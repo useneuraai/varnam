@@ -10,7 +10,7 @@ create table if not exists public.templates (
     category varchar not null,
     religion varchar not null,
     language varchar not null default 'English',
-    price numeric not null default 499.00,
+    price numeric not null default 799.00,
     thumbnail_url text,
     preview_music_url text,
     config jsonb not null default '{}'::jsonb,
@@ -97,7 +97,7 @@ values
     'Tamil Wedding',
     'Hindu',
     'Tamil/English',
-    699.00,
+    799.00,
     'https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?auto=format&fit=crop&q=80&w=600',
     'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
     '{
@@ -121,7 +121,7 @@ values
     'Muslim Wedding',
     'Muslim',
     'English/Urdu',
-    699.00,
+    799.00,
     'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600',
     'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
     '{
@@ -145,7 +145,7 @@ values
     'Christian Wedding',
     'Christian',
     'English',
-    599.00,
+    799.00,
     'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&q=80&w=600',
     'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
     '{

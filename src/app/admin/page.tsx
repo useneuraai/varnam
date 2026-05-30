@@ -14,7 +14,7 @@ export default async function AdminDashboard() {
   const totalRevenue = invitations.reduce((acc, inv) => {
     // Find matching template to get its price
     const template = TEMPLATES.find((t) => t.slug === inv.template_slug);
-    const price = template ? template.price : 499;
+    const price = template ? template.price : 799;
     return acc + price;
   }, 0);
 

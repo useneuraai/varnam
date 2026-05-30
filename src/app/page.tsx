@@ -41,7 +41,7 @@ const FAQS = [
   },
   {
     q: "What does the one-time payment include?",
-    a: "One payment of ₹699 unlocks all templates for the same event, unlimited photo slideshows, custom music uploads, Google Maps integration, RSVP guest tracking, and interactive scratch-to-reveal cards."
+    a: "One payment of ₹799 unlocks all templates for the same event, unlimited photo slideshows, custom music uploads, Google Maps integration, RSVP guest tracking, and interactive scratch-to-reveal cards."
   },
   {
     q: "What happens after the event?",
@@ -347,7 +347,7 @@ export default function LandingPage() {
                 {
                   icon: <CreditCard className="w-6 h-6 text-gold-600" />,
                   title: "3. Complete Payment",
-                  desc: "Process a one-time ₹699 activation fee securely using Razorpay checkout SDK."
+                  desc: "Process a one-time ₹799 activation fee securely using Razorpay checkout SDK."
                 },
                 {
                   icon: <Share2 className="w-6 h-6 text-gold-600" />,
@@ -390,8 +390,9 @@ export default function LandingPage() {
                 <span className="font-montserrat text-[10px] text-[#6b6660] font-bold tracking-widest uppercase mt-4 block">
                   ONE-TIME PAYMENT
                 </span>
-                <div className="flex items-baseline justify-center gap-1 my-4">
-                  <span className="font-cinzel text-4xl md:text-5xl font-extrabold text-gold-600">₹699</span>
+                <div className="flex items-baseline justify-center gap-2.5 my-4">
+                  <span className="font-cinzel text-xl md:text-2xl line-through text-[#6b6660]/60">₹999</span>
+                  <span className="font-cinzel text-4xl md:text-5xl font-extrabold text-gold-600">₹799</span>
                   <span className="font-serif text-xs text-[#6b6660]">/ single wedding event</span>
                 </div>
                 

@@ -69,7 +69,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     category: "Tamil Wedding",
     religion: "Hindu",
     language: "Tamil/English",
-    price: 699,
+    price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?auto=format&fit=crop&q=80&w=600",
     previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     fields: [
@@ -90,7 +90,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     category: "Tamil Wedding",
     religion: "Hindu",
     language: "Tamil/English",
-    price: 699,
+    price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600",
     previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
     fields: [
@@ -132,7 +132,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     category: "Modern Wedding",
     religion: "Secular",
     language: "English",
-    price: 599,
+    price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&q=80&w=600",
     previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
     fields: [
@@ -174,7 +174,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     category: "Tamil Wedding",
     religion: "Hindu",
     language: "Tamil/English",
-    price: 699,
+    price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600",
     previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     fields: [
@@ -195,7 +195,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     category: "Muslim Wedding",
     religion: "Muslim",
     language: "English/Urdu",
-    price: 699,
+    price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1618005198143-e528346d9a59?auto=format&fit=crop&q=80&w=600",
     previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
     fields: [
@@ -216,7 +216,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     category: "Christian Wedding",
     religion: "Christian",
     language: "English",
-    price: 599,
+    price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600",
     previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
     fields: [

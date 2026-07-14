@@ -278,7 +278,7 @@ export default function DashboardPage() {
           </div>
         ) : invitations.length === 0 ? (
           <div className="text-center py-20 bg-white border border-zinc-150 rounded-[32px] shadow-sm max-w-2xl mx-auto">
-            <Heart className="w-12 h-12 text-zinc-300 stroke-[1.2) mx-auto mb-4" />
+            <Heart className="w-12 h-12 text-zinc-300 stroke-[1.2] mx-auto mb-4" />
             <h3 className="font-cinzel text-lg font-bold text-zinc-900 mb-2">
               No Invitations Found
             </h3>

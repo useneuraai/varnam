@@ -118,8 +118,10 @@ const FAQS = [
 export default function LandingPage() {
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(null);
   const [user, setUser] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
     if (isMockSupabase) {
       setUser({ email: "demo.user@varnam.com" });
@@ -199,20 +201,22 @@ export default function LandingPage() {
             </nav>
 
             <div className="flex items-center gap-4">
-              {user ? (
+              {mounted && user ? (
                 <Link
                   href="/dashboard"
                   className="px-5 py-2 text-[10px] tracking-widest text-[#b3811b] hover:text-[#c59b27] border border-[#eed57c] bg-[#fffcf9] hover:bg-[#fff9f2] transition-all duration-300 font-bold rounded-full uppercase"
                 >
                   My Studio
                 </Link>
-              ) : (
+              ) : mounted ? (
                 <Link
                   href="/login"
                   className="px-5 py-2 text-[10px] tracking-widest text-zinc-500 hover:text-zinc-950 transition-all duration-300 font-bold uppercase"
                 >
                   Sign In
                 </Link>
+              ) : (
+                <div className="w-14 h-4 bg-zinc-100 rounded animate-pulse" />
               )}
               <Link
                 href="/templates"

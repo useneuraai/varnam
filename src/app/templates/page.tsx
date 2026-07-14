@@ -25,8 +25,10 @@ export default function GalleryPage() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [user, setUser] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
     if (isMockSupabase) {
       setUser({ email: "demo.user@varnam.com" });
@@ -84,14 +86,16 @@ export default function GalleryPage() {
             <span className="hidden sm:inline text-[11px] tracking-widest text-zinc-400 font-bold uppercase">
               DESIGN TEMPLATES
             </span>
-            {user ? (
+            {mounted && user ? (
               <Link href="/dashboard" className="text-[11px] tracking-widest text-[#b3811b] hover:text-[#c59b27] transition-colors font-bold uppercase">
                 MY STUDIO
               </Link>
-            ) : (
+            ) : mounted ? (
               <Link href="/login" className="text-[11px] tracking-widest text-zinc-500 hover:text-zinc-900 transition-colors font-bold uppercase">
                 SIGN IN
               </Link>
+            ) : (
+              <div className="w-14 h-4 bg-zinc-100 rounded animate-pulse" />
             )}
           </div>
         </header>

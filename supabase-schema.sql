@@ -197,7 +197,7 @@ values
             {"id": "wedding_date", "label": "Solemnization Date & Time", "type": "datetime", "required": true},
             {"id": "wedding_venue", "label": "Church & Reception Venue", "type": "textarea", "placeholder": "St. Andrews Cathedral, Chennai", "required": true},
             {"id": "quote", "label": "Holy Bible Verse", "type": "text", "placeholder": "So they are no longer two, but one flesh. (Matthew 19:6)", "required": false},
-            {"id": "family_names", "label": "Parents of the Bride & Groom", "type": "text", "placeholder": "D\'Souza and Mathews Families", "required": false},
+            {"id": "family_names", "label": "Parents of the Bride & Groom", "type": "text", "placeholder": "D''Souza and Mathews Families", "required": false},
             {"id": "rsvp_phone", "label": "RSVP Contact", "type": "text", "placeholder": "+91 99887 76655", "required": true},
             {"id": "custom_message", "label": "Ceremony Invite", "type": "textarea", "placeholder": "Celebrate the union of our lives in Christ.", "required": false}
         ]

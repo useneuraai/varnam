@@ -1,3 +1,8 @@
+-- =====================================================================================
+-- IMPORTANT: IF YOU ALREADY HAVE THE DATABASE CREATED, JUST RUN THIS MIGRATION LINE:
+-- alter table public.invitations add column if not exists user_id uuid references auth.users(id) on delete set null;
+-- =====================================================================================
+
 -- 1. Enable UUID Extension
 create extension if not exists "uuid-ossp";
 
@@ -91,45 +96,55 @@ alter table public.payments enable row level security;
 alter table public.rsvps enable row level security;
 
 -- Policies for templates (anyone can read active ones, write requires admin / auth)
+drop policy if exists "Allow public read-only access to active templates" on public.templates;
 create policy "Allow public read-only access to active templates"
     on public.templates for select
     using (is_active = true);
 
+drop policy if exists "Allow all actions for admin on templates" on public.templates;
 create policy "Allow all actions for admin on templates"
     on public.templates for all
-    using (true); -- Simplified for setup, can restrict to authenticated admin users
+    using (true);
 
 -- Policies for invitations (anyone can read paid ones, insert is public for creation, update/delete restricted)
+drop policy if exists "Allow public read access to invitations" on public.invitations;
 create policy "Allow public read access to invitations"
     on public.invitations for select
     using (true);
 
+drop policy if exists "Allow anyone to insert invitations" on public.invitations;
 create policy "Allow anyone to insert invitations"
     on public.invitations for insert
     with check (true);
 
+drop policy if exists "Allow update to owner of invitations" on public.invitations;
 create policy "Allow update to owner of invitations"
     on public.invitations for update
     using (auth.uid() = user_id);
 
+drop policy if exists "Allow delete to owner of invitations" on public.invitations;
 create policy "Allow delete to owner of invitations"
     on public.invitations for delete
     using (auth.uid() = user_id);
 
 -- Policies for payments
+drop policy if exists "Allow public inserts on payments" on public.payments;
 create policy "Allow public inserts on payments"
     on public.payments for insert
     with check (true);
 
+drop policy if exists "Allow read on payments" on public.payments;
 create policy "Allow read on payments"
     on public.payments for select
     using (true);
 
 -- Policies for RSVPs
+drop policy if exists "Allow public read access to RSVPs" on public.rsvps;
 create policy "Allow public read access to RSVPs"
     on public.rsvps for select
     using (true);
 
+drop policy if exists "Allow public inserts on RSVPs" on public.rsvps;
 create policy "Allow public inserts on RSVPs"
     on public.rsvps for insert
     with check (true);
@@ -232,4 +247,5 @@ values
         ]
     }'::jsonb,
     true
-);
+)
+on conflict (slug) do nothing;

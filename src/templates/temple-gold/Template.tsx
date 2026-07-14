@@ -130,7 +130,7 @@ export default function TempleGoldTemplate({ data }: { data: TemplateData }) {
       {/* Custom Background Image Overlay */}
       <div
         style={isColor ? { background: bgImage, opacity: 1 } : { backgroundImage: `url(${bgImage})` }}
-        className={`fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none ${
+        className={`absolute inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none ${
           data.bg_image_url ? "opacity-35" : "opacity-15 mix-blend-overlay"
         }`}
       />

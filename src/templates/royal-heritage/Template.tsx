@@ -206,6 +206,7 @@ export default function RoyalHeritageTemplate({ data }: { data: TemplateData }) 
   }, []);
 
   const bgImage = data.bg_image_url || "https://images.unsplash.com/photo-1618005198143-e528346d9a59?auto=format&fit=crop&q=80&w=1200";
+  const isColor = bgImage.startsWith("#") || bgImage.startsWith("rgb") || bgImage.startsWith("hsl") || bgImage.includes("gradient") || (bgImage.length < 20 && !bgImage.startsWith("http"));
 
   return (
     <div
@@ -216,8 +217,10 @@ export default function RoyalHeritageTemplate({ data }: { data: TemplateData }) 
     >
       {/* Custom Background Image Overlay */}
       <div
-        style={{ backgroundImage: `url(${bgImage})` }}
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none opacity-15 mix-blend-overlay"
+        style={isColor ? { background: bgImage, opacity: 1 } : { backgroundImage: `url(${bgImage})` }}
+        className={`fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none ${
+          data.bg_image_url ? "opacity-35" : "opacity-15 mix-blend-overlay"
+        }`}
       />
 
       {/* Floating Gold sparkles */}
@@ -353,7 +356,13 @@ export default function RoyalHeritageTemplate({ data }: { data: TemplateData }) 
                     <Calendar className="w-4 h-4 text-[#8a6828] shrink-0 mt-0.5" />
                     <div>
                       <strong className="font-cinzel text-[10px] tracking-wide block uppercase text-neutral-800">Muhurtham Auspicious Hour</strong>
-                      <span>{formatDate(data.wedding_date)}</span>
+                      {data.scratch_enabled === "yes" ? (
+                        <div className="mt-1 text-black font-sans font-normal uppercase tracking-widest text-[9px]">
+                          <ScratchReveal dateString={formatDate(data.wedding_date)} />
+                        </div>
+                      ) : (
+                        <span>{formatDate(data.wedding_date)}</span>
+                      )}
                     </div>
                   </div>
                   <div className="flex gap-2 border-t border-[#c2a353]/15 pt-2">
@@ -449,9 +458,9 @@ export default function RoyalHeritageTemplate({ data }: { data: TemplateData }) 
           </div>
 
           {/* Dress guidelines & map */}
-          {(data.dress_code || data.transport_info) && (
+          {((data.dress_code && data.dress_code_enabled !== "no") || (data.transport_info && data.transport_enabled !== "no")) && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full text-left mt-8">
-              {data.dress_code && (
+              {data.dress_code && data.dress_code_enabled !== "no" && (
                 <div className="border border-gold-500/15 p-4 bg-black/40 flex gap-2">
                   <Compass className="w-5 h-5 text-gold-500 shrink-0 mt-0.5" />
                   <div>
@@ -460,7 +469,7 @@ export default function RoyalHeritageTemplate({ data }: { data: TemplateData }) 
                   </div>
                 </div>
               )}
-              {data.transport_info && (
+              {data.transport_info && data.transport_enabled !== "no" && (
                 <div className="border border-gold-500/15 p-4 bg-black/40 flex gap-2">
                   <MapPin className="w-5 h-5 text-gold-500 shrink-0 mt-0.5" />
                   <div>
@@ -471,8 +480,37 @@ export default function RoyalHeritageTemplate({ data }: { data: TemplateData }) 
               )}
             </div>
           )}
+
         </motion.div>
       </div>
+
+      {/* Custom Info Sections */}
+      {(() => {
+        if (!data.custom_sections) return null;
+        try {
+          const sections = JSON.parse(data.custom_sections);
+          if (!Array.isArray(sections) || sections.length === 0) return null;
+          return sections.map((sec: any, idx: number) => (
+            <div key={idx} className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen py-16 px-4 text-center relative z-10 border-t border-gold-500/10">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="w-full flex flex-col items-center max-w-2xl"
+              >
+                <span className="font-montserrat text-[10px] tracking-[0.2em] text-gold-400 uppercase mb-2">ADDITIONAL DETAILS</span>
+                <h2 className="font-cinzel text-xl md:text-2xl text-gold-300 tracking-widest uppercase mb-8">{sec.title}</h2>
+                <div className="w-full bg-black/40 border border-gold-500/15 p-6 sm:p-8 rounded-sm text-left relative overflow-hidden">
+                  <div className="absolute top-3 right-3 text-gold-500/15 pointer-events-none"><Sparkles className="w-6 h-6" /></div>
+                  <p className="font-serif text-xs text-gold-200/80 leading-relaxed whitespace-pre-line relative z-10">{sec.content}</p>
+                </div>
+              </motion.div>
+            </div>
+          ));
+        } catch {
+          return null;
+        }
+      })()}
 
       {/* RSVP Desk */}
       {data.rsvp_phone && (

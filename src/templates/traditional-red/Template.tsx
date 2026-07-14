@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { MapPin, Calendar, Compass, Clock, Heart } from "lucide-react";
+import { MapPin, Calendar, Compass, Clock, Heart, Sparkles } from "lucide-react";
 import { TemplateData } from "@/lib/templates";
 import FloatingFlowers from "@/components/animations/FloatingFlowers";
 import ScratchReveal from "@/components/animations/ScratchReveal";
@@ -81,6 +81,7 @@ export default function TraditionalRedTemplate({ data }: { data: TemplateData })
   };
 
   const bgImage = data.bg_image_url || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1200";
+  const isColor = bgImage.startsWith("#") || bgImage.startsWith("rgb") || bgImage.startsWith("hsl") || bgImage.includes("gradient") || (bgImage.length < 20 && !bgImage.startsWith("http"));
 
   return (
     <div
@@ -91,8 +92,10 @@ export default function TraditionalRedTemplate({ data }: { data: TemplateData })
     >
       {/* Custom Background Image Overlay */}
       <div
-        style={{ backgroundImage: `url(${bgImage})` }}
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none opacity-15 mix-blend-overlay"
+        style={isColor ? { background: bgImage, opacity: 1 } : { backgroundImage: `url(${bgImage})` }}
+        className={`fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none ${
+          data.bg_image_url ? "opacity-35" : "opacity-15 mix-blend-overlay"
+        }`}
       />
 
       {/* Falling Jasmine Flowers */}
@@ -275,9 +278,9 @@ export default function TraditionalRedTemplate({ data }: { data: TemplateData })
             </div>
 
             {/* Travel notes */}
-            {(data.dress_code || data.transport_info) && (
+            {((data.dress_code && data.dress_code_enabled !== "no") || (data.transport_info && data.transport_enabled !== "no")) && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-lg mt-8 text-left">
-                {data.dress_code && (
+                {data.dress_code && data.dress_code_enabled !== "no" && (
                   <div className="border border-gold-500/15 p-4 bg-black/35 flex gap-2">
                     <Compass className="w-5 h-5 text-gold-500 shrink-0 mt-0.5" />
                     <div>
@@ -286,7 +289,7 @@ export default function TraditionalRedTemplate({ data }: { data: TemplateData })
                     </div>
                   </div>
                 )}
-                {data.transport_info && (
+                {data.transport_info && data.transport_enabled !== "no" && (
                   <div className="border border-gold-500/15 p-4 bg-black/35 flex gap-2">
                     <MapPin className="w-5 h-5 text-gold-500 shrink-0 mt-0.5" />
                     <div>
@@ -297,9 +300,38 @@ export default function TraditionalRedTemplate({ data }: { data: TemplateData })
                 )}
               </div>
             )}
+
           </motion.div>
         </div>
       )}
+
+      {/* Custom Info Sections */}
+      {(() => {
+        if (!data.custom_sections) return null;
+        try {
+          const sections = JSON.parse(data.custom_sections);
+          if (!Array.isArray(sections) || sections.length === 0) return null;
+          return sections.map((sec: any, idx: number) => (
+            <div key={idx} className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen py-16 px-4 text-center relative z-10 border-t border-gold-500/10">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="w-full flex flex-col items-center max-w-2xl"
+              >
+                <span className="font-montserrat text-[10px] tracking-[0.2em] text-gold-400 uppercase mb-2">ADDITIONAL DETAILS</span>
+                <h2 className="font-cinzel text-xl md:text-2xl text-[#eed57c] tracking-widest uppercase mb-8">{sec.title}</h2>
+                <div className="w-full bg-[#1c0101]/60 border-2 border-double border-gold-500/25 p-6 sm:p-8 text-left rounded-sm relative overflow-hidden">
+                  <div className="absolute top-3 right-3 text-gold-500/15 pointer-events-none"><Sparkles className="w-6 h-6" /></div>
+                  <p className="font-serif text-xs text-gold-100/90 leading-relaxed whitespace-pre-line relative z-10">{sec.content}</p>
+                </div>
+              </motion.div>
+            </div>
+          ));
+        } catch {
+          return null;
+        }
+      })()}
 
       {/* RSVP Direct Phone */}
       {data.rsvp_phone && (

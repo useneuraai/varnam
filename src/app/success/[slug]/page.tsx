@@ -61,7 +61,7 @@ export default async function SuccessPage({ params }: PageProps) {
         </div>
 
         {/* Action Button Row */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 mb-4">
           <a
             href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
               whatsappText + `https://varnam.wedding/invite/${slug}`
@@ -83,6 +83,16 @@ export default async function SuccessPage({ params }: PageProps) {
             VIEW LIVE CARD
           </Link>
         </div>
+
+        <Link
+          href={`/editor/${invitation.template_slug}?edit=${slug}`}
+          className="w-full py-3.5 border border-gold-500/40 text-gold-300 hover:text-black hover:bg-gold-500 font-montserrat text-xs font-bold tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-2 bg-black/60"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          EDIT INVITATION DETAILS
+        </Link>
 
         <div className="mt-8 border-t border-gold-600/10 pt-6">
           <Link

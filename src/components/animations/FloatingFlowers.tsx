@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 interface FloatingFlowersProps {
   type?: "jasmine" | "rose" | "gold" | "sparkle";
@@ -9,6 +10,10 @@ interface FloatingFlowersProps {
 
 export default function FloatingFlowers({ type = "jasmine", count = 35 }: FloatingFlowersProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pathname = usePathname();
+
+  const isPreviewPage = pathname === "/" || pathname === "/templates";
+  if (isPreviewPage) return null;
 
   useEffect(() => {
     const canvas = canvasRef.current;

@@ -5,7 +5,7 @@ import { TemplateData } from "@/lib/templates";
 import FloatingFlowers from "@/components/animations/FloatingFlowers";
 import ScratchReveal from "@/components/animations/ScratchReveal";
 import PhotoSlideshow from "@/components/animations/PhotoSlideshow";
-import { Compass, Bus } from "lucide-react";
+import { Compass, Bus, MapPin, Sparkles } from "lucide-react";
 import { CinematicCrest, GoldFoilLeaves, ScrollDrawTimeline, RevealGlowText, CountdownTimer } from "@/components/animations/CinematicEffects";
 
 export default function ModernChristianTemplate({ data }: { data: TemplateData }) {
@@ -37,6 +37,7 @@ export default function ModernChristianTemplate({ data }: { data: TemplateData }
   const initials = `${data.bride_name?.charAt(0) || "M"}${data.groom_name?.charAt(0) || "D"}`;
 
   const bgImage = data.bg_image_url || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200";
+  const isColor = bgImage.startsWith("#") || bgImage.startsWith("rgb") || bgImage.startsWith("hsl") || bgImage.includes("gradient") || (bgImage.length < 20 && !bgImage.startsWith("http"));
 
   return (
     <div
@@ -47,8 +48,10 @@ export default function ModernChristianTemplate({ data }: { data: TemplateData }
     >
       {/* Custom Background Image (Fixed to bypass mobile browser fixed-attachment bugs) */}
       <div
-        style={{ backgroundImage: `url(${bgImage})` }}
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none opacity-20 mix-blend-overlay"
+        style={isColor ? { background: bgImage, opacity: 1 } : { backgroundImage: `url(${bgImage})` }}
+        className={`fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none ${
+          data.bg_image_url ? "opacity-35" : "opacity-20 mix-blend-overlay"
+        }`}
       />
 
       {/* Dark overlay for custom background image readability */}
@@ -224,16 +227,18 @@ export default function ModernChristianTemplate({ data }: { data: TemplateData }
           className="w-full flex flex-col items-center gap-12"
         >
           {/* Photo Slideshow */}
-          <motion.div variants={fadeInUp} className="w-full flex flex-col items-center">
-            <span className="font-serif text-xs tracking-[0.2em] text-rose-300 uppercase mb-2">MEMORIES CAROUSEL</span>
-            <h2 className="font-cinzel text-2xl md:text-3xl tracking-widest text-rose-300 uppercase mb-6">Gallery Slideshow</h2>
-            <PhotoSlideshow imagesString={data.slideshow_images} />
-          </motion.div>
+          {data.slideshow_enabled !== "no" && data.slideshow_images && (
+            <motion.div variants={fadeInUp} className="w-full flex flex-col items-center">
+              <span className="font-serif text-xs tracking-[0.2em] text-rose-300 uppercase mb-2">MEMORIES CAROUSEL</span>
+              <h2 className="font-cinzel text-2xl md:text-3xl tracking-widest text-rose-300 uppercase mb-6">Gallery Slideshow</h2>
+              <PhotoSlideshow imagesString={data.slideshow_images} />
+            </motion.div>
+          )}
 
           {/* Dress Code & Travel guidelines */}
-          {(data.dress_code || data.transport_info) && (
+          {((data.dress_code && data.dress_code_enabled !== "no") || (data.transport_info && data.transport_enabled !== "no")) && (
             <motion.div variants={fadeInUp} className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-2xl mt-4">
-              {data.dress_code && (
+              {data.dress_code && data.dress_code_enabled !== "no" && (
                 <div className="glass-card p-6 border border-rose-300/10 flex flex-col items-center text-center bg-black/35">
                   <Compass className="w-8 h-8 text-rose-300 mb-3 stroke-[1.25]" />
                   <h4 className="font-cinzel text-sm text-rose-300 tracking-wider uppercase mb-2">Attire Code</h4>
@@ -243,7 +248,7 @@ export default function ModernChristianTemplate({ data }: { data: TemplateData }
                 </div>
               )}
 
-              {data.transport_info && (
+              {data.transport_info && data.transport_enabled !== "no" && (
                 <div className="glass-card p-6 border border-rose-300/10 flex flex-col items-center text-center bg-black/35">
                   <Bus className="w-8 h-8 text-rose-300 mb-3 stroke-[1.25]" />
                   <h4 className="font-cinzel text-sm text-rose-300 tracking-wider uppercase mb-2">Travel & Parking</h4>
@@ -272,6 +277,34 @@ export default function ModernChristianTemplate({ data }: { data: TemplateData }
           )}
         </motion.div>
       </div>
+
+      {/* Custom Info Sections */}
+      {(() => {
+        if (!data.custom_sections) return null;
+        try {
+          const sections = JSON.parse(data.custom_sections);
+          if (!Array.isArray(sections) || sections.length === 0) return null;
+          return sections.map((sec: any, idx: number) => (
+            <div key={idx} className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen py-16 px-4 text-center relative z-10 border-t border-rose-300/10">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="w-full flex flex-col items-center max-w-2xl"
+              >
+                <span className="font-montserrat text-[10px] tracking-[0.2em] text-[#a08060] uppercase mb-2">ADDITIONAL DETAILS</span>
+                <h2 className="font-playfair text-2xl text-rose-200 tracking-wide mb-8">{sec.title}</h2>
+                <div className="w-full bg-black/40 border border-rose-300/10 p-6 sm:p-8 rounded-2xl text-left relative overflow-hidden backdrop-blur-md shadow-2xl">
+                  <div className="absolute top-3 right-3 text-[#a08060]/10 pointer-events-none"><Sparkles className="w-6 h-6" /></div>
+                  <p className="font-serif text-xs text-rose-100/90 leading-relaxed whitespace-pre-line relative z-10">{sec.content}</p>
+                </div>
+              </motion.div>
+            </div>
+          ));
+        } catch {
+          return null;
+        }
+      })()}
     </div>
   );
 }

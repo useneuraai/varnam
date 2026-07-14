@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cinzel, Playfair_Display, Montserrat, Great_Vibes } from "next/font/google";
+import { Cinzel, Playfair_Display, Inter, Great_Vibes } from "next/font/google";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -12,8 +12,8 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
 });
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -52,7 +52,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cinzel.variable} ${playfair.variable} ${montserrat.variable} ${greatVibes.variable} antialiased`}
+      className={`${cinzel.variable} ${playfair.variable} ${inter.variable} ${greatVibes.variable} antialiased`}
     >
       <body className="bg-[#080708] text-[#fbf6df] selection:bg-[#d4a325] selection:text-[#080708]">
         <SmoothScroll>

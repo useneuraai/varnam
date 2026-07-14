@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 // 1. Premium Interactive SVG Crest with pulsing glow
 export function CinematicCrest({ symbol = "❤", initials = "W" }: { symbol?: string; initials?: string }) {
@@ -145,7 +146,29 @@ export function ScrollDrawTimeline() {
 
 // 4. Reveal Glow Title text with shimmering mask
 export function RevealGlowText({ text, className = "" }: { text: string; className?: string }) {
+  const pathname = usePathname();
+  const isEditor = pathname?.includes("/editor");
   const words = text.split(" ");
+
+  if (isEditor) {
+    return (
+      <h1 className={`font-cinzel couple-names-title tracking-wider sm:tracking-widest text-center select-none flex flex-wrap justify-center gap-x-[0.3em] gap-y-2 relative ${className}`}>
+        {words.map((word, wIdx) => (
+          <span key={wIdx} className="inline-block whitespace-normal break-words sm:whitespace-nowrap">
+            {Array.from(word).map((char, cIdx) => (
+              <span
+                key={cIdx}
+                style={{ display: "inline-block" }}
+                className="gold-gradient-text drop-shadow-[0_4px_12px_rgba(212,163,37,0.25)]"
+              >
+                {char}
+              </span>
+            ))}
+          </span>
+        ))}
+      </h1>
+    );
+  }
 
   const containerVariants = {
     hidden: {},
@@ -178,6 +201,7 @@ export function RevealGlowText({ text, className = "" }: { text: string; classNa
 
   return (
     <motion.h1
+      key={text}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"

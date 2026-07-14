@@ -74,6 +74,7 @@ export default function FloralLuxuryTemplate({ data }: { data: TemplateData }) {
   };
 
   const bgImage = data.bg_image_url || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200";
+  const isColor = bgImage.startsWith("#") || bgImage.startsWith("rgb") || bgImage.startsWith("hsl") || bgImage.includes("gradient") || (bgImage.length < 20 && !bgImage.startsWith("http"));
 
   return (
     <div
@@ -84,8 +85,10 @@ export default function FloralLuxuryTemplate({ data }: { data: TemplateData }) {
     >
       {/* Custom Background Image Overlay */}
       <div
-        style={{ backgroundImage: `url(${bgImage})` }}
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none opacity-15 mix-blend-overlay"
+        style={isColor ? { background: bgImage, opacity: 1 } : { backgroundImage: `url(${bgImage})` }}
+        className={`fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none ${
+          data.bg_image_url ? "opacity-25" : "opacity-15 mix-blend-overlay"
+        }`}
       />
 
       {/* Floating Pink Rose Petals */}
@@ -250,24 +253,26 @@ export default function FloralLuxuryTemplate({ data }: { data: TemplateData }) {
       </div>
 
       {/* Section 4: Photo Gallery */}
-      <div className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen py-16 px-4 text-center relative z-10 border-t border-pink-200/20">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="w-full flex flex-col items-center"
-        >
-          <span className="font-montserrat text-[10px] tracking-[0.2em] text-[#a08060] uppercase mb-2">SHARED MEMORIES</span>
-          <h2 className="font-cinzel text-xl md:text-2xl text-[#8a725d] tracking-widest uppercase mb-8 flex items-center gap-2">
-            <ImageIcon className="w-5 h-5 text-[#b09070]" />
-            Photo Slideshow
-          </h2>
+      {data.slideshow_enabled !== "no" && data.slideshow_images && (
+        <div className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen py-16 px-4 text-center relative z-10 border-t border-pink-200/20">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="w-full flex flex-col items-center"
+          >
+            <span className="font-montserrat text-[10px] tracking-[0.2em] text-[#a08060] uppercase mb-2">SHARED MEMORIES</span>
+            <h2 className="font-cinzel text-xl md:text-2xl text-[#8a725d] tracking-widest uppercase mb-8 flex items-center gap-2">
+              <ImageIcon className="w-5 h-5 text-[#b09070]" />
+              Photo Slideshow
+            </h2>
 
-          <div className="w-full max-w-lg border border-pink-200/60 p-2 bg-white/50 backdrop-blur-sm rounded-2xl shadow-xl">
-            <PhotoSlideshow imagesString={data.slideshow_images} />
-          </div>
-        </motion.div>
-      </div>
+            <div className="w-full max-w-lg border border-pink-200/60 p-2 bg-white/50 backdrop-blur-sm rounded-2xl shadow-xl">
+              <PhotoSlideshow imagesString={data.slideshow_images} />
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       {/* Section 5: RSVP Panel */}
       <div className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen py-16 px-4 text-center relative z-10 border-t border-pink-200/20">
@@ -305,14 +310,48 @@ export default function FloralLuxuryTemplate({ data }: { data: TemplateData }) {
             </div>
           )}
 
-          {/* Transport note */}
-          {data.transport_info && (
-            <p className="font-serif text-[10px] text-[#806f60] mt-4 leading-relaxed italic">
+          {/* Transport/Dress note */}
+          {data.dress_code && data.dress_code_enabled !== "no" && (
+            <p className="font-serif text-[10px] text-[#806f60] mt-4 leading-relaxed italic block">
+              Dress Guidelines: {data.dress_code}
+            </p>
+          )}
+          {data.transport_info && data.transport_enabled !== "no" && (
+            <p className="font-serif text-[10px] text-[#806f60] mt-2 leading-relaxed italic block">
               Transport Desk: {data.transport_info}
             </p>
           )}
+
         </motion.div>
       </div>
+
+      {/* Custom Info Sections */}
+      {(() => {
+        if (!data.custom_sections) return null;
+        try {
+          const sections = JSON.parse(data.custom_sections);
+          if (!Array.isArray(sections) || sections.length === 0) return null;
+          return sections.map((sec: any, idx: number) => (
+            <div key={idx} className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen py-16 px-4 text-center relative z-10 border-t border-pink-200/20">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="w-full flex flex-col items-center max-w-2xl"
+              >
+                <span className="font-montserrat text-[9px] tracking-widest text-[#a88a6d] uppercase block">ADDITIONAL DETAILS</span>
+                <h3 className="font-cinzel text-neutral-800 text-lg font-bold tracking-wider my-2 uppercase">{sec.title}</h3>
+                <div className="w-full bg-white/60 border border-white/80 backdrop-blur-md p-6 sm:p-8 rounded-3xl text-left shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-3 right-3 text-[#a88a6d]/15 pointer-events-none"><Sparkles className="w-6 h-6" /></div>
+                  <p className="font-serif text-xs text-[#806f60] leading-relaxed whitespace-pre-line relative z-10">{sec.content}</p>
+                </div>
+              </motion.div>
+            </div>
+          ));
+        } catch {
+          return null;
+        }
+      })()}
 
       {/* RSVP desk contact */}
       {data.rsvp_phone && (

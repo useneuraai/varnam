@@ -57,10 +57,28 @@ export async function POST(req: NextRequest) {
       family_names: formData.family_names || undefined,
       rsvp_phone: formData.rsvp_phone || undefined,
       custom_message: formData.custom_message || undefined,
-      music_url: template.previewMusicUrl,
+      music_url: formData.music_url || template.previewMusicUrl,
       is_paid: true,
       payment_id: razorpay_payment_id || `pay_mock_${randomStr}`,
       order_id: razorpay_order_id || `order_mock_${randomStr}`,
+
+      // Licensed Event Features
+      bg_image_url: formData.bg_image_url || undefined,
+      slideshow_images: formData.slideshow_images || undefined,
+      dress_code: formData.dress_code || undefined,
+      transport_info: formData.transport_info || undefined,
+      scratch_enabled: formData.scratch_enabled || "no",
+      sangeet_enabled: formData.sangeet_enabled || "no",
+      sangeet_date: formData.sangeet_date || undefined,
+      sangeet_venue: formData.sangeet_venue || undefined,
+      reception_date: formData.reception_date || undefined,
+      reception_venue: formData.reception_venue || undefined,
+      gmap_coordinates: formData.gmap_coordinates || undefined,
+      music_enabled: formData.music_enabled || "yes",
+      slideshow_enabled: formData.slideshow_enabled || "yes",
+      dress_code_enabled: formData.dress_code_enabled || "yes",
+      transport_enabled: formData.transport_enabled || "yes",
+      custom_sections: formData.custom_sections || "",
     });
 
     return NextResponse.json({

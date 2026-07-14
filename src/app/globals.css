@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-montserrat);
+  --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
   --font-cinzel: var(--font-cinzel);
   --font-playfair: var(--font-playfair);
-  --font-montserrat: var(--font-montserrat);
+  --font-montserrat: var(--font-inter);
+  --font-inter: var(--font-inter);
   --font-great-vibes: var(--font-great-vibes);
 
   --color-gold-50: #fefcf3;
@@ -36,7 +37,7 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   overflow-x: clip;
-  font-family: var(--font-montserrat), sans-serif;
+  font-family: var(--font-inter), sans-serif;
 }
 
 /* Custom Scrollbar */
@@ -167,3 +168,143 @@ body {
   }
 }
 
+/* Confine template elements to their preview card container */
+.carousel-card-container .fixed {
+  position: absolute !important;
+}
+.carousel-card-container .w-screen {
+  width: 100% !important;
+}
+.carousel-card-container .h-screen {
+  height: 100% !important;
+}
+.carousel-card-container .min-h-screen {
+  min-height: 100% !important;
+}
+
+/* Lenis smooth scrolling recommendations */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Editor minimalist, modern, sleek and curved overrides */
+.min-h-screen.bg-gradient-to-br.from-\[\#faf8f5\] {
+  background: #ffffff !important;
+  color: #27272a !important;
+}
+
+header.h-20.border-b.border-\[\#eed57c\]\/20 {
+  border-bottom: 1px solid #f4f4f5 !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+header.h-20.border-b.border-\[\#eed57c\]\/20 span {
+  color: #71717a !important;
+}
+
+header.h-20.border-b.border-\[\#eed57c\]\/20 .bg-\[\#fffcf9\] {
+  background: #f4f4f5 !important;
+  border-color: #e4e4e7 !important;
+}
+
+header.h-20.border-b.border-\[\#eed57c\]\/20 .text-\[\#b3811b\] {
+  color: #18181b !important;
+}
+
+.border-r.border-\[\#eed57c\]\/15.bg-white\/40 {
+  background-color: #ffffff !important;
+  border-right: 1px solid #f4f4f5 !important;
+}
+
+.bg-gradient-to-r.from-\[\#d4b060\].to-\[\#b3811b\] {
+  background: #18181b !important;
+  color: #ffffff !important;
+}
+
+.border-\[\#b3811b\] {
+  border-color: #18181b !important;
+}
+
+.text-\[\#b3811b\] {
+  color: #18181b !important;
+}
+
+.border-neutral-200.group-hover\:border-\[\#b3811b\]\/40 {
+  border-color: #e4e4e7 !important;
+}
+
+.border-\[\#eed57c\]\/20.bg-\[\#fffdfa\] {
+  border-color: #f4f4f5 !important;
+  background-color: #ffffff !important;
+  border-radius: 20px !important;
+}
+
+.border-dashed.border-\[\#b3811b\]\/30.bg-\[\#fffcf9\] {
+  border-color: #e4e4e7 !important;
+  background-color: #fafafa !important;
+  border-radius: 20px !important;
+}
+
+.border-dashed.border-\[\#b3811b\]\/30.bg-\[\#fffcf9\] .text-\[\#b3811b\]\/70 {
+  color: #71717a !important;
+}
+
+.border-dashed.border-\[\#b3811b\]\/30.bg-\[\#fffcf9\] svg {
+  color: #a1a1aa !important;
+}
+
+.text-\[\#b3811b\]\/70 {
+  color: #71717a !important;
+}
+
+.bg-gold-600 {
+  background-color: #18181b !important;
+  color: #ffffff !important;
+}
+
+.hover\:bg-gold-500:hover {
+  background-color: #27272a !important;
+}
+
+.bg-gradient-to-r.from-\%5Bd4b060\%5D.to-\%5Bb3811b\%5D {
+  background: #18181b !important;
+  color: #ffffff !important;
+}
+
+.min-h-screen.flex-col select,
+.min-h-screen.flex-col input[type="text"],
+.min-h-screen.flex-col input[type="date"],
+.min-h-screen.flex-col input[type="time"] {
+  border-radius: 9999px !important;
+  border-color: #e4e4e7 !important;
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+}
+
+.min-h-screen.flex-col button {
+  border-radius: 9999px !important;
+}
+
+.min-h-screen.flex-col .rounded-2xl {
+  border-radius: 24px !important;
+}
+
+.min-h-screen.flex-col .rounded-xl {
+  border-radius: 20px !important;
+}

@@ -1,9 +1,9 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Script from "next/script";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import {
   ArrowLeft,
   CreditCard,
@@ -18,23 +18,45 @@ import {
   Smartphone,
   Tablet,
   Monitor,
+  Trash2,
+  Plus
 } from "lucide-react";
 import { getTemplateBySlug, getDefaultTemplateData, TemplateData } from "@/lib/templates";
 import { templatesMap } from "@/templates";
 
 const BG_IMAGE_PRESETS = [
   { label: "Default Template Backdrop", value: "" },
-  { label: "Royal Crimson Silk", value: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200" },
-  { label: "Deep Velvet Emerald", value: "https://images.unsplash.com/photo-1618005198143-e528346d9a59?auto=format&fit=crop&w=1200" },
-  { label: "Luxury Gold Foil", value: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200" },
-  { label: "Floral White Silk", value: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200" }
+  { label: "Palace Mandapam Stage Decor (Traditional Indian Decor) 🛕", value: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=1200" },
+  { label: "Glistening Lights & Sparkles Bokeh (Wedding Night) ✨", value: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200" },
+  { label: "Royal Red Rose Wedding Archway (Floral Grand Ceremony) 🌹", value: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&q=80&w=1200" },
+  { label: "Gilded Marigold Garlands Decor (Haldi / Sangeet Vibe) 🌼", value: "https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?auto=format&fit=crop&q=80&w=1200" },
+  { label: "Luxurious White Roses Backdrop (Premium Minimal Arch) 🤍", value: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&q=80&w=1200" },
+  { label: "Traditional Hands with Henna/Garland (Indian Ceremony Detail) 🪷", value: "https://images.unsplash.com/photo-1603561596112-0a132b757442?auto=format&fit=crop&q=80&w=1200" },
+  { label: "Elegant Palace Courtyard (Heritage Backdrop) 🏰", value: "https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?auto=format&fit=crop&q=80&w=1200" },
+  { label: "Glimmering Gold Bokeh Wallpaper (Classic Luxury) 🪙", value: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&q=80&w=1200" }
+];
+
+const BG_COLOR_PRESETS = [
+  { label: "Deep Royal Burgundy", value: "#4a0e17" },
+  { label: "Imperial Emerald Green", value: "#0b2e16" },
+  { label: "Midnight Navy Blue", value: "#0a1128" },
+  { label: "Luxurious Metallic Gold", value: "#b89047" },
+  { label: "Champagne Pearl Velvet", value: "#fcfaf2" },
+  { label: "Blush Rose Gold", value: "#f5e1e2" },
+  { label: "Rich Plum Purple", value: "#2d0831" },
+  { label: "Editorial Matte Black", value: "#09090b" },
+  { label: "Sacred Golden Sands (Gradient)", value: "linear-gradient(135deg, #e5c060 0%, #b3811b 100%)" },
+  { label: "Emerald Canopy (Gradient)", value: "linear-gradient(135deg, #184e3d 0%, #0c2b21 100%)" },
+  { label: "Burgundy Satin (Gradient)", value: "linear-gradient(135deg, #5c0612 0%, #290207 100%)" },
+  { label: "Royal Amethyst (Gradient)", value: "linear-gradient(135deg, #440c4a 0%, #15021a 100%)" }
 ];
 
 const MUSIC_PRESETS = [
   { label: "Default Template Melody", value: "" },
-  { label: "Classical Wedding Shehnai", value: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-  { label: "Sufi Flute Instrumental", value: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-  { label: "Romantic Piano Orchestral", value: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
+  { label: "Classical Wedding Shehnai", value: "https://archive.org/download/r-12356661-1632393571-2601/04.%20Kajri%20-%20Dadra%20Taal.mp3" },
+  { label: "Traditional Indian Sitar & Violin", value: "https://archive.org/download/r-12356661-1632393571-2601/01.%20Raag%20Bhimpalasi%20-%20Teen%20Taal.mp3" },
+  { label: "Elegant Classical Strings (Canon in D)", value: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Canon_in_D_Major_%28ISRC_USUAN1100301%29.mp3" },
+  { label: "Romantic Piano (Clair de Lune)", value: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Debussy_-_Clair_de_Lune.mp3" }
 ];
 
 const SLIDESHOW_PRESETS = [
@@ -43,9 +65,13 @@ const SLIDESHOW_PRESETS = [
   { label: "Minimalist Wedding Set", value: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600, https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=600" }
 ];
 
-export default function EditorPage() {
+function EditorPageContent() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editSlug = searchParams?.get("edit");
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isArchived, setIsArchived] = useState(false);
 
   const templateSlug = typeof params?.templateSlug === "string" ? params.templateSlug : "";
   const template = getTemplateBySlug(templateSlug);
@@ -74,105 +100,186 @@ export default function EditorPage() {
   // Map Search states
   const [mapSearchQuery, setMapSearchQuery] = useState("");
   const [mapSearchResults, setMapSearchResults] = useState<any[]>([]);
+  
+  // Custom Sections inputs states
+  const [newSectionTitle, setNewSectionTitle] = useState("");
+  const [newSectionContent, setNewSectionContent] = useState("");
   const [isMapSearching, setIsMapSearching] = useState(false);
+  const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
+  const [showFallbackDropdown, setShowFallbackDropdown] = useState(false);
 
-  // Initialize form with defaults
+  // Helper to adjust labels for religion categories (e.g., Nikah/Valima/Mehndi for Muslim template)
+  const getAdjustedFieldLabel = (fieldId: string, defaultLabel: string): string => {
+    const isMuslim = templateSlug === "elegant-muslim" || template?.religion?.toLowerCase() === "muslim";
+    if (!isMuslim) return defaultLabel;
+
+    switch (fieldId) {
+      case "wedding_date":
+        return "Nikah Date & Time";
+      case "wedding_venue":
+        return "Nikah Venue";
+      case "quote":
+        return "Quranic Verse / Quote";
+      case "sangeet_enabled":
+        return "Include Mehndi Event?";
+      case "sangeet_date":
+        return "Mehndi Date & Time";
+      case "sangeet_venue":
+        return "Mehndi Venue";
+      case "reception_date":
+        return "Valima Date & Time";
+      case "reception_venue":
+        return "Valima Venue";
+      default:
+        return defaultLabel
+          .replace(/Wedding/g, "Nikah")
+          .replace(/Sangeet/g, "Mehndi")
+          .replace(/Reception/g, "Valima");
+    }
+  };
+
+  const getAdjustedFieldPlaceholder = (fieldId: string, defaultPlaceholder: string): string => {
+    const isMuslim = templateSlug === "elegant-muslim" || template?.religion?.toLowerCase() === "muslim";
+    if (!isMuslim) return defaultPlaceholder;
+
+    switch (fieldId) {
+      case "wedding_venue":
+        return "E.g. Grand Plaza Banquet Hall, Chennai";
+      case "sangeet_venue":
+        return "E.g. Sapphire Banquet Hall, Chennai";
+      case "reception_venue":
+        return "E.g. Crescent Palace Lawns, Chennai";
+      default:
+        return defaultPlaceholder
+          .replace(/Wedding/g, "Nikah")
+          .replace(/Sangeet/g, "Mehndi")
+          .replace(/Reception/g, "Valima");
+    }
+  };
+
+  // Initialize form with defaults or fetch existing for editing
   useEffect(() => {
-    if (templateSlug) {
+    if (!templateSlug) return;
+
+    if (editSlug) {
+      setIsEditMode(true);
+      setIsSubmitting(true);
+      fetch(`/api/invitations/${editSlug}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Could not find invitation to edit.");
+          return res.json();
+        })
+        .then((data) => {
+          setFormData(data);
+          
+          // Check if archived (more than 5 days after event completes)
+          const now = new Date();
+          const eventDate = new Date(data.wedding_date);
+          const archiveLimit = new Date(eventDate.getTime() + 5 * 24 * 60 * 60 * 1000);
+          if (now > archiveLimit) {
+            setIsArchived(true);
+            setError("This invitation is archived (license exhausted) and cannot be edited.");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          setError(err.message || "Failed to load invitation.");
+          setFormData(getDefaultTemplateData(templateSlug));
+        })
+        .finally(() => {
+          setIsSubmitting(false);
+        });
+    } else {
       setFormData(getDefaultTemplateData(templateSlug));
     }
-  }, [templateSlug]);
+  }, [templateSlug, editSlug]);
 
-  // Load Leaflet stylesheet and script dynamically on browser
+  // Load Google Maps script dynamically (only if API key is present)
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    if (!key) {
+      // Do not load the script to avoid console auth warning popup block
+      return;
+    }
 
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-    document.head.appendChild(link);
+    if ((window as any).google?.maps?.places) {
+      setGoogleMapsLoaded(true);
+      return;
+    }
 
     const script = document.createElement("script");
-    script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places`;
     script.async = true;
+    script.defer = true;
     script.onload = () => {
-      setLeafletLoaded(true);
+      setGoogleMapsLoaded(true);
+    };
+    script.onerror = () => {
+      console.error("Google Maps Places script failed to load");
     };
     document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(link);
-      document.head.removeChild(script);
-    };
   }, []);
 
-  // Initialize Leaflet map picker
+  // Attach Google Autocomplete listener to input
   useEffect(() => {
-    if (!leafletLoaded || !formData || currentStep !== 4) return;
-    const L = (window as any).L;
-    if (!L) return;
+    if (!googleMapsLoaded || typeof window === "undefined" || !(window as any).google?.maps?.places) return;
 
-    const coordsStr = formData.gmap_coordinates || "13.0827,80.2707";
-    const cleanedCoords = coordsStr.split("(")[0].trim();
-    const [lat, lng] = cleanedCoords.split(",").map(Number);
+    const input = document.getElementById("gmap_coordinates") as HTMLInputElement;
+    if (!input) return;
 
-    const mapContainer = document.getElementById("leaflet-map");
-    if (!mapContainer) return;
+    const autocomplete = new (window as any).google.maps.places.Autocomplete(input, {
+      types: ["geocode", "establishment"],
+    });
 
-    if (mapRef.current) return; // already initialized
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace();
+      if (place.geometry && place.geometry.location) {
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        const address = place.formatted_address || place.name || "";
+        handleInputChange("gmap_coordinates", `${lat.toFixed(6)},${lng.toFixed(6)} (${address})`);
+      } else if (place.name) {
+        handleInputChange("gmap_coordinates", place.name);
+      }
+    });
+  }, [googleMapsLoaded, currentStep]);
 
-    // Center map on coordinates
-    const map = L.map("leaflet-map").setView([lat, lng], 13);
-    mapRef.current = map;
+  // Fallback search effect when Google Maps is not loaded
+  useEffect(() => {
+    const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    if (key) return; // Google Autocomplete will handle it
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
+    const inputVal = formData?.gmap_coordinates || "";
+    // If it already looks like coordinates, e.g. "12.345,67.890" or has trailing address in parenthesis, don't query Nominatim
+    const query = inputVal.split("(")[0].trim();
+    if (!query || query.length < 3 || query.includes(",") || /^[0-9.-]+\s*,\s*[0-9.-]+$/.test(query)) {
+      setMapSearchResults([]);
+      setShowFallbackDropdown(false);
+      return;
+    }
 
-    const marker = L.marker([lat, lng], { draggable: true }).addTo(map);
-    markerRef.current = marker;
-
-    const reverseGeocode = async (newLat: number, newLng: number) => {
+    const delayDebounce = setTimeout(async () => {
+      setIsMapSearching(true);
       try {
         const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${newLat}&lon=${newLng}`
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`
         );
         if (res.ok) {
           const data = await res.json();
-          if (data && data.display_name) {
-            const parts = data.display_name.split(",");
-            const shortLabel = parts.slice(0, 3).join(",").trim();
-            const coordsStr = `${newLat.toFixed(4)},${newLng.toFixed(4)} (${shortLabel})`;
-            handleInputChange("gmap_coordinates", coordsStr);
-            setMapSearchQuery(shortLabel);
-            return;
-          }
+          setMapSearchResults(data || []);
+          setShowFallbackDropdown(true);
         }
       } catch (err) {
-        console.error("Reverse geocoding error:", err);
+        console.error("Fallback map search error:", err);
+      } finally {
+        setIsMapSearching(false);
       }
-      const positionStr = `${newLat.toFixed(4)},${newLng.toFixed(4)}`;
-      handleInputChange("gmap_coordinates", positionStr);
-    };
+    }, 450);
 
-    marker.on("dragend", () => {
-      const pos = marker.getLatLng();
-      reverseGeocode(pos.lat, pos.lng);
-    });
-
-    map.on("click", (e: any) => {
-      marker.setLatLng(e.latlng);
-      reverseGeocode(e.latlng.lat, e.latlng.lng);
-    });
-
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
-        markerRef.current = null;
-      }
-    };
-  }, [leafletLoaded, formData === null, currentStep]);
+    return () => clearTimeout(delayDebounce);
+  }, [formData?.gmap_coordinates]);
 
   if (!template || !formData) {
     return (
@@ -198,40 +305,6 @@ export default function EditorPage() {
     });
   };
 
-  // Helper to fly the Leaflet map and position pin dynamically
-  const selectLocation = (lat: number, lng: number, label?: string) => {
-    const coordsStr = label
-      ? `${lat.toFixed(4)},${lng.toFixed(4)} (${label})`
-      : `${lat.toFixed(4)},${lng.toFixed(4)}`;
-    handleInputChange("gmap_coordinates", coordsStr);
-
-    if (mapRef.current) {
-      mapRef.current.setView([lat, lng], 15);
-    }
-    if (markerRef.current) {
-      markerRef.current.setLatLng([lat, lng]);
-    }
-  };
-
-  // OpenStreetMap Nominatim search handler
-  const handleMapSearch = async () => {
-    if (!mapSearchQuery.trim()) return;
-    setIsMapSearching(true);
-    try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(mapSearchQuery)}&limit=5`
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setMapSearchResults(data);
-      }
-    } catch (err) {
-      console.error("Map search error:", err);
-    } finally {
-      setIsMapSearching(false);
-    }
-  };
-
   // Wizard steps categorizer
   const getFieldStep = (fieldId: string): number => {
     switch (fieldId) {
@@ -252,6 +325,7 @@ export default function EditorPage() {
 
       // Step 3: Multi-Event schedule & Background Music
       case "music_url":
+      case "music_enabled":
       case "scratch_enabled":
       case "sangeet_date":
       case "sangeet_venue":
@@ -261,9 +335,13 @@ export default function EditorPage() {
 
       // Step 4: Slideshow, Dress Code & Map Location
       case "slideshow_images":
+      case "slideshow_enabled":
       case "dress_code":
+      case "dress_code_enabled":
       case "transport_info":
+      case "transport_enabled":
       case "gmap_coordinates":
+      case "custom_sections":
         return 4;
 
       default:
@@ -278,7 +356,7 @@ export default function EditorPage() {
       if (field.required) {
         const val = (formData as any)[field.id];
         if (!val || !val.trim()) {
-          setStepError(`Please fill out the required field: "${field.label}"`);
+          setStepError(`Please fill out the required field: "${getAdjustedFieldLabel(field.id, field.label)}"`);
           return false;
         }
       }
@@ -339,7 +417,35 @@ export default function EditorPage() {
       }
     }
 
+    if (isArchived) {
+      setError("This invitation is archived and cannot be modified.");
+      return;
+    }
+
     setIsSubmitting(true);
+    setError(null);
+
+    if (isEditMode && editSlug) {
+      try {
+        const response = await fetch(`/api/invitations/${editSlug}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ formData }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.message || "Failed to update invitation details.");
+        }
+
+        router.push(`/success/${editSlug}`);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || "An unexpected error occurred during save.");
+        setIsSubmitting(false);
+      }
+      return;
+    }
     setError(null);
 
     try {
@@ -516,6 +622,18 @@ export default function EditorPage() {
                   if ((field.id === "sangeet_date" || field.id === "sangeet_venue") && formData.sangeet_enabled === "no") {
                     return false;
                   }
+                  if (field.id === "music_url" && formData.music_enabled === "no") {
+                    return false;
+                  }
+                  if (field.id === "slideshow_images" && formData.slideshow_enabled === "no") {
+                    return false;
+                  }
+                  if (field.id === "dress_code" && formData.dress_code_enabled === "no") {
+                    return false;
+                  }
+                  if (field.id === "transport_info" && formData.transport_enabled === "no") {
+                    return false;
+                  }
                   return true;
                 })
                 .map((field) => {
@@ -527,23 +645,28 @@ export default function EditorPage() {
                       <div key={field.id} className="flex flex-col gap-2.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
                         <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
                           <ImageIcon className="w-3.5 h-3.5" />
-                          {field.label}
+                          {getAdjustedFieldLabel(field.id, field.label)}
                         </label>
 
                         {/* Mode Toggle Buttons */}
                         <div className="flex gap-1.5 mb-1 bg-neutral-100/80 p-1 rounded-xl border border-neutral-200/30">
-                          {["preset", "upload", "url"].map((mode) => (
+                          {[
+                            { id: "preset", label: "Images" },
+                            { id: "color", label: "Colors" },
+                            { id: "upload", label: "Upload" },
+                            { id: "url", label: "Link" }
+                          ].map((mode) => (
                             <button
-                              key={mode}
+                              key={mode.id}
                               type="button"
-                              onClick={() => setBgImageMode(mode)}
+                              onClick={() => setBgImageMode(mode.id)}
                               className={`flex-1 py-1.5 font-montserrat text-[9px] tracking-wider uppercase transition-all duration-300 rounded-lg cursor-pointer ${
-                                bgImageMode === mode
+                                bgImageMode === mode.id
                                   ? "bg-white text-[#b3811b] font-bold shadow-sm"
                                   : "text-neutral-500 hover:text-neutral-800"
                               }`}
                             >
-                              {mode}
+                              {mode.label}
                             </button>
                           ))}
                         </div>
@@ -562,16 +685,78 @@ export default function EditorPage() {
                           </select>
                         )}
 
+                        {bgImageMode === "color" && (
+                          <div className="space-y-3">
+                            <select
+                              value={val}
+                              onChange={(e) => handleInputChange(field.id, e.target.value)}
+                              className="w-full bg-white border border-neutral-200 text-neutral-800 text-xs px-3 py-2.5 rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all"
+                            >
+                              <option value="">Select a background color...</option>
+                              {BG_COLOR_PRESETS.map((p) => (
+                                <option key={p.value} value={p.value} className="bg-white text-neutral-800">
+                                  {p.label}
+                                </option>
+                              ))}
+                            </select>
+                            {/* Visual Color Grid Swatches */}
+                            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                              {BG_COLOR_PRESETS.map((p) => {
+                                const isSelected = val === p.value;
+                                return (
+                                  <button
+                                    key={p.value}
+                                    type="button"
+                                    onClick={() => handleInputChange(field.id, p.value)}
+                                    style={{ background: p.value }}
+                                    className={`w-8 h-8 rounded-full border shadow-sm transition-all cursor-pointer hover:scale-110 flex items-center justify-center ${
+                                      isSelected
+                                        ? "border-[#b3811b] ring-2 ring-[#b3811b]/30 scale-105"
+                                        : "border-neutral-200"
+                                    }`}
+                                    title={p.label}
+                                  >
+                                    {isSelected && (
+                                      <span className={`text-[9px] font-bold ${p.value === "#fcfaf2" || p.value === "#f5e1e2" ? "text-neutral-800" : "text-white"}`}>
+                                        ✓
+                                      </span>
+                                    )}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+
                         {bgImageMode === "upload" && (
-                          <div className="relative border border-dashed border-[#b3811b]/30 py-6 flex flex-col items-center justify-center bg-[#fffcf9] rounded-2xl transition-colors hover:bg-[#fff9f2]">
-                            <Upload className="w-6 h-6 text-[#b3811b]/60 mb-1" />
-                            <span className="font-montserrat text-[9px] text-[#b3811b]/70 uppercase font-bold">UPLOAD BACKGROUND</span>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => handleFileUpload(field.id, e)}
-                              className="absolute inset-0 opacity-0 cursor-pointer w-full"
-                            />
+                          <div className="space-y-3">
+                            <div className="relative border border-dashed border-[#b3811b]/30 py-6 flex flex-col items-center justify-center bg-[#fffcf9] rounded-2xl transition-colors hover:bg-[#fff9f2]">
+                              <Upload className="w-6 h-6 text-[#b3811b]/60 mb-1" />
+                              <span className="font-montserrat text-[9px] text-[#b3811b]/70 uppercase font-bold">
+                                {val.startsWith("data:") ? "CHANGE UPLOADED IMAGE" : "UPLOAD BACKGROUND"}
+                              </span>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleFileUpload(field.id, e)}
+                                className="absolute inset-0 opacity-0 cursor-pointer w-full"
+                              />
+                            </div>
+                            {val.startsWith("data:") && (
+                              <div className="flex items-center gap-3 bg-neutral-50 p-2 rounded-xl border border-neutral-100">
+                                <img src={val} alt="Custom uploaded backdrop" className="w-12 h-12 rounded-lg object-cover border border-[#eed57c]/30 shadow-sm" />
+                                <div className="flex-grow min-w-0">
+                                  <p className="text-[10px] font-bold text-neutral-800 truncate uppercase">Custom Upload Active</p>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleInputChange(field.id, "")}
+                                    className="text-[9px] text-red-500 hover:text-red-600 font-bold uppercase"
+                                  >
+                                    Remove custom image
+                                  </button>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         )}
 
@@ -594,7 +779,7 @@ export default function EditorPage() {
                       <div key={field.id} className="flex flex-col gap-2.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
                         <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
                           <Music className="w-3.5 h-3.5" />
-                          {field.label}
+                          {getAdjustedFieldLabel(field.id, field.label)}
                         </label>
 
                         {/* Mode Toggle */}
@@ -661,7 +846,7 @@ export default function EditorPage() {
                       <div key={field.id} className="flex flex-col gap-2.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
                         <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
                           <ImageIcon className="w-3.5 h-3.5" />
-                          {field.label}
+                          {getAdjustedFieldLabel(field.id, field.label)}
                         </label>
 
                         {/* Mode Toggle */}
@@ -749,80 +934,249 @@ export default function EditorPage() {
 
                   // 4. GOOGLE MAP COORDINATES MARKER INTEGRATION
                   if (field.id === "gmap_coordinates") {
+                    const handleGetCurrentLocation = () => {
+                      if (navigator.geolocation) {
+                        setIsLocating(true);
+                        navigator.geolocation.getCurrentPosition(
+                          (position) => {
+                            const lat = position.coords.latitude;
+                            const lng = position.coords.longitude;
+                            handleInputChange(field.id, `${lat.toFixed(6)},${lng.toFixed(6)}`);
+                            setIsLocating(false);
+                          },
+                          (error) => {
+                            alert("Geolocation Error: " + error.message + " (Make sure you allow location permissions in your browser)");
+                            setIsLocating(false);
+                          },
+                          { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+                        );
+                      } else {
+                        alert("Geolocation is not supported by your browser.");
+                      }
+                    };
+
+                    const previewUrl = `https://maps.google.com/maps?q=${encodeURIComponent(val || "13.0827,80.2707")}&z=15&output=embed`;
+
                     return (
                       <div key={field.id} className="flex flex-col gap-2.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
+                        {/* Global Google places dropdown styling */}
+                        <style>{`
+                          .pac-container {
+                            z-index: 999999 !important;
+                            border-radius: 16px !important;
+                            border: 1px solid rgba(179, 129, 27, 0.2) !important;
+                            font-family: inherit !important;
+                            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1) !important;
+                            background-color: #fffdfa !important;
+                            padding: 6px 0 !important;
+                            margin-top: 4px !important;
+                          }
+                          .pac-item {
+                            padding: 8px 14px !important;
+                            font-size: 11px !important;
+                            color: #4a3e3d !important;
+                            cursor: pointer !important;
+                            border-top: 1px solid rgba(179, 129, 27, 0.08) !important;
+                            display: flex !important;
+                            align-items: center !important;
+                          }
+                          .pac-item:hover, .pac-item-selected {
+                            background-color: rgba(179, 129, 27, 0.08) !important;
+                          }
+                          .pac-icon {
+                            display: none !important;
+                          }
+                          .pac-item-query {
+                            font-size: 11px !important;
+                            color: #1a100f !important;
+                            font-weight: 600 !important;
+                            padding-right: 4px !important;
+                          }
+                          .pac-matched {
+                            color: #b3811b !important;
+                            font-weight: 700 !important;
+                          }
+                        `}</style>
+
                         <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
                           <MapPin className="w-3.5 h-3.5 text-[#b3811b]" />
                           {field.label}
                         </label>
+                        <span className="font-serif text-[9px] text-neutral-400 italic">
+                          Type address or select from the recommendations that pop up as you type.
+                        </span>
 
-                        {/* Easy Map Search Input */}
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={mapSearchQuery}
-                            onChange={(e) => setMapSearchQuery(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") {
-                                e.preventDefault();
-                                handleMapSearch();
-                              }
-                            }}
-                            placeholder="Search venue (e.g. ITC Grand Chola Chennai)..."
-                            className="flex-grow bg-white border border-neutral-200 text-neutral-800 px-3 py-2 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
-                          />
-                          <button
-                            type="button"
-                            onClick={handleMapSearch}
-                            disabled={isMapSearching}
-                            className="px-4 py-2 bg-gradient-to-r from-[#d4b060] to-[#b3811b] hover:from-[#c59b27] hover:to-[#a07a15] text-white font-montserrat text-[10px] font-bold tracking-widest uppercase transition-colors shrink-0 disabled:bg-[#eed57c]/40 rounded-xl shadow-sm cursor-pointer"
-                          >
-                            {isMapSearching ? "SEARCHING..." : "SEARCH"}
-                          </button>
+                        <div className="relative">
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              id={field.id}
+                              value={val}
+                              onChange={(e) => handleInputChange(field.id, e.target.value)}
+                              placeholder="Type address or search places..."
+                              className="flex-grow bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400 w-full"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleGetCurrentLocation}
+                              disabled={isLocating}
+                              className="px-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs rounded-xl border border-neutral-200 shadow-sm transition-colors flex items-center justify-center gap-1.5 shrink-0 cursor-pointer font-montserrat font-semibold text-[10px] disabled:opacity-50"
+                              title="Use my current GPS location"
+                            >
+                              {isLocating ? "⏳ Locating..." : "📍 Use Current"}
+                            </button>
+                          </div>
+
+                          {/* Fallback Custom Suggestions Dropdown */}
+                          {showFallbackDropdown && mapSearchResults.length > 0 && (
+                            <div className="absolute left-0 right-0 mt-1.5 bg-[#fffdfa] border border-[#eed57c]/30 rounded-xl shadow-lg z-50 max-h-56 overflow-y-auto divide-y divide-neutral-100">
+                              {mapSearchResults.map((result: any, idx: number) => {
+                                const parts = result.display_name.split(",");
+                                const title = parts[0];
+                                const subtitle = parts.slice(1).join(",").trim();
+                                return (
+                                  <button
+                                    key={idx}
+                                    type="button"
+                                    onClick={() => {
+                                      const lat = parseFloat(result.lat);
+                                      const lng = parseFloat(result.lon);
+                                      const address = result.display_name;
+                                      handleInputChange("gmap_coordinates", `${lat.toFixed(6)},${lng.toFixed(6)} (${address})`);
+                                      setShowFallbackDropdown(false);
+                                    }}
+                                    className="w-full text-left px-4 py-2.5 hover:bg-[#b3811b]/5 flex flex-col gap-0.5 cursor-pointer text-xs transition-colors"
+                                  >
+                                    <span className="font-bold text-neutral-800">{title}</span>
+                                    <span className="text-[9px] text-neutral-400 truncate">{subtitle}</span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
                         </div>
 
-                        {/* Search Results Autocomplete Box */}
-                        {mapSearchResults.length > 0 && (
-                          <div className="border border-neutral-200 bg-white divide-y divide-neutral-100 max-h-40 overflow-y-auto rounded-xl shadow-lg mt-1">
-                            {mapSearchResults.map((result) => (
-                              <button
-                                key={result.place_id}
-                                type="button"
-                                onClick={() => {
-                                  const lat = parseFloat(result.lat);
-                                  const lon = parseFloat(result.lon);
-                                  const parts = result.display_name.split(",");
-                                  const shortLabel = parts.slice(0, 3).join(",").trim();
-                                  selectLocation(lat, lon, shortLabel);
-                                  setMapSearchResults([]);
-                                  setMapSearchQuery(shortLabel);
-                                }}
-                                className="w-full text-left px-3 py-2 text-[10px] text-[#5a483a] hover:bg-[#eed57c]/10 transition-colors leading-relaxed"
-                              >
-                                {result.display_name}
-                              </button>
+                        {/* Google Map Live Preview */}
+                        <div className="flex flex-col gap-1 mt-1 text-left">
+                          <span className="font-serif text-[9px] text-neutral-400 italic">
+                            Google Maps Live Preview:
+                          </span>
+                          <div className="w-full h-48 border border-neutral-200 relative rounded-xl overflow-hidden shadow-inner">
+                            <iframe
+                              title="Google Maps Location Finder Preview"
+                              src={previewUrl}
+                              className="w-full h-full border-0"
+                              allowFullScreen
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className="flex justify-between items-center mt-1">
+                            <span className="text-[8px] text-neutral-400 font-serif leading-relaxed max-w-[70%]">
+                              Tip: Google Maps handles text addresses and GPS coordinates directly.
+                            </span>
+                            <a
+                              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(val || "13.0827,80.2707")}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[8px] text-[#b3811b] hover:underline font-montserrat uppercase font-bold"
+                            >
+                              Search on Web ↗
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  // 5. CUSTOM INFO SECTIONS BUILDER
+                  if (field.id === "custom_sections") {
+                    const sections = (() => {
+                      if (!val) return [];
+                      try {
+                        return JSON.parse(val);
+                      } catch {
+                        return [];
+                      }
+                    })();
+
+                    return (
+                      <div key={field.id} className="flex flex-col gap-3.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
+                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
+                          <Sparkles className="w-3.5 h-3.5 text-[#b3811b]" />
+                          {field.label}
+                        </label>
+                        <span className="font-serif text-[9px] text-neutral-400 italic">
+                          Add custom cards for hotel stay details, shuttle schedule, gift registry, or any extra details.
+                        </span>
+
+                        {/* List of current sections */}
+                        {sections.length > 0 && (
+                          <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                            {sections.map((sec: any, idx: number) => (
+                              <div key={idx} className="flex items-start justify-between bg-white border border-neutral-100 p-2.5 rounded-xl gap-2 shadow-sm">
+                                <div className="min-w-0 flex-grow text-left">
+                                  <h5 className="font-montserrat text-[9px] font-bold text-neutral-800 uppercase tracking-wide truncate">{sec.title}</h5>
+                                  <p className="font-serif text-[10px] text-neutral-500 leading-normal mt-0.5 line-clamp-2 whitespace-pre-line">{sec.content}</p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const next = sections.filter((_: any, i: number) => i !== idx);
+                                    handleInputChange(field.id, next.length > 0 ? JSON.stringify(next) : "");
+                                  }}
+                                  className="text-red-500 hover:text-red-600 transition-colors cursor-pointer shrink-0"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
                             ))}
                           </div>
                         )}
 
-                        <input
-                          type="text"
-                          id={field.id}
-                          value={val}
-                          onChange={(e) => handleInputChange(field.id, e.target.value)}
-                          placeholder="e.g. 13.0827,80.2707"
-                          className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
-                        />
-
-                        {/* Interactive Leaflet Map picker container */}
-                        <div className="flex flex-col gap-1 mt-1">
-                          <span className="font-serif text-[10px] text-neutral-400 italic text-left">
-                            Or drag the marker pin on the map below:
-                          </span>
-                          <div
-                            id="leaflet-map"
-                            className="w-full h-48 border border-neutral-200 bg-[#fbfbfa] relative z-10 rounded-xl overflow-hidden shadow-inner"
-                          />
+                        {/* Add new section form */}
+                        <div className="bg-white p-3 border border-neutral-150 rounded-xl space-y-2 text-left shadow-inner">
+                          <span className="font-montserrat text-[8px] font-bold text-[#b3811b] tracking-wider uppercase block">Add Extra Section</span>
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[8px] text-neutral-400 font-montserrat uppercase">Section Title</label>
+                            <input
+                              type="text"
+                              value={newSectionTitle}
+                              onChange={(e) => setNewSectionTitle(e.target.value)}
+                              placeholder="E.g. Accommodations"
+                              className="w-full bg-white border border-neutral-200 text-neutral-800 px-3 py-1.5 text-xs rounded-lg focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[8px] text-neutral-400 font-montserrat uppercase">Section Content</label>
+                            <textarea
+                              value={newSectionContent}
+                              onChange={(e) => setNewSectionContent(e.target.value)}
+                              placeholder="E.g. Shuttle departs from the Grand Ballroom at 2:00 PM."
+                              rows={2}
+                              className="w-full bg-white border border-neutral-200 text-neutral-800 px-3 py-1.5 text-xs rounded-lg focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm"
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (!newSectionTitle.trim()) {
+                                alert("Please enter a section title");
+                                return;
+                              }
+                              if (!newSectionContent.trim()) {
+                                alert("Please enter section content");
+                                return;
+                              }
+                              const next = [...sections, { title: newSectionTitle.trim(), content: newSectionContent.trim() }];
+                              handleInputChange(field.id, JSON.stringify(next));
+                              setNewSectionTitle("");
+                              setNewSectionContent("");
+                            }}
+                            className="w-full py-1.5 bg-neutral-900 text-white font-montserrat text-[8px] font-bold tracking-widest uppercase hover:bg-neutral-800 transition-colors rounded-lg flex items-center justify-center gap-1 cursor-pointer"
+                          >
+                            <Plus className="w-3 h-3" />
+                            Add Card
+                          </button>
                         </div>
                       </div>
                     );
@@ -834,10 +1188,12 @@ export default function EditorPage() {
                       <div key={field.id} className="flex items-center justify-between p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
                         <div className="flex flex-col gap-0.5">
                           <span className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold">
-                            {field.label}
+                            {getAdjustedFieldLabel(field.id, field.label)}
                           </span>
                           {field.placeholder && (
-                            <span className="font-serif text-[9px] text-neutral-400 italic">{field.placeholder}</span>
+                            <span className="font-serif text-[9px] text-neutral-400 italic">
+                              {getAdjustedFieldPlaceholder(field.id, field.placeholder)}
+                            </span>
                           )}
                         </div>
                         <button
@@ -862,7 +1218,7 @@ export default function EditorPage() {
                   return (
                     <div key={field.id} className="flex flex-col gap-1.5">
                       <label htmlFor={field.id} className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold">
-                        {field.label} {field.required && <span className="text-red-500">*</span>}
+                        {getAdjustedFieldLabel(field.id, field.label)} {field.required && <span className="text-red-500">*</span>}
                       </label>
 
                       {field.type === "textarea" ? (
@@ -872,7 +1228,7 @@ export default function EditorPage() {
                           rows={3}
                           value={val}
                           onChange={(e) => handleInputChange(field.id, e.target.value)}
-                          placeholder={field.placeholder}
+                          placeholder={getAdjustedFieldPlaceholder(field.id, field.placeholder || "")}
                           className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-3 text-sm rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
                         />
                       ) : field.type === "datetime" ? (
@@ -916,7 +1272,7 @@ export default function EditorPage() {
                           required={field.required}
                           value={val}
                           onChange={(e) => handleInputChange(field.id, e.target.value)}
-                          placeholder={field.placeholder}
+                          placeholder={getAdjustedFieldPlaceholder(field.id, field.placeholder || "")}
                           className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-3 text-sm rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
                         />
                       )}
@@ -964,7 +1320,7 @@ export default function EditorPage() {
                 ) : (
                   <>
                     <CreditCard className="w-4 h-4" />
-                    GENERATE (₹{template.price})
+                    {isArchived ? "ARCHIVED (LOCKED)" : isEditMode ? "SAVE CHANGES" : `GENERATE (₹${template.price})`}
                   </>
                 )}
               </button>
@@ -1054,5 +1410,18 @@ export default function EditorPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function EditorPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#faf8f5] text-[#3e342a] flex items-center justify-center flex-col">
+        <div className="w-10 h-10 border-2 border-[#b3811b] border-t-transparent rounded-full animate-spin mb-4" />
+        <span className="font-cinzel text-xs tracking-widest text-[#b3811b] uppercase">Loading Studio...</span>
+      </div>
+    }>
+      <EditorPageContent />
+    </Suspense>
   );
 }

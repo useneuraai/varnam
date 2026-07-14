@@ -23,6 +23,11 @@ export interface TemplateData {
   reception_date?: string;
   reception_venue?: string;
   gmap_coordinates?: string;
+  music_enabled?: string;
+  slideshow_enabled?: string;
+  dress_code_enabled?: string;
+  transport_enabled?: string;
+  custom_sections?: string;
 }
 
 export interface TemplateConfigField {
@@ -35,17 +40,29 @@ export interface TemplateConfigField {
 
 export const SHARED_LICENSE_FIELDS: TemplateConfigField[] = [
   { id: "bg_image_url", label: "Custom Background Image URL", type: "text", placeholder: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200", required: false },
+  
+  { id: "music_enabled", label: "Enable Background Music", type: "toggle", required: false },
   { id: "music_url", label: "Custom Background Music URL", type: "text", placeholder: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", required: false },
+  
+  { id: "slideshow_enabled", label: "Enable Photo Slideshow", type: "toggle", required: false },
   { id: "slideshow_images", label: "Photo Slideshow (Comma separated URLs)", type: "textarea", placeholder: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600, https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=600", required: false },
+  
   { id: "scratch_enabled", label: "Scratch-to-Reveal Date", type: "toggle", required: false },
+  
   { id: "sangeet_enabled", label: "Include Sangeet Event?", type: "toggle", required: false },
-  { id: "dress_code", label: "Dress Code Guide", type: "text", placeholder: "Traditional Ethnic / Elegant Formal", required: false },
-  { id: "transport_info", label: "Transport & Parking Instructions", type: "text", placeholder: "Valet parking available at entrance. Shuttle service from hotel.", required: false },
   { id: "sangeet_date", label: "Sangeet Date & Time", type: "datetime", required: false },
   { id: "sangeet_venue", label: "Sangeet Venue", type: "textarea", placeholder: "Grand Ballroom, ITC Grand Chola", required: false },
+  
+  { id: "dress_code_enabled", label: "Enable Dress Code Guide", type: "toggle", required: false },
+  { id: "dress_code", label: "Dress Code Guide", type: "text", placeholder: "Traditional Ethnic / Elegant Formal", required: false },
+  
+  { id: "transport_enabled", label: "Enable Transport Instructions", type: "toggle", required: false },
+  { id: "transport_info", label: "Transport & Parking Instructions", type: "text", placeholder: "Valet parking available at entrance. Shuttle service from hotel.", required: false },
+  
   { id: "reception_date", label: "Reception Date & Time", type: "datetime", required: true },
   { id: "reception_venue", label: "Reception Venue", type: "textarea", placeholder: "Grand Lawns, Leela Palace", required: true },
   { id: "gmap_coordinates", label: "Google Maps Coordinates (Lat,Lng)", type: "text", placeholder: "13.0827,80.2707", required: false },
+  { id: "custom_sections", label: "Custom Info Sections", type: "textarea", required: false },
 ];
 
 export interface TemplateDefinition {
@@ -71,7 +88,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     language: "Tamil/English",
     price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?auto=format&fit=crop&q=80&w=600",
-    previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    previewMusicUrl: "https://archive.org/download/r-12356661-1632393571-2601/04.%20Kajri%20-%20Dadra%20Taal.mp3",
     fields: [
       { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Aishwarya", required: true },
       { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Karthik", required: true },
@@ -92,7 +109,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     language: "Tamil/English",
     price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600",
-    previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    previewMusicUrl: "https://archive.org/download/r-12356661-1632393571-2601/04.%20Kajri%20-%20Dadra%20Taal.mp3",
     fields: [
       { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Devi", required: true },
       { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Suresh", required: true },
@@ -113,7 +130,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     language: "English",
     price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600",
-    previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+    previewMusicUrl: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Canon_in_D_Major_%28ISRC_USUAN1100301%29.mp3",
     fields: [
       { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Zara", required: true },
       { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Kabir", required: true },
@@ -134,7 +151,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     language: "English",
     price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&q=80&w=600",
-    previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+    previewMusicUrl: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Debussy_-_Clair_de_Lune.mp3",
     fields: [
       { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Riya", required: true },
       { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Varun", required: true },
@@ -155,7 +172,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     language: "English",
     price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1618005198143-e528346d9a59?auto=format&fit=crop&q=80&w=600",
-    previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+    previewMusicUrl: "https://archive.org/download/r-12356661-1632393571-2601/01.%20Raag%20Bhimpalasi%20-%20Teen%20Taal.mp3",
     fields: [
       { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Arundhati", required: true },
       { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Vikram", required: true },
@@ -176,7 +193,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     language: "Tamil/English",
     price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600",
-    previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    previewMusicUrl: "https://archive.org/download/r-12356661-1632393571-2601/01.%20Raag%20Bhimpalasi%20-%20Teen%20Taal.mp3",
     fields: [
       { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Aishwarya", required: true },
       { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Karthik", required: true },
@@ -197,7 +214,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     language: "English/Urdu",
     price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1618005198143-e528346d9a59?auto=format&fit=crop&q=80&w=600",
-    previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    previewMusicUrl: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Debussy_-_Clair_de_Lune.mp3",
     fields: [
       { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Zara", required: true },
       { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Faisal", required: true },
@@ -218,7 +235,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     language: "English",
     price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600",
-    previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+    previewMusicUrl: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Canon_in_D_Major_%28ISRC_USUAN1100301%29.mp3",
     fields: [
       { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Michelle", required: true },
       { id: "groom_name", label: "Groom Name", type: "text", placeholder: "David", required: true },
@@ -239,7 +256,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     language: "English",
     price: 799,
     thumbnailUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&q=80&w=600",
-    previewMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+    previewMusicUrl: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Canon_in_D_Major_%28ISRC_USUAN1100301%29.mp3",
     fields: [
       { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Priya", required: true },
       { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Rahul", required: true },
@@ -285,6 +302,26 @@ export const getDefaultTemplateData = (slug: string): TemplateData => {
   defaultData["gmap_coordinates"] = "13.0827,80.2707";
   defaultData["sangeet_enabled"] = "yes";
   defaultData["scratch_enabled"] = "no";
+  defaultData["music_enabled"] = "yes";
+  defaultData["slideshow_enabled"] = "yes";
+  defaultData["dress_code_enabled"] = "yes";
+  defaultData["transport_enabled"] = "yes";
+  defaultData["custom_sections"] = "";
 
   return defaultData as unknown as TemplateData;
 };
+
+export interface CustomSection {
+  title: string;
+  content: string;
+}
+
+export function parseCustomSections(jsonStr?: string): CustomSection[] {
+  if (!jsonStr) return [];
+  try {
+    return JSON.parse(jsonStr);
+  } catch (e) {
+    console.error("Error parsing custom sections:", e);
+    return [];
+  }
+}

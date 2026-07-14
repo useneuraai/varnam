@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { MapPin, Calendar, MessageSquare, Send, Heart, Clock } from "lucide-react";
+import { MapPin, Calendar, MessageSquare, Send, Heart, Clock, Sparkles } from "lucide-react";
 import { TemplateData } from "@/lib/templates";
 import FloatingFlowers from "@/components/animations/FloatingFlowers";
 import TempleReveal from "@/components/animations/TempleReveal";
@@ -118,6 +118,7 @@ export default function TempleGoldTemplate({ data }: { data: TemplateData }) {
   );
 
   const bgImage = data.bg_image_url || "https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?auto=format&fit=crop&q=80&w=1200";
+  const isColor = bgImage.startsWith("#") || bgImage.startsWith("rgb") || bgImage.startsWith("hsl") || bgImage.includes("gradient") || (bgImage.length < 20 && !bgImage.startsWith("http"));
 
   return (
     <div
@@ -128,8 +129,10 @@ export default function TempleGoldTemplate({ data }: { data: TemplateData }) {
     >
       {/* Custom Background Image Overlay */}
       <div
-        style={{ backgroundImage: `url(${bgImage})` }}
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none opacity-15 mix-blend-overlay"
+        style={isColor ? { background: bgImage, opacity: 1 } : { backgroundImage: `url(${bgImage})` }}
+        className={`fixed inset-0 bg-cover bg-center bg-no-repeat z-0 pointer-events-none ${
+          data.bg_image_url ? "opacity-35" : "opacity-15 mix-blend-overlay"
+        }`}
       />
 
       {/* Background Sparkles */}
@@ -344,15 +347,49 @@ export default function TempleGoldTemplate({ data }: { data: TemplateData }) {
               </div>
             </div>
 
-            {/* Travel Guidelines */}
-            {data.transport_info && (
+            {/* Travel & Dress Guidelines */}
+            {data.dress_code && data.dress_code_enabled !== "no" && (
               <p className="mt-6 max-w-md font-serif text-xs text-gold-200/60 leading-relaxed italic">
+                Dress Guidelines: {data.dress_code}
+              </p>
+            )}
+            {data.transport_info && data.transport_enabled !== "no" && (
+              <p className="mt-2 max-w-md font-serif text-xs text-gold-200/60 leading-relaxed italic">
                 Note: {data.transport_info}
               </p>
             )}
+
           </motion.div>
         </div>
       )}
+
+      {/* Custom Info Sections */}
+      {(() => {
+        if (!data.custom_sections) return null;
+        try {
+          const sections = JSON.parse(data.custom_sections);
+          if (!Array.isArray(sections) || sections.length === 0) return null;
+          return sections.map((sec: any, idx: number) => (
+            <div key={idx} className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen py-16 px-4 text-center relative z-10 border-t border-gold-500/10">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="w-full flex flex-col items-center max-w-2xl"
+              >
+                <span className="font-montserrat text-[10px] tracking-[0.2em] text-gold-400 uppercase mb-2">ADDITIONAL DETAILS</span>
+                <h2 className="font-cinzel text-xl md:text-2xl text-gold-300 tracking-widest uppercase mb-8">{sec.title}</h2>
+                <div className="w-full bg-black/40 border border-gold-500/20 p-6 sm:p-8 rounded-sm text-left relative overflow-hidden shadow-2xl">
+                  <div className="absolute top-3 right-3 text-gold-500/15 pointer-events-none"><Sparkles className="w-6 h-6" /></div>
+                  <p className="font-serif text-xs text-[#fbf6df]/80 leading-relaxed whitespace-pre-line relative z-10">{sec.content}</p>
+                </div>
+              </motion.div>
+            </div>
+          ));
+        } catch {
+          return null;
+        }
+      })()}
 
       {/* Section 5: Blessings Wall */}
       <div className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen py-16 px-4 text-center relative z-10 border-t border-gold-500/10">

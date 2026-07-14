@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { templatesMap } from "@/templates";
 import { InvitationRecord } from "@/lib/db";
 import MusicToggle from "@/components/animations/MusicToggle";
 import DoorReveal from "@/components/animations/DoorReveal";
-import { Calendar, MapPin, Send, MessageSquare, Check, X } from "lucide-react";
+import { Calendar, MapPin, Send, MessageSquare, Check, X, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { TEMPLATES } from "@/lib/templates";
 
 export default function InviteClient({ invitation }: { invitation: InvitationRecord }) {
   const [isDoorOpened, setIsDoorOpened] = useState(false);
@@ -18,26 +19,74 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
   const [isSubmittingRsvp, setIsSubmittingRsvp] = useState(false);
   const [rsvpCompleted, setRsvpCompleted] = useState(false);
 
-  const TemplateComponent = templatesMap[invitation.template_slug] || templatesMap["royal-tamil"];
+  // States for active template selection and guest wishes board
+  const [activeTemplateSlug, setActiveTemplateSlug] = useState(invitation.template_slug);
+  const [showTemplateSwitcher, setShowTemplateSwitcher] = useState(false);
+  const [wishesList, setWishesList] = useState<any[]>([]);
+  const [isLoadingWishes, setIsLoadingWishes] = useState(false);
 
-  const handleRsvpSubmit = (e: React.FormEvent) => {
+  const TemplateComponent = templatesMap[activeTemplateSlug] || templatesMap["royal-tamil"];
+
+  // Archived checking (5 days after event completes)
+  const isArchived = new Date() > new Date(new Date(invitation.wedding_date).getTime() + 5 * 24 * 60 * 60 * 1000);
+
+  const fetchWishes = async () => {
+    try {
+      setIsLoadingWishes(true);
+      const res = await fetch(`/api/rsvps?slug=${invitation.slug}`);
+      if (res.ok) {
+        const data = await res.json();
+        setWishesList(data);
+      }
+    } catch (err) {
+      console.error("Error fetching wishes:", err);
+    } finally {
+      setIsLoadingWishes(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWishes();
+  }, [invitation.slug]);
+
+  const handleRsvpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmittingRsvp(true);
     
-    // Simulate API call for RSVP
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/rsvps", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          invitationSlug: invitation.slug,
+          name: guestName,
+          attendance,
+          guestCount: Number(guestCount) || 1,
+          wishes: wishes || "",
+        }),
+      });
+
+      if (res.ok) {
+        setRsvpCompleted(true);
+        fetchWishes(); // reload board
+        setTimeout(() => {
+          setShowRsvpModal(false);
+          // Reset state
+          setGuestName("");
+          setGuestCount("1");
+          setAttendance("yes");
+          setWishes("");
+          setRsvpCompleted(false);
+        }, 3000);
+      } else {
+        alert("Failed to submit RSVP. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error submitting RSVP. Please try again.");
+    } finally {
       setIsSubmittingRsvp(false);
-      setRsvpCompleted(true);
-      setTimeout(() => {
-        setShowRsvpModal(false);
-        // Reset state
-        setGuestName("");
-        setGuestCount("1");
-        setAttendance("yes");
-        setWishes("");
-        setRsvpCompleted(false);
-      }, 3000);
-    }, 1500);
+    }
   };
 
   const handleCalendarAdd = () => {
@@ -63,19 +112,28 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
   };
 
   return (
-    <div className="relative min-h-screen pb-24 template-container">
+    <div className="relative min-h-screen pb-24 template-container bg-black text-[#fbf6df]">
+      {/* Archived / Locked Banner */}
+      {isArchived && (
+        <div className="bg-zinc-950/90 border-b border-gold-500/20 py-2.5 px-4 text-center sticky top-0 z-50 backdrop-blur-md">
+          <span className="font-montserrat text-[10px] tracking-widest text-gold-400 uppercase font-bold flex items-center justify-center gap-1.5">
+            ✦ Archived Invitation (License Exhausted) ✦
+          </span>
+        </div>
+      )}
+
       {/* 3D Double Door Reveal Entrance */}
       {!isDoorOpened && (
         <DoorReveal
           brideName={invitation.bride_name}
           groomName={invitation.groom_name}
-          templateSlug={invitation.template_slug}
+          templateSlug={activeTemplateSlug}
           onOpen={() => setIsDoorOpened(true)}
         />
       )}
 
       {/* Template Component */}
-      <TemplateComponent data={invitation} />
+      <TemplateComponent data={invitation as any} />
 
       {/* Floating Bottom Navigation Bar */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-md glass-panel border border-gold-500/20 px-4 py-3 flex items-center justify-between shadow-[0_15px_30px_rgba(0,0,0,0.8)] rounded-none">
@@ -115,8 +173,114 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
         </a>
       </div>
 
-      {/* Dynamic Background Music - Only play after doors open */}
+      {/* Guest Wishes Board Section */}
       {isDoorOpened && (
+        <div className="max-w-4xl mx-auto py-16 px-6 text-center border-t border-gold-600/20 relative z-10 bg-black/60 backdrop-blur-md mb-20">
+          <span className="font-serif text-[10px] tracking-[0.25em] text-gold-400 uppercase block">GUEST WISHES BOARD</span>
+          <h2 className="font-cinzel text-2xl md:text-3xl text-gold-300 tracking-wider uppercase mt-2 mb-6">Blessings & Prayers</h2>
+          <div className="h-[2px] w-12 bg-gold-500 mx-auto mb-10 rounded-full" />
+
+          {isLoadingWishes ? (
+            <div className="py-8 flex flex-col items-center justify-center">
+              <div className="w-8 h-8 border-2 border-gold-500 border-t-transparent rounded-full animate-spin mb-2" />
+              <span className="text-[10px] tracking-widest text-gold-400/60 uppercase">Loading Wishes...</span>
+            </div>
+          ) : wishesList.length === 0 ? (
+            <p className="font-serif text-sm italic text-gold-200/50 max-w-md mx-auto leading-relaxed py-6 border border-gold-500/10 bg-black/20 rounded-md">
+              No blessings have been written yet. Be the first to leave a warm message for the couple!
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[480px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gold-600/30">
+              {wishesList.map((item, idx) => (
+                <motion.div
+                  key={item.id || idx}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: idx * 0.05 }}
+                  className="glass-card p-5 border border-gold-500/10 text-left bg-black/40 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-2 pb-2 border-b border-gold-500/10">
+                      <span className="font-cinzel text-xs font-bold text-gold-300 uppercase tracking-wide truncate max-w-[70%]">
+                        {item.name}
+                      </span>
+                      <span className="px-1.5 py-0.5 bg-gold-500/10 border border-gold-500/20 text-gold-400 font-montserrat text-[7px] tracking-widest uppercase font-bold">
+                        {item.attendance === "yes" ? "ATTENDING" : "DECLINED"}
+                      </span>
+                    </div>
+                    <p className="font-serif text-xs text-gold-100/80 leading-relaxed italic whitespace-pre-line mb-4">
+                      "{item.wishes || "Wishing you both a lifetime of happiness!"}"
+                    </p>
+                  </div>
+                  <span className="text-[8px] text-gold-500/40 font-montserrat text-right block">
+                    {item.created_at ? new Date(item.created_at).toLocaleDateString("en-IN", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    }) : "Just now"}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Floating Template Switcher (Access to all templates for paid invites) */}
+      {isDoorOpened && invitation.is_paid && (
+        <div className="fixed bottom-24 left-6 z-50">
+          <button
+            onClick={() => setShowTemplateSwitcher(!showTemplateSwitcher)}
+            className="w-12 h-12 bg-zinc-950 border border-gold-500/40 text-gold-400 hover:text-gold-300 hover:border-gold-400 flex items-center justify-center shadow-lg transition-all rounded-full cursor-pointer hover:scale-105"
+            title="Switch Template Design"
+          >
+            <Sparkles className="w-5 h-5 text-gold-400" />
+          </button>
+
+          <AnimatePresence>
+            {showTemplateSwitcher && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                className="absolute bottom-16 left-0 bg-[#0a0a0b] border border-gold-500/20 p-4 shadow-2xl rounded-2xl w-60 max-h-72 overflow-y-auto flex flex-col gap-2 scrollbar-none"
+              >
+                <div className="border-b border-gold-500/10 pb-2 mb-1">
+                  <span className="font-cinzel text-[9px] tracking-widest text-gold-400 uppercase font-bold block">
+                    Choose Theme Design
+                  </span>
+                  <span className="font-serif text-[8px] text-gold-200/40">
+                    Switch dynamic templates on the fly
+                  </span>
+                </div>
+                {TEMPLATES.map((tpl) => {
+                  const active = activeTemplateSlug === tpl.slug;
+                  return (
+                    <button
+                      key={tpl.slug}
+                      onClick={() => {
+                        setActiveTemplateSlug(tpl.slug);
+                        setShowTemplateSwitcher(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 text-xs font-montserrat tracking-wider uppercase transition-all flex items-center justify-between cursor-pointer ${
+                        active
+                          ? "bg-gold-500/10 text-gold-300 font-bold border border-gold-500/20 rounded-md"
+                          : "text-neutral-400 hover:text-gold-200 hover:bg-neutral-900 rounded-md"
+                      }`}
+                    >
+                      <span className="truncate">{tpl.name.replace(/[^a-zA-Z\s]/g, "")}</span>
+                      {active && <span className="text-[8px] text-gold-400">●</span>}
+                    </button>
+                  );
+                })}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+
+      {/* Dynamic Background Music - Only play after doors open */}
+      {isDoorOpened && invitation.music_enabled !== "no" && (
         <MusicToggle audioUrl={invitation.music_url} autoPlay={true} />
       )}
 

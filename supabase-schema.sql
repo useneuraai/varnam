@@ -35,6 +35,27 @@ create table if not exists public.invitations (
     is_paid boolean default false,
     payment_id varchar,
     order_id varchar,
+    
+    -- Licensed Event Features
+    bg_image_url text,
+    slideshow_images text,
+    dress_code text,
+    transport_info text,
+    scratch_enabled varchar default 'no',
+    sangeet_enabled varchar default 'no',
+    sangeet_date timestamp with time zone,
+    sangeet_venue text,
+    reception_date timestamp with time zone,
+    reception_venue text,
+    gmap_coordinates text,
+    
+    -- Added Toggle Options & Custom Sections
+    music_enabled varchar default 'yes',
+    slideshow_enabled varchar default 'yes',
+    dress_code_enabled varchar default 'yes',
+    transport_enabled varchar default 'yes',
+    custom_sections text,
+
     created_at timestamp with time zone default timezone('utc'::text, now()) not null,
     updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
@@ -51,10 +72,22 @@ create table if not exists public.payments (
     created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
+-- 5. Create RSVPs & Guest Wishes Table
+create table if not exists public.rsvps (
+    id uuid default uuid_generate_v4() primary key,
+    invitation_slug varchar not null references public.invitations(slug) on delete cascade,
+    name varchar not null,
+    attendance varchar not null,
+    guest_count integer not null default 1,
+    wishes text,
+    created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
 -- Enable Row Level Security (RLS) on all tables
 alter table public.templates enable row level security;
 alter table public.invitations enable row level security;
 alter table public.payments enable row level security;
+alter table public.rsvps enable row level security;
 
 -- Policies for templates (anyone can read active ones, write requires admin / auth)
 create policy "Allow public read-only access to active templates"
@@ -86,6 +119,15 @@ create policy "Allow public inserts on payments"
 create policy "Allow read on payments"
     on public.payments for select
     using (true);
+
+-- Policies for RSVPs
+create policy "Allow public read access to RSVPs"
+    on public.rsvps for select
+    using (true);
+
+create policy "Allow public inserts on RSVPs"
+    on public.rsvps for insert
+    with check (true);
 
 -- Seed Initial Template Data
 insert into public.templates (slug, name, description, category, religion, language, price, thumbnail_url, preview_music_url, config, is_active)

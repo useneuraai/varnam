@@ -66,6 +66,9 @@ create table if not exists public.invitations (
     updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
+-- Ensure user_id column exists on public.invitations (for existing databases)
+alter table public.invitations add column if not exists user_id uuid references auth.users(id) on delete set null;
+
 -- 4. Create Payments Table
 create table if not exists public.payments (
     id uuid default uuid_generate_v4() primary key,

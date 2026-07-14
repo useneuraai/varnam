@@ -546,7 +546,7 @@ export default function DashboardPage() {
                   setShowSignOutConfirm(false);
                   handleSignOut();
                 }}
-                className="px-5 py-2.5 bg-red-650 hover:bg-red-550 text-white font-bold text-[10px] tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex-1 shadow-sm font-sans"
+                className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] tracking-wider uppercase rounded-xl transition-all cursor-pointer flex-1 shadow-md font-sans"
               >
                 Sign Out
               </button>

@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { supabase } from "./supabase";
-import { TemplateData } from "./templates";
+import { TemplateData, TEMPLATES } from "./templates";
 
 export interface InvitationRecord {
   template_slug: string;
@@ -69,10 +69,61 @@ function writeLocalMockDb(data: Record<string, InvitationRecord>) {
   }
 }
 
+export async function ensureTemplateExists(templateSlug: string): Promise<void> {
+  const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
+  if (isMockSupabase) return;
+
+  try {
+    const { data: existing, error } = await supabase
+      .from("templates")
+      .select("slug")
+      .eq("slug", templateSlug)
+      .maybeSingle();
+
+    if (error) {
+      console.error(`Error querying template slug "${templateSlug}":`, error);
+      return;
+    }
+
+    if (!existing) {
+      const localDef = TEMPLATES.find((t) => t.slug === templateSlug);
+      if (localDef) {
+        console.log(`Auto-seeding missing template in Supabase: ${templateSlug}`);
+        const insertRecord = {
+          slug: localDef.slug,
+          name: localDef.name,
+          description: localDef.description,
+          category: localDef.category,
+          religion: localDef.religion,
+          language: localDef.language,
+          price: localDef.price,
+          thumbnail_url: localDef.thumbnailUrl,
+          preview_music_url: localDef.previewMusicUrl,
+          config: { fields: localDef.fields },
+          is_active: true
+        };
+
+        const { error: insertError } = await supabase
+          .from("templates")
+          .insert(insertRecord);
+
+        if (insertError) {
+          console.error(`Failed to auto-seed template "${templateSlug}":`, insertError);
+        } else {
+          console.log(`Successfully auto-seeded template "${templateSlug}".`);
+        }
+      }
+    }
+  } catch (err) {
+    console.error(`Graceful exception ensuring template "${templateSlug}" exists:`, err);
+  }
+}
+
 export async function saveInvitation(record: InvitationRecord): Promise<InvitationRecord> {
   const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
 
   if (!isMockSupabase) {
+    await ensureTemplateExists(record.template_slug);
     const { data, error } = await supabase
       .from("invitations")
       .insert(record)
@@ -200,6 +251,7 @@ export async function upsertInvitation(record: InvitationRecord): Promise<Invita
   const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
 
   if (!isMockSupabase) {
+    await ensureTemplateExists(record.template_slug);
     const { data, error } = await supabase
       .from("invitations")
       .upsert(record, { onConflict: "slug" })

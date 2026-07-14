@@ -19,7 +19,8 @@ import {
   ArrowRight,
   Heart,
   MessageSquare,
-  AlertCircle
+  AlertCircle,
+  CreditCard
 } from "lucide-react";
 
 interface Invitation {
@@ -325,9 +326,15 @@ export default function DashboardPage() {
                       <span className="bg-[#fffcf9] border border-[#eed57c]/40 text-[#b3811b] text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-full">
                         {invite.template_slug.replace("-", " ")}
                       </span>
-                      <span className="bg-emerald-50 text-emerald-700 text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-full">
-                        Paid & Live
-                      </span>
+                      {invite.is_paid ? (
+                        <span className="bg-emerald-50 text-emerald-700 text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-full">
+                          Paid & Live
+                        </span>
+                      ) : (
+                        <span className="bg-amber-50 text-amber-800 border border-amber-200/50 text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-full animate-pulse">
+                          Draft (Unpaid)
+                        </span>
+                      )}
                     </div>
 
                     {/* Couple Names */}
@@ -356,49 +363,71 @@ export default function DashboardPage() {
                   </div>
 
                   {/* Actions footer */}
-                  <div className="bg-zinc-50 border-t border-zinc-150 p-4 grid grid-cols-2 gap-2">
-                    <Link
-                      href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
-                      className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
-                    >
-                      <Edit className="w-3.5 h-3.5 text-zinc-500" />
-                      Edit Details
-                    </Link>
+                  <div className="bg-zinc-50 border-t border-zinc-150 p-4">
+                    {invite.is_paid ? (
+                      <div className="grid grid-cols-2 gap-2">
+                        <Link
+                          href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
+                          className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
+                        >
+                          <Edit className="w-3.5 h-3.5 text-zinc-500" />
+                          Edit Details
+                        </Link>
 
-                    <button
-                      onClick={() => handleViewRsvps(invite)}
-                      className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer"
-                    >
-                      <Users className="w-3.5 h-3.5 text-zinc-500" />
-                      View RSVPs
-                    </button>
+                        <button
+                          onClick={() => handleViewRsvps(invite)}
+                          className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer"
+                        >
+                          <Users className="w-3.5 h-3.5 text-zinc-500" />
+                          View RSVPs
+                        </button>
 
-                    <a
-                      href={`/invite/${invite.slug}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5 text-zinc-300" />
-                      Live Invite
-                    </a>
+                        <a
+                          href={`/invite/${invite.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5 text-zinc-300" />
+                          Live Invite
+                        </a>
 
-                    <button
-                      onClick={() => handleCopyLink(invite.slug)}
-                      className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer relative"
-                    >
-                      {copiedSlug === invite.slug ? (
-                        <>
-                          <ClipboardCheck className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="text-emerald-600">Copied!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Share2 className="w-3.5 h-3.5 text-zinc-500" />
-                          Share Link
-                        </>
-                      )}
-                    </button>
+                        <button
+                          onClick={() => handleCopyLink(invite.slug)}
+                          className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer relative"
+                        >
+                          {copiedSlug === invite.slug ? (
+                            <>
+                              <ClipboardCheck className="w-3.5 h-3.5 text-emerald-600" />
+                              <span className="text-emerald-600">Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Share2 className="w-3.5 h-3.5 text-zinc-500" />
+                              Share Link
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-2">
+                        <Link
+                          href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
+                          className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
+                        >
+                          <Edit className="w-3.5 h-3.5 text-zinc-500" />
+                          Continue Edit
+                        </Link>
+
+                        <Link
+                          href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
+                          className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#d4b060] to-[#b3811b] hover:from-[#c59b27] hover:to-[#a07a15] text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm hover:shadow-md"
+                        >
+                          <CreditCard className="w-3.5 h-3.5" />
+                          Pay & Activate
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </div>
               );

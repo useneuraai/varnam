@@ -80,6 +80,8 @@ function EditorPageContent() {
   const [formData, setFormData] = useState<TemplateData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [draftSlug, setDraftSlug] = useState<string | null>(null);
+  const [isAutosaving, setIsAutosaving] = useState(false);
   
   // Auth state
   const [user, setUser] = useState<any>(null);
@@ -232,6 +234,73 @@ function EditorPageContent() {
       setFormData(getDefaultTemplateData(templateSlug));
     }
   }, [templateSlug, editSlug]);
+
+  // Debounced autosave to database (if authenticated)
+  useEffect(() => {
+    if (!user || !formData || isArchived) return;
+
+    // Check if the form is empty / just initialized
+    if (!formData.bride_name && !formData.groom_name && !formData.wedding_venue) {
+      return;
+    }
+
+    const saveDraft = async () => {
+      try {
+        setIsAutosaving(true);
+        const { data: { session } } = await supabase.auth.getSession();
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        if (session) {
+          headers["Authorization"] = `Bearer ${session.access_token}`;
+        }
+
+        if (isEditMode && (editSlug || draftSlug)) {
+          // Update existing
+          const slugToUse = editSlug || draftSlug;
+          await fetch(`/api/invitations/${slugToUse}`, {
+            method: "PUT",
+            headers,
+            body: JSON.stringify({ formData }),
+          });
+        } else {
+          // If we don't have an editSlug/draftSlug yet, create a new draft!
+          const cleanName = (name: string) => name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-");
+          const bride = cleanName(formData.bride_name || "bride");
+          const groom = cleanName(formData.groom_name || "groom");
+          
+          let activeSlug = draftSlug;
+          if (!activeSlug) {
+            const randomStr = Math.random().toString(36).substring(2, 7);
+            activeSlug = `${bride}-weds-${groom}-${randomStr}`;
+            setDraftSlug(activeSlug);
+            
+            // Update URL query parameter dynamically
+            const newUrl = `${window.location.pathname}?edit=${activeSlug}`;
+            window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, "", newUrl);
+          }
+
+          await fetch("/api/invitations/draft", {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+              slug: activeSlug,
+              templateSlug: templateSlug,
+              formData,
+            }),
+          });
+        }
+        setIsAutosaving(false);
+      } catch (err) {
+        console.error("Autosave error:", err);
+        setIsAutosaving(false);
+      }
+    };
+
+    const timer = setTimeout(() => {
+      saveDraft();
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [formData, user, isEditMode, editSlug, draftSlug, templateSlug, isArchived]);
 
   // Load Google Maps script dynamically (only if API key is present)
   useEffect(() => {
@@ -505,6 +574,7 @@ function EditorPageContent() {
           formData: formData,
           templateSlug: template.slug,
           userId: user?.id,
+          existingSlug: editSlug || draftSlug,
         }),
       });
 
@@ -547,9 +617,23 @@ function EditorPageContent() {
           </Link>
           <div className="flex flex-col">
             <span className="font-cinzel text-xs text-[#8a725d] font-bold tracking-wider">DESIGN STUDIO</span>
-            <span className="font-montserrat text-[9px] tracking-widest text-[#8a725d]/70 uppercase">
-              CUSTOMIZING: {template.name}
-            </span>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="font-montserrat text-[9px] tracking-widest text-[#8a725d]/70 uppercase">
+                CUSTOMIZING: {template.name}
+              </span>
+              <span className="text-[9px] text-[#8a725d]/40 font-montserrat">•</span>
+              {isAutosaving ? (
+                <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider animate-pulse flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 animate-ping" />
+                  Saving...
+                </span>
+              ) : (
+                <span className="text-[9px] text-[#b3811b] font-bold uppercase tracking-wider flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#b3811b]" />
+                  Saved
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

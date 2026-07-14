@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { saveInvitation } from "@/lib/db";
+import { upsertInvitation } from "@/lib/db";
 import { getTemplateBySlug } from "@/lib/templates";
 
 export async function POST(req: NextRequest) {
@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
       formData,
       templateSlug,
       userId,
+      existingSlug,
     } = body;
 
     if (!formData || !templateSlug) {
@@ -39,15 +40,18 @@ export async function POST(req: NextRequest) {
       console.log("[MOCK MODE] Bypassing Razorpay signature verification.");
     }
 
-    // 2. Generate Unique Sharing Slug
-    const cleanName = (name: string) => name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-");
-    const bride = cleanName(formData.bride_name || "bride");
-    const groom = cleanName(formData.groom_name || "groom");
+    // 2. Generate or Reuse Unique Sharing Slug
+    let finalSlug = existingSlug;
     const randomStr = Math.random().toString(36).substring(2, 7);
-    const finalSlug = `${bride}-weds-${groom}-${randomStr}`;
+    if (!finalSlug) {
+      const cleanName = (name: string) => name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-");
+      const bride = cleanName(formData.bride_name || "bride");
+      const groom = cleanName(formData.groom_name || "groom");
+      finalSlug = `${bride}-weds-${groom}-${randomStr}`;
+    }
 
-    // 3. Save Invitation & Payment Data via DB Layer
-    await saveInvitation({
+    // 3. Save/Upsert Invitation & Payment Data via DB Layer
+    await upsertInvitation({
       template_slug: template.slug,
       user_id: userId || undefined,
       slug: finalSlug,

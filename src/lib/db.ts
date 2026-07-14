@@ -196,6 +196,36 @@ export async function updateInvitation(slug: string, record: Partial<InvitationR
   }
 }
 
+export async function upsertInvitation(record: InvitationRecord): Promise<InvitationRecord> {
+  const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
+
+  if (!isMockSupabase) {
+    const { data, error } = await supabase
+      .from("invitations")
+      .upsert(record, { onConflict: "slug" })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase error upserting invitation:", error);
+      throw error;
+    }
+    return data;
+  } else {
+    const db = readLocalMockDb();
+    const existing = db[record.slug] || {};
+    const newRecord = {
+      ...existing,
+      ...record,
+      created_at: existing.created_at || new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    db[record.slug] = newRecord;
+    writeLocalMockDb(db);
+    return newRecord;
+  }
+}
+
 // RSVP Database Interfaces & Methods
 export interface RsvpRecord {
   id?: string;

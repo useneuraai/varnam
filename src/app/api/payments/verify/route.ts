@@ -44,10 +44,7 @@ export async function POST(req: NextRequest) {
     let finalSlug = existingSlug;
     const randomStr = Math.random().toString(36).substring(2, 7);
     if (!finalSlug) {
-      const cleanName = (name: string) => name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-");
-      const bride = cleanName(formData.bride_name || "bride");
-      const groom = cleanName(formData.groom_name || "groom");
-      finalSlug = `${bride}-weds-${groom}-${randomStr}`;
+      finalSlug = `${template.slug}-${randomStr}`;
     }
 
     // 3. Save/Upsert Invitation & Payment Data via DB Layer

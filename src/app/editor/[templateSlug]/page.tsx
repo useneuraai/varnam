@@ -272,15 +272,10 @@ function EditorPageContent() {
             body: JSON.stringify({ formData }),
           });
         } else {
-          // If we don't have an editSlug/draftSlug yet, create a new draft!
-          const cleanName = (name: string) => name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-");
-          const bride = cleanName(formData.bride_name || "bride");
-          const groom = cleanName(formData.groom_name || "groom");
-          
           let activeSlug = draftSlug;
           if (!activeSlug) {
             const randomStr = Math.random().toString(36).substring(2, 7);
-            activeSlug = `${bride}-weds-${groom}-${randomStr}`;
+            activeSlug = `${templateSlug}-${randomStr}`;
             setDraftSlug(activeSlug);
             
             // Update URL query parameter dynamically

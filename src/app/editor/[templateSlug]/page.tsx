@@ -202,24 +202,34 @@ function EditorPageContent() {
   useEffect(() => {
     if (!templateSlug) return;
 
-    if (editSlug) {
+     if (editSlug) {
       setIsEditMode(true);
       setIsSubmitting(true);
       fetch(`/api/invitations/${editSlug}`)
         .then((res) => {
+          if (res.status === 404) {
+            console.log("Invitation slug not found (404), initializing as new draft.");
+            setIsEditMode(false);
+            // Remove edit query param from URL dynamically
+            const newUrl = window.location.pathname;
+            window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, "", newUrl);
+            return getDefaultTemplateData(templateSlug);
+          }
           if (!res.ok) throw new Error("Could not find invitation to edit.");
           return res.json();
         })
         .then((data) => {
           setFormData(data);
           
-          // Check if archived (more than 5 days after event completes)
-          const now = new Date();
-          const eventDate = new Date(data.wedding_date);
-          const archiveLimit = new Date(eventDate.getTime() + 5 * 24 * 60 * 60 * 1000);
-          if (now > archiveLimit) {
-            setIsArchived(true);
-            setError("This invitation is archived (license exhausted) and cannot be edited.");
+          if (data && data.wedding_date) {
+            // Check if archived (more than 5 days after event completes)
+            const now = new Date();
+            const eventDate = new Date(data.wedding_date);
+            const archiveLimit = new Date(eventDate.getTime() + 5 * 24 * 60 * 60 * 1000);
+            if (now > archiveLimit) {
+              setIsArchived(true);
+              setError("This invitation is archived (license exhausted) and cannot be edited.");
+            }
           }
         })
         .catch((err) => {
@@ -1227,8 +1237,8 @@ function EditorPageContent() {
                         )}
 
                         {/* Add new section form */}
-                        <div className="bg-[#fafaf9] p-5 border border-neutral-150 rounded-2xl space-y-4 text-left">
-                          <span className="font-montserrat text-[9px] font-bold text-[#b3811b] tracking-wider uppercase block">Add New Info Card</span>
+                        <div className="space-y-4 text-left pt-4 border-t border-[#eed57c]/15">
+                          <span className="font-montserrat text-[10px] font-bold text-[#b3811b] tracking-wider uppercase block">Add New Info Card</span>
                           
                           <div className="flex flex-col gap-1.5">
                             <label className="text-[10px] text-[#8a725d] font-montserrat uppercase font-bold tracking-wide">Section Title</label>

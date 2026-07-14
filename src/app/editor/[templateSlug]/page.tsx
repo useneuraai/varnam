@@ -278,7 +278,7 @@ function EditorPageContent() {
             window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, "", newUrl);
           }
 
-          await fetch("/api/invitations/draft", {
+          const res = await fetch("/api/invitations/draft", {
             method: "POST",
             headers,
             body: JSON.stringify({
@@ -287,6 +287,9 @@ function EditorPageContent() {
               formData,
             }),
           });
+          if (res.ok) {
+            setIsEditMode(true);
+          }
         }
         setIsAutosaving(false);
       } catch (err) {
@@ -300,7 +303,7 @@ function EditorPageContent() {
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [formData, user, isEditMode, editSlug, draftSlug, templateSlug, isArchived]);
+  }, [formData, user, templateSlug, isArchived]);
 
   // Load Google Maps script dynamically (only if API key is present)
   useEffect(() => {
@@ -1224,28 +1227,31 @@ function EditorPageContent() {
                         )}
 
                         {/* Add new section form */}
-                        <div className="bg-white p-3 border border-neutral-150 rounded-xl space-y-2 text-left shadow-inner">
-                          <span className="font-montserrat text-[8px] font-bold text-[#b3811b] tracking-wider uppercase block">Add Extra Section</span>
-                          <div className="flex flex-col gap-1">
-                            <label className="text-[8px] text-neutral-400 font-montserrat uppercase">Section Title</label>
+                        <div className="bg-[#fafaf9] p-5 border border-neutral-150 rounded-2xl space-y-4 text-left">
+                          <span className="font-montserrat text-[9px] font-bold text-[#b3811b] tracking-wider uppercase block">Add New Info Card</span>
+                          
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[10px] text-[#8a725d] font-montserrat uppercase font-bold tracking-wide">Section Title</label>
                             <input
                               type="text"
                               value={newSectionTitle}
                               onChange={(e) => setNewSectionTitle(e.target.value)}
                               placeholder="E.g. Accommodations"
-                              className="w-full bg-white border border-neutral-200 text-neutral-800 px-3 py-1.5 text-xs rounded-lg focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm"
+                              className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-3 text-sm rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
                             />
                           </div>
-                          <div className="flex flex-col gap-1">
-                            <label className="text-[8px] text-neutral-400 font-montserrat uppercase">Section Content</label>
+                          
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[10px] text-[#8a725d] font-montserrat uppercase font-bold tracking-wide">Section Content</label>
                             <textarea
                               value={newSectionContent}
                               onChange={(e) => setNewSectionContent(e.target.value)}
                               placeholder="E.g. Shuttle departs from the Grand Ballroom at 2:00 PM."
-                              rows={2}
-                              className="w-full bg-white border border-neutral-200 text-neutral-800 px-3 py-1.5 text-xs rounded-lg focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm"
+                              rows={3}
+                              className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-3 text-sm rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
                             />
                           </div>
+                          
                           <button
                             type="button"
                             onClick={() => {
@@ -1262,9 +1268,9 @@ function EditorPageContent() {
                               setNewSectionTitle("");
                               setNewSectionContent("");
                             }}
-                            className="w-full py-1.5 bg-neutral-900 text-white font-montserrat text-[8px] font-bold tracking-widest uppercase hover:bg-neutral-800 transition-colors rounded-lg flex items-center justify-center gap-1 cursor-pointer"
+                            className="w-full py-3 bg-zinc-950 text-white font-montserrat text-[10px] font-bold tracking-widest uppercase hover:bg-zinc-800 transition-colors rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
                           >
-                            <Plus className="w-3 h-3" />
+                            <Plus className="w-3.5 h-3.5" />
                             Add Card
                           </button>
                         </div>

@@ -171,7 +171,7 @@ export default function DashboardPage() {
     // Generate a demo invitation to seed local database in mock mode
     setLoadingInvites(true);
     try {
-      const demoSlug = `luxury-floral-demo`;
+      const demoSlug = `demo987`;
       const res = await fetch("/api/payments/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

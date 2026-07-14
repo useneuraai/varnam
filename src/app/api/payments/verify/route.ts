@@ -40,11 +40,10 @@ export async function POST(req: NextRequest) {
       console.log("[MOCK MODE] Bypassing Razorpay signature verification.");
     }
 
-    // 2. Generate or Reuse Unique Sharing Slug
+    const randomStr = Math.random().toString(36).substring(2, 9);
     let finalSlug = existingSlug;
-    const randomStr = Math.random().toString(36).substring(2, 7);
     if (!finalSlug) {
-      finalSlug = `${template.slug}-${randomStr}`;
+      finalSlug = randomStr;
     }
 
     // 3. Save/Upsert Invitation & Payment Data via DB Layer

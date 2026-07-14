@@ -274,8 +274,8 @@ function EditorPageContent() {
         } else {
           let activeSlug = draftSlug;
           if (!activeSlug) {
-            const randomStr = Math.random().toString(36).substring(2, 7);
-            activeSlug = `${templateSlug}-${randomStr}`;
+            const randomStr = Math.random().toString(36).substring(2, 9);
+            activeSlug = randomStr;
             setDraftSlug(activeSlug);
             
             // Update URL query parameter dynamically

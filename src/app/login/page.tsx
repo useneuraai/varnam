@@ -130,13 +130,13 @@ function LoginContent() {
         <div className="relative z-10">
           {/* Logo & Header */}
           <div className="text-center mb-8">
-            <span className="font-cinzel text-xs tracking-widest text-[#b3811b] font-bold block mb-1">
+            <span className="font-sans text-xs tracking-widest text-[#b3811b] font-bold block mb-1">
               WELCOME TO VARNAM
             </span>
-            <h1 className="font-cinzel text-2xl font-black tracking-widest text-zinc-900">
+            <h1 className="font-sans text-2xl font-black tracking-widest text-zinc-900">
               SIGN IN
             </h1>
-            <p className="text-xs text-zinc-500 mt-2">
+            <p className="text-xs text-zinc-500 mt-2 font-sans">
               Access your wedding invitations, timelines, RSVPs, and payments.
             </p>
           </div>

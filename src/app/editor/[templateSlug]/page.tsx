@@ -493,80 +493,28 @@ function EditorPageContent() {
     setError(null);
 
     try {
-      // 1. Create order on the server
-      const orderResponse = await fetch("/api/payments/order", {
+      // Direct dummy checkout - bypass Razorpay completely to verify flows easily
+      const randomStr = Math.random().toString(36).substring(2, 9);
+      const verifyResponse = await fetch("/api/payments/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          razorpay_order_id: `order_mock_${randomStr}`,
+          razorpay_payment_id: `pay_mock_${randomStr}`,
+          razorpay_signature: "mock_signature",
+          formData: formData,
           templateSlug: template.slug,
-          amount: template.price,
+          userId: user?.id,
         }),
       });
 
-      if (!orderResponse.ok) {
-        throw new Error("Failed to initialize payment order. Please try again.");
+      if (!verifyResponse.ok) {
+        const err = await verifyResponse.json();
+        throw new Error(err.message || "Payment verification failed.");
       }
 
-      const orderData = await orderResponse.json();
-      
-      // 2. Configure Razorpay options
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder",
-        amount: orderData.amount,
-        currency: "INR",
-        name: "Varnam Wedding Invites",
-        description: `Bespoke Design: ${template.name}`,
-        order_id: orderData.id,
-        handler: async function (response: any) {
-          try {
-            setIsSubmitting(true);
-            // 3. Verify payment signature on the server and save invite
-            const verifyResponse = await fetch("/api/payments/verify", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                formData: formData,
-                templateSlug: template.slug,
-                userId: user?.id,
-              }),
-            });
-
-            if (!verifyResponse.ok) {
-              const err = await verifyResponse.json();
-              throw new Error(err.message || "Payment verification failed.");
-            }
-
-            const verifyResult = await verifyResponse.json();
-            router.push(`/success/${verifyResult.slug}`);
-          } catch (verifyErr: any) {
-            setError(verifyErr.message || "Verification failed. Please contact support.");
-            setIsSubmitting(false);
-          }
-        },
-        prefill: {
-          name: `${formData.bride_name} & ${formData.groom_name}`,
-          contact: formData.rsvp_phone || "",
-        },
-        theme: {
-          color: "#b3811b",
-        },
-        modal: {
-          ondismiss: function () {
-            setIsSubmitting(false);
-          },
-        },
-      };
-
-      // 4. Open Razorpay Checkout overlay
-      if ((window as any).Razorpay) {
-        const rzp = new (window as any).Razorpay(options);
-        rzp.open();
-      } else {
-        throw new Error("Razorpay SDK failed to load. Please check your internet connection.");
-      }
+      const verifyResult = await verifyResponse.json();
+      router.push(`/success/${verifyResult.slug}`);
     } catch (err: any) {
       console.error(err);
       setError(err.message || "An unexpected error occurred during checkout.");

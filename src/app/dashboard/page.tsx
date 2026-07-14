@@ -60,6 +60,7 @@ export default function DashboardPage() {
   
   // Share tooltip state
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
   useEffect(() => {
     const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
@@ -219,7 +220,7 @@ export default function DashboardPage() {
       {/* Dashboard Header */}
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-zinc-150">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="font-cinzel text-2xl font-black tracking-widest text-zinc-900">
+          <Link href="/" className="font-sans text-2xl font-black tracking-widest text-zinc-900">
             VARNAM
           </Link>
           
@@ -228,7 +229,7 @@ export default function DashboardPage() {
               Signed in as: <strong className="text-zinc-800">{user?.email}</strong>
             </span>
             <button
-              onClick={handleSignOut}
+              onClick={() => setShowSignOutConfirm(true)}
               className="flex items-center gap-2 px-4 py-2 border border-zinc-200 hover:border-zinc-900 hover:bg-zinc-50 rounded-full text-xs font-bold uppercase tracking-wider text-zinc-700 hover:text-zinc-900 transition-all cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
@@ -244,7 +245,7 @@ export default function DashboardPage() {
         {/* Welcome Section */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10 pb-8 border-b border-zinc-200">
           <div>
-            <h1 className="font-cinzel text-3xl font-bold tracking-tight text-zinc-900">
+            <h1 className="font-sans text-3xl font-bold tracking-tight text-zinc-900">
               MY STUDIO
             </h1>
             <p className="text-sm text-zinc-500 mt-1.5 font-normal">
@@ -279,7 +280,7 @@ export default function DashboardPage() {
         ) : invitations.length === 0 ? (
           <div className="text-center py-20 bg-white border border-zinc-150 rounded-[32px] shadow-sm max-w-2xl mx-auto">
             <Heart className="w-12 h-12 text-zinc-300 stroke-[1.2] mx-auto mb-4" />
-            <h3 className="font-cinzel text-lg font-bold text-zinc-900 mb-2">
+            <h3 className="font-sans text-lg font-bold text-zinc-900 mb-2">
               No Invitations Found
             </h3>
             <p className="text-zinc-500 text-sm max-w-sm mx-auto leading-relaxed mb-8">
@@ -330,7 +331,7 @@ export default function DashboardPage() {
                     </div>
 
                     {/* Couple Names */}
-                    <h3 className="font-cinzel text-xl font-bold text-zinc-900 tracking-tight mb-4 uppercase">
+                    <h3 className="font-sans text-xl font-bold text-zinc-900 tracking-tight mb-4 uppercase">
                       {invite.bride_name} & {invite.groom_name}
                     </h3>
 
@@ -414,10 +415,10 @@ export default function DashboardPage() {
             {/* Modal Header */}
             <div className="p-6 border-b border-zinc-150 flex items-center justify-between">
               <div>
-                <span className="font-cinzel text-[10px] tracking-widest text-[#b3811b] font-bold block mb-1">
+                <span className="font-sans text-[10px] tracking-widest text-[#b3811b] font-bold block mb-1">
                   RSVP RESPONSES
                 </span>
-                <h3 className="font-cinzel text-lg font-bold text-zinc-900 uppercase">
+                <h3 className="font-sans text-lg font-bold text-zinc-900 uppercase">
                   {selectedInviteForRsvps.bride_name} & {selectedInviteForRsvps.groom_name}
                 </h3>
               </div>
@@ -517,6 +518,37 @@ export default function DashboardPage() {
                 className="px-5 py-2 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-[10px] tracking-wider uppercase rounded-lg transition-colors cursor-pointer"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sign Out Confirmation Modal */}
+      {showSignOutConfirm && (
+        <div className="fixed inset-0 z-50 bg-black/45 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-zinc-150 p-6 rounded-[28px] w-full max-w-sm flex flex-col shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <h3 className="font-sans text-lg font-bold text-zinc-900 text-center mb-2">
+              SIGN OUT
+            </h3>
+            <p className="text-zinc-500 text-xs text-center mb-6 leading-relaxed font-sans">
+              Are you sure you want to sign out from your studio workspace?
+            </p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => setShowSignOutConfirm(false)}
+                className="px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-[10px] tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex-1 font-sans"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setShowSignOutConfirm(false);
+                  handleSignOut();
+                }}
+                className="px-5 py-2.5 bg-red-650 hover:bg-red-550 text-white font-bold text-[10px] tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex-1 shadow-sm font-sans"
+              >
+                Sign Out
               </button>
             </div>
           </div>

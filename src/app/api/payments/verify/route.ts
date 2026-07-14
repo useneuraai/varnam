@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
       razorpay_signature,
       formData,
       templateSlug,
+      userId,
     } = body;
 
     if (!formData || !templateSlug) {
@@ -48,6 +49,7 @@ export async function POST(req: NextRequest) {
     // 3. Save Invitation & Payment Data via DB Layer
     await saveInvitation({
       template_slug: template.slug,
+      user_id: userId || undefined,
       slug: finalSlug,
       bride_name: formData.bride_name,
       groom_name: formData.groom_name,

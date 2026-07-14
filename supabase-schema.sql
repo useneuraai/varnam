@@ -22,6 +22,7 @@ create table if not exists public.templates (
 create table if not exists public.invitations (
     id uuid default uuid_generate_v4() primary key,
     template_slug varchar not null references public.templates(slug) on delete cascade,
+    user_id uuid references auth.users(id) on delete set null,
     slug varchar unique not null,
     bride_name varchar not null,
     groom_name varchar not null,
@@ -107,9 +108,13 @@ create policy "Allow anyone to insert invitations"
     on public.invitations for insert
     with check (true);
 
-create policy "Allow update to owner/creator of invitations"
+create policy "Allow update to owner of invitations"
     on public.invitations for update
-    using (true); -- In a full SaaS, link to user_id, for this system slug/token based validation is supported.
+    using (auth.uid() = user_id);
+
+create policy "Allow delete to owner of invitations"
+    on public.invitations for delete
+    using (auth.uid() = user_id);
 
 -- Policies for payments
 create policy "Allow public inserts on payments"

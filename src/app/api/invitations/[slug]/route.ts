@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getInvitationBySlug, updateInvitation } from "@/lib/db";
+import { supabase } from "@/lib/supabase";
 
 export async function GET(
   req: NextRequest,
@@ -41,6 +42,22 @@ export async function PUT(
     const invitation = await getInvitationBySlug(slug);
     if (!invitation) {
       return NextResponse.json({ message: "Invitation not found" }, { status: 404 });
+    }
+
+    // Check ownership if user_id is set on the invitation
+    if (invitation.user_id) {
+      const authHeader = req.headers.get("Authorization");
+      if (!authHeader) {
+        return NextResponse.json({ message: "Unauthorized: Missing auth session" }, { status: 401 });
+      }
+      const token = authHeader.replace("Bearer ", "");
+      const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
+      if (!isMockSupabase) {
+        const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+        if (authError || !user || invitation.user_id !== user.id) {
+          return NextResponse.json({ message: "Forbidden: You do not own this invitation" }, { status: 403 });
+        }
+      }
     }
 
     // Gating check: "Edit details freely until 5 days after event completes"

@@ -19,6 +19,7 @@ export interface InvitationRecord {
   payment_id?: string;
   order_id?: string;
   created_at?: string;
+  user_id?: string;
   
   // Licensed Event Features
   bg_image_url?: string;
@@ -138,6 +139,28 @@ export async function getAllInvitations(): Promise<InvitationRecord[]> {
   } else {
     const db = readLocalMockDb();
     return Object.values(db);
+  }
+}
+
+export async function getInvitationsByUserId(userId: string): Promise<InvitationRecord[]> {
+  const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
+
+  if (!isMockSupabase) {
+    const { data, error } = await supabase
+      .from("invitations")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error(`Supabase error fetching invitations for user "${userId}":`, error);
+      const localDb = readLocalMockDb();
+      return Object.values(localDb).filter(r => r.user_id === userId);
+    }
+    return data;
+  } else {
+    const db = readLocalMockDb();
+    return Object.values(db).filter(r => r.user_id === userId);
   }
 }
 

@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { getTemplateBySlug, getDefaultTemplateData, TemplateData } from "@/lib/templates";
 import { templatesMap } from "@/templates";
+import { supabase } from "@/lib/supabase";
 
 const BG_IMAGE_PRESETS = [
   { label: "Default Template Backdrop", value: "" },
@@ -79,6 +80,43 @@ function EditorPageContent() {
   const [formData, setFormData] = useState<TemplateData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Auth state
+  const [user, setUser] = useState<any>(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+
+  useEffect(() => {
+    const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
+    if (isMockSupabase) {
+      setUser({ id: "mock-user-123", email: "mockuser@example.com" });
+      setLoadingAuth(false);
+      return;
+    }
+
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        setUser(session.user);
+      } else {
+        router.push(`/login?redirectTo=/editor/${templateSlug}${editSlug ? `?edit=${editSlug}` : ""}`);
+      }
+      setLoadingAuth(false);
+    };
+    checkUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setUser(session.user);
+      } else {
+        setUser(null);
+        router.push(`/login?redirectTo=/editor/${templateSlug}${editSlug ? `?edit=${editSlug}` : ""}`);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [templateSlug, editSlug, router]);
   
   // Wizard steps state
   const [currentStep, setCurrentStep] = useState(1);
@@ -427,9 +465,15 @@ function EditorPageContent() {
 
     if (isEditMode && editSlug) {
       try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        if (session) {
+          headers["Authorization"] = `Bearer ${session.access_token}`;
+        }
+
         const response = await fetch(`/api/invitations/${editSlug}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers,
           body: JSON.stringify({ formData }),
         });
 
@@ -486,6 +530,7 @@ function EditorPageContent() {
                 razorpay_signature: response.razorpay_signature,
                 formData: formData,
                 templateSlug: template.slug,
+                userId: user?.id,
               }),
             });
 
@@ -528,6 +573,19 @@ function EditorPageContent() {
       setIsSubmitting(false);
     }
   };
+
+  if (loadingAuth) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f3efe9] flex flex-col items-center justify-center font-sans text-neutral-800">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 border-4 border-[#b3811b] border-t-transparent rounded-full animate-spin" />
+          <p className="text-xs uppercase tracking-widest text-[#8a725d] font-bold animate-pulse">
+            Verifying Authentication...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f3efe9] text-[#3e342a] flex flex-col">

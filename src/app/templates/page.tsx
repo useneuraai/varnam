@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Sparkles, Heart, X, ChevronRight } from "lucide-react";
 import { TEMPLATES } from "@/lib/templates";
 import LiveTemplatePreview from "@/components/LiveTemplatePreview";
+import { supabase } from "@/lib/supabase";
 
 const CATEGORIES = [
   "All",
@@ -23,48 +24,32 @@ const LANGUAGES = ["All", "English", "Tamil/English", "English/Urdu"];
 export default function GalleryPage() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
+    if (isMockSupabase) {
+      setUser({ email: "demo.user@varnam.com" });
+      return;
+    }
+    
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) setUser(session.user);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setUser(session.user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
   const [selectedReligion, setSelectedReligion] = useState("All");
   const [selectedLanguage, setSelectedLanguage] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  
-  const [lookupSlug, setLookupSlug] = useState("");
-  const [lookupError, setLookupError] = useState<string | null>(null);
-  const [isCheckingLookup, setIsCheckingLookup] = useState(false);
-
-  const handleLookupSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!lookupSlug.trim()) return;
-    setIsCheckingLookup(true);
-    setLookupError(null);
-
-    try {
-      const trimmedSlug = lookupSlug.trim().replace(/^\/invite\//, "").replace(/^invite\//, "").split("?")[0];
-      const res = await fetch(`/api/invitations/${trimmedSlug}`);
-      if (!res.ok) {
-        setLookupError("Invitation not found. Please verify the URL or slug.");
-        setIsCheckingLookup(false);
-        return;
-      }
-      const data = await res.json();
-      
-      // Check archiving limit: 5 days after event completes
-      const now = new Date();
-      const eventDate = new Date(data.wedding_date);
-      const limitDate = new Date(eventDate.getTime() + 5 * 24 * 60 * 60 * 1000);
-      if (now > limitDate) {
-        setLookupError("This invitation is archived (license exhausted) and cannot be edited.");
-        setIsCheckingLookup(false);
-        return;
-      }
-
-      router.push(`/editor/${data.template_slug}?edit=${trimmedSlug}`);
-    } catch (err) {
-      console.error(err);
-      setLookupError("Error checking invitation. Please try again.");
-    } finally {
-      setIsCheckingLookup(false);
-    }
-  };
 
   const filteredTemplates = TEMPLATES.filter((tpl) => {
     const matchesCategory =
@@ -99,9 +84,15 @@ export default function GalleryPage() {
             <span className="hidden sm:inline text-[11px] tracking-widest text-zinc-400 font-bold uppercase">
               DESIGN TEMPLATES
             </span>
-            <Link href="/" className="text-[11px] tracking-widest text-zinc-500 hover:text-zinc-900 transition-colors font-bold uppercase">
-              BACK TO HOME
-            </Link>
+            {user ? (
+              <Link href="/dashboard" className="text-[11px] tracking-widest text-[#b3811b] hover:text-[#c59b27] transition-colors font-bold uppercase">
+                MY STUDIO
+              </Link>
+            ) : (
+              <Link href="/login" className="text-[11px] tracking-widest text-zinc-500 hover:text-zinc-900 transition-colors font-bold uppercase">
+                SIGN IN
+              </Link>
+            )}
           </div>
         </header>
 
@@ -124,40 +115,6 @@ export default function GalleryPage() {
               Choose from curated templates with cinematic animations, music, RSVP, maps, and photo galleries — all shareable via one link.
             </p>
 
-            {/* Manage/Edit lookup panel */}
-            <div className="mt-10 w-full max-w-md bg-[#fafaf9] border border-zinc-150 p-6 rounded-[24px] shadow-sm">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-800 text-left mb-2 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-gold-600 animate-pulse" />
-                Manage Existing Invitation
-              </h3>
-              <p className="text-[11px] text-zinc-500 text-left mb-4 leading-relaxed">
-                Enter your invitation slug/link to edit your guest list, schedule, background images, or music details.
-              </p>
-              <form onSubmit={handleLookupSubmit} className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="e.g. priya-weds-rahul-abcde"
-                  value={lookupSlug}
-                  onChange={(e) => {
-                    setLookupSlug(e.target.value);
-                    setLookupError(null);
-                  }}
-                  className="flex-1 bg-white border border-zinc-250 text-zinc-850 placeholder-zinc-400 text-xs px-4 py-2.5 focus:border-zinc-950 focus:outline-none rounded-full"
-                />
-                <button
-                  type="submit"
-                  disabled={isCheckingLookup || !lookupSlug.trim()}
-                  className="px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 disabled:bg-zinc-300 text-white font-bold text-xs tracking-wider uppercase rounded-full transition-colors shrink-0"
-                >
-                  {isCheckingLookup ? "Checking..." : "Edit"}
-                </button>
-              </form>
-              {lookupError && (
-                <p className="mt-3 text-[10px] text-red-600 text-left font-medium">
-                  {lookupError}
-                </p>
-              )}
-            </div>
           </div>
         </section>
 

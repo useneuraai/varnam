@@ -6,7 +6,7 @@ import { TemplateData } from "@/lib/templates";
 import ScratchReveal from "@/components/animations/ScratchReveal";
 import { CountdownTimer, RevealGlowText } from "@/components/animations/CinematicEffects";
 
-export default function ModernMinimalTemplate({ data }: { data: TemplateData }) {
+export default function ModernMinimalTemplate({ data, isPreview = false }: { data: TemplateData; isPreview?: boolean }) {
   const formatDate = (dateStr: string) => {
     try {
       const d = new Date(dateStr);
@@ -211,13 +211,21 @@ export default function ModernMinimalTemplate({ data }: { data: TemplateData }) 
           {data.gmap_coordinates && (
             <motion.div variants={textFadeIn} className="w-full border border-[#1c1a17]/10 p-1 bg-white shadow-md mb-6">
               <div className="w-full h-72 relative bg-neutral-100">
-                <iframe
-                  title="Modern Minimal Map View"
-                  src={`https://maps.google.com/maps?q=${encodeURIComponent(data.gmap_coordinates)}&z=15&output=embed`}
-                  className="w-full h-full border-0 grayscale opacity-90 hover:grayscale-0 transition-all duration-500"
-                  allowFullScreen
-                  loading="lazy"
-                />
+                {isPreview ? (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-50 border border-zinc-200 text-center p-6">
+                    <MapPin className="w-8 h-8 text-zinc-400 animate-pulse mb-3" />
+                    <span className="text-xs font-sans text-zinc-650 tracking-wide font-medium">Venue Map Location</span>
+                    <span className="text-[10px] text-zinc-500 mt-1 max-w-[200px] leading-relaxed">Map loading is deferred during preview.</span>
+                  </div>
+                ) : (
+                  <iframe
+                    title="Modern Minimal Map View"
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(data.gmap_coordinates)}&z=15&output=embed`}
+                    className="w-full h-full border-0 grayscale opacity-90 hover:grayscale-0 transition-all duration-500"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                )}
               </div>
             </motion.div>
           )}

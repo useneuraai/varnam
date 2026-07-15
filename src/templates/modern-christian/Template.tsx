@@ -8,7 +8,7 @@ import PhotoSlideshow from "@/components/animations/PhotoSlideshow";
 import { Compass, Bus, MapPin, Sparkles } from "lucide-react";
 import { CinematicCrest, GoldFoilLeaves, ScrollDrawTimeline, RevealGlowText, CountdownTimer } from "@/components/animations/CinematicEffects";
 
-export default function ModernChristianTemplate({ data }: { data: TemplateData }) {
+export default function ModernChristianTemplate({ data, isPreview = false }: { data: TemplateData; isPreview?: boolean }) {
   const formatDate = (dateStr: string) => {
     try {
       const d = new Date(dateStr);
@@ -176,13 +176,21 @@ export default function ModernChristianTemplate({ data }: { data: TemplateData }
 
             {data.gmap_coordinates && (
               <div className="w-full mt-4 h-48 border border-rose-300/15 overflow-hidden shadow-inner">
-                <iframe
-                  title="GMap Venue Location"
-                  src={`https://maps.google.com/maps?q=${encodeURIComponent(data.gmap_coordinates)}&z=15&output=embed`}
-                  className="w-full h-full border-0 grayscale opacity-75 hover:opacity-100 transition-opacity duration-500"
-                  allowFullScreen
-                  loading="lazy"
-                />
+                {isPreview ? (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-950/80 border border-rose-350/10 text-center p-4">
+                    <MapPin className="w-6 h-6 text-rose-300 animate-pulse mb-2" />
+                    <span className="text-[10px] font-serif text-rose-200/85 tracking-wide">Venue Map Location</span>
+                    <span className="text-[9px] text-zinc-500 mt-0.5 max-w-[180px] leading-relaxed">Map loading is deferred during preview.</span>
+                  </div>
+                ) : (
+                  <iframe
+                    title="GMap Venue Location"
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(data.gmap_coordinates)}&z=15&output=embed`}
+                    className="w-full h-full border-0 grayscale opacity-75 hover:opacity-100 transition-opacity duration-500"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                )}
               </div>
             )}
           </motion.div>

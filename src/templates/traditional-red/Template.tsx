@@ -7,7 +7,7 @@ import FloatingFlowers from "@/components/animations/FloatingFlowers";
 import ScratchReveal from "@/components/animations/ScratchReveal";
 import { CountdownTimer, RevealGlowText } from "@/components/animations/CinematicEffects";
 
-export default function TraditionalRedTemplate({ data }: { data: TemplateData }) {
+export default function TraditionalRedTemplate({ data, isPreview = false }: { data: TemplateData; isPreview?: boolean }) {
   const formatDate = (dateStr: string) => {
     try {
       const d = new Date(dateStr);
@@ -267,13 +267,21 @@ export default function TraditionalRedTemplate({ data }: { data: TemplateData })
             {/* Traditional Gold/Red double framed map */}
             <div className="w-full max-w-2xl border-4 border-gold-500/40 p-1.5 bg-[#1c0101] shadow-2xl">
               <div className="w-full h-80 relative bg-neutral-900 border border-gold-500/20">
-                <iframe
-                  title="Traditional Red Map View"
-                  src={`https://maps.google.com/maps?q=${encodeURIComponent(data.gmap_coordinates)}&z=15&output=embed`}
-                  className="w-full h-full border-0 grayscale opacity-80"
-                  allowFullScreen
-                  loading="lazy"
-                />
+                {isPreview ? (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-950/80 border border-gold-500/10 text-center p-6">
+                    <MapPin className="w-8 h-8 text-gold-400 animate-pulse mb-3" />
+                    <span className="text-xs font-serif text-gold-300/85 tracking-wide">Venue Map Location</span>
+                    <span className="text-[10px] text-zinc-500 mt-1 max-w-[200px] leading-relaxed">Map loading is deferred during preview.</span>
+                  </div>
+                ) : (
+                  <iframe
+                    title="Traditional Red Map View"
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(data.gmap_coordinates)}&z=15&output=embed`}
+                    className="w-full h-full border-0 grayscale opacity-80"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                )}
               </div>
             </div>
 

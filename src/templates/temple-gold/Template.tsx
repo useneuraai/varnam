@@ -22,7 +22,7 @@ const DEFAULT_WISHES: Wish[] = [
   { id: "3", name: "Rajesh Kumar", message: "Congratulations! Wishing you a wonderful journey ahead. See you at the wedding!", timestamp: "1 day ago" }
 ];
 
-export default function TempleGoldTemplate({ data }: { data: TemplateData }) {
+export default function TempleGoldTemplate({ data, isPreview = false }: { data: TemplateData; isPreview?: boolean }) {
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [newWishName, setNewWishName] = useState("");
   const [newWishMessage, setNewWishMessage] = useState("");
@@ -337,13 +337,21 @@ export default function TempleGoldTemplate({ data }: { data: TemplateData }) {
               <div className="absolute -bottom-3 -right-3 w-6 h-6 border-b-4 border-r-4 border-gold-400 pointer-events-none z-10" />
 
               <div className="w-full h-80 relative overflow-hidden bg-neutral-900">
-                <iframe
-                  title="Temple Gold Map View"
-                  src={`https://maps.google.com/maps?q=${encodeURIComponent(data.gmap_coordinates)}&z=15&output=embed`}
-                  className="w-full h-full border-0 grayscale opacity-80 hover:opacity-100 transition-opacity duration-300"
-                  allowFullScreen
-                  loading="lazy"
-                />
+                {isPreview ? (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-950/80 border border-gold-550/10 text-center p-6">
+                    <MapPin className="w-8 h-8 text-gold-400 animate-pulse mb-3" />
+                    <span className="text-xs font-serif text-gold-300/85 tracking-wide">Venue Map Location</span>
+                    <span className="text-[10px] text-zinc-500 mt-1 max-w-[200px] leading-relaxed">Map loading is deferred during preview.</span>
+                  </div>
+                ) : (
+                  <iframe
+                    title="Temple Gold Map View"
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(data.gmap_coordinates)}&z=15&output=embed`}
+                    className="w-full h-full border-0 grayscale opacity-80 hover:opacity-100 transition-opacity duration-300"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                )}
               </div>
             </div>
 

@@ -81,7 +81,7 @@ export default function LiveTemplatePreview({ slug, autoScroll = false }: { slug
       }
       {...(autoScroll ? { "data-lenis-prevent": true } : {})}
     >
-      <TemplateComponent data={demoData} />
+      <TemplateComponent data={demoData} isPreview={true} />
     </div>
   );
 }

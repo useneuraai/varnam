@@ -49,7 +49,7 @@ const BloomingFlower = ({ className = "", delay = 0 }: { className?: string; del
   </div>
 );
 
-export default function FloralLuxuryTemplate({ data }: { data: TemplateData }) {
+export default function FloralLuxuryTemplate({ data, isPreview = false }: { data: TemplateData; isPreview?: boolean }) {
   const itineraryCount = (data.sangeet_enabled !== "no" && data.sangeet_date ? 1 : 0) + 1 + (data.reception_date ? 1 : 0);
   const gridClass = itineraryCount === 3
     ? "md:grid-cols-3"
@@ -299,13 +299,21 @@ export default function FloralLuxuryTemplate({ data }: { data: TemplateData }) {
             <div className="text-center w-full">
               <span className="font-montserrat text-[8px] tracking-widest text-[#a88a6d] uppercase block mb-3">DESTINATION DIRECTIONS</span>
               <div className="w-full h-48 border border-pink-200/40 rounded-xl overflow-hidden shadow-inner">
-                <iframe
-                  title="Floral Luxury Map View"
-                  src={`https://maps.google.com/maps?q=${encodeURIComponent(data.gmap_coordinates)}&z=14&output=embed`}
-                  className="w-full h-full border-0 opacity-90 hover:opacity-100 transition-opacity duration-300"
-                  allowFullScreen
-                  loading="lazy"
-                />
+                {isPreview ? (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-pink-50/20 border border-pink-100/10 text-center p-4">
+                    <MapPin className="w-6 h-6 text-pink-300 animate-pulse mb-2" />
+                    <span className="text-[10px] font-serif text-[#806f60] tracking-wide font-medium">Venue Map Location</span>
+                    <span className="text-[9px] text-[#a88a6d]/80 mt-0.5 max-w-[180px] leading-relaxed">Map loading is deferred during preview.</span>
+                  </div>
+                ) : (
+                  <iframe
+                    title="Floral Luxury Map View"
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(data.gmap_coordinates)}&z=14&output=embed`}
+                    className="w-full h-full border-0 opacity-90 hover:opacity-100 transition-opacity duration-300"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                )}
               </div>
             </div>
           )}

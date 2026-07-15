@@ -257,7 +257,7 @@ export default function DashboardPage() {
 
           <Link
             href="/templates"
-            className="inline-flex items-center gap-2 bg-zinc-950 hover:bg-zinc-850 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 rounded-full transition-all shadow-md hover:shadow-lg self-start md:self-auto cursor-pointer"
+            className="inline-flex items-center gap-2 bg-zinc-950 hover:bg-zinc-850 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 rounded-xl transition-all shadow-sm self-start md:self-auto cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             Create New invitation
@@ -280,7 +280,7 @@ export default function DashboardPage() {
             </p>
           </div>
         ) : invitations.length === 0 ? (
-          <div className="text-center py-20 bg-white border border-zinc-150 rounded-[32px] shadow-sm max-w-2xl mx-auto">
+          <div className="text-center py-20 bg-white border border-zinc-150 rounded-2xl shadow-sm max-w-2xl mx-auto">
             <Heart className="w-12 h-12 text-zinc-300 stroke-[1.2] mx-auto mb-4" />
             <h3 className="font-sans text-lg font-bold text-zinc-900 mb-2">
               No Invitations Found
@@ -291,14 +291,14 @@ export default function DashboardPage() {
             <div className="flex flex-col sm:flex-row justify-center gap-4 px-6">
               <Link
                 href="/templates"
-                className="bg-zinc-900 text-white text-xs uppercase font-bold tracking-widest py-3.5 px-8 hover:bg-zinc-800 transition-colors shadow-sm rounded-full"
+                className="bg-zinc-900 text-white text-xs uppercase font-bold tracking-widest py-3.5 px-8 hover:bg-zinc-800 transition-colors shadow-sm rounded-xl"
               >
                 Browse Templates
               </Link>
               {user?.email === "demo.user@varnam.com" && (
                 <button
                   onClick={handleSeedDemoInvite}
-                  className="bg-[#fffcf9] border border-[#eed57c] text-[#b3811b] text-xs uppercase font-bold tracking-widest py-3.5 px-8 hover:bg-[#fff9f2] transition-colors rounded-full cursor-pointer"
+                  className="bg-[#fffcf9] border border-[#eed57c] text-[#b3811b] text-xs uppercase font-bold tracking-widest py-3.5 px-8 hover:bg-[#fff9f2] transition-colors rounded-xl cursor-pointer"
                 >
                   Seed Demo Invitation
                 </button>
@@ -319,20 +319,20 @@ export default function DashboardPage() {
               return (
                 <div 
                   key={invite.slug}
-                  className="bg-white border border-zinc-150 rounded-[28px] overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                  className="bg-white border border-zinc-150 rounded-2xl overflow-hidden shadow-none transition-all duration-300 flex flex-col justify-between"
                 >
                   <div className="p-6">
                     {/* Header */}
                     <div className="flex items-center justify-between mb-4">
-                      <span className="bg-[#fffcf9] border border-[#eed57c]/40 text-[#b3811b] text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-full">
+                      <span className="bg-[#FBF3DB] border border-[#eed57c]/40 text-[#956400] text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-lg">
                         {invite.template_slug.replace("-", " ")}
                       </span>
                       {invite.is_paid ? (
-                        <span className="bg-emerald-50 text-emerald-700 text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-full">
+                        <span className="bg-[#EDF3EC] text-[#346538] border border-emerald-100 text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-lg">
                           Paid & Live
                         </span>
                       ) : (
-                        <span className="bg-amber-50 text-amber-800 border border-amber-200/50 text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-full animate-pulse">
+                        <span className="bg-[#FDEBEC] text-[#9F2F2D] border border-red-150 text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-lg animate-pulse">
                           Draft (Unpaid)
                         </span>
                       )}
@@ -422,7 +422,7 @@ export default function DashboardPage() {
 
                         <Link
                           href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
-                          className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#d4b060] to-[#b3811b] hover:from-[#c59b27] hover:to-[#a07a15] text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm hover:shadow-md"
+                          className="flex items-center justify-center gap-2 bg-[#b3811b] hover:bg-[#9a6f14] text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm"
                         >
                           <CreditCard className="w-3.5 h-3.5" />
                           Pay & Activate
@@ -440,7 +440,7 @@ export default function DashboardPage() {
       {/* RSVP Modal Overlay */}
       {selectedInviteForRsvps && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-zinc-150 rounded-[32px] w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl relative animate-in fade-in zoom-in duration-200">
+          <div className="bg-white border border-zinc-150 rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-sm relative animate-in fade-in zoom-in duration-200">
             
             {/* Modal Header */}
             <div className="p-6 border-b border-zinc-150 flex items-center justify-between">
@@ -454,7 +454,7 @@ export default function DashboardPage() {
               </div>
               <button
                 onClick={() => setSelectedInviteForRsvps(null)}
-                className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-colors cursor-pointer text-sm font-sans"
+                className="w-8 h-8 rounded-lg border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-colors cursor-pointer text-sm font-sans"
               >
                 ✕
               </button>
@@ -509,10 +509,10 @@ export default function DashboardPage() {
                               <h4 className="font-bold text-xs text-zinc-900 truncate uppercase">
                                 {rsvp.name}
                               </h4>
-                              <span className={`text-[8px] tracking-wider uppercase px-2 py-0.5 font-bold rounded-full ${
+                              <span className={`text-[8px] tracking-wider uppercase px-2 py-0.5 font-bold rounded-lg ${
                                 attending 
-                                  ? "bg-emerald-50 text-emerald-700 border border-emerald-100" 
-                                  : "bg-red-50 text-red-600 border border-red-100"
+                                  ? "bg-[#EDF3EC] text-[#346538] border border-emerald-100" 
+                                  : "bg-[#FDEBEC] text-[#9F2F2D] border border-red-100"
                               }`}>
                                 {attending ? `Attending (${rsvp.guest_count} guests)` : "Declined"}
                               </span>

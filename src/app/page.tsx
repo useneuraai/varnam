@@ -223,7 +223,7 @@ export default function LandingPage() {
               {mounted && user ? (
                 <Link
                   href="/dashboard"
-                  className="px-5 py-2.5 text-xs tracking-widest text-[#b3811b] hover:text-[#9a6f14] border border-[#eed57c] bg-[#fffcf9] hover:bg-[#fff9f2] transition-all duration-300 font-bold rounded-full uppercase min-h-[40px] flex items-center"
+                  className="px-5 py-2.5 text-xs tracking-widest text-[#b3811b] hover:text-[#9a6f14] border border-[#eed57c] bg-[#fffcf9] hover:bg-[#fff9f2] transition-all duration-300 font-bold rounded-xl uppercase min-h-[40px] flex items-center"
                 >
                   My Studio
                 </Link>
@@ -239,7 +239,7 @@ export default function LandingPage() {
               )}
               <Link
                 href="/templates"
-                className="relative px-5 py-2.5 text-xs tracking-widest text-zinc-700 hover:text-zinc-950 border border-zinc-300 hover:border-zinc-800 bg-transparent hover:bg-zinc-50/50 transition-all duration-300 font-bold rounded-full min-h-[40px] flex items-center"
+                className="relative px-5 py-2.5 text-xs tracking-widest text-zinc-700 hover:text-zinc-950 border border-zinc-300 hover:border-zinc-800 bg-transparent hover:bg-zinc-50/50 transition-all duration-300 font-bold rounded-xl min-h-[40px] flex items-center"
               >
                 BROWSE GALLERY
               </Link>
@@ -263,21 +263,21 @@ export default function LandingPage() {
               Craft a premium cinematic wedding invitation website with interactive reveal animations, online RSVP tracking, guest books, photo galleries, and custom music. No clutter, no app installs—just one beautiful link to share on WhatsApp.
             </p>
 
-            <p className="text-xs font-bold text-[#916710] bg-[#fff9f2] px-5 py-2 rounded-full border border-[#eed57c]/30 mb-8 animate-pulse select-none">
+            <p className="text-xs font-bold text-[#916710] bg-[#fff9f2] px-5 py-2 rounded-xl border border-[#eed57c]/30 mb-8 animate-pulse select-none">
               ✨ Free to start drafting — pay only when you are ready to publish!
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
               <Link
                 href="/templates"
-                className="px-8 py-4 bg-zinc-950 hover:bg-zinc-900 text-white font-extrabold text-xs tracking-widest uppercase transition-all duration-300 border border-[#eed57c] shadow-lg shadow-gold-700/10 min-w-[210px] min-h-[48px] flex items-center justify-center gap-2 group rounded-full"
+                className="px-8 py-4 bg-zinc-950 hover:bg-zinc-900 text-white font-extrabold text-xs tracking-widest uppercase transition-all duration-300 border border-[#eed57c] shadow-sm min-w-[210px] min-h-[48px] flex items-center justify-center gap-2 group rounded-xl"
               >
                 Browse Templates
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-[#eed57c]" />
               </Link>
               <Link
                 href="/templates/royal-tamil"
-                className="px-8 py-4 border border-zinc-300 hover:border-zinc-800 text-zinc-700 hover:bg-zinc-50/50 font-bold text-xs tracking-widest uppercase transition-all duration-300 min-w-[210px] min-h-[48px] flex items-center justify-center gap-2 rounded-full"
+                className="px-8 py-4 border border-zinc-300 hover:border-zinc-800 text-zinc-700 hover:bg-zinc-50/50 font-bold text-xs tracking-widest uppercase transition-all duration-300 min-w-[210px] min-h-[48px] flex items-center justify-center gap-2 rounded-xl"
               >
                 View Sample Invite
               </Link>
@@ -621,8 +621,8 @@ export default function LandingPage() {
             </div>
 
             <div className="flex justify-center">
-              <div className="bg-white p-8 md:p-12 border border-zinc-100 max-w-lg w-full relative shadow-xl shadow-zinc-250/20 rounded-[32px] flex flex-col items-center text-center">
-                <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-zinc-900 text-white text-[10px] font-bold tracking-widest uppercase px-5 py-2 shadow-md rounded-full">
+              <div className="bg-white p-8 md:p-12 border border-zinc-100 max-w-lg w-full relative shadow-sm rounded-[24px] flex flex-col items-center text-center">
+                <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-zinc-900 text-white text-[10px] font-bold tracking-widest uppercase px-5 py-2 shadow-sm rounded-lg">
                   SIGNATURE EVENT LICENSE
                 </div>
 
@@ -664,7 +664,7 @@ export default function LandingPage() {
 
                 <Link
                   href="/templates"
-                  className="w-full py-4 bg-zinc-950 hover:bg-zinc-900 text-white font-extrabold text-xs tracking-widest uppercase transition-all duration-300 border border-[#eed57c] flex items-center justify-center gap-2 group shadow-lg shadow-gold-700/10 min-h-[48px] rounded-full"
+                  className="w-full py-4 bg-zinc-950 hover:bg-zinc-900 text-white font-extrabold text-xs tracking-widest uppercase transition-all duration-300 border border-[#eed57c] flex items-center justify-center gap-2 group shadow-sm min-h-[48px] rounded-xl"
                 >
                   SELECT TEMPLATE & START
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-[#eed57c]" />
@@ -699,28 +699,26 @@ export default function LandingPage() {
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900">
                 Frequently Asked Questions About Digital Invitations
               </h2>
-              <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-full" />
+              <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-xl" />
             </div>
 
-            <div className="space-y-4">
+            <div className="divide-y divide-zinc-100 border-t border-b border-zinc-100">
               {FAQS.map((faq, idx) => {
                 const isOpen = openFaqIdx === idx;
                 return (
                   <div
                     key={idx}
-                    className="border border-zinc-100 bg-zinc-50/20 rounded-2xl overflow-hidden transition-all duration-300"
+                    className="overflow-hidden"
                   >
                     <button
                       type="button"
                       onClick={() => toggleFaq(idx)}
-                      className="w-full flex items-center justify-between px-6 py-5 text-left text-sm sm:text-base font-bold text-zinc-850 hover:bg-zinc-50/50 transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-between py-5 text-left text-sm sm:text-base font-bold text-zinc-900 transition-colors cursor-pointer"
                     >
                       <span>{faq.q}</span>
-                      <ChevronDown
-                        className={`w-4 h-4 text-[#916710] transition-transform duration-300 ${
-                          isOpen ? "rotate-180" : ""
-                        }`}
-                      />
+                      <span className="text-zinc-400 font-mono text-lg shrink-0 ml-4">
+                        {isOpen ? "−" : "+"}
+                      </span>
                     </button>
                     <AnimatePresence initial={false}>
                       {isOpen && (
@@ -730,7 +728,7 @@ export default function LandingPage() {
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.2, ease: "easeInOut" }}
                         >
-                          <div className="px-6 pb-6 pt-1 text-sm sm:text-base text-zinc-600 leading-relaxed border-t border-zinc-100/50">
+                          <div className="pb-5 pt-1 text-sm sm:text-base text-zinc-650 leading-relaxed">
                             {faq.a}
                           </div>
                         </motion.div>

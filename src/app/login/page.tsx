@@ -122,11 +122,7 @@ function LoginContent() {
       </Link>
 
       {/* Main card */}
-      <div className="bg-white/85 backdrop-blur-xl border border-zinc-100 p-8 rounded-[32px] shadow-2xl relative overflow-hidden">
-        {/* Decorative Golden Ambient Glow */}
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#b3811b]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-[#eed57c]/10 rounded-full blur-3xl pointer-events-none" />
-
+      <div className="bg-white border border-zinc-150 p-8 rounded-2xl shadow-sm relative overflow-hidden">
         <div className="relative z-10">
           {/* Logo & Header */}
           <div className="text-center mb-8">
@@ -161,7 +157,7 @@ function LoginContent() {
             type="button"
             disabled={loading}
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-3 bg-white border border-zinc-200 hover:border-zinc-900 text-zinc-800 text-xs uppercase font-bold tracking-wider py-3.5 px-4 rounded-full transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mb-6"
+            className="w-full flex items-center justify-center gap-3 bg-white border border-zinc-200 hover:border-zinc-900 text-zinc-800 text-xs uppercase font-bold tracking-wider py-3.5 px-4 rounded-xl transition-all duration-300 shadow-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mb-6"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24">
               <path
@@ -192,7 +188,7 @@ function LoginContent() {
           </div>
 
           {/* Tab Switchers */}
-          <div className="flex gap-2 p-1 bg-zinc-100 rounded-2xl mb-6">
+          <div className="flex gap-2 p-1 bg-zinc-100 rounded-xl mb-6">
             <button
               type="button"
               onClick={() => {
@@ -238,7 +234,7 @@ function LoginContent() {
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-white border border-zinc-200 text-zinc-800 text-xs px-10 py-3 rounded-full focus:border-zinc-900 focus:outline-none transition-colors placeholder-zinc-400"
+                  className="w-full bg-white border border-zinc-200 text-zinc-800 text-xs px-10 py-3 rounded-xl focus:border-zinc-900 focus:outline-none transition-colors placeholder-zinc-400"
                 />
                 <Mail className="w-4 h-4 text-zinc-450 absolute left-4 top-1/2 -translate-y-1/2" />
               </div>
@@ -250,14 +246,14 @@ function LoginContent() {
                   <span>Password</span>
                 </label>
                 <div className="relative">
-                  <input
-                    type="password"
-                    required
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-white border border-zinc-200 text-zinc-800 text-xs px-10 py-3 rounded-full focus:border-zinc-900 focus:outline-none transition-colors placeholder-zinc-400"
-                  />
+                    <input
+                      type="password"
+                      required
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full bg-white border border-zinc-200 text-zinc-800 text-xs px-10 py-3 rounded-xl focus:border-zinc-900 focus:outline-none transition-colors placeholder-zinc-400"
+                    />
                   <Lock className="w-4 h-4 text-zinc-450 absolute left-4 top-1/2 -translate-y-1/2" />
                 </div>
               </div>
@@ -278,7 +274,7 @@ function LoginContent() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-zinc-950 hover:bg-zinc-850 text-white text-xs uppercase font-bold tracking-widest py-3.5 rounded-full transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              className="w-full bg-zinc-950 hover:bg-zinc-850 text-white text-xs uppercase font-bold tracking-widest py-3.5 rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -299,7 +295,7 @@ function LoginContent() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f3efe9] flex items-center justify-center px-6 py-12 font-sans selection:bg-gold-200 selection:text-black">
+    <div className="min-h-screen bg-[#fbfbfa] flex items-center justify-center px-6 py-12 font-sans selection:bg-gold-200 selection:text-black">
       <Suspense fallback={
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-[#b3811b] border-t-transparent rounded-full animate-spin" />

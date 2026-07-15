@@ -645,13 +645,13 @@ function EditorPageContent() {
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f3efe9] text-[#3e342a] flex flex-col">
+    <div className="relative min-h-screen bg-[#fbfbfa] text-[#3e342a] flex flex-col">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
 
       {/* Editor Header */}
       <header className="h-20 border-b border-[#eed57c]/20 bg-white/70 backdrop-blur-md flex items-center justify-between px-6 z-20">
         <div className="flex items-center gap-3">
-          <Link href="/templates" className="p-2 text-[#8a725d] hover:text-[#c59b27] transition-colors rounded-full hover:bg-[#b3811b]/5">
+          <Link href="/templates" className="p-2 text-[#8a725d] hover:text-[#c59b27] transition-colors rounded-xl hover:bg-[#b3811b]/5">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div className="flex flex-col">
@@ -680,7 +680,7 @@ function EditorPageContent() {
           VARNAM
         </Link>
 
-        <div className="bg-[#fffcf9] border border-[#eed57c]/30 px-4 py-1.5 rounded-full shadow-sm">
+        <div className="bg-[#fffcf9] border border-[#eed57c]/30 px-4 py-1.5 rounded-xl shadow-sm">
           <span className="font-cinzel text-[#b3811b] font-bold tracking-wide text-xs">₹{template.price}</span>
         </div>
       </header>
@@ -1553,7 +1553,7 @@ function EditorPageContent() {
               element.scrollIntoView({ behavior: "smooth" });
             }
           }}
-          className="bg-zinc-950/90 hover:bg-zinc-900 backdrop-blur-md text-[#eed57c] border border-[#eed57c]/30 shadow-2xl py-3 px-6 rounded-full flex items-center gap-2 text-xs font-bold tracking-widest uppercase transition-all duration-300 transform active:scale-95 cursor-pointer whitespace-nowrap"
+          className="bg-zinc-950/90 hover:bg-zinc-900 backdrop-blur-md text-[#eed57c] border border-[#eed57c]/30 shadow-md py-3 px-6 rounded-xl flex items-center gap-2 text-xs font-bold tracking-widest uppercase transition-all duration-300 transform active:scale-95 cursor-pointer whitespace-nowrap"
         >
           {activeMobileView === "form" ? (
             <>

@@ -135,7 +135,7 @@ export default function GalleryPage() {
                     key={cat}
                     type="button"
                     onClick={() => setSelectedCategory(cat)}
-                    className={`shrink-0 rounded-full px-4 py-2 text-[11px] transition-all duration-200 font-bold uppercase tracking-wider ${
+                    className={`shrink-0 rounded-xl px-4 py-2 text-[11px] transition-all duration-200 font-bold uppercase tracking-wider ${
                       active
                         ? "bg-zinc-900 text-white shadow-sm"
                         : "bg-zinc-50 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 border border-zinc-200/40"
@@ -156,7 +156,7 @@ export default function GalleryPage() {
                   placeholder="Search by name..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white border border-zinc-200 text-zinc-800 placeholder-zinc-400 text-xs px-10 py-2.5 focus:border-zinc-900 focus:outline-none transition-colors rounded-full shadow-sm"
+                  className="w-full bg-white border border-zinc-200 text-zinc-800 placeholder-zinc-400 text-xs px-10 py-2.5 focus:border-zinc-900 focus:outline-none transition-colors rounded-xl shadow-none"
                 />
                 <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 {searchQuery && (
@@ -174,7 +174,7 @@ export default function GalleryPage() {
                 <select
                   value={selectedReligion}
                   onChange={(e) => setSelectedReligion(e.target.value)}
-                  className="w-full bg-white border border-zinc-200 text-zinc-800 text-xs px-4 py-2.5 focus:border-zinc-900 focus:outline-none rounded-full shadow-sm appearance-none pr-8 cursor-pointer uppercase tracking-wider font-bold"
+                  className="w-full bg-white border border-zinc-200 text-zinc-800 text-xs px-4 py-2.5 focus:border-zinc-900 focus:outline-none rounded-xl shadow-none appearance-none pr-8 cursor-pointer uppercase tracking-wider font-bold"
                 >
                   <option value="All">All Religions</option>
                   {RELIGIONS.filter(r => r !== "All").map((r) => (
@@ -191,7 +191,7 @@ export default function GalleryPage() {
                 <select
                   value={selectedLanguage}
                   onChange={(e) => setSelectedLanguage(e.target.value)}
-                  className="w-full bg-white border border-zinc-200 text-zinc-800 text-xs px-4 py-2.5 focus:border-zinc-900 focus:outline-none rounded-full shadow-sm appearance-none pr-8 cursor-pointer uppercase tracking-wider font-bold"
+                  className="w-full bg-white border border-zinc-200 text-zinc-800 text-xs px-4 py-2.5 focus:border-zinc-900 focus:outline-none rounded-xl shadow-none appearance-none pr-8 cursor-pointer uppercase tracking-wider font-bold"
                 >
                   <option value="All">All Languages</option>
                   {LANGUAGES.filter(l => l !== "All").map((l) => (
@@ -222,7 +222,7 @@ export default function GalleryPage() {
                   setSelectedLanguage("All");
                   setSearchQuery("");
                 }}
-                className="mt-6 px-6 py-3 bg-zinc-900 text-white hover:bg-zinc-800 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-full"
+                className="mt-6 px-6 py-3 bg-zinc-900 text-white hover:bg-zinc-800 text-[10px] font-bold tracking-widest uppercase transition-colors rounded-xl"
               >
                 Reset Filters
               </button>
@@ -248,11 +248,11 @@ export default function GalleryPage() {
                       <LiveTemplatePreview slug={tpl.slug} autoScroll={false} />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
                       
-                      <span className="absolute top-4 left-4 bg-zinc-950/90 backdrop-blur-md text-[#eed57c] text-[10px] tracking-[0.2em] uppercase px-3 py-1.5 font-bold rounded-md shadow-md pointer-events-none">
+                      <span className="absolute top-4 left-4 bg-zinc-950/90 backdrop-blur-md text-[#eed57c] text-[10px] tracking-[0.2em] uppercase px-3 py-1.5 font-bold rounded-lg shadow-md pointer-events-none">
                         {tpl.religion}
                       </span>
 
-                      <span className="absolute top-4 right-4 bg-zinc-900/60 text-white text-[9px] tracking-widest uppercase px-3 py-1.5 font-bold backdrop-blur-sm rounded-full pointer-events-none">
+                      <span className="absolute top-4 right-4 bg-zinc-900/60 text-white text-[9px] tracking-widest uppercase px-3 py-1.5 font-bold backdrop-blur-sm rounded-lg pointer-events-none">
                         {tpl.category}
                       </span>
                     </div>

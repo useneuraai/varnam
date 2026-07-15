@@ -4,10 +4,10 @@ Varnam is an ultra-premium, interactive, and cinematic digital wedding invitatio
 
 ## Main Pages
 
-- [Home Page](https://varnam.co/) - Premium cinematic digital wedding invitations with RSVP tracker.
-- [Templates Gallery](https://varnam.co/templates) - Handcrafted templates collection for Hindu, Muslim, Christian, and Secular weddings.
-- [Privacy Policy](https://varnam.co/privacy-policy) - Privacy and security guidelines.
-- [Terms of Service](https://varnam.co/terms-of-service) - Licensing terms and conditions.
+- [Home Page](https://varnaminvites.in/) - Premium cinematic digital wedding invitations with RSVP tracker.
+- [Templates Gallery](https://varnaminvites.in/templates) - Handcrafted templates collection for Hindu, Muslim, Christian, and Secular weddings.
+- [Privacy Policy](https://varnaminvites.in/privacy-policy) - Privacy and security guidelines.
+- [Terms of Service](https://varnaminvites.in/terms-of-service) - Licensing terms and conditions.
 
 ## Key Features
 

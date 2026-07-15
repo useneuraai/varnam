@@ -2,6 +2,13 @@
 
 Varnam is an ultra-premium, interactive, and cinematic digital wedding invitation platform. It allows users to create bespoke, luxury-tier digital wedding e-invites shareable with a single link on WhatsApp, SMS, or email.
 
+## Main Pages
+
+- [Home Page](https://varnam.co/) - Premium cinematic digital wedding invitations with RSVP tracker.
+- [Templates Gallery](https://varnam.co/templates) - Handcrafted templates collection for Hindu, Muslim, Christian, and Secular weddings.
+- [Privacy Policy](https://varnam.co/privacy-policy) - Privacy and security guidelines.
+- [Terms of Service](https://varnam.co/terms-of-service) - Licensing terms and conditions.
+
 ## Key Features
 
 - **Cinematic Entrance Animations**: Double-door reveals, royal Tamil themes, divine temple aesthetics, and champagne floral transitions.
@@ -12,14 +19,15 @@ Varnam is an ultra-premium, interactive, and cinematic digital wedding invitatio
 
 ## Pricing
 
-- **Signature Event License**: One-time payment of ₹799 per premium invitation website. Free drafting, activation on payment.
+- [Pricing Details](https://varnam.co/#pricing) - One-time payment of ₹799 per premium invitation website. Free drafting, activation on payment.
 
 ## Templates Collection
 
-1. **Temple Gold**: Divine temple drawing animations, floats brass lamps, Tamil Hindu aesthetics.
-2. **Traditional Red**: South Indian silk textures, self-drawing Kolams, falling jasmine.
-3. **Floral Luxury**: Destination theme, champagne gold and blush pink tones.
-4. **Modern Minimal**: Contemporary motion typography and clean beige layout.
-5. **Royal Heritage**: Unfolding scrolls, opening palace gates, royal crests, fireworks.
-6. **Elegant Islamic Nikaah**: Emerald green and glistening gold mandalas.
-7. **Celestial Rose Christian**: Rose gold theme, cross transitions, string instrumentals.
+1. [Temple Gold Template](https://varnam.co/templates/temple-gold) - Divine temple drawing animations, floats brass lamps, Tamil Hindu aesthetics.
+2. [Traditional Red Template](https://varnam.co/templates/traditional-red) - South Indian silk textures, self-drawing Kolams, falling jasmine.
+3. [Royal Tamil Template](https://varnam.co/templates/royal-tamil) - Deep crimson design featuring custom classical Tamil visual cues.
+4. [Floral Luxury Template](https://varnam.co/templates/floral-luxury) - Destination theme, champagne gold and blush pink tones.
+5. [Modern Minimal Template](https://varnam.co/templates/modern-minimal) - Contemporary motion typography and clean beige layout.
+6. [Modern Christian Template](https://varnam.co/templates/modern-christian) - Celestial rose theme, cross transitions, string instrumentals.
+7. [Luxury Floral Template](https://varnam.co/templates/luxury-floral) - Sophisticated destination theme with organic floral designs.
+8. [Elegant Muslim Template](https://varnam.co/templates/elegant-muslim) - Emerald green and glistening gold mandalas.

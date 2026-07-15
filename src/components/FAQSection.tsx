@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const FAQS = [
   {
-    q: "How quickly can I create an invitation?",
-    a: "Most hosts publish their invitation in 10 to 15 minutes after choosing a template and adding their event details."
+    q: "Can I preview my wedding invitation website before purchasing the license?",
+    a: "Yes! Varnam operates on a \"try before you pay\" model. You can completely customize your wedding template, set up your music, and check out the interactive RSVP tracking tools before making a one-time ₹799 payment to share the live link with guests."
   },
   {
     q: "Can I edit after publishing?",
@@ -25,8 +25,8 @@ const FAQS = [
     a: "One payment of ₹799 unlocks all templates for the same event, unlimited photo slideshows, custom music uploads, Google Maps integration, RSVP guest tracking, and interactive scratch-to-reveal cards."
   },
   {
-    q: "What happens after the event?",
-    a: "The invitation remains active and editable until 5 days after the event date, after which it is archived and the license is exhausted."
+    q: "How long does my personalized wedding website link stay active?",
+    a: "Your custom invitation website link remains fully active and editable until 5 days after your wedding events are complete. All guest entries on your RSVP dashboard will be securely stored for you to view."
   }
 ];
 

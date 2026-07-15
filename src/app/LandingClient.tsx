@@ -296,7 +296,7 @@ export default function LandingClient() {
             </p>
 
             <p className="text-xs font-bold text-[#916710] bg-[#fff9f2] px-5 py-2 rounded-xl border border-[#eed57c]/30 mb-8 animate-pulse select-none">
-              ✨ Free to start drafting — pay only when you are ready to publish!
+              ✨ Try before you pay — draft your premium wedding invitation website and only pay ₹799 to activate your live link!
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
@@ -430,11 +430,11 @@ export default function LandingClient() {
             <div className="h-[1px] w-24 bg-zinc-100 my-1.5" />
             
             <div className="text-xs sm:text-sm tracking-widest text-zinc-650 font-bold flex flex-wrap items-center justify-center gap-x-5 gap-y-2 uppercase">
-              <span>No app installs</span>
+              <span>No app required</span>
               <span className="text-[#b3811b]/50">•</span>
-              <span>Online RSVP Link Tracking</span>
+              <span>Interactive RSVP Tracking</span>
               <span className="text-[#b3811b]/50">•</span>
-              <span>Buy & Edit for just ₹799</span>
+              <span>Pay Only to Publish (₹799)</span>
             </div>
           </div>
         </section>
@@ -464,7 +464,7 @@ export default function LandingClient() {
                 Why choose varnam
               </p>
               <h2 className="mt-4 max-w-[560px] text-4xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight">
-                Premium WhatsApp Wedding Invitation & RSVP Link
+                Premium Indian Wedding Invitation Website Platform
               </h2>
               <p className="mt-5 max-w-[500px] text-base leading-relaxed text-zinc-600">
                 Varnam provides a premium, all-in-one digital wedding invitation maker. Easily personalize your wedding templates, custom music, photo galleries, Google Maps location, and guest messages from a secure live dashboard.
@@ -547,7 +547,7 @@ export default function LandingClient() {
                 Our Handcrafted Collection
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900">
-                Signature Digital Wedding Invitation Templates
+                Signature Indian Wedding Invitation Website Templates
               </h2>
               <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-full" />
             </div>
@@ -559,7 +559,19 @@ export default function LandingClient() {
                   className="group relative flex flex-col bg-white rounded-[24px] overflow-hidden border border-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(179,129,27,0.06)] hover:border-[#eed57c]/40 transition-all duration-500"
                 >
                   {/* Image */}
-                  <div className="relative h-64 overflow-hidden bg-zinc-50 border-b border-zinc-100">
+                  <div
+                    aria-label={
+                      tpl.slug === "temple-gold"
+                        ? "Temple Gold - Traditional Tamil wedding invitation website sample"
+                        : tpl.slug === "traditional-red"
+                        ? "Traditional Red - South Indian wedding invite template with live RSVP links"
+                        : tpl.slug === "floral-luxury"
+                        ? "Floral Luxury - Elegant digital wedding website template for smartphones"
+                        : `${tpl.name} wedding invitation website preview`
+                    }
+                    role="img"
+                    className="relative h-64 overflow-hidden bg-zinc-50 border-b border-zinc-100"
+                  >
                     <LiveTemplatePreview slug={tpl.slug} autoScroll={false} />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
                     

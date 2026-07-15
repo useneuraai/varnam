@@ -74,8 +74,8 @@ export default function PhotoSlideshow({ imagesString }: PhotoSlideshowProps) {
             <button
               key={idx}
               onClick={() => setCurrentIndex(idx)}
-              className={`w-1.5 h-1.5 rounded-full bg-gold-400 transition-transform duration-300 origin-center ${
-                idx === currentIndex ? "scale-x-[2.5]" : "opacity-30"
+              className={`w-2 h-2 rounded-full bg-gold-400 transition-transform duration-300 origin-center ${
+                idx === currentIndex ? "scale-x-[2.5]" : "opacity-30 scale-100"
               }`}
               aria-label={`Go to slide ${idx + 1}`}
             />

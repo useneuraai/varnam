@@ -252,7 +252,7 @@ export default function LandingClient() {
         <section className="relative px-6 pt-16 pb-12 overflow-hidden flex flex-col items-center justify-start text-center bg-white">
           <div className="max-w-4xl mx-auto flex flex-col items-center relative z-10 select-none">
             <p className="text-xs font-bold uppercase tracking-widest text-[#916710] mb-5">
-              Premium Digital Wedding Invitations
+              Traditional & Modern WhatsApp Wedding Invitations
             </p>
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.02] text-zinc-900 tracking-tight mb-8">
@@ -261,7 +261,7 @@ export default function LandingClient() {
             </h1>
 
             <p className="max-w-2xl text-zinc-600 text-base sm:text-lg leading-relaxed mb-10 font-normal">
-              Craft a premium cinematic wedding invitation website with interactive reveal animations, online RSVP tracking, guest books, photo galleries, and custom music. No clutter, no app installs—just one beautiful link to share on WhatsApp.
+              Create and customize a premium cinematic wedding invitation website with traditional South Indian, Tamil, Hindu, Christian, and Muslim themes. Features interactive reveal animations, online RSVP tracking, guest books, photo galleries, and custom music—shared easily with a single WhatsApp link.
             </p>
 
             <p className="text-xs font-bold text-[#916710] bg-[#fff9f2] px-5 py-2 rounded-xl border border-[#eed57c]/30 mb-8 animate-pulse select-none">
@@ -389,21 +389,21 @@ export default function LandingClient() {
         <section className="w-full bg-white border-y border-zinc-100 py-12 px-6 relative z-10 flex flex-col items-center justify-center text-center">
           <div className="max-w-4xl mx-auto flex flex-col items-center gap-4">
             <div className="text-xs sm:text-sm tracking-[0.15em] text-zinc-900 font-semibold flex flex-wrap items-center justify-center gap-x-5 gap-y-2 uppercase">
-              <span>Choose a template</span>
+              <span>Choose your traditional template</span>
               <span className="text-[#b3811b]/50">•</span>
-              <span>Personalize every detail</span>
+              <span>Customize design & music</span>
               <span className="text-[#b3811b]/50">•</span>
-              <span>Share a beautiful e-invite link</span>
+              <span>Download & Share WhatsApp Invitation</span>
             </div>
 
             <div className="h-[1px] w-24 bg-zinc-100 my-1.5" />
             
             <div className="text-xs sm:text-sm tracking-widest text-zinc-650 font-bold flex flex-wrap items-center justify-center gap-x-5 gap-y-2 uppercase">
-              <span>No app required</span>
+              <span>No app installs</span>
               <span className="text-[#b3811b]/50">•</span>
-              <span>Unlimited guests & RSVPs</span>
+              <span>Online RSVP Link Tracking</span>
               <span className="text-[#b3811b]/50">•</span>
-              <span>One-time ₹799 payment</span>
+              <span>Buy & Edit for just ₹799</span>
             </div>
           </div>
         </section>
@@ -433,7 +433,7 @@ export default function LandingClient() {
                 Why choose varnam
               </p>
               <h2 className="mt-4 max-w-[560px] text-4xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight">
-                Premium digital wedding invitation maker
+                Premium WhatsApp Wedding Invitation & RSVP Link
               </h2>
               <p className="mt-5 max-w-[500px] text-base leading-relaxed text-zinc-600">
                 Varnam provides a premium, all-in-one digital wedding invitation maker. Easily personalize your wedding templates, custom music, photo galleries, Google Maps location, and guest messages from a secure live dashboard.

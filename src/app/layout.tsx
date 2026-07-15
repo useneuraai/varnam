@@ -32,7 +32,7 @@ import type { Viewport } from "next";
 
 export const metadata: Metadata = {
   title: "Varnam | Premium Cinematic Digital Wedding Invitations with RSVP",
-  description: "Craft ultra-premium, interactive, and cinematic digital wedding invitations. Exquisite storytelling for your special day, inspired by luxury brands.",
+  description: "Create premium cinematic digital wedding invitations with RSVP tracking. Easily customize luxury templates and share a WhatsApp link. Free to try — edit now!",
   metadataBase: new URL("https://varnam-invites.vercel.app"),
   alternates: {
     canonical: "/",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Varnam | Premium Cinematic Digital Wedding Invitations with RSVP",
-    description: "Create elegant digital invites with cinematic animation and music.",
+    description: "Create premium cinematic digital wedding invitations with RSVP tracking. Easily customize luxury templates and share a WhatsApp link. Free to try — edit now!",
     type: "website",
     url: "https://varnam-invites.vercel.app",
     siteName: "Varnam",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Varnam | Premium Cinematic Wedding Invitations",
-    description: "Create elegant digital invites with cinematic animation and music.",
+    description: "Create premium cinematic digital wedding invitations with RSVP tracking. Easily customize luxury templates and share a WhatsApp link. Free to try — edit now!",
     images: ["/og-image.png"],
   },
 };
@@ -164,9 +164,9 @@ export default function RootLayout({
             <>
               <Script
                 src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-                strategy="afterInteractive"
+                strategy="lazyOnload"
               />
-              <Script id="google-analytics" strategy="afterInteractive">
+              <Script id="google-analytics" strategy="lazyOnload">
                 {`
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
@@ -179,7 +179,7 @@ export default function RootLayout({
         })()}
         {/* Facebook Pixel */}
         {process.env.NEXT_PUBLIC_FB_PIXEL_ID && (
-          <Script id="facebook-pixel" strategy="afterInteractive">
+          <Script id="facebook-pixel" strategy="lazyOnload">
             {`
               !function(f,b,e,v,n,t,s)
               {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

@@ -308,7 +308,7 @@ export default function GalleryClient() {
         {/* Footer */}
         <footer className="w-full py-10 px-6 border-t border-zinc-100 bg-white z-10 text-center flex flex-col items-center justify-center gap-3">
           <p className="text-xs text-zinc-600">
-            📍 115, Ekambaranathar Sannathi Street, Kanchipuram, Tamil Nadu - 631502 &nbsp;·&nbsp; 📞 +91 7200180268 &nbsp;·&nbsp; ✉ support@varnam.in
+            📍 115A, Ekambaranathar Sannathi Street, Kanchipuram, Tamil Nadu - 631502 &nbsp;·&nbsp; 📞 +91 7200180268 &nbsp;·&nbsp; ✉ support@varnam.in
           </p>
           <div className="flex gap-6 text-[11px] tracking-wider text-zinc-500 font-bold uppercase justify-center">
             <Link href="/privacy-policy" className="hover:text-zinc-900 transition-colors">Privacy Policy</Link>

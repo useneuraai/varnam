@@ -1,0 +1,25 @@
+# Varnam
+
+Varnam is an ultra-premium, interactive, and cinematic digital wedding invitation platform. It allows users to create bespoke, luxury-tier digital wedding e-invites shareable with a single link on WhatsApp, SMS, or email.
+
+## Key Features
+
+- **Cinematic Entrance Animations**: Double-door reveals, royal Tamil themes, divine temple aesthetics, and champagne floral transitions.
+- **Dynamic RSVP Tracking**: Online RSVP management with attendance logs, guest counts, and guest wish boards.
+- **Event Information & Schedules**: Interactive multi-event schedules (Muhurtham, Reception, Sangeet) with dress code specifications, transit instructions, and active directions.
+- **Media & Slideshow Integration**: Customized background image uploads, photo slideshow galleries, and support for elegant background music tracks.
+- **No App Required**: Built on modern web technologies ensuring compatibility across any mobile and desktop browser.
+
+## Pricing
+
+- **Signature Event License**: One-time payment of ₹799 per premium invitation website. Free drafting, activation on payment.
+
+## Templates Collection
+
+1. **Temple Gold**: Divine temple drawing animations, floats brass lamps, Tamil Hindu aesthetics.
+2. **Traditional Red**: South Indian silk textures, self-drawing Kolams, falling jasmine.
+3. **Floral Luxury**: Destination theme, champagne gold and blush pink tones.
+4. **Modern Minimal**: Contemporary motion typography and clean beige layout.
+5. **Royal Heritage**: Unfolding scrolls, opening palace gates, royal crests, fireworks.
+6. **Elegant Islamic Nikaah**: Emerald green and glistening gold mandalas.
+7. **Celestial Rose Christian**: Rose gold theme, cross transitions, string instrumentals.

@@ -757,6 +757,12 @@ export default function LandingClient() {
                 Ultra-premium, cinematic digital wedding invitation websites. Exquisite interactive e-invites with RSVP, custom music, maps, and guest message walls for modern couples.
               </p>
               <p className="text-xs text-zinc-500 mt-2">
+                📍 12, Khader Nawaz Khan Road, Nungambakkam, Chennai, TN - 600006
+              </p>
+              <p className="text-xs text-zinc-500 mt-1">
+                📞 +91 98765 43210 &nbsp;·&nbsp; ✉ support@varnam.in
+              </p>
+              <p className="text-xs text-zinc-400 mt-2">
                 © {new Date().getFullYear()} Varnam Wedding Invites. All rights reserved.
               </p>
             </div>

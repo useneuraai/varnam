@@ -306,7 +306,10 @@ export default function GalleryClient() {
         </main>
 
         {/* Footer */}
-        <footer className="w-full py-10 px-6 border-t border-zinc-100 bg-white z-10 text-center">
+        <footer className="w-full py-10 px-6 border-t border-zinc-100 bg-white z-10 text-center flex flex-col items-center justify-center gap-2">
+          <p className="text-xs text-zinc-600">
+            📍 12, Khader Nawaz Khan Road, Nungambakkam, Chennai, TN - 600006 &nbsp;·&nbsp; 📞 +91 98765 43210 &nbsp;·&nbsp; ✉ support@varnam.in
+          </p>
           <p className="text-xs text-zinc-500">
             © {new Date().getFullYear()} Varnam Wedding Invites. All rights reserved.
           </p>

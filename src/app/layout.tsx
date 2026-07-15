@@ -26,7 +26,7 @@ const greatVibes = Great_Vibes({
 import type { Viewport } from "next";
 
 export const metadata: Metadata = {
-  title: "Varnam | Premium Cinematic Wedding Invitations",
+  title: "Varnam | Premium Cinematic Digital Wedding Invitations with RSVP",
   description: "Craft ultra-premium, interactive, and cinematic digital wedding invitations. Exquisite storytelling for your special day, inspired by luxury brands.",
   metadataBase: new URL("https://varnam-invites.vercel.app"),
   alternates: {
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "Varnam | Premium Cinematic Wedding Invitations",
+    title: "Varnam | Premium Cinematic Digital Wedding Invitations with RSVP",
     description: "Create elegant digital invites with cinematic animation and music.",
     type: "website",
     url: "https://varnam-invites.vercel.app",
@@ -97,6 +97,38 @@ const webAppSchema = {
   }
 };
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Varnam",
+  "url": "https://varnam-invites.vercel.app",
+  "logo": "https://varnam-invites.vercel.app/apple-touch-icon.png",
+  "description": "Craft ultra-premium, interactive, and cinematic digital wedding invitations with online RSVP, slideshows, and custom music.",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+91-98765-43210",
+    "contactType": "customer service"
+  }
+};
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Varnam Wedding Invites",
+  "image": "https://varnam-invites.vercel.app/og-image.png",
+  "telephone": "+91 98765 43210",
+  "email": "support@varnam.in",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "12, Khader Nawaz Khan Road, Nungambakkam",
+    "addressLocality": "Chennai",
+    "addressRegion": "Tamil Nadu",
+    "postalCode": "600006",
+    "addressCountry": "IN"
+  },
+  "priceRange": "₹₹"
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -112,6 +144,49 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
+        {/* Google Analytics */}
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+                `,
+              }}
+            />
+          </>
+        )}
+        {/* Facebook Pixel */}
+        {process.env.NEXT_PUBLIC_FB_PIXEL_ID && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '${process.env.NEXT_PUBLIC_FB_PIXEL_ID}');
+                fbq('track', 'PageView');
+              `,
+            }}
+          />
+        )}
       </head>
       <body className="bg-[#080708] text-[#fbf6df] selection:bg-[#d4a325] selection:text-[#080708]">
         <SmoothScroll>

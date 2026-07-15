@@ -45,6 +45,10 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "Varnam | Premium Cinematic Wedding Invitations",
     description: "Create elegant digital invites with cinematic animation and music.",

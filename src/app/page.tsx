@@ -17,6 +17,7 @@ import {
 import { TEMPLATES } from "@/lib/templates";
 import LiveTemplatePreview from "@/components/LiveTemplatePreview";
 import { supabase } from "@/lib/supabase";
+import SocialShare from "@/components/SocialShare";
 
 // Helpers for the carousel indices
 const getWrappedOffset = (index: number, activeIndex: number, total: number) => {
@@ -264,7 +265,7 @@ export default function LandingPage() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
               <Link
-                href="/templates?event=Wedding"
+                href="/templates"
                 className="px-8 py-4 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs tracking-widest uppercase transition-all duration-300 shadow-lg shadow-zinc-200/10 min-w-[210px] flex items-center justify-center gap-2 group rounded-full"
               >
                 Browse Templates
@@ -417,10 +418,15 @@ export default function LandingPage() {
               </p>
               
               <div className="mt-8 flex flex-wrap gap-4">
-                <span className="inline-flex items-center gap-2 rounded-full border border-zinc-100 bg-zinc-50/50 px-5 py-2.5 text-xs font-semibold tracking-wide text-zinc-800 shadow-sm">
+                <a
+                  href="https://razorpay.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-zinc-100 bg-zinc-50/50 px-5 py-2.5 text-xs font-semibold tracking-wide text-zinc-800 hover:text-zinc-950 hover:border-zinc-200 transition-colors shadow-sm"
+                >
                   <ShieldCheck className="w-4 h-4 text-gold-600" />
                   Razorpay Verified
-                </span>
+                </a>
                 <span className="inline-flex items-center gap-2 rounded-full border border-zinc-100 bg-zinc-50/50 px-5 py-2.5 text-xs font-semibold tracking-wide text-zinc-800 shadow-sm">
                   <Lock className="w-4 h-4 text-gold-600" />
                   Secure Live Dashboard
@@ -526,8 +532,9 @@ export default function LandingPage() {
                         <Link
                           href={`/templates/${tpl.slug}`}
                           className="text-[10px] tracking-widest uppercase font-bold text-zinc-500 hover:text-zinc-900 transition-colors px-3 py-2"
+                          aria-label={`Preview ${tpl.name} template`}
                         >
-                          PREVIEW
+                          PREVIEW {tpl.name.replace(/✨|❤️|🌸|⚪/g, "").trim().toUpperCase()}
                         </Link>
                         <Link
                           href={`/editor/${tpl.slug}`}
@@ -713,6 +720,9 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        {/* Social Share Bar */}
+        <SocialShare />
 
         {/* Footer */}
         <footer className="w-full py-12 px-6 border-t border-zinc-100 bg-[#fafaf9] z-10">

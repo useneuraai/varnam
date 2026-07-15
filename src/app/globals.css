@@ -199,6 +199,15 @@ html.lenis, html.lenis body {
   overflow: hidden;
 }
 
+@media (max-width: 1023px) {
+  html.lenis-stopped,
+  html.lenis-stopped body,
+  .lenis.lenis-stopped {
+    overflow: auto !important;
+    height: auto !important;
+  }
+}
+
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }

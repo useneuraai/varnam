@@ -5,8 +5,10 @@ import Link from "next/link";
 import { CheckCircle2, Copy, ExternalLink, Share2, Check, Sparkles, Home } from "lucide-react";
 import { motion } from "framer-motion";
 import GoldParticles from "@/components/animations/GoldParticles";
+import { useSearchParams } from "next/navigation";
 
 interface Invitation {
+  id?: string;
   bride_name: string;
   groom_name: string;
   template_slug: string;
@@ -29,6 +31,8 @@ interface Particle {
 export default function SuccessClient({ invitation }: { invitation: Invitation }) {
   const [copied, setCopied] = useState(false);
   const [confetti, setConfetti] = useState<Particle[]>([]);
+  const searchParams = useSearchParams();
+  const isEdit = searchParams.get("mode") === "edit";
 
   useEffect(() => {
     // Generate celebration gold confetti burst on mount
@@ -95,7 +99,8 @@ export default function SuccessClient({ invitation }: { invitation: Invitation }
   }, []);
 
   const handleCopy = () => {
-    const fullUrl = `${window.location.origin}/invite/${invitation.slug}`;
+    const inviteIdentifier = invitation.id || invitation.slug;
+    const fullUrl = `${window.location.origin}/invite/${inviteIdentifier}`;
     navigator.clipboard.writeText(fullUrl).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -103,7 +108,8 @@ export default function SuccessClient({ invitation }: { invitation: Invitation }
   };
 
   const whatsappText = `You are cordially invited to the wedding of ${invitation.bride_name} & ${invitation.groom_name}. Please view our cinematic digital invitation here: `;
-  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/invite/${invitation.slug}` : `/invite/${invitation.slug}`;
+  const inviteIdentifier = invitation.id || invitation.slug;
+  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/invite/${inviteIdentifier}` : `/invite/${inviteIdentifier}`;
 
   return (
     <div className="relative min-h-screen bg-[#080708] text-[#fbf6df] flex flex-col items-center justify-center p-6 overflow-hidden font-sans">
@@ -158,7 +164,7 @@ export default function SuccessClient({ invitation }: { invitation: Invitation }
           transition={{ delay: 0.4 }}
           className="font-sans text-2xl md:text-3xl font-black tracking-widest text-[#f5e9b3] uppercase"
         >
-          ORDER CONCLUDED
+          {isEdit ? "CHANGES SAVED" : "ORDER CONCLUDED"}
         </motion.h1>
         
         <motion.p
@@ -167,7 +173,7 @@ export default function SuccessClient({ invitation }: { invitation: Invitation }
           transition={{ delay: 0.5 }}
           className="font-sans text-[10px] tracking-widest text-[#eed57c]/60 uppercase mt-2 mb-8 font-bold"
         >
-          Your premium digital invitation is live
+          {isEdit ? "Your digital invitation has been updated successfully" : "Your premium digital invitation is live"}
         </motion.p>
 
         {/* Couple Card Display */}
@@ -196,7 +202,7 @@ export default function SuccessClient({ invitation }: { invitation: Invitation }
           </span>
           <div className="flex items-center justify-between gap-4 font-mono text-xs text-[#fbf6df]/90 truncate">
             <span className="truncate pr-4 select-all">
-              {typeof window !== "undefined" ? `${window.location.origin}/invite/${invitation.slug}` : `/invite/${invitation.slug}`}
+              {typeof window !== "undefined" ? `${window.location.origin}/invite/${invitation.id || invitation.slug}` : `/invite/${invitation.id || invitation.slug}`}
             </span>
             <button
               onClick={handleCopy}
@@ -237,7 +243,7 @@ export default function SuccessClient({ invitation }: { invitation: Invitation }
           </a>
 
           <Link
-            href={`/invite/${invitation.slug}`}
+            href={`/invite/${invitation.id || invitation.slug}`}
             target="_blank"
             className="flex-1 py-4 border border-white/10 text-white hover:bg-white/5 font-bold text-[10px] tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-2 rounded-2xl"
           >

@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 interface Invitation {
+  id?: string;
   template_slug: string;
   slug: string;
   bride_name: string;
@@ -142,10 +143,10 @@ export default function DashboardPage() {
     router.replace("/templates");
   };
 
-  const handleCopyLink = (slug: string) => {
-    const link = `${window.location.origin}/invite/${slug}`;
+  const handleCopyLink = (idOrSlug: string) => {
+    const link = `${window.location.origin}/invite/${idOrSlug}`;
     navigator.clipboard.writeText(link);
-    setCopiedSlug(slug);
+    setCopiedSlug(idOrSlug);
     setTimeout(() => setCopiedSlug(null), 2000);
   };
 
@@ -383,7 +384,7 @@ export default function DashboardPage() {
                         </button>
 
                         <a
-                          href={`/invite/${invite.slug}`}
+                          href={`/invite/${invite.id || invite.slug}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
@@ -393,10 +394,10 @@ export default function DashboardPage() {
                         </a>
 
                         <button
-                          onClick={() => handleCopyLink(invite.slug)}
+                          onClick={() => handleCopyLink(invite.id || invite.slug)}
                           className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer relative"
                         >
-                          {copiedSlug === invite.slug ? (
+                          {copiedSlug === (invite.id || invite.slug) ? (
                             <>
                               <ClipboardCheck className="w-3.5 h-3.5 text-emerald-600" />
                               <span className="text-emerald-600">Copied!</span>

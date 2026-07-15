@@ -241,18 +241,18 @@ export default function GalleryPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4 }}
-                    className="group relative flex flex-col bg-white rounded-[24px] overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border-0"
+                    className="group relative flex flex-col bg-white rounded-[24px] overflow-hidden border border-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(179,129,27,0.06)] hover:border-[#eed57c]/40 transition-all duration-500"
                   >
                     {/* Thumbnail Image Container */}
-                    <div className="relative aspect-[4/3] overflow-hidden bg-zinc-100">
+                    <div className="relative aspect-[4/3] overflow-hidden bg-zinc-50 border-b border-zinc-100">
                       <LiveTemplatePreview slug={tpl.slug} autoScroll={false} />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#1c1a17]/20 via-transparent to-transparent pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
                       
-                      <span className="absolute top-4 left-4 bg-white/95 text-[#1c1a17] text-[9px] tracking-widest uppercase px-3 py-1 font-bold shadow-sm rounded-full pointer-events-none">
+                      <span className="absolute top-4 left-4 bg-zinc-950/90 backdrop-blur-md text-[#eed57c] text-[10px] tracking-[0.2em] uppercase px-3 py-1.5 font-bold rounded-md shadow-md pointer-events-none">
                         {tpl.religion}
                       </span>
 
-                      <span className="absolute top-4 right-4 bg-black/50 text-white text-[9px] tracking-widest uppercase px-3 py-1 font-bold backdrop-blur-sm rounded-full pointer-events-none">
+                      <span className="absolute top-4 right-4 bg-zinc-900/60 text-white text-[9px] tracking-widest uppercase px-3 py-1.5 font-bold backdrop-blur-sm rounded-full pointer-events-none">
                         {tpl.category}
                       </span>
                     </div>
@@ -260,35 +260,38 @@ export default function GalleryPage() {
                     {/* Body details */}
                     <div className="p-6 flex flex-col flex-grow">
                       <div className="flex items-center gap-1.5 mb-2">
-                        <span className="h-1.5 w-1.5 rounded-full bg-gold-500" />
-                        <span className="text-[9px] tracking-widest text-zinc-400 uppercase font-bold">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#b3811b]" />
+                        <span className="text-xs tracking-widest text-zinc-500 uppercase font-bold">
                           {tpl.language}
                         </span>
                       </div>
 
-                      <h2 className="text-lg text-zinc-900 font-bold tracking-tight mb-2 uppercase">
+                      <h2 className="text-xl text-zinc-900 font-bold font-serif tracking-wide mb-2">
                         {tpl.name}
                       </h2>
-                      <p className="text-xs text-zinc-500 leading-relaxed mb-6 flex-grow">
+                      <p className="text-sm text-zinc-650 leading-relaxed mb-6 flex-grow font-normal">
                         {tpl.description}
                       </p>
 
-                      <div className="flex items-center justify-between border-t border-zinc-100 pt-4 mt-auto">
-                        <span className="text-base text-zinc-900 font-bold">
-                          ₹{tpl.price}
-                        </span>
-                        <div className="flex gap-2">
-                          <Link
-                            href={`/templates/${tpl.slug}`}
-                            className="text-[10px] tracking-widest uppercase text-zinc-500 hover:text-zinc-900 transition-colors px-3 py-2 font-bold"
-                          >
-                            PREVIEW
-                          </Link>
+                      <div className="flex flex-col gap-4 border-t border-zinc-100 pt-4 mt-auto">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-extrabold">Single License</span>
+                          <span className="text-lg text-zinc-950 font-extrabold font-serif">₹{tpl.price}</span>
+                        </div>
+                        
+                        <div className="flex flex-col gap-2 w-full">
                           <Link
                             href={`/editor/${tpl.slug}`}
-                            className="bg-zinc-900 text-white text-[10px] tracking-widest uppercase font-bold px-4 py-2 hover:bg-zinc-800 transition-colors shadow-sm rounded-full"
+                            className="w-full bg-zinc-950 hover:bg-[#b3811b] text-white text-xs font-bold tracking-widest uppercase py-3.5 transition-all duration-300 border border-zinc-900 hover:border-[#b3811b] rounded-xl flex items-center justify-center min-h-[44px] shadow-sm"
                           >
-                            USE TEMPLATE
+                            Customize Template
+                          </Link>
+                          <Link
+                            href={`/templates/${tpl.slug}`}
+                            className="w-full text-xs tracking-widest uppercase font-bold text-zinc-600 hover:text-zinc-900 border border-zinc-200 hover:border-zinc-800 bg-white transition-all duration-300 py-3.5 rounded-xl flex items-center justify-center min-h-[44px]"
+                            aria-label={`Preview ${tpl.name} template`}
+                          >
+                            Live Preview
                           </Link>
                         </div>
                       </div>

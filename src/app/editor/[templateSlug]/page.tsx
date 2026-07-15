@@ -559,7 +559,7 @@ function EditorPageContent() {
           throw new Error(errData.message || "Failed to update invitation details.");
         }
 
-        router.push(`/success/${editSlug}`);
+        router.push(`/success/${editSlug}?mode=edit`);
       } catch (err: any) {
         console.error(err);
         setError(err.message || "An unexpected error occurred during save.");

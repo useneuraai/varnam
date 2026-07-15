@@ -139,7 +139,7 @@ export default async function AdminDashboard() {
                         </td>
                         <td className="p-4 text-right">
                           <Link
-                            href={`/invite/${inv.slug}`}
+                            href={`/invite/${inv.id || inv.slug}`}
                             target="_blank"
                             className="inline-flex items-center gap-1 text-gold-400 hover:text-gold-200 font-sans text-[9px] tracking-widest uppercase font-bold border border-gold-500/20 px-2 py-1 bg-black/40"
                           >

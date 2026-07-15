@@ -4,6 +4,7 @@ import { supabase } from "./supabase";
 import { TemplateData, TEMPLATES } from "./templates";
 
 export interface InvitationRecord {
+  id?: string;
   template_slug: string;
   slug: string;
   bride_name: string;
@@ -139,6 +140,7 @@ export async function saveInvitation(record: InvitationRecord): Promise<Invitati
     // Save to local file cache
     const db = readLocalMockDb();
     const newRecord = {
+      id: record.id || Math.random().toString(36).substring(2, 9),
       ...record,
       created_at: new Date().toISOString(),
     };
@@ -152,23 +154,31 @@ export async function getInvitationBySlug(slug: string): Promise<InvitationRecor
   const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
 
   if (!isMockSupabase) {
-    const { data, error } = await supabase
+    // Try query by id first
+    const { data: byId } = await supabase
+      .from("invitations")
+      .select("*")
+      .eq("id", slug)
+      .maybeSingle();
+
+    if (byId) return byId;
+
+    // Fallback query by slug
+    const { data: bySlug } = await supabase
       .from("invitations")
       .select("*")
       .eq("slug", slug)
-      .single();
+      .maybeSingle();
 
-    if (error) {
-      console.error(`Supabase error fetching invitation with slug "${slug}":`, error);
-      // If invitation is not found in supabase, fall back to local mock DB in case it was created locally
-      const localDb = readLocalMockDb();
-      return localDb[slug] || null;
-    }
-    return data;
+    if (bySlug) return bySlug;
+
+    // Fall back to local mock DB
+    const localDb = readLocalMockDb();
+    return localDb[slug] || Object.values(localDb).find(r => r.id === slug) || null;
   } else {
     // Read from local file cache
     const db = readLocalMockDb();
-    return db[slug] || null;
+    return db[slug] || Object.values(db).find((r: any) => r.id === slug) || null;
   }
 }
 
@@ -267,6 +277,7 @@ export async function upsertInvitation(record: InvitationRecord): Promise<Invita
     const db = readLocalMockDb();
     const existing = db[record.slug] || {};
     const newRecord = {
+      id: record.id || existing.id || Math.random().toString(36).substring(2, 9),
       ...existing,
       ...record,
       created_at: existing.created_at || new Date().toISOString(),

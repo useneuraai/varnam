@@ -28,7 +28,7 @@ import type { Viewport } from "next";
 export const metadata: Metadata = {
   title: "Varnam | Premium Cinematic Wedding Invitations",
   description: "Craft ultra-premium, interactive, and cinematic digital wedding invitations. Exquisite storytelling for your special day, inspired by luxury brands.",
-  metadataBase: new URL("https://varnam.wedding"),
+  metadataBase: new URL("https://varnam-invites.vercel.app"),
   alternates: {
     canonical: "/",
   },
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     title: "Varnam | Premium Cinematic Wedding Invitations",
     description: "Create elegant digital invites with cinematic animation and music.",
     type: "website",
-    url: "https://varnam.wedding",
+    url: "https://varnam-invites.vercel.app",
     siteName: "Varnam",
     images: [
       {
@@ -84,7 +84,7 @@ const webAppSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Varnam",
-  "url": "https://varnam.wedding",
+  "url": "https://varnam-invites.vercel.app",
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "All",
   "browserRequirements": "Requires HTML5 compatible browser",

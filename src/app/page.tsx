@@ -544,7 +544,7 @@ export default function LandingPage() {
                           href={`/editor/${tpl.slug}`}
                           className="bg-[#b3811b] hover:bg-[#9a6f14] text-white text-xs tracking-widest uppercase font-bold px-5 py-2.5 transition-colors shadow-sm hover:shadow-md rounded-full flex items-center justify-center min-h-[40px]"
                         >
-                          USE THIS
+                          SELECT {tpl.name.replace(/✨|❤️|🌸|⚪/g, "").trim().toUpperCase()}
                         </Link>
                       </div>
                     </div>

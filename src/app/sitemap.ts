@@ -1,8 +1,12 @@
 import { MetadataRoute } from "next";
 import { TEMPLATES } from "@/lib/templates";
+import { headers } from "next/headers";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://varnam-invites.vercel.app";
+  const headersList = await headers();
+  const host = headersList.get("host") || "varnam-invites.vercel.app";
+  const proto = headersList.get("x-forwarded-proto") || "https";
+  const baseUrl = `${proto}://${host}`;
 
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [

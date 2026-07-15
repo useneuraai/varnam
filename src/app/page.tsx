@@ -408,7 +408,7 @@ export default function LandingPage() {
         </section>
 
         {/* Why Choose Varnam / Features */}
-        <section id="why-choose" className="py-24 px-6 relative bg-white overflow-hidden">
+        <section id="why-choose" className="py-24 px-6 relative bg-white overflow-hidden scroll-mt-20">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-16 lg:items-center">
             <div>
               <p className="font-semibold text-xs uppercase tracking-widest text-[#916710]">
@@ -507,46 +507,47 @@ export default function LandingPage() {
               {TEMPLATES.slice(0, 4).map((tpl) => (
                 <div
                   key={tpl.slug}
-                  className="group relative flex flex-col bg-white rounded-[28px] overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border-0"
+                  className="group relative flex flex-col bg-white rounded-[24px] overflow-hidden border border-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(179,129,27,0.06)] hover:border-[#eed57c]/40 transition-all duration-500"
                 >
                   {/* Image */}
-                  <div className="relative h-64 overflow-hidden bg-zinc-100">
+                  <div className="relative h-64 overflow-hidden bg-zinc-50 border-b border-zinc-100">
                     <LiveTemplatePreview slug={tpl.slug} autoScroll={false} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
                     
-                    <span className="absolute top-4 left-4 bg-white/95 text-zinc-900 text-xs tracking-widest uppercase px-3 py-1.5 font-bold shadow-sm rounded-full pointer-events-none">
+                    {/* Mode label */}
+                    <span className="absolute top-4 left-4 bg-zinc-950/90 backdrop-blur-md text-[#eed57c] text-[10px] tracking-[0.2em] uppercase px-3 py-1.5 font-bold rounded-md shadow-md pointer-events-none">
                       {tpl.category}
                     </span>
                   </div>
 
                   {/* Body */}
                   <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-lg text-zinc-900 font-bold tracking-tight mb-2">
+                    <h3 className="text-xl text-zinc-900 font-bold font-serif tracking-wide mb-2">
                       {tpl.name}
                     </h3>
-                    <p className="text-sm text-zinc-650 leading-relaxed mb-6 flex-grow">
+                    <p className="text-sm text-zinc-650 leading-relaxed mb-6 flex-grow font-normal">
                       {tpl.description}
                     </p>
 
-                    <div className="flex flex-col gap-3 border-t border-zinc-100 pt-4 mt-auto">
+                    <div className="flex flex-col gap-4 border-t border-zinc-100 pt-4 mt-auto">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-zinc-500 uppercase tracking-widest font-bold">Price</span>
-                        <span className="text-lg text-zinc-900 font-extrabold">₹{tpl.price}</span>
+                        <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-extrabold">Single License</span>
+                        <span className="text-lg text-zinc-950 font-extrabold font-serif">₹{tpl.price}</span>
                       </div>
                       
                       <div className="flex flex-col gap-2 w-full">
                         <Link
                           href={`/editor/${tpl.slug}`}
-                          className="w-full bg-zinc-950 hover:bg-zinc-900 text-white text-xs tracking-widest uppercase font-bold py-3 transition-colors border border-[#eed57c] shadow-sm hover:shadow-md rounded-full flex items-center justify-center min-h-[44px]"
+                          className="w-full bg-zinc-950 hover:bg-[#b3811b] text-white text-xs font-bold tracking-widest uppercase py-3.5 transition-all duration-300 border border-zinc-900 hover:border-[#b3811b] rounded-xl flex items-center justify-center min-h-[44px] shadow-sm"
                         >
-                          SELECT {tpl.name.replace(/✨|❤️|🌸|⚪/g, "").trim().toUpperCase()}
+                          Customize Template
                         </Link>
                         <Link
                           href={`/templates/${tpl.slug}`}
-                          className="w-full text-xs tracking-widest uppercase font-bold text-zinc-700 hover:text-zinc-950 border border-zinc-200 hover:border-zinc-400 transition-colors py-3 rounded-full flex items-center justify-center min-h-[44px]"
+                          className="w-full text-xs tracking-widest uppercase font-bold text-zinc-600 hover:text-zinc-900 border border-zinc-200 hover:border-zinc-800 bg-white transition-all duration-300 py-3.5 rounded-xl flex items-center justify-center min-h-[44px]"
                           aria-label={`Preview ${tpl.name} template`}
                         >
-                          PREVIEW {tpl.name.replace(/✨|❤️|🌸|⚪/g, "").trim().toUpperCase()}
+                          Live Preview
                         </Link>
                       </div>
                     </div>
@@ -558,7 +559,7 @@ export default function LandingPage() {
         </section>
 
         {/* How it works Section */}
-        <section id="how-it-works" className="py-24 px-6 z-10 border-t border-zinc-150 bg-white relative">
+        <section id="how-it-works" className="py-24 px-6 z-10 border-t border-zinc-150 bg-white relative scroll-mt-20">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <span className="text-xs font-bold tracking-widest text-[#916710] uppercase">
@@ -607,7 +608,7 @@ export default function LandingPage() {
         </section>
 
         {/* Pricing / Event License */}
-        <section id="pricing" className="py-24 px-6 z-10 border-t border-zinc-150 bg-[#fafaf9] relative">
+        <section id="pricing" className="py-24 px-6 z-10 border-t border-zinc-150 bg-[#fafaf9] relative scroll-mt-20">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <span className="text-xs font-bold tracking-widest text-[#916710] uppercase">
@@ -689,7 +690,7 @@ export default function LandingPage() {
         </section>
 
         {/* Accordion FAQ Section */}
-        <section id="faq" className="py-24 px-6 z-10 border-t border-zinc-150 bg-white relative">
+        <section id="faq" className="py-24 px-6 z-10 border-t border-zinc-150 bg-white relative scroll-mt-20">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <span className="text-xs font-bold tracking-widest text-[#916710] uppercase">

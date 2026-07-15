@@ -1,9 +1,52 @@
 import { notFound } from "next/navigation";
 import { getInvitationBySlug } from "@/lib/db";
 import InviteClient from "./InviteClient";
+import { Metadata } from "next";
 
 interface PageProps {
   params: Promise<{ slug: string }> | { slug: string };
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
+  const invitation = await getInvitationBySlug(slug);
+
+  if (!invitation) {
+    return {
+      title: "Sacred Announcement | Varnam",
+      description: "This invitation is under verification or not found.",
+    };
+  }
+
+  const bride = invitation.bride_name;
+  const groom = invitation.groom_name;
+  const dateStr = invitation.wedding_date ? new Date(invitation.wedding_date).toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }) : "";
+  const venue = invitation.wedding_venue || "";
+
+  return {
+    title: `${bride} & ${groom}'s Wedding Invitation | Varnam`,
+    description: `You are cordially invited to the grand celebration of the wedding of ${bride} & ${groom} on ${dateStr} at ${venue}. RSVP, view maps, dress code details, and send blessings online.`,
+    keywords: [
+      "wedding",
+      "invitation",
+      bride,
+      groom,
+      "rsvp",
+      "celebration",
+      "event",
+    ],
+    openGraph: {
+      title: `${bride} & ${groom}'s Wedding Invitation`,
+      description: `Join us in celebrating our wedding on ${dateStr} at ${venue}. RSVP online.`,
+      type: "website",
+    }
+  };
 }
 
 export default async function InvitePage({ params }: PageProps) {

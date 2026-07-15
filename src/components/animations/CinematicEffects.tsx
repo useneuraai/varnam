@@ -148,11 +148,13 @@ export function ScrollDrawTimeline() {
 export function RevealGlowText({ text, className = "" }: { text: string; className?: string }) {
   const pathname = usePathname();
   const isEditor = pathname?.includes("/editor");
+  const isInvitePage = pathname?.startsWith("/invite/");
   const words = text.split(" ");
 
   if (isEditor) {
+    const Tag = isInvitePage ? "h1" : "h2";
     return (
-      <h1 className={`font-cinzel couple-names-title tracking-wider sm:tracking-widest text-center select-none flex flex-wrap justify-center gap-x-[0.3em] gap-y-2 relative ${className}`}>
+      <Tag className={`font-cinzel couple-names-title tracking-wider sm:tracking-widest text-center select-none flex flex-wrap justify-center gap-x-[0.3em] gap-y-2 relative ${className}`}>
         {words.map((word, wIdx) => (
           <span key={wIdx} className="inline-block whitespace-normal break-words sm:whitespace-nowrap">
             {Array.from(word).map((char, cIdx) => (
@@ -166,7 +168,7 @@ export function RevealGlowText({ text, className = "" }: { text: string; classNa
             ))}
           </span>
         ))}
-      </h1>
+      </Tag>
     );
   }
 
@@ -199,8 +201,10 @@ export function RevealGlowText({ text, className = "" }: { text: string; classNa
     }
   };
 
+  const MotionTag = isInvitePage ? motion.h1 : motion.h2;
+
   return (
-    <motion.h1
+    <MotionTag
       key={text}
       variants={containerVariants}
       initial="hidden"
@@ -225,7 +229,7 @@ export function RevealGlowText({ text, className = "" }: { text: string; classNa
           ))}
         </span>
       ))}
-    </motion.h1>
+    </MotionTag>
   );
 }
 

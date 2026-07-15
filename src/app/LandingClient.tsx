@@ -22,7 +22,9 @@ import {
   Check,
   Sliders,
   Layers,
-  Send
+  Send,
+  Menu,
+  X
 } from "lucide-react";
 import { TEMPLATES } from "@/lib/templates";
 import LiveTemplatePreview from "@/components/LiveTemplatePreview";
@@ -128,11 +130,18 @@ export default function LandingClient() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [windowWidth, setWindowWidth] = useState(1200);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setWindowWidth(window.innerWidth);
-      const handleResize = () => setWindowWidth(window.innerWidth);
+      requestAnimationFrame(() => {
+        setWindowWidth(window.innerWidth);
+      });
+      const handleResize = () => {
+        requestAnimationFrame(() => {
+          setWindowWidth(window.innerWidth);
+        });
+      };
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
     }
@@ -180,31 +189,93 @@ export default function LandingClient() {
             </nav>
 
             <div className="flex items-center gap-4">
-              {mounted && user ? (
-                <Link
-                  href="/dashboard"
-                  className="px-5 py-2.5 text-xs tracking-widest text-[#b3811b] hover:text-[#9a6f14] border border-[#eed57c] bg-[#fffcf9] hover:bg-[#fff9f2] transition-all duration-300 font-bold rounded-xl uppercase min-h-[40px] flex items-center"
-                >
-                  My Studio
-                </Link>
-              ) : mounted ? (
-                <Link
-                  href="/login"
-                  className="px-5 py-2.5 text-xs tracking-widest text-zinc-650 hover:text-zinc-950 transition-all duration-300 font-bold uppercase min-h-[40px] flex items-center"
-                >
-                  Sign In
-                </Link>
-              ) : (
-                <div className="w-14 h-4 bg-zinc-100 rounded animate-pulse" />
-              )}
-              <Link
-                href="/templates"
-                className="relative px-5 py-2.5 text-xs tracking-widest text-zinc-700 hover:text-zinc-950 border border-zinc-300 hover:border-zinc-800 bg-transparent hover:bg-zinc-50/50 transition-all duration-300 font-bold rounded-xl min-h-[40px] flex items-center"
+              <div className="hidden md:flex items-center gap-4">
+                {mounted && user ? (
+                  <Link
+                    href="/dashboard"
+                    className="px-5 py-2.5 text-xs tracking-widest text-[#b3811b] hover:text-[#9a6f14] border border-[#eed57c] bg-[#fffcf9] hover:bg-[#fff9f2] transition-all duration-300 font-bold rounded-xl uppercase min-h-[40px] flex items-center"
+                  >
+                    My Studio
+                  </Link>
+                ) : mounted ? (
+                  <Link
+                    href="/login"
+                    className="px-5 py-2.5 text-xs tracking-widest text-zinc-650 hover:text-zinc-950 transition-all duration-300 font-bold uppercase min-h-[40px] flex items-center"
+                  >
+                    Sign In
+                  </Link>
+                ) : (
+                  <div className="w-14 h-4 bg-zinc-100 rounded animate-pulse" />
+                )}
+              </div>
+
+              {/* Mobile menu trigger */}
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 md:hidden text-zinc-800 hover:text-zinc-950 focus:outline-none transition-colors"
+                aria-label="Toggle Menu"
               >
-                BROWSE GALLERY
-              </Link>
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
             </div>
           </div>
+
+          {/* Mobile navigation dropdown */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t border-zinc-100 bg-white/95 backdrop-blur-md absolute top-20 left-0 w-full shadow-lg z-50 flex flex-col px-6 py-6 gap-4 select-none">
+              <Link
+                href="/templates"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-sm font-bold tracking-wider text-zinc-800 py-2 border-b border-zinc-50"
+              >
+                TEMPLATES
+              </Link>
+              <a
+                href="#how-it-works"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-sm font-bold tracking-wider text-zinc-800 py-2 border-b border-zinc-50"
+              >
+                HOW IT WORKS
+              </a>
+              <a
+                href="#why-choose"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-sm font-bold tracking-wider text-zinc-800 py-2 border-b border-zinc-50"
+              >
+                WHY US
+              </a>
+              <a
+                href="#faq"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-sm font-bold tracking-wider text-zinc-800 py-2 border-b border-zinc-50"
+              >
+                FAQ
+              </a>
+              
+              <div className="pt-2 flex flex-col gap-2">
+                {mounted && user ? (
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-full text-center px-5 py-3 text-xs tracking-widest text-[#b3811b] border border-[#eed57c] bg-[#fffcf9] font-bold rounded-xl uppercase min-h-[44px] flex items-center justify-center"
+                  >
+                    My Studio
+                  </Link>
+                ) : mounted ? (
+                  <Link
+                    href="/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-full text-center px-5 py-3 text-xs tracking-widest text-zinc-800 border border-zinc-200 bg-zinc-50 font-bold rounded-xl uppercase min-h-[44px] flex items-center justify-center"
+                  >
+                    Sign In
+                  </Link>
+                ) : (
+                  <div className="w-full h-10 bg-zinc-100 rounded-xl animate-pulse" />
+                )}
+              </div>
+            </div>
+          )}
         </header>
 
         <main className="flex-grow">
@@ -215,7 +286,7 @@ export default function LandingClient() {
               Traditional & Modern WhatsApp Wedding Invitations
             </p>
             
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.02] text-zinc-900 tracking-tight mb-8">
+            <h1 className="text-3xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] sm:leading-[1.02] text-zinc-900 tracking-tight mb-8">
               Cinematic digital wedding <br className="hidden sm:inline" />
               <span className="gold-gradient-text drop-shadow-sm">invitations with RSVP</span>
             </h1>
@@ -252,7 +323,7 @@ export default function LandingClient() {
             onMouseLeave={() => setIsHovered(false)}
           >
             {/* Carousel Container */}
-            <div className="relative w-full h-[480px] sm:h-[600px] flex items-center justify-center overflow-x-clip py-4">
+            <div className="relative w-full h-[450px] sm:h-[600px] flex items-center justify-center overflow-x-clip py-4">
               {TEMPLATES.map((tpl, idx) => {
                 const offset = getWrappedOffset(idx, activeIndex, TEMPLATES.length);
                 const isVisible = Math.abs(offset) <= 2;
@@ -266,8 +337,8 @@ export default function LandingClient() {
                   <motion.div
                     key={tpl.slug}
                     style={{
-                      width: isMobile ? 260 : 340,
-                      height: isMobile ? 440 : 550,
+                      width: mounted && isMobile ? Math.min(windowWidth - 48, 280) : 340,
+                      height: mounted && isMobile ? Math.min((windowWidth - 48) * 1.6, 440) : 550,
                       position: "absolute",
                       borderRadius: 20,
                       overflow: "hidden",
@@ -469,7 +540,7 @@ export default function LandingClient() {
         </section>
 
         {/* Featured Templates Gallery */}
-        <section className="py-24 px-6 bg-[#fafaf9] border-t border-zinc-100 relative z-10">
+        <section style={{ contentVisibility: "auto", containIntrinsicSize: "0 800px" }} className="py-24 px-6 bg-[#fafaf9] border-t border-zinc-100 relative z-10">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <span className="text-xs font-bold tracking-widest text-[#916710] uppercase">
@@ -537,7 +608,7 @@ export default function LandingClient() {
         </section>
 
         {/* How it works Section */}
-        <section id="how-it-works" className="py-24 px-6 z-10 border-t border-zinc-150 bg-white relative scroll-mt-20">
+        <section id="how-it-works" style={{ contentVisibility: "auto", containIntrinsicSize: "0 600px" }} className="py-24 px-6 z-10 border-t border-zinc-150 bg-white relative scroll-mt-20">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <span className="text-xs font-bold tracking-widest text-[#916710] uppercase">
@@ -586,7 +657,7 @@ export default function LandingClient() {
         </section>
 
         {/* Pricing / Event License */}
-        <section id="pricing" className="py-24 px-6 z-10 border-t border-zinc-150 bg-[#fafaf9] relative scroll-mt-20">
+        <section id="pricing" style={{ contentVisibility: "auto", containIntrinsicSize: "0 1000px" }} className="py-24 px-6 z-10 border-t border-zinc-150 bg-[#fafaf9] relative scroll-mt-20">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <span className="text-xs font-bold tracking-widest text-[#916710] uppercase">

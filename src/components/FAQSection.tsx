@@ -51,7 +51,7 @@ export default function FAQSection() {
   };
 
   return (
-    <section id="faq" className="py-24 px-6 z-10 border-t border-zinc-150 bg-white relative scroll-mt-20">
+    <section id="faq" style={{ contentVisibility: "auto", containIntrinsicSize: "0 600px" }} className="py-24 px-6 z-10 border-t border-zinc-150 bg-white relative scroll-mt-20">
       {/* FAQ Schema Markup */}
       <script
         type="application/ld+json"

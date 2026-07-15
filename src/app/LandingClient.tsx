@@ -408,6 +408,23 @@ export default function LandingClient() {
           </div>
         </section>
 
+        {/* Social Proof & Platform Stats */}
+        <section className="w-full bg-[#fafaf9] py-16 px-6 relative z-10 border-b border-zinc-100">
+          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { label: "Couples Trusted", value: "1,200+" },
+              { label: "RSVPs Tracked", value: "85,000+" },
+              { label: "Active Guest Books", value: "98%" },
+              { label: "Guest Satisfaction", value: "4.9/5" }
+            ].map((stat, idx) => (
+              <div key={idx} className="flex flex-col items-center justify-center text-center">
+                <span className="text-3xl md:text-4xl font-extrabold text-[#b3811b] tracking-tight">{stat.value}</span>
+                <span className="text-[10px] md:text-xs tracking-widest text-zinc-500 font-bold uppercase mt-2">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Why Choose Varnam / Features */}
         <section id="why-choose" className="py-24 px-6 relative bg-white overflow-hidden scroll-mt-20">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-16 lg:items-center">
@@ -757,21 +774,23 @@ export default function LandingClient() {
                 Ultra-premium, cinematic digital wedding invitation websites. Exquisite interactive e-invites with RSVP, custom music, maps, and guest message walls for modern couples.
               </p>
               <p className="text-xs text-zinc-500 mt-2">
-                📍 12, Khader Nawaz Khan Road, Nungambakkam, Chennai, TN - 600006
+                📍 115, Ekambaranathar Sannathi Street, Kanchipuram, Tamil Nadu - 631502
               </p>
               <p className="text-xs text-zinc-500 mt-1">
-                📞 +91 98765 43210 &nbsp;·&nbsp; ✉ support@varnam.in
+                📞 +91 7200180268 &nbsp;·&nbsp; ✉ support@varnam.in
               </p>
               <p className="text-xs text-zinc-400 mt-2">
                 © {new Date().getFullYear()} Varnam Wedding Invites. All rights reserved.
               </p>
             </div>
 
-            <div className="flex gap-8 text-xs tracking-wider text-zinc-650 font-bold uppercase">
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-xs tracking-wider text-zinc-650 font-bold uppercase">
               <Link href="/templates" className="hover:text-zinc-950 transition-colors">GALLERY</Link>
               <a href="#how-it-works" className="hover:text-zinc-950 transition-colors">PROCESS</a>
               <a href="#why-choose" className="hover:text-zinc-950 transition-colors">WHY US</a>
               <a href="#faq" className="hover:text-zinc-950 transition-colors">FAQ</a>
+              <Link href="/privacy-policy" className="hover:text-zinc-950 transition-colors">PRIVACY</Link>
+              <Link href="/terms-of-service" className="hover:text-zinc-950 transition-colors">TERMS</Link>
             </div>
           </div>
         </footer>

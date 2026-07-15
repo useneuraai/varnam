@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cinzel, Playfair_Display, Inter, Great_Vibes } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const cinzel = Cinzel({
   variable: "--font-cinzel",
@@ -116,14 +117,14 @@ const localBusinessSchema = {
   "@type": "LocalBusiness",
   "name": "Varnam Wedding Invites",
   "image": "https://varnam-invites.vercel.app/og-image.png",
-  "telephone": "+91 98765 43210",
+  "telephone": "+91 7200180268",
   "email": "support@varnam.in",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "12, Khader Nawaz Khan Road, Nungambakkam",
-    "addressLocality": "Chennai",
+    "streetAddress": "115, Ekambaranathar Sannathi Street",
+    "addressLocality": "Kanchipuram",
     "addressRegion": "Tamil Nadu",
-    "postalCode": "600006",
+    "postalCode": "631502",
     "addressCountry": "IN"
   },
   "priceRange": "₹₹"
@@ -157,38 +158,37 @@ export default function RootLayout({
           const gaId = process.env.NEXT_PUBLIC_GA_ID || "G-85Y79K4YQE";
           return (
             <>
-              <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
-              <script
-                dangerouslySetInnerHTML={{
-                  __html: `
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-                    gtag('config', '${gaId}');
-                  `,
-                }}
+              <Script
+                src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+                strategy="afterInteractive"
               />
+              <Script id="google-analytics" strategy="afterInteractive">
+                {`
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${gaId}');
+                `}
+              </Script>
             </>
           );
         })()}
         {/* Facebook Pixel */}
         {process.env.NEXT_PUBLIC_FB_PIXEL_ID && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                !function(f,b,e,v,n,t,s)
-                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-                n.queue=[];t=b.createElement(e);t.async=!0;
-                t.src=v;s=b.getElementsByTagName(e)[0];
-                s.parentNode.insertBefore(t,s)}(window, document,'script',
-                'https://connect.facebook.net/en_US/fbevents.js');
-                fbq('init', '${process.env.NEXT_PUBLIC_FB_PIXEL_ID}');
-                fbq('track', 'PageView');
-              `,
-            }}
-          />
+          <Script id="facebook-pixel" strategy="afterInteractive">
+            {`
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '${process.env.NEXT_PUBLIC_FB_PIXEL_ID}');
+              fbq('track', 'PageView');
+            `}
+          </Script>
         )}
       </head>
       <body className="bg-[#080708] text-[#fbf6df] selection:bg-[#d4a325] selection:text-[#080708]">

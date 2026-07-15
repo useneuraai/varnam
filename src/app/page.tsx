@@ -270,10 +270,10 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
               <Link
                 href="/templates"
-                className="px-8 py-4 bg-[#b3811b] hover:bg-[#9a6f14] text-white font-bold text-xs tracking-widest uppercase transition-all duration-300 shadow-md hover:shadow-lg shadow-gold-700/10 min-w-[210px] min-h-[48px] flex items-center justify-center gap-2 group rounded-full"
+                className="px-8 py-4 bg-zinc-950 hover:bg-zinc-900 text-white font-extrabold text-xs tracking-widest uppercase transition-all duration-300 border border-[#eed57c] shadow-lg shadow-gold-700/10 min-w-[210px] min-h-[48px] flex items-center justify-center gap-2 group rounded-full"
               >
                 Browse Templates
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-[#eed57c]" />
               </Link>
               <Link
                 href="/templates/royal-tamil"
@@ -524,27 +524,29 @@ export default function LandingPage() {
                     <h3 className="text-lg text-zinc-900 font-bold tracking-tight mb-2">
                       {tpl.name}
                     </h3>
-                    <p className="text-xs text-zinc-600 leading-relaxed mb-6 flex-grow">
+                    <p className="text-sm text-zinc-650 leading-relaxed mb-6 flex-grow">
                       {tpl.description}
                     </p>
 
-                    <div className="flex items-center justify-between border-t border-zinc-100 pt-4 mt-auto">
-                      <span className="text-base text-zinc-900 font-bold">
-                        ₹{tpl.price}
-                      </span>
-                      <div className="flex gap-2">
+                    <div className="flex flex-col gap-3 border-t border-zinc-100 pt-4 mt-auto">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-zinc-500 uppercase tracking-widest font-bold">Price</span>
+                        <span className="text-lg text-zinc-900 font-extrabold">₹{tpl.price}</span>
+                      </div>
+                      
+                      <div className="flex flex-col gap-2 w-full">
+                        <Link
+                          href={`/editor/${tpl.slug}`}
+                          className="w-full bg-zinc-950 hover:bg-zinc-900 text-white text-xs tracking-widest uppercase font-bold py-3 transition-colors border border-[#eed57c] shadow-sm hover:shadow-md rounded-full flex items-center justify-center min-h-[44px]"
+                        >
+                          SELECT {tpl.name.replace(/✨|❤️|🌸|⚪/g, "").trim().toUpperCase()}
+                        </Link>
                         <Link
                           href={`/templates/${tpl.slug}`}
-                          className="text-xs tracking-widest uppercase font-bold text-zinc-650 hover:text-zinc-950 border border-zinc-200 hover:border-zinc-400 transition-colors px-4 py-2.5 rounded-full flex items-center justify-center min-h-[40px]"
+                          className="w-full text-xs tracking-widest uppercase font-bold text-zinc-700 hover:text-zinc-950 border border-zinc-200 hover:border-zinc-400 transition-colors py-3 rounded-full flex items-center justify-center min-h-[44px]"
                           aria-label={`Preview ${tpl.name} template`}
                         >
                           PREVIEW {tpl.name.replace(/✨|❤️|🌸|⚪/g, "").trim().toUpperCase()}
-                        </Link>
-                        <Link
-                          href={`/editor/${tpl.slug}`}
-                          className="bg-[#b3811b] hover:bg-[#9a6f14] text-white text-xs tracking-widest uppercase font-bold px-5 py-2.5 transition-colors shadow-sm hover:shadow-md rounded-full flex items-center justify-center min-h-[40px]"
-                        >
-                          SELECT {tpl.name.replace(/✨|❤️|🌸|⚪/g, "").trim().toUpperCase()}
                         </Link>
                       </div>
                     </div>
@@ -597,7 +599,7 @@ export default function LandingPage() {
                 >
                   <div className="mb-5 p-4 bg-white rounded-2xl border border-zinc-100 shadow-sm">{step.icon}</div>
                   <h3 className="text-base text-zinc-900 font-bold mb-2 tracking-tight">{step.title}</h3>
-                  <p className="text-xs text-zinc-650 leading-relaxed">{step.desc}</p>
+                  <p className="text-sm text-zinc-600 leading-relaxed">{step.desc}</p>
                 </div>
               ))}
             </div>
@@ -661,11 +663,26 @@ export default function LandingPage() {
 
                 <Link
                   href="/templates"
-                  className="w-full py-4 bg-[#b3811b] hover:bg-[#9a6f14] text-white font-bold text-xs tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-2 group shadow-lg shadow-gold-700/20 min-h-[48px] rounded-full"
+                  className="w-full py-4 bg-zinc-950 hover:bg-zinc-900 text-white font-extrabold text-xs tracking-widest uppercase transition-all duration-300 border border-[#eed57c] flex items-center justify-center gap-2 group shadow-lg shadow-gold-700/10 min-h-[48px] rounded-full"
                 >
                   SELECT TEMPLATE & START
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-[#eed57c]" />
                 </Link>
+
+                <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-2 text-left w-full border-t border-zinc-100 pt-5">
+                  <span className="flex items-center gap-1.5 text-xs text-zinc-600">
+                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Pay only when ready
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs text-zinc-600">
+                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Edit details anytime
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs text-zinc-600">
+                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> 1-Click activation
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs text-zinc-600">
+                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> No hidden platform fees
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -712,7 +729,7 @@ export default function LandingPage() {
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.2, ease: "easeInOut" }}
                         >
-                          <div className="px-6 pb-6 pt-1 text-xs sm:text-sm text-zinc-650 leading-relaxed border-t border-zinc-100/50">
+                          <div className="px-6 pb-6 pt-1 text-sm sm:text-base text-zinc-600 leading-relaxed border-t border-zinc-100/50">
                             {faq.a}
                           </div>
                         </motion.div>

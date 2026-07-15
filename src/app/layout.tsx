@@ -153,21 +153,24 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
         {/* Google Analytics */}
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-                `,
-              }}
-            />
-          </>
-        )}
+        {(() => {
+          const gaId = process.env.NEXT_PUBLIC_GA_ID || "G-85Y79K4YQE";
+          return (
+            <>
+              <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${gaId}');
+                  `,
+                }}
+              />
+            </>
+          );
+        })()}
         {/* Facebook Pixel */}
         {process.env.NEXT_PUBLIC_FB_PIXEL_ID && (
           <script

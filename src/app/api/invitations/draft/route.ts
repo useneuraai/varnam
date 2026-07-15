@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { upsertInvitation } from "@/lib/db";
 import { getTemplateBySlug } from "@/lib/templates";
-import { supabase } from "@/lib/supabase";
+import { getUserIdFromAuthHeader } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,18 +19,7 @@ export async function POST(req: NextRequest) {
 
     // Get authenticated user if token is present
     const authHeader = req.headers.get("Authorization");
-    let userId: string | undefined = undefined;
-
-    const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
-    if (!isMockSupabase && authHeader) {
-      const token = authHeader.replace("Bearer ", "");
-      const { data: { user }, error } = await supabase.auth.getUser(token);
-      if (!error && user) {
-        userId = user.id;
-      }
-    } else if (isMockSupabase) {
-      userId = "mock-user-123";
-    }
+    const userId = await getUserIdFromAuthHeader(authHeader);
 
     const record = await upsertInvitation({
       template_slug: template.slug,

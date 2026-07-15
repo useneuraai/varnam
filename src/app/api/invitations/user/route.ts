@@ -1,25 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getInvitationsByUserId } from "@/lib/db";
-import { supabase } from "@/lib/supabase";
+import { getUserIdFromAuthHeader } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
   try {
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
+    const userId = await getUserIdFromAuthHeader(authHeader);
 
-    const token = authHeader.replace("Bearer ", "");
-    let userId = "mock-user-123";
-    
-    const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
-
-    if (!isMockSupabase) {
-      const { data: { user }, error } = await supabase.auth.getUser(token);
-      if (error || !user) {
-        return NextResponse.json({ message: "Invalid session" }, { status: 401 });
-      }
-      userId = user.id;
+    if (!userId) {
+      return NextResponse.json({ message: "Unauthorized: Invalid or missing session" }, { status: 401 });
     }
 
     const invitations = await getInvitationsByUserId(userId);

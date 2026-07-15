@@ -181,8 +181,26 @@ export default function LandingPage() {
     setOpenFaqIdx(openFaqIdx === idx ? null : idx);
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": FAQS.map((faq) => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.a,
+      },
+    })),
+  };
+
   return (
     <div className="relative min-h-screen bg-white text-zinc-800 flex flex-col selection:bg-gold-200 selection:text-black">
+        {/* FAQ Schema Markup */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
         
         {/* Premium Header */}
         <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-zinc-100">
@@ -232,16 +250,16 @@ export default function LandingPage() {
         <section className="relative px-6 pt-16 pb-12 overflow-hidden flex flex-col items-center justify-start text-center bg-white">
           <div className="max-w-4xl mx-auto flex flex-col items-center relative z-10 select-none">
             <p className="text-xs font-bold uppercase tracking-widest text-gold-600 mb-5">
-              Premium Digital Event Invitations
+              Premium Digital Wedding Invitations
             </p>
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.02] text-zinc-900 tracking-tight mb-8">
-              Elegant invitations for <br className="hidden sm:inline" />
-              <span className="gold-gradient-text drop-shadow-sm">real celebrations</span>
+              Cinematic digital wedding <br className="hidden sm:inline" />
+              <span className="gold-gradient-text drop-shadow-sm">invitations with RSVP</span>
             </h1>
 
             <p className="max-w-2xl text-zinc-500 text-base sm:text-lg leading-relaxed mb-10 font-normal">
-              Create a refined invitation website with an opening reveal, RSVP, photos, music, maps, and guest messages. No clutter, no app installs, just one beautiful link.
+              Craft a premium cinematic wedding invitation website with interactive reveal animations, online RSVP tracking, guest books, photo galleries, and custom music. No clutter, no app installs—just one beautiful link to share on WhatsApp.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
@@ -346,9 +364,9 @@ export default function LandingPage() {
 
             {/* Active Template Description */}
             <div className="mt-6 text-center select-none max-w-lg px-6">
-              <h3 className="text-xl font-bold text-zinc-900">
+              <div className="text-xl font-bold text-zinc-900">
                 {getCoupleName(TEMPLATES[activeIndex].slug)}
-              </h3>
+              </div>
               <Link
                 href={`/templates/${TEMPLATES[activeIndex].slug}`}
                 className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-gold-600 hover:text-gold-700 font-semibold tracking-wider transition-all uppercase group"
@@ -365,11 +383,11 @@ export default function LandingPage() {
         <section className="w-full bg-white border-y border-zinc-100 py-12 px-6 relative z-10 flex flex-col items-center justify-center text-center">
           <div className="max-w-4xl mx-auto flex flex-col items-center gap-4">
             <div className="text-xs sm:text-sm tracking-[0.15em] text-zinc-900 font-semibold flex flex-wrap items-center justify-center gap-x-5 gap-y-2 uppercase">
-              <span>Choose a design</span>
+              <span>Choose a template</span>
               <span className="text-gold-500/50">•</span>
               <span>Personalize every detail</span>
               <span className="text-gold-500/50">•</span>
-              <span>Share with one beautiful link</span>
+              <span>Share a beautiful e-invite link</span>
             </div>
 
             <div className="h-[1px] w-24 bg-zinc-100 my-1.5" />
@@ -377,9 +395,9 @@ export default function LandingPage() {
             <div className="text-[10px] sm:text-xs tracking-widest text-zinc-500 font-bold flex flex-wrap items-center justify-center gap-x-5 gap-y-2 uppercase">
               <span>No app required</span>
               <span className="text-gold-400/40">•</span>
-              <span>Unlimited guests</span>
+              <span>Unlimited guests & RSVPs</span>
               <span className="text-gold-400/40">•</span>
-              <span>One-time payment</span>
+              <span>One-time ₹799 payment</span>
             </div>
           </div>
         </section>
@@ -392,10 +410,10 @@ export default function LandingPage() {
                 Why choose varnam
               </p>
               <h2 className="mt-4 max-w-[560px] text-4xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight">
-                Premium invitations, kept simple
+                Premium digital wedding invitation maker
               </h2>
               <p className="mt-5 max-w-[500px] text-base leading-relaxed text-zinc-500">
-                One event workspace for design, media, billing, RSVP, maps, and guest messages. The invitation remains luxurious, while the owner flow stays practical.
+                Varnam provides a premium, all-in-one digital wedding invitation maker. Easily personalize your wedding templates, custom music, photo galleries, Google Maps location, and guest messages from a secure live dashboard.
               </p>
               
               <div className="mt-8 flex flex-wrap gap-4">
@@ -423,18 +441,18 @@ export default function LandingPage() {
                 {[
                   {
                     step: "01",
-                    title: "Clear event license",
-                    desc: "One event, one plan, and clear rules for editing and archiving. No subscriptions."
+                    title: "One-Time Event License",
+                    desc: "Get complete access to all templates for one event. No subscriptions or recurring fees."
                   },
                   {
                     step: "02",
-                    title: "Secure checkout",
-                    desc: "Payments are safely processed using Razorpay SDK before any invitation link activates."
+                    title: "Secure Razorpay Checkout",
+                    desc: "Activate your premium digital wedding card immediately after a safe, secure payment."
                   },
                   {
                     step: "03",
-                    title: "Guest-ready experience",
-                    desc: "Includes online RSVP, guest messaging board, slideshows, maps, and music in one simple link."
+                    title: "Interactive Guest Experience",
+                    desc: "Engage guests with real-time online RSVP, scratch-to-reveal event cards, dynamic maps, photo galleries, and guest wish boards."
                   }
                 ].map((item, idx) => (
                   <div key={idx} className={`grid grid-cols-[48px_1fr] gap-5 ${idx > 0 ? "pt-8" : ""}`}>
@@ -470,7 +488,7 @@ export default function LandingPage() {
                 Our Handcrafted Collection
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900">
-                Signature Designs
+                Signature Digital Wedding Invitation Templates
               </h2>
               <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-full" />
             </div>
@@ -534,7 +552,7 @@ export default function LandingPage() {
                 Simple Creation Process
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900">
-                How It Works
+                How to Create Your WhatsApp Wedding Invite
               </h2>
               <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-full" />
             </div>
@@ -543,23 +561,23 @@ export default function LandingPage() {
               {[
                 {
                   icon: <Layers className="w-5 h-5 text-gold-600" />,
-                  title: "1. Select Theme",
-                  desc: "Choose from our premium Hindu, Muslim, Christian, or Secular cultural template gallery."
+                  title: "1. Select Wedding Template",
+                  desc: "Choose a design from our Hindu, Muslim, Christian, or Secular wedding invitation template gallery."
                 },
                 {
                   icon: <Sliders className="w-5 h-5 text-gold-600" />,
-                  title: "2. Personalize Details",
-                  desc: "Fill in names, schedules, dress codes, music tracks, map coordinates, and upload photos."
+                  title: "2. Customize Your Details",
+                  desc: "Fill in the couple details, event schedules, dress codes, music tracks, map coordinates, and photos."
                 },
                 {
                   icon: <CreditCard className="w-5 h-5 text-gold-600" />,
-                  title: "3. Complete Payment",
-                  desc: "Process a one-time ₹799 activation fee securely using Razorpay checkout SDK."
+                  title: "3. Secure One-Time Payment",
+                  desc: "Complete a one-time ₹799 event licensing fee securely using Razorpay integration."
                 },
                 {
                   icon: <Send className="w-5 h-5 text-gold-600" />,
-                  title: "4. Share with Guests",
-                  desc: "Instantly copy your private invitation web link and share it on WhatsApp or email."
+                  title: "4. Share on WhatsApp & Email",
+                  desc: "Instantly copy your custom digital wedding invitation link and share it with guests on WhatsApp."
                 }
               ].map((step, idx) => (
                 <div
@@ -583,7 +601,7 @@ export default function LandingPage() {
                 Bespoke Event Licensing
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900">
-                Pricing Structure
+                Affordable Digital Wedding Card Pricing
               </h2>
               <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-full" />
             </div>
@@ -600,7 +618,7 @@ export default function LandingPage() {
                 <div className="flex items-baseline justify-center gap-2.5 my-4">
                   <span className="text-lg line-through text-zinc-300">₹999</span>
                   <span className="text-4xl md:text-5xl font-extrabold text-gold-600">₹799</span>
-                  <span className="text-xs text-zinc-500">/ single wedding event</span>
+                  <span className="text-xs text-zinc-500">/ premium wedding website</span>
                 </div>
                 
                 <p className="text-xs text-zinc-400 leading-relaxed mb-8 max-w-xs">
@@ -615,11 +633,11 @@ export default function LandingPage() {
                     "Unlimited photo slideshow uploads",
                     "Custom background image overrides",
                     "Custom background music & audio uploads",
-                    "Interactive RSVP form and guest wishes board",
-                    "Interactive Scratch-to-Reveal event date card",
+                    "Interactive online RSVP tracker & guest blessings wall",
+                    "Cinematic Scratch-to-Reveal event date reveal card",
                     "Multi-event schedule (Muhurtham, Reception, Sangeet)",
                     "Dress code guidelines & transport notes",
-                    "Dynamic Google Maps and calendar sync",
+                    "Google Maps direction integration & calendar sync",
                     "Edit details freely until 5 days after event completes",
                     "License exhausted after event archiving"
                   ].map((feat, idx) => (
@@ -650,7 +668,7 @@ export default function LandingPage() {
                 Frequently Asked Questions
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900">
-                F.A.Q.
+                Frequently Asked Questions About Digital Invitations
               </h2>
               <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-full" />
             </div>
@@ -703,7 +721,10 @@ export default function LandingPage() {
               <span className="text-lg font-black tracking-widest text-zinc-900">
                 VARNAM
               </span>
-              <p className="text-[10px] text-zinc-400">
+              <p className="text-xs text-zinc-500 max-w-sm mt-2 leading-relaxed text-center md:text-left">
+                Ultra-premium, cinematic digital wedding invitation websites. Exquisite interactive e-invites with RSVP, custom music, maps, and guest message walls for modern couples.
+              </p>
+              <p className="text-[10px] text-zinc-400 mt-2">
                 © {new Date().getFullYear()} Varnam Wedding Invites. All rights reserved.
               </p>
             </div>

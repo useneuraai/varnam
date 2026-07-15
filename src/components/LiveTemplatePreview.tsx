@@ -1,15 +1,21 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getDefaultTemplateData } from "@/lib/templates";
 import { templatesMap } from "@/templates";
 
 export default function LiveTemplatePreview({ slug, autoScroll = false }: { slug: string; autoScroll?: boolean }) {
+  const [mounted, setMounted] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const TemplateComponent = templatesMap[slug];
   const demoData = getDefaultTemplateData(slug);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
@@ -53,7 +59,15 @@ export default function LiveTemplatePreview({ slug, autoScroll = false }: { slug
         scrollContainer.scrollTop = 0;
       }
     };
-  }, [slug, autoScroll]);
+  }, [slug, autoScroll, mounted]);
+
+  if (!mounted) {
+    return (
+      <div className="w-full h-full bg-zinc-50 flex items-center justify-center">
+        <div className="w-6 h-6 rounded-full border-2 border-zinc-200 border-t-[#eed57c] animate-spin" />
+      </div>
+    );
+  }
 
   if (!TemplateComponent) return null;
 

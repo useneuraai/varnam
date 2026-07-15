@@ -19,7 +19,8 @@ import {
   Tablet,
   Monitor,
   Trash2,
-  Plus
+  Plus,
+  Eye
 } from "lucide-react";
 import { getTemplateBySlug, getDefaultTemplateData, TemplateData } from "@/lib/templates";
 import { templatesMap } from "@/templates";
@@ -82,6 +83,36 @@ function EditorPageContent() {
   const [error, setError] = useState<string | null>(null);
   const [draftSlug, setDraftSlug] = useState<string | null>(null);
   const [isAutosaving, setIsAutosaving] = useState(false);
+  const [activeMobileView, setActiveMobileView] = useState<"form" | "preview">("form");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target.id === "live-preview") {
+              setActiveMobileView("preview");
+            } else if (entry.target.id === "editor-form") {
+              setActiveMobileView("form");
+            }
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    const formEl = document.getElementById("editor-form");
+    const previewEl = document.getElementById("live-preview");
+
+    if (formEl) observer.observe(formEl);
+    if (previewEl) observer.observe(previewEl);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
   
   // Auth state
   const [user, setUser] = useState<any>(null);
@@ -657,7 +688,7 @@ function EditorPageContent() {
       {/* Main Split Layout */}
       <div className="flex-grow flex flex-col lg:flex-row min-h-0">
         {/* Left Side: Form controls with 4-Step Wizard */}
-        <div data-lenis-prevent className="w-full lg:w-[450px] xl:w-[500px] border-r border-[#eed57c]/15 bg-white/40 p-6 overflow-y-auto lg:h-[calc(100vh-80px)] flex flex-col justify-between">
+        <div id="editor-form" data-lenis-prevent className="w-full lg:w-[450px] xl:w-[500px] border-r border-[#eed57c]/15 bg-white/40 p-6 overflow-y-auto lg:h-[calc(100vh-80px)] flex flex-col justify-between scroll-mt-24">
           <div>
             {/* Stepper Header */}
             <div className="mb-8 flex items-center justify-between relative px-2">
@@ -1430,7 +1461,7 @@ function EditorPageContent() {
         </div>
 
         {/* Right Side: Simulated Live Viewport Preview with Device Switcher */}
-        <div className="flex-grow bg-[#f4f1ea] flex flex-col items-center justify-center p-4 md:p-6 lg:h-[calc(100vh-80px)] overflow-hidden relative border-t lg:border-t-0 border-[#eed57c]/20">
+        <div id="live-preview" className="flex-grow bg-[#f4f1ea] flex flex-col items-center justify-center p-4 md:p-6 lg:h-[calc(100vh-80px)] overflow-hidden relative border-t lg:border-t-0 border-[#eed57c]/20 scroll-mt-24">
           
           {/* Device Mockup Switcher Controls */}
           <div className="mb-4 flex items-center gap-1 bg-white border border-neutral-200 p-1.5 rounded-2xl shadow-md z-20">
@@ -1509,6 +1540,33 @@ function EditorPageContent() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Mobile Sticky Navigation Toggle */}
+      <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-auto px-4">
+        <button
+          type="button"
+          onClick={() => {
+            const targetId = activeMobileView === "form" ? "live-preview" : "editor-form";
+            const element = document.getElementById(targetId);
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+            }
+          }}
+          className="bg-zinc-950/90 hover:bg-zinc-900 backdrop-blur-md text-[#eed57c] border border-[#eed57c]/30 shadow-2xl py-3 px-6 rounded-full flex items-center gap-2 text-xs font-bold tracking-widest uppercase transition-all duration-300 transform active:scale-95 cursor-pointer whitespace-nowrap"
+        >
+          {activeMobileView === "form" ? (
+            <>
+              <Eye className="w-4 h-4 text-[#eed57c]" />
+              View Live Preview
+            </>
+          ) : (
+            <>
+              <Sparkles className="w-4 h-4 text-[#eed57c]" />
+              Back to Form Wizard
+            </>
+          )}
+        </button>
       </div>
     </div>
   );

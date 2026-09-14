@@ -106,6 +106,12 @@ export default function LandingClient() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Intercept OAuth hash tokens if redirected to root (e.g. from Supabase default site URL)
+    if (typeof window !== "undefined" && window.location.hash && window.location.hash.includes("access_token")) {
+      window.location.replace(`/auth/callback${window.location.hash}`);
+      return;
+    }
+
     setMounted(true);
     const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
     if (isMockSupabase) {

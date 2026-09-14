@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { 
   LogOut, 
   Plus, 
@@ -84,7 +84,7 @@ export default function DashboardPage() {
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
   useEffect(() => {
-    const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
+    const isMockSupabase = !isSupabaseConfigured;
     if (isMockSupabase) {
       setUser({ id: "mock-user-123", email: "demo.user@varnam.com" });
       setLoadingAuth(false);
@@ -176,7 +176,7 @@ export default function DashboardPage() {
   const handleDeleteInvite = async (slug: string) => {
     if (!window.confirm("Are you sure you want to delete this draft invitation?")) return;
     try {
-      const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
+      const isMockSupabase = !isSupabaseConfigured;
       const { data: { session } } = await supabase.auth.getSession();
       const token = isMockSupabase ? "mock-user-token" : session?.access_token || "";
 
@@ -196,7 +196,7 @@ export default function DashboardPage() {
   };
 
   const handleSignOut = async () => {
-    const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
+    const isMockSupabase = !isSupabaseConfigured;
     if (isMockSupabase) {
       router.replace("/templates");
       return;

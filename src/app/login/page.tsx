@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { Mail, Lock, ArrowLeft, AlertCircle, CheckCircle2 } from "lucide-react";
 
 function LoginContent() {
@@ -20,6 +20,13 @@ function LoginContent() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
+  const getRedirectOrigin = () => {
+    if (typeof window !== "undefined" && window.location.origin) {
+      return window.location.origin;
+    }
+    return process.env.NEXT_PUBLIC_SITE_URL || "https://varnam-invites.vercel.app";
+  };
+
   // Check if already logged in, redirect to dashboard
   useEffect(() => {
     const checkUser = async () => {
@@ -35,14 +42,13 @@ function LoginContent() {
     setLoading(true);
     setError(null);
     try {
-      const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
-      if (isMockSupabase) {
+      if (!isSupabaseConfigured) {
         console.log("[MOCK MODE] Simulating Google Login.");
         router.push(`/auth/callback?next=${encodeURIComponent(redirectTo)}`);
         return;
       }
 
-      const redirectUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`;
+      const redirectUrl = `${getRedirectOrigin()}/auth/callback?next=${encodeURIComponent(redirectTo)}`;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
@@ -65,20 +71,20 @@ function LoginContent() {
     setError(null);
     setMessage(null);
 
-    const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
-
     try {
-      if (isMockSupabase) {
+      if (!isSupabaseConfigured) {
         console.log("[MOCK MODE] Simulating Email Login.");
         router.push(`/auth/callback?next=${encodeURIComponent(redirectTo)}`);
         return;
       }
 
+      const callbackUrl = `${getRedirectOrigin()}/auth/callback?next=${encodeURIComponent(redirectTo)}`;
+
       if (loginMethod === "magic-link") {
         const { error } = await supabase.auth.signInWithOtp({
           email,
           options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+            emailRedirectTo: callbackUrl,
           },
         });
         if (error) throw error;
@@ -89,7 +95,7 @@ function LoginContent() {
             email,
             password,
             options: {
-              emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+              emailRedirectTo: callbackUrl,
             },
           });
           if (error) throw error;

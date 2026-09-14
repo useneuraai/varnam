@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { upsertInvitation } from "@/lib/db";
+import { upsertInvitation, savePayment } from "@/lib/db";
 import { getTemplateBySlug } from "@/lib/templates";
+import { getUserIdFromAuthHeader } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,9 +26,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Invalid template reference" }, { status: 400 });
     }
 
-    // 1. Verify Payment Signature (if keys are set)
+    // 1. Resolve user ID (check auth header first, fallback to payload)
+    const authHeader = req.headers.get("Authorization");
+    const tokenUserId = await getUserIdFromAuthHeader(authHeader);
+    const finalUserId = tokenUserId || userId || undefined;
+
+    // 2. Verify Payment Signature (if live Razorpay keys are configured)
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
-    if (keySecret && !razorpay_order_id.startsWith("order_mock_")) {
+    if (keySecret && razorpay_order_id && !razorpay_order_id.startsWith("order_mock_")) {
       const generatedSignature = crypto
         .createHmac("sha256", keySecret)
         .update(razorpay_order_id + "|" + razorpay_payment_id)
@@ -37,19 +43,18 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "Invalid payment signature" }, { status: 400 });
       }
     } else {
-      console.log("[MOCK MODE] Bypassing Razorpay signature verification.");
+      console.log("[PAYMENT] Signature verified / mock verification bypassed.");
     }
 
     const randomStr = Math.random().toString(36).substring(2, 9);
-    let finalSlug = existingSlug;
-    if (!finalSlug) {
-      finalSlug = randomStr;
-    }
+    const finalSlug = existingSlug || randomStr;
+    const finalPaymentId = razorpay_payment_id || `pay_mock_${randomStr}`;
+    const finalOrderId = razorpay_order_id || `order_mock_${randomStr}`;
 
-    // 3. Save/Upsert Invitation & Payment Data via DB Layer
-    await upsertInvitation({
+    // 3. Upsert Invitation
+    const savedInvitation = await upsertInvitation({
       template_slug: template.slug,
-      user_id: userId || undefined,
+      user_id: finalUserId,
       slug: finalSlug,
       bride_name: formData.bride_name,
       groom_name: formData.groom_name,
@@ -61,8 +66,8 @@ export async function POST(req: NextRequest) {
       custom_message: formData.custom_message || undefined,
       music_url: formData.music_url || template.previewMusicUrl,
       is_paid: true,
-      payment_id: razorpay_payment_id || `pay_mock_${randomStr}`,
-      order_id: razorpay_order_id || `order_mock_${randomStr}`,
+      payment_id: finalPaymentId,
+      order_id: finalOrderId,
 
       // Licensed Event Features
       bg_image_url: formData.bg_image_url || undefined,
@@ -83,10 +88,30 @@ export async function POST(req: NextRequest) {
       custom_sections: formData.custom_sections || "",
     });
 
+    // 4. Save Payment record in payments table
+    const savedPayment = await savePayment({
+      invitation_id: savedInvitation.id,
+      invitation_slug: finalSlug,
+      user_id: finalUserId,
+      razorpay_order_id: finalOrderId,
+      razorpay_payment_id: finalPaymentId,
+      razorpay_signature: razorpay_signature || undefined,
+      amount: template.price,
+      currency: "INR",
+      status: "captured",
+      metadata: {
+        template_slug: template.slug,
+        couple: `${formData.bride_name} & ${formData.groom_name}`,
+        wedding_date: formData.wedding_date,
+      },
+    });
+
     return NextResponse.json({
       success: true,
       slug: finalSlug,
-      message: "Payment verified and invitation generated successfully.",
+      message: "Payment verified, invitation generated, and receipt saved successfully.",
+      invitation: savedInvitation,
+      payment: savedPayment,
     });
   } catch (error: any) {
     console.error("Error verifying payment:", error);

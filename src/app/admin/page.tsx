@@ -1,18 +1,20 @@
 import Link from "next/link";
-import { getAllInvitations } from "@/lib/db";
+import { getAllInvitations, getAllPayments, getAllTemplates } from "@/lib/db";
 import { TEMPLATES } from "@/lib/templates";
 import { Sparkles, DollarSign, FileText, BarChart3, Globe, Shield, Power } from "lucide-react";
 import GoldParticles from "@/components/animations/GoldParticles";
 
 export default async function AdminDashboard() {
   const invitations = await getAllInvitations();
+  const payments = await getAllPayments();
+  const dbTemplates = await getAllTemplates();
 
   // Calculate stats
   const totalInvites = invitations.length;
   
-  // Sum up revenue
-  const totalRevenue = invitations.reduce((acc, inv) => {
-    // Find matching template to get its price
+  // Sum up revenue from actual payments or fallback to calculated
+  const recordedRevenue = payments.reduce((acc, p) => acc + (Number(p.amount) || 0), 0);
+  const totalRevenue = recordedRevenue > 0 ? recordedRevenue : invitations.reduce((acc, inv) => {
     const template = TEMPLATES.find((t) => t.slug === inv.template_slug);
     const price = template ? template.price : 799;
     return acc + price;

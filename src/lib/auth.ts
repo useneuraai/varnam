@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { supabase, isSupabaseConfigured } from "./supabase";
 
 /**
  * Extracts and decodes the user ID (sub claim) from an Authorization Bearer header.
@@ -8,9 +8,8 @@ export async function getUserIdFromAuthHeader(authHeader: string | null): Promis
   if (!authHeader) return undefined;
 
   const token = authHeader.replace("Bearer ", "");
-  const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
 
-  if (isMockSupabase) {
+  if (!isSupabaseConfigured) {
     return "mock-user-123";
   }
 

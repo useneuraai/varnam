@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getInvitationBySlug, updateInvitation } from "@/lib/db";
+import { getInvitationBySlug, updateInvitation, deleteInvitation } from "@/lib/db";
 import { getUserIdFromAuthHeader } from "@/lib/auth";
 
 export async function GET(
@@ -103,6 +103,37 @@ export async function PUT(
     });
   } catch (error: any) {
     console.error("Error updating invitation:", error);
+    return NextResponse.json(
+      { message: error.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  props: { params: Promise<{ slug: string }> }
+) {
+  try {
+    const params = await props.params;
+    const slug = params.slug;
+
+    const invitation = await getInvitationBySlug(slug);
+    if (!invitation) {
+      return NextResponse.json({ message: "Invitation not found" }, { status: 404 });
+    }
+
+    const authHeader = req.headers.get("Authorization");
+    const userId = await getUserIdFromAuthHeader(authHeader);
+
+    if (invitation.user_id && invitation.user_id !== userId) {
+      return NextResponse.json({ message: "Forbidden: You do not own this invitation" }, { status: 403 });
+    }
+
+    await deleteInvitation(slug, userId);
+    return NextResponse.json({ success: true, message: "Invitation deleted successfully." });
+  } catch (error: any) {
+    console.error("Error deleting invitation:", error);
     return NextResponse.json(
       { message: error.message || "Internal server error" },
       { status: 500 }

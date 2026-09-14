@@ -7,16 +7,46 @@ import { supabase } from "@/lib/supabase";
 function CallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams?.get("next") || "/dashboard";
+
+  // Retrieve destination from client storage or query string
+  const getDestination = () => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = sessionStorage.getItem("auth_redirect_to") || localStorage.getItem("auth_redirect_to");
+        if (stored) return stored;
+      } catch (_) {}
+    }
+    return searchParams?.get("next") || "/dashboard";
+  };
+
+  const next = getDestination();
 
   useEffect(() => {
     let isSubscribed = true;
 
+    const clearStoredDestination = () => {
+      if (typeof window !== "undefined") {
+        try {
+          sessionStorage.removeItem("auth_redirect_to");
+          localStorage.removeItem("auth_redirect_to");
+        } catch (_) {}
+      }
+    };
+
     const handleAuth = async () => {
       try {
+        // If loaded on localhost with tokens, forward directly to production
+        if (typeof window !== "undefined" && window.location.hash && window.location.hash.includes("access_token")) {
+          if (window.location.origin.includes("localhost") || window.location.origin.includes("127.0.0.1")) {
+            window.location.replace(`https://varnam-invites.vercel.app/auth/callback${window.location.hash}`);
+            return;
+          }
+        }
+
         // 1. Direct session check
         const { data: sessionData } = await supabase.auth.getSession();
         if (sessionData.session && isSubscribed) {
+          clearStoredDestination();
           router.replace(next);
           return;
         }
@@ -37,6 +67,7 @@ function CallbackContent() {
             });
 
             if (!tokenError && tokenSession.session && isSubscribed) {
+              clearStoredDestination();
               router.replace(next);
               return;
             }

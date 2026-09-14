@@ -108,6 +108,10 @@ export default function LandingClient() {
   useEffect(() => {
     // Intercept OAuth hash tokens if redirected to root (e.g. from Supabase default site URL)
     if (typeof window !== "undefined" && window.location.hash && window.location.hash.includes("access_token")) {
+      if (window.location.origin.includes("localhost") || window.location.origin.includes("127.0.0.1")) {
+        window.location.replace(`https://varnam-invites.vercel.app/auth/callback${window.location.hash}`);
+        return;
+      }
       window.location.replace(`/auth/callback${window.location.hash}`);
       return;
     }

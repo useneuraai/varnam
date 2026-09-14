@@ -3,6 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   env: {
     // Automatically bridges private Vercel environment variables to client runtime
+    SUPABASE_URL:
+      process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    SUPABASE_ANON_KEY:
+      process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+    SITE_URL:
+      process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://varnam-invites.vercel.app",
     NEXT_PUBLIC_SUPABASE_URL:
       process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "",
     NEXT_PUBLIC_SUPABASE_ANON_KEY:

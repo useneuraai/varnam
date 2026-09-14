@@ -22,7 +22,10 @@ function LoginContent() {
 
   const getRedirectOrigin = () => {
     if (typeof window !== "undefined" && window.location.origin) {
-      return window.location.origin;
+      // If deployed on Vercel or custom domain, use current origin
+      if (!window.location.origin.includes("localhost") && !window.location.origin.includes("127.0.0.1")) {
+        return window.location.origin;
+      }
     }
     return process.env.NEXT_PUBLIC_SITE_URL || "https://varnam-invites.vercel.app";
   };
@@ -48,7 +51,16 @@ function LoginContent() {
         return;
       }
 
-      const redirectUrl = `${getRedirectOrigin()}/auth/callback?next=${encodeURIComponent(redirectTo)}`;
+      // Persist the intended post-login destination in client storage
+      if (typeof window !== "undefined") {
+        try {
+          sessionStorage.setItem("auth_redirect_to", redirectTo);
+          localStorage.setItem("auth_redirect_to", redirectTo);
+        } catch (_) {}
+      }
+
+      // Clean redirect URL without query params so it matches Supabase exact whitelist
+      const redirectUrl = `${getRedirectOrigin()}/auth/callback`;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
@@ -78,7 +90,15 @@ function LoginContent() {
         return;
       }
 
-      const callbackUrl = `${getRedirectOrigin()}/auth/callback?next=${encodeURIComponent(redirectTo)}`;
+      // Persist intended destination
+      if (typeof window !== "undefined") {
+        try {
+          sessionStorage.setItem("auth_redirect_to", redirectTo);
+          localStorage.setItem("auth_redirect_to", redirectTo);
+        } catch (_) {}
+      }
+
+      const callbackUrl = `${getRedirectOrigin()}/auth/callback`;
 
       if (loginMethod === "magic-link") {
         const { error } = await supabase.auth.signInWithOtp({

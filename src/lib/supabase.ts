@@ -1,21 +1,21 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 const supabaseUrl =
-  process.env.SUPABASE_URL ||
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  process.env.SUPABASE_URL ||
   "https://placeholder-project.supabase.co";
 
 const supabaseAnonKey =
-  process.env.SUPABASE_ANON_KEY ||
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
   "placeholder-anon-key";
 
 const supabaseServiceRoleKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey;
 
 export const isSupabaseConfigured =
-  Boolean(process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-  (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) !==
+  Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL) &&
+  (process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL) !==
     "https://placeholder-project.supabase.co";
 
 if (!isSupabaseConfigured && typeof window !== "undefined") {

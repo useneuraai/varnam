@@ -21,6 +21,8 @@ export const templatesMap: Record<
   "modern-tamil-minimal": dynamic(() => import("./modern-tamil-minimal/Template")),
 
   // Legacy mappings for backwards compatibility
+  "gopuram": dynamic(() => import("./thanjavur-heritage/Template")),
+  "koyil": dynamic(() => import("./thanjavur-heritage/Template")),
   "royal-tamil": dynamic(() => import("./thanjavur-heritage/Template")),
   "temple-gold": dynamic(() => import("./temple-grandeur/Template")),
   "traditional-red": dynamic(() => import("./thanjavur-heritage/Template")),

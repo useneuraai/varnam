@@ -186,17 +186,17 @@ export const TEMPLATES: TemplateDefinition[] = [
   },
   {
     slug: "thanjavur-heritage",
-    name: "Thanjavur Heritage 🪷",
-    description: "A royal, classical Tamil aesthetic inspired by 16th-century Thanjavur art and traditional South Indian culture. Deep burgundy, muted crimson, antique gold leaf, gem-studded ornamental frames, sacred invocations, and ceremonial typography.",
+    name: "Thanjavur Temple Heritage 🛕",
+    description: "A magnificent South Indian temple wedding invitation. Towering colorful Dravidian temple gopuram, azure twilight sky with floating glowing paper sky lanterns, monumental serif typography, red music play button, and sacred temple mandapam.",
     category: "Tamil Wedding",
     religion: "Hindu",
     language: "Tamil/English",
     price: 799,
-    thumbnailUrl: "/images/couples/thanjavur-heritage.jpg",
+    thumbnailUrl: "/images/gopuram/temple_gopuram.jpg",
     previewMusicUrl: "https://archive.org/download/r-12356661-1632393571-2601/01.%20Raag%20Bhimpalasi%20-%20Teen%20Taal.mp3",
     fields: [
-      { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Arundhati Devi", required: true },
-      { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Sundaram Varma", required: true },
+      { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Kavya", required: true },
+      { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Vishu", required: true },
       { id: "wedding_date", label: "Muhurtham Date & Time", type: "datetime", required: true },
       { id: "wedding_venue", label: "Wedding Venue", type: "textarea", placeholder: "Brihadeeswara Royal Mandapam, Thanjavur", required: true },
       { id: "quote", label: "Sacred Invocation", type: "text", placeholder: "Under the golden grace of the Almighty, two sacred lineages unite in eternal devotion.", required: false },
@@ -484,6 +484,8 @@ export const getTemplateBySlug = (slug: string): TemplateDefinition | undefined 
   let t = TEMPLATES.find((tpl) => tpl.slug === slug);
   if (!t) {
     const legacyAliases: Record<string, string> = {
+      "gopuram": "thanjavur-heritage",
+      "koyil": "thanjavur-heritage",
       "royal-tamil": "thanjavur-heritage",
       "temple-gold": "temple-grandeur",
       "traditional-red": "thanjavur-heritage",

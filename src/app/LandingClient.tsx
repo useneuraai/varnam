@@ -78,7 +78,7 @@ const getCoupleName = (slug: string) => {
     case "kadhal":
       return "Adithya & Meera";
     case "thanjavur-heritage":
-      return "Arundhati & Sundaram";
+      return "Vishu & Kavya";
     case "chettinad-vintage":
       return "Meenakshi & Chidambaram";
     case "jasmine-romance":

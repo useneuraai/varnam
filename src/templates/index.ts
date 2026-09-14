@@ -6,13 +6,21 @@ export const templatesMap: Record<
   string,
   ComponentType<{ data: TemplateData; isPreview?: boolean }>
 > = {
-  "royal-tamil": dynamic(() => import("./royal-tamil/Template")),
+  // 5 Signature Tamil Wedding Templates
+  "thanjavur-heritage": dynamic(() => import("./thanjavur-heritage/Template")),
+  "chettinad-vintage": dynamic(() => import("./chettinad-vintage/Template")),
+  "jasmine-romance": dynamic(() => import("./jasmine-romance/Template")),
+  "temple-grandeur": dynamic(() => import("./temple-grandeur/Template")),
+  "modern-tamil-minimal": dynamic(() => import("./modern-tamil-minimal/Template")),
+
+  // Legacy mappings for backwards compatibility
+  "royal-tamil": dynamic(() => import("./thanjavur-heritage/Template")),
+  "temple-gold": dynamic(() => import("./temple-grandeur/Template")),
+  "traditional-red": dynamic(() => import("./thanjavur-heritage/Template")),
+  "floral-luxury": dynamic(() => import("./jasmine-romance/Template")),
+  "modern-minimal": dynamic(() => import("./modern-tamil-minimal/Template")),
+  "royal-heritage": dynamic(() => import("./thanjavur-heritage/Template")),
   "elegant-muslim": dynamic(() => import("./elegant-muslim/Template")),
   "modern-christian": dynamic(() => import("./modern-christian/Template")),
   "luxury-floral": dynamic(() => import("./luxury-floral/Template")),
-  "temple-gold": dynamic(() => import("./temple-gold/Template")),
-  "traditional-red": dynamic(() => import("./traditional-red/Template")),
-  "floral-luxury": dynamic(() => import("./floral-luxury/Template")),
-  "modern-minimal": dynamic(() => import("./modern-minimal/Template")),
-  "royal-heritage": dynamic(() => import("./royal-heritage/Template")),
 };

@@ -11,15 +11,15 @@ import { supabase } from "@/lib/supabase";
 
 const CATEGORIES = [
   "All",
-  "Wedding",
-  "Birthday",
-  "Baby Shower",
-  "Anniversary",
-  "Corporate"
+  "Tamil Wedding",
+  "Temple",
+  "Luxury Wedding",
+  "Modern Wedding",
+  "Secular",
 ];
 
 const RELIGIONS = ["All", "Hindu", "Muslim", "Christian", "Secular"];
-const LANGUAGES = ["All", "English", "Tamil/English", "English/Urdu"];
+const LANGUAGES = ["All", "Tamil/English", "English", "English/Tamil", "English/Urdu"];
 
 export default function GalleryClient() {
   const router = useRouter();

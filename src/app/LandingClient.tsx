@@ -67,6 +67,16 @@ const getCardStyles = (offset: number, isMobile: boolean) => {
 
 const getCoupleName = (slug: string) => {
   switch (slug) {
+    case "thanjavur-heritage":
+      return "Arundhati & Sundaram";
+    case "chettinad-vintage":
+      return "Meenakshi & Chidambaram";
+    case "jasmine-romance":
+      return "Ananya & Aditya";
+    case "temple-grandeur":
+      return "Samyuktha & Vijay";
+    case "modern-tamil-minimal":
+      return "Maya & Dev";
     case "royal-tamil":
       return "Malar";
     case "temple-gold":
@@ -92,6 +102,11 @@ const getCoupleName = (slug: string) => {
 
 const getCategoryName = (template: any) => {
   switch (template.slug) {
+    case "thanjavur-heritage":
+    case "chettinad-vintage":
+    case "jasmine-romance":
+    case "temple-grandeur":
+    case "modern-tamil-minimal":
     case "royal-tamil":
     case "temple-gold":
     case "traditional-red":

@@ -6,7 +6,14 @@ export const templatesMap: Record<
   string,
   ComponentType<{ data: TemplateData; isPreview?: boolean }>
 > = {
-  // 5 Signature Tamil Wedding Templates
+  // 5 New Distinct Tamil Wedding Visual Worlds
+  "thiruvizha": dynamic(() => import("./thiruvizha/Template")),
+  "manamagan": dynamic(() => import("./manamagan/Template")),
+  "mangalam": dynamic(() => import("./mangalam/Template")),
+  "vizha": dynamic(() => import("./vizha/Template")),
+  "kadhal": dynamic(() => import("./kadhal/Template")),
+
+  // Existing Tamil Wedding Templates
   "thanjavur-heritage": dynamic(() => import("./thanjavur-heritage/Template")),
   "chettinad-vintage": dynamic(() => import("./chettinad-vintage/Template")),
   "jasmine-romance": dynamic(() => import("./jasmine-romance/Template")),

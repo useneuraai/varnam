@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
 interface FloatingFlowersProps {
-  type?: "jasmine" | "rose" | "gold" | "sparkle";
+  type?: "jasmine" | "rose" | "gold" | "sparkle" | "marigold";
   count?: number;
 }
 
@@ -149,6 +149,25 @@ export default function FloatingFlowers({ type = "jasmine", count = 35 }: Floati
           ctx.fillStyle = "#eed57c";
           ctx.beginPath();
           ctx.arc(0, 0, this.size / 6, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (type === "marigold") {
+          // Lush orange & turmeric yellow marigold florets with ruffled layers
+          const layers = 3;
+          const petalsPerLayer = 6;
+          for (let l = 0; l < layers; l++) {
+            const layerSize = this.size * (1 - l * 0.22);
+            ctx.fillStyle = l === 0 ? "#fa8231" : l === 1 ? "#f7b731" : "#fed330";
+            for (let i = 0; i < petalsPerLayer; i++) {
+              ctx.rotate((Math.PI * 2) / petalsPerLayer + (l * 0.2));
+              ctx.beginPath();
+              ctx.ellipse(0, layerSize / 2, layerSize / 3.5, layerSize / 2, 0, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+          // Center saffron heart
+          ctx.fillStyle = "#d35400";
+          ctx.beginPath();
+          ctx.arc(0, 0, this.size / 4, 0, Math.PI * 2);
           ctx.fill();
         } else if (type === "sparkle") {
           // Glowing star sparkle

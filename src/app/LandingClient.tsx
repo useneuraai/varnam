@@ -67,6 +67,16 @@ const getCardStyles = (offset: number, isMobile: boolean) => {
 
 const getCoupleName = (slug: string) => {
   switch (slug) {
+    case "thiruvizha":
+      return "Arun & Kavya";
+    case "manamagan":
+      return "Karthik & Nila";
+    case "mangalam":
+      return "Arjun & Dhanya";
+    case "vizha":
+      return "Vishnu & Harini";
+    case "kadhal":
+      return "Adithya & Meera";
     case "thanjavur-heritage":
       return "Arundhati & Sundaram";
     case "chettinad-vintage":
@@ -102,6 +112,16 @@ const getCoupleName = (slug: string) => {
 
 const getCategoryName = (template: any) => {
   switch (template.slug) {
+    case "thiruvizha":
+      return "Grand Traditional Tamil";
+    case "manamagan":
+      return "Soft Jasmine Romance";
+    case "mangalam":
+      return "Dark Temple Luxury";
+    case "vizha":
+      return "Colourful Tamil Celebration";
+    case "kadhal":
+      return "Modern Tamil Editorial";
     case "thanjavur-heritage":
     case "chettinad-vintage":
     case "jasmine-romance":

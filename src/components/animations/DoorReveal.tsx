@@ -26,6 +26,56 @@ export default function DoorReveal({ brideName, groomName, templateSlug, onOpen 
   // Get theme styles based on template slug
   const getTheme = () => {
     switch (templateSlug) {
+      case "thiruvizha":
+        return {
+          doorBg: "bg-gradient-to-br from-[#38040e] via-[#200207] to-[#0d0103]",
+          goldBorder: "border-[#d4af37]/40",
+          accentColor: "text-[#eed57c]",
+          sealBg: "bg-gradient-to-r from-[#b3811b] via-[#eed57c] to-[#b3811b]",
+          sealText: "text-black",
+          badge: "🛕",
+          sub: "திருக்கல்யாண அழைப்பிதழ்"
+        };
+      case "manamagan":
+        return {
+          doorBg: "bg-gradient-to-br from-[#faf8f5] via-[#f7ede8] to-[#ebdcd3]",
+          goldBorder: "border-[#c4b5a5]/30",
+          accentColor: "text-[#52463e]",
+          sealBg: "bg-gradient-to-r from-[#f7ede8] via-[#ffffff] to-[#f7ede8]",
+          sealText: "text-[#52463e]",
+          badge: "🌸",
+          sub: "TWO PEOPLE · ONE LOVE STORY"
+        };
+      case "mangalam":
+        return {
+          doorBg: "bg-gradient-to-br from-[#120a0e] via-[#0c080a] to-[#040305]",
+          goldBorder: "border-[#eed57c]/40",
+          accentColor: "text-[#eed57c]",
+          sealBg: "bg-gradient-to-r from-[#b3811b] via-[#eed57c] to-[#b3811b]",
+          sealText: "text-black",
+          badge: "ॐ",
+          sub: "THE SACRED SANCTUM"
+        };
+      case "vizha":
+        return {
+          doorBg: "bg-gradient-to-br from-[#fff7eb] via-[#fa8231] to-[#eb3b5a]",
+          goldBorder: "border-[#fed330]/60",
+          accentColor: "text-white",
+          sealBg: "bg-gradient-to-r from-[#fed330] via-[#ffffff] to-[#fa8231]",
+          sealText: "text-[#d35400]",
+          badge: "🌼",
+          sub: "கல்யாண வைபவம்"
+        };
+      case "kadhal":
+        return {
+          doorBg: "bg-gradient-to-br from-[#f7f6f2] via-[#e5e4de] to-[#d4d2cb]",
+          goldBorder: "border-black/20",
+          accentColor: "text-black",
+          sealBg: "bg-gradient-to-r from-black via-[#333] to-black",
+          sealText: "text-white",
+          badge: "🖤",
+          sub: "இணையும் இரு இதயங்கள்"
+        };
       case "temple-gold":
         return {
           doorBg: "bg-gradient-to-br from-[#2a0101] via-[#1a0000] to-[#0d0000]",

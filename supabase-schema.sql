@@ -396,6 +396,126 @@ create policy "Allow service role full access to RSVPs"
 insert into public.templates (slug, name, description, category, religion, language, price, thumbnail_url, preview_music_url, config, is_active)
 values
 (
+    'thiruvizha',
+    'THIRUVIZHA — Grand Traditional Tamil 🛕',
+    'A grand Tamil wedding ceremony inside a sacred temple and mantapam. Dark maroon, subtle temple stone texture, carved pillars, antique gold typography, thoranam, banana leaves, and sacred Tamil chants.',
+    'Tamil Wedding',
+    'Hindu',
+    'Tamil/English',
+    799.00,
+    '/images/couples/thiruvizha.jpg',
+    'https://archive.org/download/r-12356661-1632393571-2601/01.%20Raag%20Bhimpalasi%20-%20Teen%20Taal.mp3',
+    '{
+        "fields": [
+            {"id": "bride_name", "label": "Bride Name", "type": "text", "placeholder": "Kavya", "required": true},
+            {"id": "groom_name", "label": "Groom Name", "type": "text", "placeholder": "Arun", "required": true},
+            {"id": "wedding_date", "label": "Muhurtham Date & Time", "type": "datetime", "required": true},
+            {"id": "wedding_venue", "label": "Temple Mandapam Venue", "type": "textarea", "placeholder": "Sri Brihadeeswarar Temple Kalyana Mandapam, Thanjavur", "required": true},
+            {"id": "quote", "label": "Sacred Invocation", "type": "text", "placeholder": "மங்கள நாண் பூட்டி, ஏழு அடி எடுத்து வைத்து, இல்லறம் தொடங்கும் இனிய தருணம்.", "required": false},
+            {"id": "family_names", "label": "Inviting Families", "type": "text", "placeholder": "The Ramanathan and Sundaresan Families", "required": false},
+            {"id": "rsvp_phone", "label": "RSVP Desk", "type": "text", "placeholder": "+91 98765 43210", "required": true},
+            {"id": "custom_message", "label": "Ceremonial Blessing Note", "type": "textarea", "placeholder": "We seek your gracious presence, prayers, and heartfelt blessings for our sacred union.", "required": false}
+        ]
+    }'::jsonb,
+    true
+),
+(
+    'manamagan',
+    'MANAMAGAN — Soft Jasmine Wedding 🌸',
+    'Two people, one love story. Soft, romantic, emotional, and dreamy. Warm ivory canvas, photographic couple hero, realistic cascading Madurai jasmine vines, delicate blush accents, and editorial photo flow.',
+    'Tamil Wedding',
+    'Hindu',
+    'Tamil/English',
+    799.00,
+    '/images/couples/manamagan.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/2/2b/Canon_in_D_Major_%28ISRC_USUAN1100301%29.mp3',
+    '{
+        "fields": [
+            {"id": "bride_name", "label": "Bride Name", "type": "text", "placeholder": "Nila", "required": true},
+            {"id": "groom_name", "label": "Groom Name", "type": "text", "placeholder": "Karthik", "required": true},
+            {"id": "wedding_date", "label": "Wedding Date & Time", "type": "datetime", "required": true},
+            {"id": "wedding_venue", "label": "Wedding Venue", "type": "textarea", "placeholder": "The Leela Palace Seaside Lawns, Adyar, Chennai", "required": true},
+            {"id": "quote", "label": "Love Story Note", "type": "text", "placeholder": "A beautiful beginning to forever. Like fresh jasmine at dawn, our love unfolds.", "required": false},
+            {"id": "family_names", "label": "Parents & Families", "type": "text", "placeholder": "The Krishnan and Raghavan Families", "required": false},
+            {"id": "rsvp_phone", "label": "RSVP Direct", "type": "text", "placeholder": "+91 90000 54321", "required": true},
+            {"id": "custom_message", "label": "Personal Invitation", "type": "textarea", "placeholder": "Join us under the blooming jasmine canopy as we exchange our forever vows.", "required": false}
+        ]
+    }'::jsonb,
+    true
+),
+(
+    'mangalam',
+    'MANGALAM — Temple Luxury 👑',
+    'The ₹999+ royal luxury experience. Dramatic dark charcoal and near-black backdrop, controlled real antique gold architectural details, interactive opening temple doors on scroll, and four ceremonial chapters.',
+    'Tamil Wedding',
+    'Hindu',
+    'Tamil/English',
+    999.00,
+    '/images/couples/mangalam.jpg',
+    'https://archive.org/download/r-12356661-1632393571-2601/01.%20Raag%20Bhimpalasi%20-%20Teen%20Taal.mp3',
+    '{
+        "fields": [
+            {"id": "bride_name", "label": "Bride Name", "type": "text", "placeholder": "Dhanya", "required": true},
+            {"id": "groom_name", "label": "Groom Name", "type": "text", "placeholder": "Arjun", "required": true},
+            {"id": "wedding_date", "label": "Muhurtham Date & Time", "type": "datetime", "required": true},
+            {"id": "wedding_venue", "label": "Temple Mandapam Venue", "type": "textarea", "placeholder": "Grand Temple Sanctum Mandapam, Madurai", "required": true},
+            {"id": "quote", "label": "Sacred Mantra", "type": "text", "placeholder": "With the divine blessings of Lord Shiva & Parvati, we embark upon our sacred journey.", "required": false},
+            {"id": "family_names", "label": "Royal Lineages of", "type": "text", "placeholder": "The Natarajan and Viswanathan Dynasties", "required": false},
+            {"id": "rsvp_phone", "label": "Ceremonial RSVP", "type": "text", "placeholder": "+91 99000 88888", "required": true},
+            {"id": "custom_message", "label": "Solemn Proclamation", "type": "textarea", "placeholder": "We request the honor of your auspicious presence at our holy wedding ceremonies.", "required": false}
+        ]
+    }'::jsonb,
+    true
+),
+(
+    'vizha',
+    'VIZHA — Colourful Tamil Wedding 🌼',
+    'Joyful, festive, young, and energetic Tamil wedding celebration. Warm cream canvas accented with marigold garlands, self-drawing Kolam vectors, turmeric yellow, parrot green, and rani pink silk.',
+    'Tamil Wedding',
+    'Hindu',
+    'Tamil/English',
+    799.00,
+    '/images/couples/vizha.jpg',
+    'https://archive.org/download/r-12356661-1632393571-2601/04.%20Kajri%20-%20Dadra%20Taal.mp3',
+    '{
+        "fields": [
+            {"id": "bride_name", "label": "Bride Name", "type": "text", "placeholder": "Harini", "required": true},
+            {"id": "groom_name", "label": "Groom Name", "type": "text", "placeholder": "Vishnu", "required": true},
+            {"id": "wedding_date", "label": "Muhurtham Date & Time", "type": "datetime", "required": true},
+            {"id": "wedding_venue", "label": "Kalyana Mandapam Venue", "type": "textarea", "placeholder": "Mayor Ramanathan Chettiar Kalyana Mandapam, Chennai", "required": true},
+            {"id": "quote", "label": "Festive Tagline", "type": "text", "placeholder": "கல்யாண வைபவம்! Two families celebrate joy, laughter, and lifelong love.", "required": false},
+            {"id": "family_names", "label": "Welcoming Families", "type": "text", "placeholder": "The Alagappan and Chettiar Families", "required": false},
+            {"id": "rsvp_phone", "label": "RSVP Contact", "type": "text", "placeholder": "+91 98765 43211", "required": true},
+            {"id": "custom_message", "label": "Celebration Welcome", "type": "textarea", "placeholder": "Come celebrate with food, music, dance, and unconditional joy!", "required": false}
+        ]
+    }'::jsonb,
+    true
+),
+(
+    'kadhal',
+    'KADHAL — Modern Tamil Editorial 🖤',
+    'Awwwards website × Vogue wedding editorial × Tamil culture. Minimal, artistic, young, sophisticated. Chalk ivory canvas, stark black typography, vermilion accents, full-screen zoom, and fashion layouts.',
+    'Tamil Wedding',
+    'Secular',
+    'English/Tamil',
+    799.00,
+    '/images/couples/kadhal.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/3/3d/Debussy_-_Clair_de_Lune.mp3',
+    '{
+        "fields": [
+            {"id": "bride_name", "label": "Bride Name", "type": "text", "placeholder": "Meera", "required": true},
+            {"id": "groom_name", "label": "Groom Name", "type": "text", "placeholder": "Adithya", "required": true},
+            {"id": "wedding_date", "label": "Celebration Date & Time", "type": "datetime", "required": true},
+            {"id": "wedding_venue", "label": "Editorial Venue", "type": "textarea", "placeholder": "The Glass House Pavilion, Bangalore", "required": true},
+            {"id": "quote", "label": "Editorial Poem", "type": "text", "placeholder": "இணையும் இரு இதயங்கள். A modern chapter begins.", "required": false},
+            {"id": "family_names", "label": "Hosts", "type": "text", "placeholder": "The Sen and Ramanathan Families", "required": false},
+            {"id": "rsvp_phone", "label": "RSVP Direct", "type": "text", "placeholder": "+91 99887 76655", "required": true},
+            {"id": "custom_message", "label": "Curated Note", "type": "textarea", "placeholder": "An intimate evening of contemporary love, art, music, and quiet luxury.", "required": false}
+        ]
+    }'::jsonb,
+    true
+),
+(
     'thanjavur-heritage',
     'Thanjavur Heritage 🪷',
     'A royal, classical Tamil aesthetic inspired by 16th-century Thanjavur art and traditional South Indian culture. Deep burgundy, muted crimson, antique gold leaf, gem-studded ornamental frames, sacred invocations, and ceremonial typography.',

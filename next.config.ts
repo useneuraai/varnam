@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_SUPABASE_ANON_KEY:
       process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
     NEXT_PUBLIC_SITE_URL:
-      process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "",
+      process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://varnam-invites.vercel.app",
     NEXT_PUBLIC_RAZORPAY_KEY_ID:
       process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "",
   },

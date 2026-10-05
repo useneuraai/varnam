@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       "cinematic invitation",
       cleanName,
       template.category,
-      template.religion,
+      "interactive invitation",
     ],
   };
 }

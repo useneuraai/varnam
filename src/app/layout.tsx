@@ -33,7 +33,7 @@ import type { Viewport } from "next";
 export const metadata: Metadata = {
   title: "Varnam | Premium Cinematic Digital Wedding Invitations with RSVP",
   description: "Create premium cinematic digital wedding invitations with RSVP tracking. Easily customize luxury templates and share a WhatsApp link. Free to try — edit now!",
-  metadataBase: new URL("https://varnam-invites.vercel.app"),
+  metadataBase: new URL("https://varnaminvites.store"),
   alternates: {
     canonical: "/",
   },
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     title: "Varnam | Premium Cinematic Digital Wedding Invitations with RSVP",
     description: "Create premium cinematic digital wedding invitations with RSVP tracking. Easily customize luxury templates and share a WhatsApp link. Free to try — edit now!",
     type: "website",
-    url: "https://varnam-invites.vercel.app",
+    url: "https://varnaminvites.store",
     siteName: "Varnam",
     images: [
       {
@@ -88,14 +88,14 @@ const webAppSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Varnam",
-  "url": "https://varnam-invites.vercel.app",
+  "url": "https://varnaminvites.store",
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "All",
   "browserRequirements": "Requires HTML5 compatible browser",
   "description": "Craft ultra-premium, interactive, and cinematic digital wedding invitations. Exquisite storytelling for your special day, inspired by luxury brands.",
   "offers": {
     "@type": "Offer",
-    "price": "799.00",
+    "price": "999.00",
     "priceCurrency": "INR",
     "availability": "https://schema.org/InStock",
     "category": "Signature Event License"
@@ -106,8 +106,8 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Varnam",
-  "url": "https://varnam-invites.vercel.app",
-  "logo": "https://varnam-invites.vercel.app/apple-touch-icon.png",
+  "url": "https://varnaminvites.store",
+  "logo": "https://varnaminvites.store/apple-touch-icon.png",
   "description": "Craft ultra-premium, interactive, and cinematic digital wedding invitations with online RSVP, slideshows, and custom music.",
   "contactPoint": {
     "@type": "ContactPoint",
@@ -120,7 +120,7 @@ const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Varnam Wedding Invites",
-  "image": "https://varnam-invites.vercel.app/og-image.png",
+  "image": "https://varnaminvites.store/og-image.png",
   "telephone": "+91 7200180268",
   "email": "support@varnam.in",
   "address": {
@@ -142,9 +142,21 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${cinzel.variable} ${playfair.variable} ${inter.variable} ${greatVibes.variable} antialiased`}
     >
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Marcellus&family=Ramabhadra&family=Suranna&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body
+        suppressHydrationWarning
+        className="bg-[#080708] text-[#fbf6df] selection:bg-[#d4a325] selection:text-[#080708]"
+      >
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
@@ -194,8 +206,6 @@ export default function RootLayout({
             `}
           </Script>
         )}
-      </head>
-      <body className="bg-[#080708] text-[#fbf6df] selection:bg-[#d4a325] selection:text-[#080708]">
         <SmoothScroll>
           {children}
         </SmoothScroll>

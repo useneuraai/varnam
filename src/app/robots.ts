@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const headersList = await headers();
-  const host = headersList.get("host") || "varnam-invites.vercel.app";
+  const host = headersList.get("host") || "varnaminvites.store";
   const proto = headersList.get("x-forwarded-proto") || "https";
   const baseUrl = `${proto}://${host}`;
 

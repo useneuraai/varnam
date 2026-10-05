@@ -27,7 +27,7 @@ export default function PrivacyPolicyPage() {
         
         <div className="prose prose-zinc text-zinc-650 space-y-6 text-sm leading-relaxed">
           <p>
-            At Varnam, accessible from https://varnam-invites.vercel.app, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Varnam and how we use it.
+            At Varnam, accessible from https://varnaminvites.store, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Varnam and how we use it.
           </p>
           
           <h2 className="text-lg font-bold text-zinc-900 pt-4">1. Information We Collect</h2>
@@ -54,6 +54,27 @@ export default function PrivacyPolicyPage() {
           </p>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="w-full py-10 px-6 border-t border-zinc-100 bg-[#fafaf9] text-center flex flex-col items-center justify-center gap-3">
+        <p className="text-xs text-zinc-600">
+          📍 115, Ekambaranathar Sannathi Street, Kanchipuram, Tamil Nadu - 631502 &nbsp;·&nbsp; 📞 +91 7200180268 &nbsp;·&nbsp; ✉ support@varnam.in
+        </p>
+        <div className="flex flex-wrap gap-4 sm:gap-6 text-[11px] tracking-wider text-zinc-500 font-bold uppercase justify-center">
+          <Link href="/about" className="hover:text-zinc-900 transition-colors">About</Link>
+          <span>·</span>
+          <Link href="/contact" className="hover:text-zinc-900 transition-colors">Contact</Link>
+          <span>·</span>
+          <Link href="/terms-of-service" className="hover:text-zinc-900 transition-colors">Terms &amp; Conditions</Link>
+          <span>·</span>
+          <Link href="/privacy-policy" className="hover:text-zinc-900 transition-colors">Privacy Policy</Link>
+          <span>·</span>
+          <Link href="/refund-policy" className="hover:text-zinc-900 transition-colors">Refund Policy</Link>
+        </div>
+        <p className="text-xs text-zinc-400">
+          © {new Date().getFullYear()} Varnam Wedding Invites. All rights reserved.
+        </p>
+      </footer>
     </div>
   );
 }

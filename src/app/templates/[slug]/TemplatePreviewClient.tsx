@@ -57,7 +57,7 @@ export default function TemplatePreviewClient({ slug }: TemplatePreviewClientPro
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="flex flex-col">
-            <span className="text-sm text-zinc-800 font-bold tracking-tight">{template.name}</span>
+            <span suppressHydrationWarning className="text-sm text-zinc-800 font-bold tracking-tight">{template.name}</span>
             <span className="text-[9px] tracking-widest text-zinc-400 uppercase font-bold">LIVE PREVIEW</span>
           </div>
         </div>
@@ -127,6 +127,27 @@ export default function TemplatePreviewClient({ slug }: TemplatePreviewClientPro
           </div>
         )}
       </main>
+
+      {/* Footer (Only on Landing Page and Template Page) */}
+      <footer className="w-full py-10 px-6 border-t border-zinc-200/80 bg-white z-20 text-center flex flex-col items-center justify-center gap-3 relative">
+        <p className="text-xs text-zinc-650">
+          📍 115, Ekambaranathar Sannathi Street, Kanchipuram, Tamil Nadu - 631502 &nbsp;·&nbsp; 📞 +91 7200180268 &nbsp;·&nbsp; ✉ support@varnam.in
+        </p>
+        <div className="flex flex-wrap gap-4 sm:gap-6 text-[11px] tracking-wider text-zinc-650 font-bold uppercase justify-center">
+          <Link href="/about" className="hover:text-zinc-950 transition-colors">About</Link>
+          <span>·</span>
+          <Link href="/contact" className="hover:text-zinc-950 transition-colors">Contact</Link>
+          <span>·</span>
+          <Link href="/terms-of-service" className="hover:text-zinc-950 transition-colors">Terms &amp; Conditions</Link>
+          <span>·</span>
+          <Link href="/privacy-policy" className="hover:text-zinc-950 transition-colors">Privacy Policy</Link>
+          <span>·</span>
+          <Link href="/refund-policy" className="hover:text-zinc-950 transition-colors">Refund Policy</Link>
+        </div>
+        <p className="text-xs text-zinc-400">
+          © {new Date().getFullYear()} Varnam Wedding Invites. All rights reserved.
+        </p>
+      </footer>
 
       {/* Floating Ambient Music */}
       <MusicToggle audioUrl={template.previewMusicUrl} autoPlay={true} />

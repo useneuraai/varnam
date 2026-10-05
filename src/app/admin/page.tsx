@@ -16,7 +16,7 @@ export default async function AdminDashboard() {
   const recordedRevenue = payments.reduce((acc, p) => acc + (Number(p.amount) || 0), 0);
   const totalRevenue = recordedRevenue > 0 ? recordedRevenue : invitations.reduce((acc, inv) => {
     const template = TEMPLATES.find((t) => t.slug === inv.template_slug);
-    const price = template ? template.price : 799;
+    const price = template ? template.price : 999;
     return acc + price;
   }, 0);
 

@@ -172,9 +172,6 @@ function EditorPageContent() {
   const [mapSearchQuery, setMapSearchQuery] = useState("");
   const [mapSearchResults, setMapSearchResults] = useState<any[]>([]);
   
-  // Custom Sections inputs states
-  const [newSectionTitle, setNewSectionTitle] = useState("");
-  const [newSectionContent, setNewSectionContent] = useState("");
   const [isMapSearching, setIsMapSearching] = useState(false);
   const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
@@ -454,40 +451,30 @@ function EditorPageContent() {
   // Wizard steps categorizer
   const getFieldStep = (fieldId: string): number => {
     switch (fieldId) {
-      // Step 1: Styling & Couple Details
+      // Step 1: Couple & Quote
       case "bride_name":
       case "groom_name":
       case "quote":
       case "bg_image_url":
         return 1;
 
-      // Step 2: Main Event details & RSVPs
+      // Step 2: Date & Photos
       case "wedding_date":
-      case "wedding_venue":
-      case "family_names":
-      case "rsvp_phone":
-      case "custom_message":
+      case "slideshow_images":
         return 2;
 
-      // Step 3: Multi-Event schedule & Background Music
-      case "music_url":
-      case "music_enabled":
-      case "scratch_enabled":
-      case "sangeet_date":
-      case "sangeet_venue":
+      // Step 3: Program Timeline
+      case "wedding_venue":
       case "reception_date":
       case "reception_venue":
+      case "wedding_events":
         return 3;
 
-      // Step 4: Slideshow, Dress Code & Map Location
-      case "slideshow_images":
-      case "slideshow_enabled":
-      case "dress_code":
-      case "dress_code_enabled":
-      case "transport_info":
-      case "transport_enabled":
+      // Step 4: Venue Map & RSVP
       case "gmap_coordinates":
-      case "custom_sections":
+      case "rsvp_phone":
+      case "family_names":
+      case "custom_message":
         return 4;
 
       default:
@@ -657,7 +644,7 @@ function EditorPageContent() {
           <div className="flex flex-col">
             <span className="font-cinzel text-xs text-[#8a725d] font-bold tracking-wider">DESIGN STUDIO</span>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="font-montserrat text-[9px] tracking-widest text-[#8a725d]/70 uppercase">
+              <span suppressHydrationWarning className="font-montserrat text-[9px] tracking-widest text-[#8a725d]/70 uppercase">
                 CUSTOMIZING: {template.name}
               </span>
               <span className="text-[9px] text-[#8a725d]/40 font-montserrat">•</span>
@@ -723,7 +710,7 @@ function EditorPageContent() {
                           : "text-neutral-400 group-hover:text-neutral-600"
                       }`}
                     >
-                      {step === 1 ? "Styling" : step === 2 ? "Details" : step === 3 ? "Timeline" : "Media"}
+                      {step === 1 ? "Couple" : step === 2 ? "Photos" : step === 3 ? "Timeline" : "RSVP"}
                     </span>
                   </button>
                 );
@@ -747,24 +734,6 @@ function EditorPageContent() {
             <div className="space-y-6">
               {template.fields
                 .filter((field) => getFieldStep(field.id) === currentStep)
-                .filter((field) => {
-                  if ((field.id === "sangeet_date" || field.id === "sangeet_venue") && formData.sangeet_enabled === "no") {
-                    return false;
-                  }
-                  if (field.id === "music_url" && formData.music_enabled === "no") {
-                    return false;
-                  }
-                  if (field.id === "slideshow_images" && formData.slideshow_enabled === "no") {
-                    return false;
-                  }
-                  if (field.id === "dress_code" && formData.dress_code_enabled === "no") {
-                    return false;
-                  }
-                  if (field.id === "transport_info" && formData.transport_enabled === "no") {
-                    return false;
-                  }
-                  return true;
-                })
                 .map((field) => {
                   const val = (formData as any)[field.id] || "";
                   
@@ -1217,102 +1186,7 @@ function EditorPageContent() {
                     );
                   }
 
-                  // 5. CUSTOM INFO SECTIONS BUILDER
-                  if (field.id === "custom_sections") {
-                    const sections = (() => {
-                      if (!val) return [];
-                      try {
-                        return JSON.parse(val);
-                      } catch {
-                        return [];
-                      }
-                    })();
 
-                    return (
-                      <div key={field.id} className="flex flex-col gap-3.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
-                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
-                          <Sparkles className="w-3.5 h-3.5 text-[#b3811b]" />
-                          {field.label}
-                        </label>
-                        <span className="font-serif text-[9px] text-neutral-400 italic">
-                          Add custom cards for hotel stay details, shuttle schedule, gift registry, or any extra details.
-                        </span>
-
-                        {/* List of current sections */}
-                        {sections.length > 0 && (
-                          <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
-                            {sections.map((sec: any, idx: number) => (
-                              <div key={idx} className="flex items-start justify-between bg-white border border-neutral-100 p-2.5 rounded-xl gap-2 shadow-sm">
-                                <div className="min-w-0 flex-grow text-left">
-                                  <h5 className="font-montserrat text-[9px] font-bold text-neutral-800 uppercase tracking-wide truncate">{sec.title}</h5>
-                                  <p className="font-serif text-[10px] text-neutral-500 leading-normal mt-0.5 line-clamp-2 whitespace-pre-line">{sec.content}</p>
-                                </div>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    const next = sections.filter((_: any, i: number) => i !== idx);
-                                    handleInputChange(field.id, next.length > 0 ? JSON.stringify(next) : "");
-                                  }}
-                                  className="text-red-500 hover:text-red-600 transition-colors cursor-pointer shrink-0"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Add new section form */}
-                        <div className="space-y-4 text-left pt-4 border-t border-[#eed57c]/15">
-                          <span className="font-montserrat text-[10px] font-bold text-[#b3811b] tracking-wider uppercase block">Add New Info Card</span>
-                          
-                          <div className="flex flex-col gap-1.5">
-                            <label className="text-[10px] text-[#8a725d] font-montserrat uppercase font-bold tracking-wide">Section Title</label>
-                            <input
-                              type="text"
-                              value={newSectionTitle}
-                              onChange={(e) => setNewSectionTitle(e.target.value)}
-                              placeholder="E.g. Accommodations"
-                              className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-3 text-sm rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
-                            />
-                          </div>
-                          
-                          <div className="flex flex-col gap-1.5">
-                            <label className="text-[10px] text-[#8a725d] font-montserrat uppercase font-bold tracking-wide">Section Content</label>
-                            <textarea
-                              value={newSectionContent}
-                              onChange={(e) => setNewSectionContent(e.target.value)}
-                              placeholder="E.g. Shuttle departs from the Grand Ballroom at 2:00 PM."
-                              rows={3}
-                              className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-3 text-sm rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
-                            />
-                          </div>
-                          
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (!newSectionTitle.trim()) {
-                                alert("Please enter a section title");
-                                return;
-                              }
-                              if (!newSectionContent.trim()) {
-                                alert("Please enter section content");
-                                return;
-                              }
-                              const next = [...sections, { title: newSectionTitle.trim(), content: newSectionContent.trim() }];
-                              handleInputChange(field.id, JSON.stringify(next));
-                              setNewSectionTitle("");
-                              setNewSectionContent("");
-                            }}
-                            className="w-full py-3 bg-zinc-950 text-white font-montserrat text-[10px] font-bold tracking-widest uppercase hover:bg-zinc-800 transition-colors rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
-                          >
-                            <Plus className="w-3.5 h-3.5" />
-                            Add Card
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  }
 
                   if (field.type === "toggle") {
                     const isChecked = val === "yes";

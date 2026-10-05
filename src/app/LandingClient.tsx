@@ -67,72 +67,49 @@ const getCardStyles = (offset: number, isMobile: boolean) => {
 
 const getCoupleName = (slug: string) => {
   switch (slug) {
-    case "thiruvizha":
-      return "Arun & Kavya";
-    case "manamagan":
-      return "Karthik & Nila";
-    case "mangalam":
-      return "Arjun & Dhanya";
-    case "vizha":
-      return "Vishnu & Harini";
-    case "kadhal":
-      return "Adithya & Meera";
+    case "kamalam-kalyanam":
+      return "Meenakshi & Sundar";
+    case "kovil-thirumanam":
+      return "Sriya & Karthik";
+    case "kalyana-mandapam":
+      return "Nila & Aravind";
+    case "konaseema-kalyanam":
+      return "Tejaswi & Aditya";
+    case "theertha-mandapam":
+    case "malligai-manam":
+      return "Eleanor & Alexander";
+    case "marigold-vizha":
+    case "chettinad-rajamaligai":
+      return "Victoria & Julian";
+    case "kadhal-editorial":
     case "thanjavur-heritage":
-      return "Vishu & Kavya";
-    case "chettinad-vintage":
-      return "Meenakshi & Chidambaram";
-    case "jasmine-romance":
-      return "Ananya & Aditya";
-    case "temple-grandeur":
-      return "Samyuktha & Vijay";
-    case "modern-tamil-minimal":
-      return "Maya & Dev";
-    case "royal-tamil":
-      return "Malar";
-    case "temple-gold":
-      return "Aishwarya & Karthik";
-    case "traditional-red":
-      return "Devi & Suresh";
-    case "floral-luxury":
-      return "Zara & Kabir";
-    case "modern-minimal":
-      return "Riya & Varun";
-    case "royal-heritage":
-      return "Arundhati & Vikram";
-    case "elegant-muslim":
-      return "Zara & Faisal";
-    case "modern-christian":
-      return "Michelle & David";
-    case "luxury-floral":
-      return "Priya & Rahul";
+      return "Clara & Sebastian";
     default:
-      return "Malar";
+      return "Meenakshi & Sundar";
   }
 };
 
 const getCategoryName = (template: any) => {
   switch (template.slug) {
-    case "thiruvizha":
-      return "Grand Traditional Tamil";
-    case "manamagan":
-      return "Soft Jasmine Romance";
-    case "mangalam":
-      return "Dark Temple Luxury";
-    case "vizha":
-      return "Colourful Tamil Celebration";
-    case "kadhal":
-      return "Modern Tamil Editorial";
+    case "kamalam-kalyanam":
+      return "Royal Lotus & Crimson";
+    case "kovil-thirumanam":
+      return "Temple Mandapam";
+    case "kalyana-mandapam":
+      return "Palace Mandapam";
+    case "konaseema-kalyanam":
+      return "River Heritage";
+    case "theertha-mandapam":
+    case "malligai-manam":
+      return "Royal Swan & Lotus";
+    case "marigold-vizha":
+    case "chettinad-rajamaligai":
+      return "Marigold Celebration";
+    case "kadhal-editorial":
     case "thanjavur-heritage":
-    case "chettinad-vintage":
-    case "jasmine-romance":
-    case "temple-grandeur":
-    case "modern-tamil-minimal":
-    case "royal-tamil":
-    case "temple-gold":
-    case "traditional-red":
-      return "Traditional Tamil Wedding";
+      return "Classical Melodies";
     default:
-      return template.category || "Traditional Wedding";
+      return template.category || "Wedding Template";
   }
 };
 
@@ -144,7 +121,7 @@ export default function LandingClient() {
     // Intercept OAuth hash tokens if redirected to root (e.g. from Supabase default site URL)
     if (typeof window !== "undefined" && window.location.hash && window.location.hash.includes("access_token")) {
       if (window.location.origin.includes("localhost") || window.location.origin.includes("127.0.0.1")) {
-        window.location.replace(`https://varnam-invites.vercel.app/auth/callback${window.location.hash}`);
+        window.location.replace(`https://varnaminvites.store/auth/callback${window.location.hash}`);
         return;
       }
       window.location.replace(`/auth/callback${window.location.hash}`);
@@ -198,7 +175,7 @@ export default function LandingClient() {
     if (isHovered) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % TEMPLATES.length);
-    }, 4500);
+    }, 6000); // 6.0s balanced medium slideshow interval
     return () => clearInterval(interval);
   }, [isHovered]);
 
@@ -325,36 +302,52 @@ export default function LandingClient() {
 
         <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative px-6 pt-16 pb-12 overflow-hidden flex flex-col items-center justify-start text-center bg-white">
-          <div className="max-w-4xl mx-auto flex flex-col items-center relative z-10 select-none">
-            <p className="text-xs font-bold uppercase tracking-widest text-[#916710] mb-5">
-              Traditional & Modern WhatsApp Wedding Invitations
+        <section className="relative px-4 sm:px-6 pt-8 sm:pt-16 pb-8 sm:pb-12 overflow-hidden flex flex-col items-center justify-start text-center bg-white">
+          {/* Subtle warm luxury ambient glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[420px] sm:h-[500px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-100/40 via-orange-50/15 to-transparent blur-3xl pointer-events-none -z-0" />
+
+          <div className="max-w-5xl mx-auto flex flex-col items-center relative z-10 select-none">
+            <p className="text-[10.5px] sm:text-xs font-bold uppercase tracking-[0.16em] sm:tracking-widest text-[#916710] mb-3 sm:mb-5">
+              Create &amp; Share on WhatsApp in Minutes
             </p>
             
-            <h1 className="text-3xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] sm:leading-[1.02] text-zinc-900 tracking-tight mb-8">
-              Cinematic digital wedding <br className="hidden sm:inline" />
-              <span className="gold-gradient-text drop-shadow-sm">invitations with RSVP</span>
+            <h1 className="text-[1.28rem] min-[360px]:text-[1.42rem] min-[390px]:text-[1.58rem] sm:text-4xl md:text-5xl lg:text-[3.4rem] xl:text-[3.8rem] font-bold leading-[1.2] sm:leading-[1.12] text-zinc-900 tracking-tight mb-4 sm:mb-6 font-serif max-w-5xl">
+              <span className="hidden sm:block sm:whitespace-nowrap">Create your wedding invitation website</span>
+              <span className="hidden sm:block gold-gradient-text drop-shadow-sm mt-1 sm:mt-2 sm:whitespace-nowrap">online in minutes</span>
+
+              <span className="block sm:hidden whitespace-nowrap">Create your wedding invitation</span>
+              <span className="block sm:hidden gold-gradient-text drop-shadow-sm mt-0.5 whitespace-nowrap">website online in minutes</span>
             </h1>
 
-            <p className="max-w-2xl text-zinc-600 text-base sm:text-lg leading-relaxed mb-10 font-normal">
-              Create and customize a premium cinematic wedding invitation website with traditional South Indian, Tamil, Hindu, Christian, and Muslim themes. Features interactive reveal animations, online RSVP tracking, guest books, photo galleries, and custom music—shared easily with a single WhatsApp link.
+            {/* Subtitle: strictly 3 lines on mobile and 3 lines on desktop */}
+            <p className="block sm:hidden text-zinc-600 text-[11.5px] min-[360px]:text-[12.5px] min-[390px]:text-[13px] leading-[1.5] mb-5 font-normal max-w-xs mx-auto">
+              <span className="block whitespace-nowrap">Turn your story into a luxury wedding website.</span>
+              <span className="block whitespace-nowrap">3D temple designs, scratch cards, photos &amp; maps,</span>
+              <span className="block whitespace-nowrap">ready to share instantly with one WhatsApp link.</span>
             </p>
 
-            <p className="text-xs font-bold text-[#916710] bg-[#fff9f2] px-5 py-2 rounded-xl border border-[#eed57c]/30 mb-8 animate-pulse select-none">
-              ✨ Try before you pay — draft your premium wedding invitation website and only pay ₹799 to activate your live link!
+            <p className="hidden sm:block max-w-3xl text-zinc-600 sm:text-base lg:text-lg leading-relaxed mb-8 sm:mb-10 font-normal">
+              <span className="block sm:whitespace-nowrap">Turn your love story into a breathtaking, interactive wedding website.</span>
+              <span className="block sm:mt-1 sm:whitespace-nowrap">Luxury 3D South Indian temple designs with scratch cards, photos &amp; maps,</span>
+              <span className="block sm:mt-1 sm:whitespace-nowrap">ready to share with your guests instantly with a single WhatsApp link.</span>
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+            <div className="inline-flex items-center justify-center text-[11px] sm:text-xs font-bold text-[#916710] bg-[#fff9f2] px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full sm:rounded-xl border border-[#eed57c]/35 mb-6 sm:mb-8 select-none shadow-xs max-w-full">
+              <span className="hidden sm:inline">Try before you pay — customize your invitation for free, with plans starting at ₹999!</span>
+              <span className="inline sm:hidden whitespace-nowrap">Customize for free • Plans from ₹999!</span>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
               <Link
                 href="/templates"
-                className="px-8 py-4 bg-zinc-950 hover:bg-zinc-900 text-white font-extrabold text-xs tracking-widest uppercase transition-all duration-300 border border-[#eed57c] shadow-sm min-w-[210px] min-h-[48px] flex items-center justify-center gap-2 group rounded-xl"
+                className="w-full sm:w-auto px-7 sm:px-8 py-3.5 sm:py-4 bg-zinc-950 hover:bg-zinc-900 active:scale-[0.98] text-white font-extrabold text-xs tracking-widest uppercase transition-all duration-200 border border-[#eed57c] shadow-sm min-w-0 sm:min-w-[210px] min-h-[46px] sm:min-h-[48px] flex items-center justify-center gap-2 group rounded-xl max-w-xs sm:max-w-none"
               >
                 Browse Templates
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-[#eed57c]" />
               </Link>
               <Link
-                href="/templates/royal-tamil"
-                className="px-8 py-4 border border-zinc-300 hover:border-zinc-800 text-zinc-700 hover:bg-zinc-50/50 font-bold text-xs tracking-widest uppercase transition-all duration-300 min-w-[210px] min-h-[48px] flex items-center justify-center gap-2 rounded-xl"
+                href="/templates/kovil-thirumanam"
+                className="w-full sm:w-auto px-7 sm:px-8 py-3.5 sm:py-4 border border-zinc-300 hover:border-zinc-800 active:scale-[0.98] text-zinc-700 hover:bg-zinc-50 font-bold text-xs tracking-widest uppercase transition-all duration-200 min-w-0 sm:min-w-[210px] min-h-[46px] sm:min-h-[48px] flex items-center justify-center gap-2 rounded-xl max-w-xs sm:max-w-none"
               >
                 View Sample Invite
               </Link>
@@ -363,12 +356,16 @@ export default function LandingClient() {
 
           {/* Carousel Section */}
           <div 
-            className="w-full relative mt-16 flex flex-col items-center z-20"
+            className="w-full relative mt-8 sm:mt-16 flex flex-col items-center z-20"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onTouchStart={() => setIsHovered(true)}
+            onTouchEnd={() => {
+              setTimeout(() => setIsHovered(false), 5000);
+            }}
           >
             {/* Carousel Container */}
-            <div className="relative w-full h-[450px] sm:h-[600px] flex items-center justify-center overflow-x-clip py-4">
+            <div className="relative w-full h-[450px] sm:h-[600px] flex items-center justify-center overflow-x-clip py-2 sm:py-4">
               {TEMPLATES.map((tpl, idx) => {
                 const offset = getWrappedOffset(idx, activeIndex, TEMPLATES.length);
                 const isVisible = Math.abs(offset) <= 2;
@@ -383,7 +380,7 @@ export default function LandingClient() {
                     key={tpl.slug}
                     style={{
                       width: mounted && isMobile ? Math.min(windowWidth - 48, 280) : 340,
-                      height: mounted && isMobile ? Math.min((windowWidth - 48) * 1.6, 440) : 550,
+                      height: mounted && isMobile ? Math.min((windowWidth - 48) * 1.55, 435) : 550,
                       position: "absolute",
                       borderRadius: 20,
                       overflow: "hidden",
@@ -419,39 +416,54 @@ export default function LandingClient() {
                     onClick={() => handleCardClick(idx)}
                     className="cursor-pointer bg-white border border-zinc-150/40 origin-center select-none"
                   >
-                    <LiveTemplatePreview slug={tpl.slug} autoScroll={isActive} />
+                    {isActive ? (
+                      <LiveTemplatePreview slug={tpl.slug} autoScroll={true} />
+                    ) : (
+                      <div className="w-full h-full relative overflow-hidden bg-zinc-950">
+                        <img
+                          src={tpl.thumbnailUrl}
+                          alt={tpl.name}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover object-center select-none"
+                        />
+                        <div className="absolute inset-0 bg-black/25 pointer-events-none" />
+                      </div>
+                    )}
                   </motion.div>
                 );
               })}
             </div>
 
             {/* Pagination Controls */}
-            <div className="mt-8 flex items-center gap-8 text-xs tracking-widest text-zinc-500 font-semibold">
+            <div className="mt-4 sm:mt-8 flex items-center gap-6 sm:gap-8 text-xs tracking-widest text-zinc-500 font-semibold">
               <button 
                 onClick={handlePrev}
-                className="p-2 hover:text-gold-600 transition-colors text-lg"
+                className="p-2 hover:text-gold-600 active:scale-90 transition-all text-lg"
+                aria-label="Previous template"
               >
                 ←
               </button>
-              <span className="font-bold">
+              <span className="font-bold font-mono">
                 {String(activeIndex + 1).padStart(2, "0")} / {String(TEMPLATES.length).padStart(2, "0")}
               </span>
               <button 
                 onClick={handleNext}
-                className="p-2 hover:text-gold-600 transition-colors text-lg"
+                className="p-2 hover:text-gold-600 active:scale-90 transition-all text-lg"
+                aria-label="Next template"
               >
                 →
               </button>
             </div>
 
             {/* Active Template Description */}
-            <div className="mt-6 text-center select-none max-w-lg px-6">
-              <div className="text-xl font-bold text-zinc-900">
+            <div className="mt-3 sm:mt-6 text-center select-none max-w-lg px-4 sm:px-6">
+              <div className="text-lg sm:text-xl font-bold text-zinc-900">
                 {getCoupleName(TEMPLATES[activeIndex].slug)}
               </div>
               <Link
                 href={`/templates/${TEMPLATES[activeIndex].slug}`}
-                className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-gold-600 hover:text-gold-700 font-semibold tracking-wider transition-all uppercase group"
+                className="mt-1 inline-flex items-center gap-1.5 text-xs text-gold-600 hover:text-gold-700 font-semibold tracking-wider transition-all uppercase group"
               >
                 <span>{getCategoryName(TEMPLATES[activeIndex])}</span>
                 <span>·</span>
@@ -462,70 +474,77 @@ export default function LandingClient() {
         </section>
 
         {/* Minimal Trust & Value Strip */}
-        <section className="w-full bg-white border-y border-zinc-100 py-12 px-6 relative z-10 flex flex-col items-center justify-center text-center">
-          <div className="max-w-4xl mx-auto flex flex-col items-center gap-4">
-            <div className="text-xs sm:text-sm tracking-[0.15em] text-zinc-900 font-semibold flex flex-wrap items-center justify-center gap-x-5 gap-y-2 uppercase">
-              <span>Choose your traditional template</span>
-              <span className="text-[#b3811b]/50">•</span>
-              <span>Customize design & music</span>
-              <span className="text-[#b3811b]/50">•</span>
-              <span>Download & Share WhatsApp Invitation</span>
+        <section className="w-full bg-gradient-to-b from-white to-[#fdfbf7] border-y border-zinc-150/80 py-8 sm:py-12 px-4 sm:px-6 relative z-10 flex flex-col items-center justify-center text-center">
+          <div className="max-w-4xl mx-auto flex flex-col items-center gap-3 sm:gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[11px] sm:text-xs tracking-wider sm:tracking-[0.14em] text-zinc-800 font-semibold uppercase">
+              <span className="px-3 py-1 bg-white rounded-full border border-zinc-200/70 shadow-2xs">Choose Template</span>
+              <span className="text-[#b3811b]">❖</span>
+              <span className="px-3 py-1 bg-white rounded-full border border-zinc-200/70 shadow-2xs">Customize &amp; Music</span>
+              <span className="text-[#b3811b]">❖</span>
+              <span className="px-3 py-1 bg-white rounded-full border border-zinc-200/70 shadow-2xs">Share on WhatsApp</span>
             </div>
 
-            <div className="h-[1px] w-24 bg-zinc-100 my-1.5" />
+            <div className="h-[1px] w-20 bg-zinc-200/80 my-1" />
             
-            <div className="text-xs sm:text-sm tracking-widest text-zinc-650 font-bold flex flex-wrap items-center justify-center gap-x-5 gap-y-2 uppercase">
-              <span>No app required</span>
-              <span className="text-[#b3811b]/50">•</span>
-              <span>Interactive RSVP Tracking</span>
-              <span className="text-[#b3811b]/50">•</span>
-              <span>Pay Only to Publish (₹799)</span>
+            <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 text-[10.5px] sm:text-xs tracking-wider sm:tracking-widest text-zinc-650 font-bold uppercase">
+              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-[#b3811b]" /> No app required</span>
+              <span className="hidden sm:inline text-[#b3811b]/40">•</span>
+              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-[#b3811b]" /> Interactive RSVP Tracking</span>
+              <span className="hidden sm:inline text-[#b3811b]/40">•</span>
+              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-[#b3811b]" /> Pay Only to Publish (from ₹999)</span>
             </div>
           </div>
         </section>
 
         {/* Social Proof & Platform Stats */}
-        <section className="w-full bg-[#fafaf9] py-16 px-6 relative z-10 border-b border-zinc-100">
-          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+        <section className="w-full bg-[#fafaf9] py-10 sm:py-16 px-4 sm:px-6 relative z-10 border-b border-zinc-100">
+          <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
             {[
               { label: "Couples Trusted", value: "1,200+" },
               { label: "RSVPs Tracked", value: "85,000+" },
               { label: "Active Guest Books", value: "98%" },
               { label: "Guest Satisfaction", value: "4.9/5" }
             ].map((stat, idx) => (
-              <div key={idx} className="flex flex-col items-center justify-center text-center">
-                <span className="text-3xl md:text-4xl font-extrabold text-[#b3811b] tracking-tight">{stat.value}</span>
-                <span className="text-[10px] md:text-xs tracking-widest text-zinc-500 font-bold uppercase mt-2">{stat.label}</span>
+              <div 
+                key={idx} 
+                className="flex flex-col items-center justify-center text-center p-4 sm:p-6 bg-white rounded-2xl border border-zinc-150/70 shadow-xs hover:border-[#eed57c]/50 transition-colors"
+              >
+                <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif text-[#916710] tracking-tight">
+                  {stat.value}
+                </span>
+                <span className="text-[10px] sm:text-xs tracking-wider text-zinc-500 font-bold uppercase mt-1 sm:mt-2">
+                  {stat.label}
+                </span>
               </div>
             ))}
           </div>
         </section>
 
         {/* Why Choose Varnam / Features */}
-        <section id="why-choose" className="py-24 px-6 relative bg-white overflow-hidden scroll-mt-20">
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-16 lg:items-center">
+        <section id="why-choose" className="py-14 sm:py-24 px-4 sm:px-6 relative bg-white overflow-hidden scroll-mt-20">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 lg:items-center">
             <div>
-              <p className="font-semibold text-xs uppercase tracking-widest text-[#916710]">
+              <p className="font-bold text-[11px] sm:text-xs uppercase tracking-[0.18em] text-[#916710]">
                 Why choose varnam
               </p>
-              <h2 className="mt-4 max-w-[560px] text-4xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight">
-                Premium Indian Wedding Invitation Website Platform
+              <h2 className="mt-3 sm:mt-4 max-w-[560px] text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight font-serif">
+                Premium Indian Wedding Invitation Platform
               </h2>
-              <p className="mt-5 max-w-[500px] text-base leading-relaxed text-zinc-600">
+              <p className="mt-4 sm:mt-5 max-w-[500px] text-sm sm:text-base leading-relaxed text-zinc-600 font-normal">
                 Varnam provides a premium, all-in-one digital wedding invitation maker. Easily personalize your wedding templates, custom music, photo galleries, Google Maps location, and guest messages from a secure live dashboard.
               </p>
               
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="mt-6 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-4">
                 <a
                   href="https://razorpay.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-zinc-100 bg-zinc-50/50 px-5 py-2.5 text-xs font-semibold tracking-wide text-zinc-805 hover:text-zinc-950 hover:border-zinc-200 transition-colors shadow-sm"
+                  className="inline-flex items-center gap-2 rounded-full border border-zinc-200/80 bg-zinc-50/70 px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold tracking-wide text-zinc-800 hover:text-zinc-950 hover:border-zinc-300 transition-colors shadow-2xs"
                 >
                   <ShieldCheck className="w-4 h-4 text-[#916710]" />
                   Razorpay Verified
                 </a>
-                <span className="inline-flex items-center gap-2 rounded-full border border-zinc-100 bg-zinc-50/50 px-5 py-2.5 text-xs font-semibold tracking-wide text-zinc-800 shadow-sm">
+                <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200/80 bg-zinc-50/70 px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold tracking-wide text-zinc-800 shadow-2xs">
                   <Lock className="w-4 h-4 text-[#916710]" />
                   Secure Live Dashboard
                 </span>
@@ -533,20 +552,20 @@ export default function LandingClient() {
 
               <Link
                 href="/templates"
-                className="mt-10 inline-flex items-center gap-2 text-xs font-bold text-[#b3811b] hover:text-[#9a6f14] transition-colors uppercase tracking-widest"
+                className="mt-8 sm:mt-10 inline-flex items-center gap-2 text-xs font-bold text-[#b3811b] hover:text-[#9a6f14] transition-colors uppercase tracking-widest"
               >
                 Browse wedding templates
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
-            <div className="relative border border-zinc-100 bg-zinc-50/50 p-8 shadow-sm rounded-[32px] md:p-10">
-              <div className="grid gap-8 divide-y divide-zinc-200/50">
+            <div className="relative border border-zinc-200/70 bg-gradient-to-br from-zinc-50/70 to-[#fffdf9] p-6 sm:p-8 md:p-10 shadow-xs rounded-[24px] sm:rounded-[32px]">
+              <div className="grid gap-6 sm:gap-8 divide-y divide-zinc-200/60">
                 {[
                   {
                     step: "01",
                     title: "One-Time Event License",
-                    desc: "Get complete access to all templates for one event. No subscriptions or recurring fees."
+                    desc: "1 template license for your event. No subscriptions or recurring fees."
                   },
                   {
                     step: "02",
@@ -559,15 +578,15 @@ export default function LandingClient() {
                     desc: "Engage guests with real-time online RSVP, scratch-to-reveal event cards, dynamic maps, photo galleries, and guest wish boards."
                   }
                 ].map((item, idx) => (
-                  <div key={idx} className={`grid grid-cols-[48px_1fr] gap-5 ${idx > 0 ? "pt-8" : ""}`}>
-                    <div className="flex h-12 w-12 items-center justify-center border border-zinc-200 bg-white text-zinc-900 rounded-full text-sm font-bold shadow-sm">
+                  <div key={idx} className={`grid grid-cols-[40px_1fr] sm:grid-cols-[48px_1fr] gap-4 sm:gap-5 ${idx > 0 ? "pt-6 sm:pt-8" : ""}`}>
+                    <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center border border-zinc-200 bg-white text-[#916710] font-serif rounded-full text-xs sm:text-sm font-bold shadow-2xs">
                       {item.step}
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-zinc-900 tracking-tight">
+                      <h3 className="text-base sm:text-lg font-bold text-zinc-900 tracking-tight">
                         {item.title}
                       </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-zinc-650">
+                      <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-zinc-650">
                         {item.desc}
                       </p>
                     </div>
@@ -575,8 +594,8 @@ export default function LandingClient() {
                 ))}
               </div>
 
-              <div className="mt-8 border-t border-zinc-200/50 pt-8">
-                <p className="text-lg italic text-zinc-800 leading-relaxed font-serif">
+              <div className="mt-6 sm:mt-8 border-t border-zinc-200/60 pt-6 sm:pt-8">
+                <p className="text-base sm:text-lg italic text-zinc-800 leading-relaxed font-serif">
                   &ldquo;The design feels high-end, but every guest action is just one tap away.&rdquo;
                 </p>
               </div>
@@ -585,72 +604,74 @@ export default function LandingClient() {
         </section>
 
         {/* Featured Templates Gallery */}
-        <section style={{ contentVisibility: "auto", containIntrinsicSize: "0 800px" }} className="py-24 px-6 bg-[#fafaf9] border-t border-zinc-100 relative z-10">
+        <section className="py-14 sm:py-24 px-4 sm:px-6 bg-[#fafaf9] border-t border-zinc-150 relative z-10">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="text-xs font-bold tracking-widest text-[#916710] uppercase">
+            <div className="text-center mb-10 sm:mb-16">
+              <span className="text-[11px] sm:text-xs font-bold tracking-[0.18em] text-[#916710] uppercase">
                 Our Handcrafted Collection
               </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900">
-                Signature Indian Wedding Invitation Website Templates
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900 font-serif">
+                Signature Wedding Invitation Templates
               </h2>
-              <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-full" />
+              <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-3 sm:mt-4 rounded-full" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {TEMPLATES.slice(0, 4).map((tpl) => (
                 <div
                   key={tpl.slug}
-                  className="group relative flex flex-col bg-white rounded-[24px] overflow-hidden border border-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(179,129,27,0.06)] hover:border-[#eed57c]/40 transition-all duration-500"
+                  className="group relative flex flex-col bg-white rounded-[22px] sm:rounded-[24px] overflow-hidden border border-zinc-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_16px_36px_rgba(179,129,27,0.08)] hover:border-[#eed57c]/60 transition-all duration-300"
                 >
                   {/* Image */}
                   <div
-                    aria-label={
-                      tpl.slug === "temple-gold"
-                        ? "Temple Gold - Traditional Tamil wedding invitation website sample"
-                        : tpl.slug === "traditional-red"
-                        ? "Traditional Red - South Indian wedding invite template with live RSVP links"
-                        : tpl.slug === "floral-luxury"
-                        ? "Floral Luxury - Elegant digital wedding website template for smartphones"
-                        : `${tpl.name} wedding invitation website preview`
-                    }
                     role="img"
-                    className="relative h-64 overflow-hidden bg-zinc-50 border-b border-zinc-100"
+                    aria-label={`${tpl.name} wedding invitation preview`}
+                    className="relative h-60 sm:h-64 overflow-hidden bg-zinc-50 border-b border-zinc-100"
                   >
-                    <LiveTemplatePreview slug={tpl.slug} autoScroll={false} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
+                    {tpl.thumbnailUrl ? (
+                      <img
+                        src={tpl.thumbnailUrl}
+                        alt={tpl.name}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 select-none"
+                      />
+                    ) : (
+                      <LiveTemplatePreview slug={tpl.slug} autoScroll={false} />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                     
-                    {/* Mode label */}
-                    <span className="absolute top-4 left-4 bg-zinc-950/90 backdrop-blur-md text-[#eed57c] text-[10px] tracking-[0.2em] uppercase px-3 py-1.5 font-bold rounded-md shadow-md pointer-events-none">
+                    {/* Category label */}
+                    <span className="absolute top-3.5 left-3.5 bg-zinc-950/90 backdrop-blur-md text-[#eed57c] text-[9.5px] sm:text-[10px] tracking-[0.18em] uppercase px-2.5 py-1 font-bold rounded-md shadow-xs pointer-events-none">
                       {tpl.category}
                     </span>
                   </div>
 
                   {/* Body */}
-                  <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-xl text-zinc-900 font-bold font-serif tracking-wide mb-2">
+                  <div className="p-5 sm:p-6 flex flex-col flex-grow">
+                    <h3 suppressHydrationWarning className="text-lg sm:text-xl text-zinc-900 font-bold font-serif tracking-wide mb-1.5 sm:mb-2">
                       {tpl.name}
                     </h3>
-                    <p className="text-sm text-zinc-650 leading-relaxed mb-6 flex-grow font-normal">
+                    <p suppressHydrationWarning className="text-xs sm:text-sm text-zinc-650 leading-relaxed mb-5 sm:mb-6 flex-grow font-normal line-clamp-3 sm:line-clamp-none">
                       {tpl.description}
                     </p>
 
-                    <div className="flex flex-col gap-4 border-t border-zinc-100 pt-4 mt-auto">
+                    <div className="flex flex-col gap-3 sm:gap-4 border-t border-zinc-100 pt-4 mt-auto">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-extrabold">Single License</span>
-                        <span className="text-lg text-zinc-950 font-extrabold font-serif">₹{tpl.price}</span>
+                        <span className="text-[9.5px] sm:text-[10px] text-zinc-400 uppercase tracking-widest font-extrabold">Single License</span>
+                        <span className="text-lg sm:text-xl text-zinc-950 font-extrabold font-serif">₹{tpl.price}</span>
                       </div>
                       
                       <div className="flex flex-col gap-2 w-full">
                         <Link
                           href={`/editor/${tpl.slug}`}
-                          className="w-full bg-zinc-950 hover:bg-[#b3811b] text-white text-xs font-bold tracking-widest uppercase py-3.5 transition-all duration-300 border border-zinc-900 hover:border-[#b3811b] rounded-xl flex items-center justify-center min-h-[44px] shadow-sm"
+                          className="w-full bg-zinc-950 hover:bg-[#b3811b] active:scale-[0.98] text-white text-xs font-bold tracking-widest uppercase py-3 sm:py-3.5 transition-all duration-200 border border-zinc-900 hover:border-[#b3811b] rounded-xl flex items-center justify-center min-h-[44px] shadow-2xs"
                         >
                           Customize Template
                         </Link>
                         <Link
                           href={`/templates/${tpl.slug}`}
-                          className="w-full text-xs tracking-widest uppercase font-bold text-zinc-600 hover:text-zinc-950 border border-zinc-200 hover:border-zinc-800 bg-white transition-all duration-300 py-3.5 rounded-xl flex items-center justify-center min-h-[44px]"
+                          className="w-full text-xs tracking-widest uppercase font-bold text-zinc-600 hover:text-zinc-950 active:scale-[0.98] border border-zinc-200 hover:border-zinc-800 bg-white transition-all duration-200 py-3 sm:py-3.5 rounded-xl flex items-center justify-center min-h-[44px]"
                           aria-label={`Preview ${tpl.name} template`}
                         >
                           Live Preview
@@ -665,24 +686,24 @@ export default function LandingClient() {
         </section>
 
         {/* How it works Section */}
-        <section id="how-it-works" style={{ contentVisibility: "auto", containIntrinsicSize: "0 600px" }} className="py-24 px-6 z-10 border-t border-zinc-150 bg-white relative scroll-mt-20">
+        <section id="how-it-works" className="py-14 sm:py-24 px-4 sm:px-6 z-10 border-t border-zinc-150 bg-white relative scroll-mt-20">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="text-xs font-bold tracking-widest text-[#916710] uppercase">
+            <div className="text-center mb-10 sm:mb-16">
+              <span className="text-[11px] sm:text-xs font-bold tracking-[0.18em] text-[#916710] uppercase">
                 Simple Creation Process
               </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900">
-                How to Create Your WhatsApp Wedding Invite
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900 font-serif">
+                How to Create Your WhatsApp Invite
               </h2>
-              <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-full" />
+              <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-3 sm:mt-4 rounded-full" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {[
                 {
                   icon: <Layers className="w-5 h-5 text-[#916710]" />,
                   title: "1. Select Wedding Template",
-                  desc: "Choose a design from our Hindu, Muslim, Christian, or Secular wedding invitation template gallery."
+                  desc: "Choose a design from our curated collection of classic and premium cinematic wedding templates."
                 },
                 {
                   icon: <Sliders className="w-5 h-5 text-[#916710]" />,
@@ -692,7 +713,7 @@ export default function LandingClient() {
                 {
                   icon: <CreditCard className="w-5 h-5 text-[#916710]" />,
                   title: "3. Secure One-Time Payment",
-                  desc: "Complete a one-time ₹799 event licensing fee securely using Razorpay integration."
+                  desc: "Complete your one-time event licensing fee securely via Razorpay (Classic ₹999 / Premium ₹1,199)."
                 },
                 {
                   icon: <Send className="w-5 h-5 text-[#916710]" />,
@@ -702,11 +723,11 @@ export default function LandingClient() {
               ].map((step, idx) => (
                 <div
                   key={idx}
-                  className="bg-zinc-50/50 border border-zinc-100 p-8 flex flex-col items-center text-center rounded-[28px] shadow-sm transition hover:shadow-md hover:border-zinc-200/60 duration-300"
+                  className="bg-zinc-50/70 border border-zinc-200/70 p-6 sm:p-8 flex flex-col items-center text-center rounded-[22px] sm:rounded-[28px] shadow-2xs transition hover:shadow-xs hover:border-[#eed57c]/60 duration-300"
                 >
-                  <div className="mb-5 p-4 bg-white rounded-2xl border border-zinc-100 shadow-sm">{step.icon}</div>
+                  <div className="mb-4 sm:mb-5 p-3.5 sm:p-4 bg-white rounded-2xl border border-zinc-150 shadow-2xs">{step.icon}</div>
                   <h3 className="text-base text-zinc-900 font-bold mb-2 tracking-tight">{step.title}</h3>
-                  <p className="text-sm text-zinc-600 leading-relaxed">{step.desc}</p>
+                  <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">{step.desc}</p>
                 </div>
               ))}
             </div>
@@ -714,82 +735,140 @@ export default function LandingClient() {
         </section>
 
         {/* Pricing / Event License */}
-        <section id="pricing" style={{ contentVisibility: "auto", containIntrinsicSize: "0 1000px" }} className="py-24 px-6 z-10 border-t border-zinc-150 bg-[#fafaf9] relative scroll-mt-20">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="text-xs font-bold tracking-widest text-[#916710] uppercase">
-                Bespoke Event Licensing
+        <section id="pricing" className="py-14 sm:py-24 px-4 sm:px-6 z-10 border-t border-zinc-150 bg-[#fafaf9] relative scroll-mt-20">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-10 sm:mb-16">
+              <span className="text-[11px] sm:text-xs font-bold tracking-[0.18em] text-[#916710] uppercase">
+                Transparent Event Licensing
               </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900">
-                Affordable Digital Wedding Card Pricing
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900 font-serif">
+                Digital Wedding Invitation Pricing
               </h2>
+              <p className="mt-3 text-sm text-zinc-600 max-w-lg mx-auto">
+                One-time payment per event. Customize everything for free, pay only when you are ready to publish and share with your guests.
+              </p>
               <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-full" />
             </div>
 
-            <div className="flex justify-center">
-              <div className="bg-white p-8 md:p-12 border border-zinc-100 max-w-lg w-full relative shadow-sm rounded-[24px] flex flex-col items-center text-center">
-                <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-zinc-900 text-white text-[10px] font-bold tracking-widest uppercase px-5 py-2 shadow-sm rounded-lg">
-                  SIGNATURE EVENT LICENSE
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
+              {/* Classic Tier Card */}
+              <div className="bg-white p-6 sm:p-10 border border-zinc-200/80 rounded-[24px] sm:rounded-[28px] shadow-sm flex flex-col relative">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] sm:text-xs text-zinc-500 font-bold tracking-widest uppercase">
+                    CLASSIC TIER
+                  </span>
+                  <span className="bg-zinc-100 text-zinc-700 text-[10px] font-bold tracking-wider uppercase px-3 py-1 rounded-full">
+                    Standard
+                  </span>
                 </div>
 
-                <span className="text-xs text-zinc-500 font-bold tracking-widest uppercase mt-6 block">
-                  ONE-TIME PAYMENT
-                </span>
-                <div className="flex items-baseline justify-center gap-2.5 my-4">
-                  <span className="text-lg line-through text-zinc-300">₹999</span>
-                  <span className="text-4xl md:text-5xl font-extrabold text-gold-600">₹799</span>
-                  <span className="text-xs text-zinc-650">/ premium wedding website</span>
-                </div>
-                
-                <p className="text-xs text-zinc-600 leading-relaxed mb-8 max-w-xs">
-                  Unlock all premium templates to build, host, and customize your exquisite interactive invitation webpage.
+                <h3 className="text-xl sm:text-2xl font-bold font-serif text-zinc-900 mb-2">Classic License</h3>
+                <p className="text-xs text-zinc-600 leading-relaxed mb-6">
+                  Timeless traditional and floral wedding templates with all essential interactive features.
                 </p>
 
+                <div className="flex items-baseline gap-2 mb-6">
+                  <span className="text-4xl sm:text-5xl font-extrabold font-serif text-zinc-900">₹999</span>
+                  <span className="text-xs text-zinc-500 font-medium">/ one-time event</span>
+                </div>
+
                 {/* Features List */}
-                <ul className="w-full text-left text-xs text-zinc-700 space-y-3.5 mb-8 border-t border-b border-zinc-100 py-6">
+                <ul className="text-left text-xs text-zinc-700 space-y-3 mb-8 border-t border-b border-zinc-100 py-6 flex-grow">
                   {[
                     "1 event hosting license included",
-                    "Access to all templates for the licensed event",
+                    "1 Classic template license of your choice",
                     "Unlimited photo slideshow uploads",
-                    "Custom background image overrides",
-                    "Custom background music & audio uploads",
-                    "Interactive online RSVP tracker & guest blessings wall",
-                    "Cinematic Scratch-to-Reveal event date reveal card",
-                    "Multi-event schedule (Muhurtham, Reception, Sangeet)",
-                    "Dress code guidelines & transport notes",
-                    "Google Maps direction integration & calendar sync",
-                    "Edit details freely until 5 days after event completes",
-                    "License exhausted after event archiving"
+                    "Custom background music & audio",
+                    "Interactive RSVP tracker & blessings wall",
+                    "Full multi-event schedule & timeline",
+                    "Google Maps venue integration & calendar sync",
+                    "Shareable WhatsApp link with custom preview",
+                    "Edit details freely until 5 days after event",
                   ].map((feat, idx) => (
-                    <li key={idx} className="flex items-center gap-3">
-                      <Check className="w-4 h-4 text-[#916710] shrink-0" />
-                      <span className="font-medium tracking-wide text-zinc-700">{feat}</span>
+                    <li key={idx} className="flex items-center gap-2.5">
+                      <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span className="font-medium text-zinc-700">{feat}</span>
                     </li>
                   ))}
                 </ul>
 
                 <Link
                   href="/templates"
-                  className="w-full py-4 bg-zinc-950 hover:bg-zinc-900 text-white font-extrabold text-xs tracking-widest uppercase transition-all duration-300 border border-[#eed57c] flex items-center justify-center gap-2 group shadow-sm min-h-[48px] rounded-xl"
+                  className="w-full py-3.5 sm:py-4 bg-zinc-100 hover:bg-zinc-200 active:scale-[0.98] text-zinc-900 font-bold text-xs tracking-widest uppercase transition-all duration-200 flex items-center justify-center gap-2 rounded-xl min-h-[48px]"
                 >
-                  SELECT TEMPLATE & START
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-[#eed57c]" />
+                  SELECT CLASSIC (₹999)
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
+              </div>
 
-                <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-2 text-left w-full border-t border-zinc-100 pt-5">
-                  <span className="flex items-center gap-1.5 text-xs text-zinc-600">
-                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Pay only when ready
+              {/* Premium Tier Card (Featured) */}
+              <div className="bg-white p-6 sm:p-10 border-2 border-[#b3811b] rounded-[24px] sm:rounded-[28px] shadow-lg flex flex-col relative">
+                <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-zinc-950 text-[#eed57c] text-[9.5px] sm:text-[10px] font-bold tracking-widest uppercase px-4 sm:px-5 py-1.5 sm:py-2 shadow-sm rounded-full border border-[#eed57c]/40">
+                  MOST POPULAR • CINEMATIC 3D
+                </div>
+
+                <div className="flex items-center justify-between mb-4 mt-2 sm:mt-0">
+                  <span className="text-[10px] sm:text-xs text-[#916710] font-bold tracking-widest uppercase">
+                    PREMIUM TIER
                   </span>
-                  <span className="flex items-center gap-1.5 text-xs text-zinc-600">
-                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Edit details anytime
-                  </span>
-                  <span className="flex items-center gap-1.5 text-xs text-zinc-600">
-                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> 1-Click activation
-                  </span>
-                  <span className="flex items-center gap-1.5 text-xs text-zinc-600">
-                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> No hidden platform fees
+                  <span className="bg-[#fff9f2] text-[#916710] border border-[#eed57c]/40 text-[10px] font-bold tracking-wider uppercase px-3 py-1 rounded-full">
+                    Flagship
                   </span>
                 </div>
+
+                <h3 className="text-xl sm:text-2xl font-bold font-serif text-zinc-900 mb-2">Premium License</h3>
+                <p className="text-xs text-zinc-600 leading-relaxed mb-6">
+                  Ultra-luxurious 3D scroll experiences with animated temple archways, scratch reveal, and falling petals.
+                </p>
+
+                <div className="flex items-baseline gap-2 mb-6">
+                  <span className="text-4xl sm:text-5xl font-extrabold font-serif text-[#916710]">₹1,199</span>
+                  <span className="text-xs text-zinc-500 font-medium">/ one-time event</span>
+                </div>
+
+                {/* Features List */}
+                <ul className="text-left text-xs text-zinc-700 space-y-3 mb-8 border-t border-b border-zinc-100 py-6 flex-grow">
+                  {[
+                    "Everything in Classic, plus:",
+                    "1 Premium 3D template license of your choice",
+                    "Interactive Scratch-to-Reveal date with falling petals",
+                    "Cinematic temple archways & 3D scroll motion",
+                    "Interactive expanding ceremony agenda cards",
+                    "Live countdown timer with custom typography",
+                    "Priority WhatsApp concierge support",
+                    "Ultra-high resolution asset rendering",
+                    "Edit details freely until 5 days after event",
+                  ].map((feat, idx) => (
+                    <li key={idx} className="flex items-center gap-2.5">
+                      <Check className="w-4 h-4 text-[#916710] shrink-0" />
+                      <span className={`text-zinc-700 ${idx === 0 ? "font-bold text-zinc-900" : "font-medium"}`}>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href="/templates"
+                  className="w-full py-3.5 sm:py-4 bg-zinc-950 hover:bg-zinc-900 active:scale-[0.98] text-white font-extrabold text-xs tracking-widest uppercase transition-all duration-200 border border-[#eed57c] flex items-center justify-center gap-2 group shadow-sm min-h-[48px] rounded-xl"
+                >
+                  SELECT PREMIUM (₹1,199)
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-[#eed57c]" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Assurance strip */}
+            <div className="mt-12 max-w-2xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+              <div className="p-3 bg-white rounded-xl border border-zinc-150 text-[11px] text-zinc-600 font-medium flex items-center justify-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Free to customize
+              </div>
+              <div className="p-3 bg-white rounded-xl border border-zinc-150 text-[11px] text-zinc-600 font-medium flex items-center justify-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Pay only to publish
+              </div>
+              <div className="p-3 bg-white rounded-xl border border-zinc-150 text-[11px] text-zinc-600 font-medium flex items-center justify-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Edit anytime
+              </div>
+              <div className="p-3 bg-white rounded-xl border border-zinc-150 text-[11px] text-zinc-600 font-medium flex items-center justify-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> 100% secure payment
               </div>
             </div>
           </div>
@@ -803,8 +882,8 @@ export default function LandingClient() {
         <SocialShare />
 
         {/* Footer */}
-        <footer className="w-full py-12 px-6 border-t border-zinc-100 bg-[#fafaf9] z-10">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <footer className="w-full py-10 sm:py-12 px-4 sm:px-6 border-t border-zinc-150 bg-[#fafaf9] z-10">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
             <div className="flex flex-col items-center md:items-start gap-1">
               <span className="text-lg font-black tracking-widest text-zinc-900">
                 VARNAM
@@ -812,24 +891,23 @@ export default function LandingClient() {
               <p className="text-xs text-zinc-600 max-w-sm mt-2 leading-relaxed text-center md:text-left">
                 Ultra-premium, cinematic digital wedding invitation websites. Exquisite interactive e-invites with RSVP, custom music, maps, and guest message walls for modern couples.
               </p>
-              <p className="text-xs text-zinc-500 mt-2">
+              <p className="text-xs text-zinc-500 mt-2 text-center md:text-left">
                 📍 115, Ekambaranathar Sannathi Street, Kanchipuram, Tamil Nadu - 631502
               </p>
-              <p className="text-xs text-zinc-500 mt-1">
+              <p className="text-xs text-zinc-500 mt-1 text-center md:text-left">
                 📞 +91 7200180268 &nbsp;·&nbsp; ✉ support@varnam.in
               </p>
-              <p className="text-xs text-zinc-400 mt-2">
+              <p className="text-[11px] text-zinc-400 mt-2 text-center md:text-left">
                 © {new Date().getFullYear()} Varnam Wedding Invites. All rights reserved.
               </p>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-xs tracking-wider text-zinc-650 font-bold uppercase">
-              <Link href="/templates" className="hover:text-zinc-950 transition-colors">GALLERY</Link>
-              <a href="#how-it-works" className="hover:text-zinc-950 transition-colors">PROCESS</a>
-              <a href="#why-choose" className="hover:text-zinc-950 transition-colors">WHY US</a>
-              <a href="#faq" className="hover:text-zinc-950 transition-colors">FAQ</a>
-              <Link href="/privacy-policy" className="hover:text-zinc-950 transition-colors">PRIVACY</Link>
-              <Link href="/terms-of-service" className="hover:text-zinc-950 transition-colors">TERMS</Link>
+            <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-8 gap-y-3 text-xs tracking-wider text-zinc-650 font-bold uppercase">
+              <Link href="/about" className="hover:text-zinc-950 transition-colors">ABOUT</Link>
+              <Link href="/contact" className="hover:text-zinc-950 transition-colors">CONTACT</Link>
+              <Link href="/terms-of-service" className="hover:text-zinc-950 transition-colors">TERMS &amp; CONDITIONS</Link>
+              <Link href="/privacy-policy" className="hover:text-zinc-950 transition-colors">PRIVACY POLICY</Link>
+              <Link href="/refund-policy" className="hover:text-zinc-950 transition-colors">REFUND POLICY</Link>
             </div>
           </div>
         </footer>

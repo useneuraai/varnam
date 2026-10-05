@@ -5,9 +5,14 @@
   --font-serif: var(--font-playfair);
   --font-cinzel: var(--font-cinzel);
   --font-playfair: var(--font-playfair);
+  --font-marcellus: "Marcellus", serif;
+  --font-cormorant: "Cormorant Garamond", serif;
+  --font-cinzel-decorative: "Cinzel Decorative", serif;
   --font-montserrat: var(--font-inter);
   --font-inter: var(--font-inter);
   --font-great-vibes: var(--font-great-vibes);
+  --font-suranna: "Suranna", serif;
+  --font-ramabhadra: "Ramabhadra", sans-serif;
 
   --color-gold-50: #fefcf3;
   --color-gold-100: #fbf6df;
@@ -67,6 +72,18 @@ body {
   border-image: linear-gradient(to right, #8f6018, #eed57c, #8f6018) 1;
 }
 
+.font-marcellus {
+  font-family: var(--font-marcellus), 'Marcellus', Georgia, serif;
+}
+
+.font-cormorant {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+}
+
+.font-cinzel-decorative {
+  font-family: var(--font-cinzel-decorative), 'Cinzel Decorative', Georgia, serif;
+}
+
 .glass-card {
   background: rgba(20, 16, 20, 0.7);
   backdrop-filter: blur(12px);
@@ -101,6 +118,113 @@ body {
   100% {
     transform: translateX(100%);
   }
+}
+
+/* Hardware-accelerated GPU animations for floating petals and template flourishes */
+@keyframes fallingPetal1 {
+  0% {
+    transform: translate3d(0, -40px, 0) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  85% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(24px, 105vh, 0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes fallingPetal2 {
+  0% {
+    transform: translate3d(0, -40px, 0) rotate(15deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.85;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(-24px, 105vh, 0) rotate(380deg);
+    opacity: 0;
+  }
+}
+
+@keyframes floatSubtle {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -3px, 0) scale(1.02);
+  }
+}
+
+@keyframes lampSwayLeft {
+  0%, 100% {
+    transform: rotate(-2.5deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+
+@keyframes lampSwayRight {
+  0%, 100% {
+    transform: rotate(2.5deg);
+  }
+  50% {
+    transform: rotate(-2.5deg);
+  }
+}
+
+@keyframes flameGlow {
+  0%, 100% {
+    opacity: 0.55;
+    transform: translate3d(-50%, 0, 0) scale(0.95);
+  }
+  50% {
+    opacity: 0.95;
+    transform: translate3d(-50%, 0, 0) scale(1.06);
+  }
+}
+
+.anim-falling-petal-1 {
+  animation: fallingPetal1 linear infinite;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.anim-falling-petal-2 {
+  animation: fallingPetal2 linear infinite;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.anim-float-subtle {
+  animation: floatSubtle 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.anim-lamp-sway-left {
+  animation: lampSwayLeft 4.5s ease-in-out infinite;
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.anim-lamp-sway-right {
+  animation: lampSwayRight 4.5s ease-in-out infinite;
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.anim-flame-glow {
+  animation: flameGlow 2s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 /* Scrollbar hide utility */
@@ -212,6 +336,21 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
+/* Mobile hardware-accelerated smooth scrolling & GPU performance */
+html {
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 1023px) {
+  /* Disable heavy GPU backdrop-filter calculations on long scrollable template cards on mobile */
+  .template-container [class*="backdrop-blur"],
+  .preview-mode-mobile [class*="backdrop-blur"],
+  .preview-mode-tablet [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
 /* Editor minimalist, modern, sleek and curved overrides */
 .min-h-screen.bg-gradient-to-br.from-\[\#faf8f5\] {
   background: #ffffff !important;
@@ -317,3 +456,39 @@ header.h-20.border-b.border-\[\#eed57c\]\/20 .text-\[\#b3811b\] {
 .min-h-screen.flex-col .rounded-xl {
   border-radius: 20px !important;
 }
+
+/* ========================================================================= */
+/* Mobile Device Preview Container Overrides inside Desktop Editor          */
+/* Ensures that inside the 375px mobile preview frame, elements always use   */
+/* mobile-responsive styling regardless of the desktop monitor width.       */
+/* ========================================================================= */
+.preview-mode-mobile .sm\:grid-cols-4,
+.preview-mode-mobile .md\:grid-cols-4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.preview-mode-mobile .lg\:grid-cols-2 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+
+.preview-mode-mobile .hidden.sm\:block,
+.preview-mode-mobile .hidden.md\:block {
+  display: none !important;
+}
+
+.preview-mode-mobile .sm\:hidden {
+  display: block !important;
+}
+
+.preview-mode-mobile .font-great-vibes {
+  font-size: 2.25rem !important;
+  line-height: 2.75rem !important;
+}
+
+.preview-mode-mobile .sm\:text-6xl,
+.preview-mode-mobile .sm\:text-7xl {
+  font-size: 2.25rem !important;
+  line-height: 2.75rem !important;
+}
+
+

@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import GalleryClient from "./GalleryClient";
 
 export const metadata: Metadata = {
-  title: "Browse Premium Wedding Templates | Varnam",
-  description: "Explore our collection of cinematic, interactive digital wedding invitation templates. Choose from Traditional Tamil, Floral Luxury, Modern Minimal, Royal Heritage, and more.",
+  title: "Browse Wedding Invitation Templates | Varnam",
+  description: "Explore our collection of cinematic, interactive digital wedding invitation templates. Choose from Classic and Premium designs crafted with luxury typography, music, and smooth motion.",
   keywords: ["wedding templates", "digital wedding invitation", "cinematic invitation", "rsvp templates"],
 };
 

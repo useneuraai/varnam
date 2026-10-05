@@ -38,7 +38,7 @@ function CallbackContent() {
         // If loaded on localhost with tokens, forward directly to production
         if (typeof window !== "undefined" && window.location.hash && window.location.hash.includes("access_token")) {
           if (window.location.origin.includes("localhost") || window.location.origin.includes("127.0.0.1")) {
-            window.location.replace(`https://varnam-invites.vercel.app/auth/callback${window.location.hash}`);
+            window.location.replace(`https://varnaminvites.store/auth/callback${window.location.hash}`);
             return;
           }
         }

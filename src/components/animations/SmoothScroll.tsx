@@ -4,6 +4,8 @@ import { ReactLenis, useLenis } from "lenis/react";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
+import { useState } from "react";
+
 function LenisController() {
   const pathname = usePathname();
   const lenis = useLenis();
@@ -30,8 +32,35 @@ function LenisController() {
 }
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const [isTouch, setIsTouch] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const touchDetected =
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        window.innerWidth < 1024;
+      setIsTouch(touchDetected);
+    }
+  }, []);
+
+  // On touch/mobile devices, native 120Hz GPU scrolling is zero-latency and perfectly smooth
+  if (isTouch) {
+    return <>{children}</>;
+  }
+
   return (
-    <ReactLenis root options={{ duration: 1.2, smoothWheel: true }}>
+    <ReactLenis
+      root
+      options={{
+        duration: 0.35,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        wheelMultiplier: 1.1,
+        touchMultiplier: 1.2,
+        infinite: false,
+      }}
+    >
       <LenisController />
       {children}
     </ReactLenis>

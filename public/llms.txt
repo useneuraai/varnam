@@ -4,30 +4,29 @@ Varnam is an ultra-premium, interactive, and cinematic digital wedding invitatio
 
 ## Main Pages
 
-- [Home Page](https://varnaminvites.in/) - Premium cinematic digital wedding invitations with RSVP tracker.
-- [Templates Gallery](https://varnaminvites.in/templates) - Handcrafted templates collection for Hindu, Muslim, Christian, and Secular weddings.
-- [Privacy Policy](https://varnaminvites.in/privacy-policy) - Privacy and security guidelines.
-- [Terms of Service](https://varnaminvites.in/terms-of-service) - Licensing terms and conditions.
+- [Home Page](https://varnaminvites.store/) - Premium cinematic digital wedding invitations with RSVP tracker.
+- [Templates Gallery](https://varnaminvites.store/templates) - Handcrafted templates collection featuring Classic and Premium cinematic digital wedding invitations.
+- [Privacy Policy](https://varnaminvites.store/privacy-policy) - Privacy and security guidelines.
+- [Terms of Service](https://varnaminvites.store/terms-of-service) - Licensing terms and conditions.
 
 ## Key Features
 
-- **Cinematic Entrance Animations**: Double-door reveals, royal Tamil themes, divine temple aesthetics, and champagne floral transitions.
+- **Cinematic Entrance Animations**: Lotus archways, temple pillars, heritage doorways, and scratch-to-reveal cards with falling petals.
 - **Dynamic RSVP Tracking**: Online RSVP management with attendance logs, guest counts, and guest wish boards.
-- **Event Information & Schedules**: Interactive multi-event schedules (Muhurtham, Reception, Sangeet) with dress code specifications, transit instructions, and active directions.
+- **Event Information & Schedules**: Interactive multi-event schedules with dress code specifications, transit instructions, and active directions.
 - **Media & Slideshow Integration**: Customized background image uploads, photo slideshow galleries, and support for elegant background music tracks.
 - **No App Required**: Built on modern web technologies ensuring compatibility across any mobile and desktop browser.
 
 ## Pricing
 
-- [Pricing Details](https://varnam.co/#pricing) - One-time payment of ₹799 per premium invitation website. Free drafting, activation on payment.
+- [Pricing Details](https://varnaminvites.store/#pricing) - Transparent event licensing: Classic tier at ₹999, Premium tier at ₹1,199. Free drafting and preview, pay only to activate your live link.
 
 ## Templates Collection
 
-1. [Temple Gold Template](https://varnam.co/templates/temple-gold) - Divine temple drawing animations, floats brass lamps, Tamil Hindu aesthetics.
-2. [Traditional Red Template](https://varnam.co/templates/traditional-red) - South Indian silk textures, self-drawing Kolams, falling jasmine.
-3. [Royal Tamil Template](https://varnam.co/templates/royal-tamil) - Deep crimson design featuring custom classical Tamil visual cues.
-4. [Floral Luxury Template](https://varnam.co/templates/floral-luxury) - Destination theme, champagne gold and blush pink tones.
-5. [Modern Minimal Template](https://varnam.co/templates/modern-minimal) - Contemporary motion typography and clean beige layout.
-6. [Modern Christian Template](https://varnam.co/templates/modern-christian) - Celestial rose theme, cross transitions, string instrumentals.
-7. [Luxury Floral Template](https://varnam.co/templates/luxury-floral) - Sophisticated destination theme with organic floral designs.
-8. [Elegant Muslim Template](https://varnam.co/templates/elegant-muslim) - Emerald green and glistening gold mandalas.
+1. [Kamalam Kalyanam](https://varnaminvites.store/templates/kamalam-kalyanam) - Minimalist royal crimson wedding invitation framed with golden lotus archway, elegant typography, and smooth scroll motion.
+2. [Kovil Thirumanam](https://varnaminvites.store/templates/kovil-thirumanam) - Grand temple wedding invitation featuring carved stone architecture, sacred oil lamps, and cinematic gold foil reveal.
+3. [Kalyana Mandapam](https://varnaminvites.store/templates/kalyana-mandapam) - Palace mandapam wedding invitation with carved heritage pillars, traditional scroll timeline, and gold filigree animations.
+4. [Konaseema Kalyanam](https://varnaminvites.store/templates/konaseema-kalyanam) - River heritage wedding invitation featuring ancestral wooden doorway reveal, brass deepams, and festive courtyard celebration.
+5. [Theertha Mandapam](https://varnaminvites.store/templates/theertha-mandapam) - Serene sacred water wedding invitation adorned with royal swans, floating lotus blossoms, and traditional hanging bells.
+6. [Marigold Vizha](https://varnaminvites.store/templates/marigold-vizha) - Joyous celebration adorned with cascading marigold garlands, peacock archway motifs, and glowing terracotta lamps.
+7. [Mangala Isai](https://varnaminvites.store/templates/kadhal-editorial) - Graceful classical wedding invitation adorned with royal gold filigree archway, divine Veena and Mridangam melodies.

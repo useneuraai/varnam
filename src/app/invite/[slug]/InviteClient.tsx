@@ -19,13 +19,11 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
   const [isSubmittingRsvp, setIsSubmittingRsvp] = useState(false);
   const [rsvpCompleted, setRsvpCompleted] = useState(false);
 
-  // States for active template selection and guest wishes board
-  const [activeTemplateSlug, setActiveTemplateSlug] = useState(invitation.template_slug);
-  const [showTemplateSwitcher, setShowTemplateSwitcher] = useState(false);
+  // States for guest wishes board
   const [wishesList, setWishesList] = useState<any[]>([]);
   const [isLoadingWishes, setIsLoadingWishes] = useState(false);
 
-  const TemplateComponent = templatesMap[activeTemplateSlug] || templatesMap["royal-tamil"];
+  const TemplateComponent = templatesMap[invitation.template_slug] || templatesMap["kamalam-kalyanam"] || templatesMap["royal-tamil"];
 
   // Archived checking (5 days after event completes)
   const isArchived = new Date() > new Date(new Date(invitation.wedding_date).getTime() + 5 * 24 * 60 * 60 * 1000);
@@ -127,7 +125,7 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
         <DoorReveal
           brideName={invitation.bride_name}
           groomName={invitation.groom_name}
-          templateSlug={activeTemplateSlug}
+          templateSlug={invitation.template_slug}
           onOpen={() => setIsDoorOpened(true)}
         />
       )}
@@ -226,58 +224,7 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
         </div>
       )}
 
-      {/* Floating Template Switcher (Access to all templates for paid invites) */}
-      {isDoorOpened && invitation.is_paid && (
-        <div className="fixed bottom-24 left-6 z-50">
-          <button
-            onClick={() => setShowTemplateSwitcher(!showTemplateSwitcher)}
-            className="w-12 h-12 bg-zinc-950 border border-gold-500/40 text-gold-400 hover:text-gold-300 hover:border-gold-400 flex items-center justify-center shadow-lg transition-all rounded-full cursor-pointer hover:scale-105"
-            title="Switch Template Design"
-          >
-            <Sparkles className="w-5 h-5 text-gold-400" />
-          </button>
 
-          <AnimatePresence>
-            {showTemplateSwitcher && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                className="absolute bottom-16 left-0 bg-[#0a0a0b] border border-gold-500/20 p-4 shadow-2xl rounded-2xl w-60 max-h-72 overflow-y-auto flex flex-col gap-2 scrollbar-none"
-              >
-                <div className="border-b border-gold-500/10 pb-2 mb-1">
-                  <span className="font-cinzel text-[9px] tracking-widest text-gold-400 uppercase font-bold block">
-                    Choose Theme Design
-                  </span>
-                  <span className="font-serif text-[8px] text-gold-200/40">
-                    Switch dynamic templates on the fly
-                  </span>
-                </div>
-                {TEMPLATES.map((tpl) => {
-                  const active = activeTemplateSlug === tpl.slug;
-                  return (
-                    <button
-                      key={tpl.slug}
-                      onClick={() => {
-                        setActiveTemplateSlug(tpl.slug);
-                        setShowTemplateSwitcher(false);
-                      }}
-                      className={`w-full text-left px-3 py-2 text-xs font-montserrat tracking-wider uppercase transition-all flex items-center justify-between cursor-pointer ${
-                        active
-                          ? "bg-gold-500/10 text-gold-300 font-bold border border-gold-500/20 rounded-md"
-                          : "text-neutral-400 hover:text-gold-200 hover:bg-neutral-900 rounded-md"
-                      }`}
-                    >
-                      <span className="truncate">{tpl.name.replace(/[^a-zA-Z\s]/g, "")}</span>
-                      {active && <span className="text-[8px] text-gold-400">●</span>}
-                    </button>
-                  );
-                })}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      )}
 
       {/* Dynamic Background Music - Only play after doors open */}
       {isDoorOpened && invitation.music_enabled !== "no" && (

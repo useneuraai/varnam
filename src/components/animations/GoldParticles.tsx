@@ -78,8 +78,10 @@ export default function GoldParticles({ count = 40 }: { count?: number }) {
       }
     }
 
+    const isMobile = window.innerWidth < 768;
+    const actualCount = isMobile ? Math.min(count, 15) : count;
     const sparkles: Sparkle[] = [];
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < actualCount; i++) {
       sparkles.push(new Sparkle());
     }
 

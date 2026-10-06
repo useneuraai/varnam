@@ -23,7 +23,7 @@ const TwitterIcon = () => (
 
 export default function SocialShare() {
   const [copied, setCopied] = useState(false);
-  const shareUrl = "https://varnaminvites.store";
+  const shareUrl = "https://www.varnaminvites.store";
   const shareText = "Create premium cinematic digital wedding invitations with Varnam!";
 
   const handleCopy = async () => {

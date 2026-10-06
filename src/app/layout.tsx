@@ -33,7 +33,7 @@ import type { Viewport } from "next";
 export const metadata: Metadata = {
   title: "Varnam | Premium Cinematic Digital Wedding Invitations with RSVP",
   description: "Create premium cinematic digital wedding invitations with RSVP tracking. Easily customize luxury templates and share a WhatsApp link. Free to try — edit now!",
-  metadataBase: new URL("https://varnaminvites.store"),
+  metadataBase: new URL("https://www.varnaminvites.store"),
   alternates: {
     canonical: "/",
   },
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     title: "Varnam | Premium Cinematic Digital Wedding Invitations with RSVP",
     description: "Create premium cinematic digital wedding invitations with RSVP tracking. Easily customize luxury templates and share a WhatsApp link. Free to try — edit now!",
     type: "website",
-    url: "https://varnaminvites.store",
+    url: "https://www.varnaminvites.store",
     siteName: "Varnam",
     images: [
       {
@@ -88,7 +88,7 @@ const webAppSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Varnam",
-  "url": "https://varnaminvites.store",
+  "url": "https://www.varnaminvites.store",
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "All",
   "browserRequirements": "Requires HTML5 compatible browser",
@@ -106,8 +106,8 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Varnam",
-  "url": "https://varnaminvites.store",
-  "logo": "https://varnaminvites.store/apple-touch-icon.png",
+  "url": "https://www.varnaminvites.store",
+  "logo": "https://www.varnaminvites.store/apple-touch-icon.png",
   "description": "Craft ultra-premium, interactive, and cinematic digital wedding invitations with online RSVP, slideshows, and custom music.",
   "contactPoint": {
     "@type": "ContactPoint",
@@ -120,7 +120,7 @@ const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Varnam Wedding Invites",
-  "image": "https://varnaminvites.store/og-image.png",
+  "image": "https://www.varnaminvites.store/og-image.png",
   "telephone": "+91 7200180268",
   "email": "support@varnam.in",
   "address": {

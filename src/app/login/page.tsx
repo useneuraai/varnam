@@ -27,7 +27,7 @@ function LoginContent() {
         return window.location.origin;
       }
     }
-    return process.env.NEXT_PUBLIC_SITE_URL || "https://varnaminvites.store";
+    return process.env.NEXT_PUBLIC_SITE_URL || "https://www.varnaminvites.store";
   };
 
   // Check if already logged in, redirect to dashboard

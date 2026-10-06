@@ -8,13 +8,13 @@ const nextConfig: NextConfig = {
     SUPABASE_ANON_KEY:
       process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
     SITE_URL:
-      process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://varnaminvites.store",
+      process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://www.varnaminvites.store",
     NEXT_PUBLIC_SUPABASE_URL:
       process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "",
     NEXT_PUBLIC_SUPABASE_ANON_KEY:
       process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
     NEXT_PUBLIC_SITE_URL:
-      process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://varnaminvites.store",
+      process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://www.varnaminvites.store",
     NEXT_PUBLIC_RAZORPAY_KEY_ID:
       process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "",
   },

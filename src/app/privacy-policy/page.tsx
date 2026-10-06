@@ -27,7 +27,7 @@ export default function PrivacyPolicyPage() {
         
         <div className="prose prose-zinc text-zinc-650 space-y-6 text-sm leading-relaxed">
           <p>
-            At Varnam, accessible from https://varnaminvites.store, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Varnam and how we use it.
+            At Varnam, accessible from https://www.varnaminvites.store, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Varnam and how we use it.
           </p>
           
           <h2 className="text-lg font-bold text-zinc-900 pt-4">1. Information We Collect</h2>

@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const headersList = await headers();
-  const host = headersList.get("host") || "varnaminvites.store";
+  const host = headersList.get("host") || "www.varnaminvites.store";
   const proto = headersList.get("x-forwarded-proto") || "https";
   const baseUrl = `${proto}://${host}`;
 

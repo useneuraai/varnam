@@ -328,7 +328,7 @@ export default function LandingClient() {
 
             <p className="hidden sm:block max-w-3xl text-zinc-600 sm:text-base lg:text-lg leading-relaxed mb-8 sm:mb-10 font-normal">
               <span className="block sm:whitespace-nowrap">Varnam creates beautifully designed, interactive digital wedding invitation websites for Indian weddings.</span>
-              <span className="block sm:mt-1 sm:whitespace-nowrap">Luxury 3D South Indian temple designs with scratch cards, photos &amp; maps,</span>
+              <span className="block sm:mt-1 sm:whitespace-nowrap">Luxury 3D designs with scratch cards, photos &amp; maps,</span>
               <span className="block sm:mt-1 sm:whitespace-nowrap">ready to share with your guests instantly with a single WhatsApp link.</span>
             </p>
 

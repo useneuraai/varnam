@@ -66,7 +66,7 @@ export default function PrivacyPolicyPage() {
         <div className="flex flex-wrap gap-4 sm:gap-6 text-[11px] tracking-wider text-zinc-500 font-bold uppercase justify-center">
           <Link href="/about" className="hover:text-zinc-900 transition-colors">About</Link>
           <span>·</span>
-          <Link href="/contact" className="hover:text-zinc-900 transition-colors">Contact</Link>
+          <a href="mailto:hello@varnaminvites.store" className="hover:text-zinc-900 transition-colors">Contact</a>
           <span>·</span>
           <Link href="/terms-of-service" className="hover:text-zinc-900 transition-colors">Terms &amp; Conditions</Link>
           <span>·</span>

@@ -135,11 +135,11 @@ export default function KonaseemaKalyanamTemplate({
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Couple names & text
-  const bride = data.bride_name || "తేజస్వి";
-  const groom = data.groom_name || "ఆదిత్య";
+  const bride = data.bride_name || "Tejaswi";
+  const groom = data.groom_name || "Aditya";
   const quote =
     data.quote ||
-    "మాంగల్యం తంతునానేన మమ జీవన హేతునా | కంఠే బధ్నామి శుభగే త్వం జీవ శరదాం శతమ్ ||";
+    "Two souls united in love and blessed with lifelong joy, embarking on an eternal sacred journey.";
 
   // Audio Playback - Authentic Mangala Vaadyam (Nadaswaram)
   const [isPlaying, setIsPlaying] = useState(false);
@@ -320,17 +320,17 @@ export default function KonaseemaKalyanamTemplate({
     ctx.strokeStyle = "rgba(100, 60, 10, 0.35)";
     ctx.strokeRect(8, 8, width - 16, height - 16);
 
-    // Centered instruction text in Telugu & English
+    // Centered instruction text in English
     ctx.fillStyle = "#3e270c";
-    ctx.font = "bold 11px 'Ramabhadra', sans-serif";
+    ctx.font = "600 12px 'Cinzel', serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("✦ తాంబూలం శుభలేఖ ✦", width / 2, height / 2 - 12);
-    ctx.font = "bold 9px 'Cinzel', serif, sans-serif";
-    ctx.fillText("SWIPE TO REVEAL DATE", width / 2, height / 2 + 6);
-    ctx.font = "italic 8.5px serif";
+    ctx.fillText("✦ AUSPICIOUS INVITATION ✦", width / 2, height / 2 - 14);
+    ctx.font = "600 10px 'Cinzel', serif";
+    ctx.fillText("SWIPE TO REVEAL DATE", width / 2, height / 2 + 4);
+    ctx.font = "italic 9.5px 'Cormorant Garamond', Georgia, serif";
     ctx.fillStyle = "#5c3a12";
-    ctx.fillText("Scratch to unveil the sacred date", width / 2, height / 2 + 20);
+    ctx.fillText("Scratch to unveil the wedding date", width / 2, height / 2 + 20);
   };
 
   useEffect(() => {
@@ -454,7 +454,7 @@ export default function KonaseemaKalyanamTemplate({
   const venueLocation =
     data.gmap_coordinates ||
     data.wedding_venue ||
-    "శ్రీ గోదావరి సాంప్రదాయ నిలయం, రావులపాలెం, కోనసీమ";
+    "Godavari Riverfront Heritage Mandapam, Andhra Pradesh";
   const gmapSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     venueLocation
   )}`;
@@ -517,7 +517,7 @@ export default function KonaseemaKalyanamTemplate({
           {/* Soft atmospheric gradient */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[#121c15] pointer-events-none" />
 
-          {/* Top Telugu Heritage Emblem */}
+          {/* Top Heritage Emblem */}
           <div
             className="relative z-20 flex flex-col items-center transition-all duration-300"
             style={{
@@ -525,16 +525,16 @@ export default function KonaseemaKalyanamTemplate({
               transform: `translateY(-${scrollProgress * 35}px)`,
             }}
           >
-            <div className="flex items-center justify-center gap-2 mb-1 text-[#eed57c]">
+            <div className="flex items-center justify-center gap-2 mb-1.5 text-[#eed57c]">
               <div className="w-8 h-[1px] bg-current opacity-80" />
               <span className="text-xs">❖</span>
               <div className="w-8 h-[1px] bg-current opacity-80" />
             </div>
-            <h2 className="font-ramabhadra text-sm sm:text-base tracking-[0.25em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-              కోనసీమ కళ్యాణం
+            <h2 className="font-cinzel text-base sm:text-lg tracking-[0.25em] text-[#fff2b2] uppercase font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
+              HERITAGE COURTYARD
             </h2>
-            <span className="font-marcellus text-[9px] sm:text-[9.5px] tracking-[0.35em] text-[#eed57c] uppercase font-bold">
-              KONASEEMA KALYANAM
+            <span className="font-marcellus text-[10px] sm:text-[11px] tracking-[0.3em] text-[#eed57c] uppercase font-medium mt-0.5">
+              AN AUSPICIOUS CELEBRATION
             </span>
           </div>
 
@@ -546,31 +546,31 @@ export default function KonaseemaKalyanamTemplate({
               transform: `translateY(-${scrollProgress * 50}px)`,
             }}
           >
-            <p className="font-marcellus text-[10px] tracking-[0.32em] text-[#eed57c] uppercase font-bold mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+            <p className="font-marcellus text-xs sm:text-[13px] tracking-[0.32em] text-[#eed57c] uppercase font-semibold mb-2.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
               WE&apos;RE GETTING MARRIED
             </p>
 
             {/* Bride Name */}
-            <h1 className="font-ramabhadra text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.12em] text-[#fff9e6] uppercase leading-tight drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]">
+            <h1 className="font-cinzel text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.14em] text-[#fff9e6] uppercase leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]">
               {bride}
             </h1>
 
             {/* Weds Divider */}
-            <div className="flex items-center justify-center gap-3 my-2 w-full">
+            <div className="flex items-center justify-center gap-3 my-2.5 w-full">
               <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-              <span className="font-great-vibes text-xl sm:text-2xl text-[#eed57c] italic">
+              <span className="font-great-vibes text-2xl sm:text-3xl text-[#eed57c] italic">
                 weds
               </span>
               <div className="h-[1px] w-12 bg-gradient-to-l from-transparent via-[#eed57c] to-transparent" />
             </div>
 
             {/* Groom Name */}
-            <h1 className="font-ramabhadra text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.12em] text-[#fff9e6] uppercase leading-tight drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]">
+            <h1 className="font-cinzel text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.14em] text-[#fff9e6] uppercase leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]">
               {groom}
             </h1>
 
             {/* Wedding Date Subtitle */}
-            <p className="font-marcellus text-xs sm:text-[13px] tracking-[0.2em] text-[#faedd0] uppercase font-bold mt-2.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+            <p className="font-marcellus text-sm sm:text-base tracking-[0.2em] text-[#faedd0] uppercase font-medium mt-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
               {weddingDateInfo.weekday}, {weddingDateInfo.day} {weddingDateInfo.month} {weddingDateInfo.year}
             </p>
           </div>
@@ -613,13 +613,13 @@ export default function KonaseemaKalyanamTemplate({
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-[68%] max-w-[290px] flex flex-col items-center px-3 py-6 my-auto"
+            className="relative z-10 w-[78%] max-w-[320px] flex flex-col items-center px-3 py-6 my-auto"
           >
-            {/* Sacred Telugu Sloka in Glistening Gold */}
-            <h2 className="font-ramabhadra text-lg sm:text-xl text-[#fff9e6] font-semibold leading-relaxed tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
-              &ldquo;మాంగల్యం తంతునానేన
+            {/* Sacred Marriage Verse in Glistening Gold */}
+            <h2 className="font-cinzel text-xl sm:text-2xl text-[#fff9e6] font-semibold leading-relaxed tracking-wide drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+              &ldquo;Bound by sacred love,
               <br />
-              మమ జీవన హేతునా.&rdquo;
+              blessed for a lifetime.&rdquo;
             </h2>
 
             <motion.div
@@ -630,12 +630,12 @@ export default function KonaseemaKalyanamTemplate({
               className="w-16 h-[1px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent my-3.5"
             />
 
-            {/* Custom Telugu Quote */}
-            <p className="font-suranna text-sm sm:text-base text-[#eed57c] leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+            {/* Custom Quote in English */}
+            <p className="font-cormorant text-base sm:text-lg text-[#faedd0] leading-relaxed drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)] font-medium italic">
               {quote}
             </p>
 
-            <div className="flex items-center gap-2 mt-3.5 text-[#eed57c]/80">
+            <div className="flex items-center gap-2 mt-4 text-[#eed57c]/80">
               <div className="w-8 h-[1px] bg-current" />
               <span className="text-xs">❖</span>
               <div className="w-8 h-[1px] bg-current" />
@@ -676,7 +676,7 @@ export default function KonaseemaKalyanamTemplate({
             >
               {/* Header inside Card */}
               <div className="flex flex-col items-center pt-2">
-                <span className="font-marcellus text-[8.5px] sm:text-[9.5px] tracking-[0.24em] text-[#7a3407] font-bold uppercase drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+                <span className="font-cinzel text-[9.5px] sm:text-[10.5px] tracking-[0.24em] text-[#7a3407] font-bold uppercase drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
                   ✦ AUSPICIOUS MUHURTHAM ✦
                 </span>
                 <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#9e6b22] to-transparent mt-0.5" />
@@ -687,7 +687,7 @@ export default function KonaseemaKalyanamTemplate({
                 <div className="font-cormorant text-5xl sm:text-6xl font-bold text-[#230d02] leading-none tracking-tight drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
                   {weddingDateInfo.day}
                 </div>
-                <div className="font-marcellus text-xs sm:text-sm tracking-[0.28em] text-[#3b1704] font-bold uppercase mt-1">
+                <div className="font-cinzel text-xs sm:text-sm tracking-[0.28em] text-[#3b1704] font-bold uppercase mt-1">
                   {weddingDateInfo.month} {weddingDateInfo.year}
                 </div>
                 <div className="flex items-center gap-1.5 my-1 text-[#9e6b22]/70">
@@ -695,16 +695,16 @@ export default function KonaseemaKalyanamTemplate({
                   <span className="text-[7px]">❖</span>
                   <div className="w-4 h-[1px] bg-current" />
                 </div>
-                <div className="font-marcellus text-[9.5px] sm:text-[10.5px] text-[#4a2406] font-bold tracking-wider">
+                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#4a2406] font-semibold tracking-wider">
                   {weddingDateInfo.weekday} · {weddingDateInfo.time}
                 </div>
-                <div className="font-suranna text-[9.5px] sm:text-[10px] text-[#6b3509] font-bold mt-0.5 line-clamp-1 max-w-[140px]">
-                  {data.wedding_venue || "శ్రీ గోదావరి సాంప్రదాయ నిలయం"}
+                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#6b3509] font-semibold mt-0.5 line-clamp-1 max-w-[150px]">
+                  {data.wedding_venue || "Godavari Heritage Mandapam"}
                 </div>
               </div>
 
               {/* Bottom Tag */}
-              <div className="pb-1 text-[7.5px] tracking-[0.2em] font-marcellus text-[#8a5518] uppercase font-bold">
+              <div className="pb-1 text-[8.5px] tracking-[0.22em] font-cinzel text-[#8a5518] uppercase font-bold">
                 ❖ Save The Date ❖
               </div>
             </div>
@@ -749,9 +749,9 @@ export default function KonaseemaKalyanamTemplate({
             <button
               type="button"
               onClick={() => setIsScratched(true)}
-              className="absolute bottom-8 z-20 px-5 py-2 rounded-full bg-gradient-to-r from-[#241105] via-[#432009] to-[#241105] border border-[#eed57c] text-[#fff2b2] text-[9.5px] tracking-[0.22em] uppercase font-marcellus font-bold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.85)] cursor-pointer flex items-center gap-1.5"
+              className="absolute bottom-8 z-20 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#241105] via-[#432009] to-[#241105] border border-[#eed57c] text-[#fff2b2] text-[10.5px] tracking-[0.22em] uppercase font-cinzel font-semibold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.85)] cursor-pointer flex items-center gap-1.5"
             >
-              <Sparkles className="w-3 h-3 text-[#eed57c]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#eed57c]" />
               <span>Click To Reveal Date</span>
             </button>
           )}
@@ -774,10 +774,10 @@ export default function KonaseemaKalyanamTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 w-full max-w-[290px] sm:max-w-[310px] flex flex-col items-center py-6 px-3"
           >
-            <h3 className="font-ramabhadra text-lg sm:text-xl text-[#fff2b2] tracking-[0.15em] uppercase font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-              ముహూర్త ఘడియలు
+            <h3 className="font-cinzel text-xl sm:text-2xl text-[#fff2b2] tracking-[0.2em] uppercase font-semibold drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+              AUSPICIOUS MUHURTHAM
             </h3>
-            <span className="font-marcellus text-[9.5px] tracking-[0.22em] text-[#eed57c] uppercase font-bold mt-0.5">
+            <span className="font-marcellus text-[11px] sm:text-xs tracking-[0.24em] text-[#eed57c] uppercase font-medium mt-1">
               Counting Down to Forever
             </span>
             <GoldDivider className="my-2.5 opacity-90" />
@@ -785,10 +785,10 @@ export default function KonaseemaKalyanamTemplate({
             {/* 4 Countdown Boxes with Staggered Modern Animation */}
             <div className="grid grid-cols-2 gap-2.5 w-full mt-3">
               {[
-                { label: "DAYS (రోజులు)", value: timeLeft.days },
-                { label: "HOURS (గంటలు)", value: timeLeft.hours },
-                { label: "MINUTES (నిమిషాలు)", value: timeLeft.minutes },
-                { label: "SECONDS (సెకన్లు)", value: timeLeft.seconds },
+                { label: "DAYS", value: timeLeft.days },
+                { label: "HOURS", value: timeLeft.hours },
+                { label: "MINUTES", value: timeLeft.minutes },
+                { label: "SECONDS", value: timeLeft.seconds },
               ].map((unit, idx) => (
                 <motion.div
                   key={idx}
@@ -796,13 +796,13 @@ export default function KonaseemaKalyanamTemplate({
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.25 }}
                   transition={{ duration: 0.6, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
-                  className="py-3 px-2 rounded-xl bg-[#121f15]/90 border border-[#d4af37]/60 shadow-[0_6px_18px_rgba(0,0,0,0.6)] backdrop-blur-xs flex flex-col items-center justify-center relative overflow-hidden"
+                  className="py-3.5 px-2 rounded-xl bg-[#121f15]/90 border border-[#d4af37]/60 shadow-[0_6px_18px_rgba(0,0,0,0.6)] backdrop-blur-xs flex flex-col items-center justify-center relative overflow-hidden"
                 >
                   <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
                   <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#fff2b2] tabular-nums leading-none drop-shadow-[0_2px_6px_rgba(238,213,124,0.4)]">
                     {String(unit.value).padStart(2, "0")}
                   </span>
-                  <span className="font-marcellus text-[8.5px] tracking-[0.16em] text-[#eed57c] uppercase font-bold mt-1 text-center">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.2em] text-[#eed57c] uppercase font-semibold mt-1.5 text-center">
                     {unit.label}
                   </span>
                 </motion.div>
@@ -853,14 +853,14 @@ export default function KonaseemaKalyanamTemplate({
                 transition={{ duration: 0.6 }}
                 className="flex flex-col items-center mb-5 relative z-10"
               >
-                <span className="font-ramabhadra text-[9px] sm:text-[10px] tracking-[0.2em] text-[#7a3809] uppercase font-bold mb-0.5">
-                  ✦ కళ్యాణ మహోత్సవ క్రమము ✦
+                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#7a3809] uppercase font-bold mb-0.5">
+                  ✦ SACRED CEREMONIES ✦
                 </span>
-                <h2 className="font-marcellus text-lg sm:text-xl text-[#240e02] tracking-[0.16em] uppercase font-bold drop-shadow-[0_1px_1px_rgba(255,255,255,0.85)]">
+                <h2 className="font-cinzel text-xl sm:text-2xl text-[#240e02] tracking-[0.18em] uppercase font-bold drop-shadow-[0_1px_1px_rgba(255,255,255,0.85)]">
                   Wedding Program
                 </h2>
-                <p className="font-cormorant italic text-xs sm:text-[13px] text-[#542807] font-semibold mt-0.5">
-                  Auspicious Telugu Rituals &amp; Celebrations
+                <p className="font-cormorant italic text-sm sm:text-base text-[#542807] font-semibold mt-0.5">
+                  Auspicious Rituals &amp; Celebrations
                 </p>
                 <div className="flex items-center gap-2 mt-2 text-[#996a1a]">
                   <div className="w-8 h-[1px] bg-current" />
@@ -874,7 +874,7 @@ export default function KonaseemaKalyanamTemplate({
                 {/* Vertical connecting gold rod */}
                 <div className="absolute left-1/2 -translate-x-1/2 top-3 bottom-3 w-[1.5px] bg-gradient-to-b from-[#a8781a]/30 via-[#c99b38] to-[#a8781a]/30" />
 
-                {/* Ritual 1: Snathakam & Mangala Snanam */}
+                {/* Ritual 1: Mangala Snanam */}
                 <motion.div
                   initial={{ opacity: 0, y: 25, scale: 0.95 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -882,20 +882,20 @@ export default function KonaseemaKalyanamTemplate({
                   transition={{ duration: 0.6, ease: "easeOut" }}
                   className="relative z-10 w-full flex flex-col items-center text-center"
                 >
-                  <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#542d07] font-marcellus font-bold mb-1 ring-2 ring-[#784f18]/20">
+                  <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#542d07] font-cinzel font-bold mb-1 ring-2 ring-[#784f18]/20">
                     1
                   </div>
-                  <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.2em] text-[#783e0a] uppercase font-bold block leading-tight">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.2em] text-[#783e0a] uppercase font-bold block leading-tight">
                     MANGALA SNANAM
                   </span>
-                  <h4 className="font-ramabhadra text-sm sm:text-base font-bold text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                    స్నాతకం &amp; మంగళస్నానం
+                  <h4 className="font-marcellus text-sm sm:text-base font-semibold text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+                    Auspicious Sacred Bath &amp; Prayers
                   </h4>
-                  <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
+                  <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#240e02] font-semibold leading-tight">
                     28 Nov 2026 · 06:30 AM
                   </div>
-                  <div className="font-suranna text-xs text-[#522a07] font-semibold leading-tight mt-0.5">
-                    {data.wedding_venue || "శ్రీ గోదావరి సాంప్రదాయ నిలయం"}
+                  <div className="font-marcellus text-xs text-[#522a07] font-medium leading-tight mt-0.5">
+                    {data.wedding_venue || "Godavari Heritage Mandapam"}
                   </div>
                 </motion.div>
 
@@ -907,20 +907,20 @@ export default function KonaseemaKalyanamTemplate({
                   transition={{ duration: 0.6, ease: "easeOut" }}
                   className="relative z-10 w-full flex flex-col items-center text-center"
                 >
-                  <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#542d07] font-marcellus font-bold mb-1 ring-2 ring-[#784f18]/20">
+                  <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#542d07] font-cinzel font-bold mb-1 ring-2 ring-[#784f18]/20">
                     2
                   </div>
-                  <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.2em] text-[#783e0a] uppercase font-bold block leading-tight">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.2em] text-[#783e0a] uppercase font-bold block leading-tight">
                     PELLI VEDUKA
                   </span>
-                  <h4 className="font-ramabhadra text-sm sm:text-base font-bold text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                    పెళ్ళికూతురు &amp; పెళ్ళికొడుకు
+                  <h4 className="font-marcellus text-sm sm:text-base font-semibold text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+                    Traditional Pre-Wedding Festivities
                   </h4>
-                  <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
+                  <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#240e02] font-semibold leading-tight">
                     28 Nov 2026 · 07:30 AM
                   </div>
-                  <div className="font-suranna text-xs text-[#522a07] font-semibold leading-tight mt-0.5">
-                    {data.wedding_venue || "శ్రీ గోదావరి సాంప్రదాయ నిలయం"}
+                  <div className="font-marcellus text-xs text-[#522a07] font-medium leading-tight mt-0.5">
+                    {data.wedding_venue || "Godavari Heritage Mandapam"}
                   </div>
                 </motion.div>
 
@@ -930,22 +930,22 @@ export default function KonaseemaKalyanamTemplate({
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.25 }}
                   transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="relative z-10 w-full flex flex-col items-center text-center py-1.5 px-2 rounded-xl bg-[#8b1e1e]/10 border border-[#8b1e1e]/25"
+                  className="relative z-10 w-full flex flex-col items-center text-center py-2 px-2.5 rounded-xl bg-[#8b1e1e]/10 border border-[#8b1e1e]/25"
                 >
                   <div className="w-7 h-7 rounded-full bg-[#8b1e1e] border-2 border-[#eed57c] shadow-lg flex items-center justify-center text-xs text-[#fff2b2] font-bold mb-1 ring-2 ring-[#8b1e1e]/40">
                     ❖
                   </div>
-                  <span className="font-marcellus text-[9.5px] sm:text-[10.5px] tracking-[0.24em] text-[#8b1e1e] uppercase font-bold block leading-tight">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#8b1e1e] uppercase font-bold block leading-tight">
                     SACRED TELUGU MUHURTHAM
                   </span>
-                  <h4 className="font-ramabhadra text-base sm:text-lg font-bold text-[#5c1d0e] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                    జీలకర్ర బెల్లం &amp; మాంగల్యధారణ
+                  <h4 className="font-cinzel text-base sm:text-lg font-bold text-[#5c1d0e] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+                    Jeelakarra Bellam &amp; Mangalyadharana
                   </h4>
-                  <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#240307] font-bold leading-tight">
+                  <div className="mt-0.5 font-cormorant text-base sm:text-lg text-[#240307] font-bold leading-tight">
                     {weddingDateInfo.day} {weddingDateInfo.month} · {weddingDateInfo.time}
                   </div>
-                  <div className="font-suranna text-xs sm:text-[13px] text-[#8b1e1e] font-bold leading-tight mt-0.5">
-                    {data.wedding_venue || "శ్రీ గోదావరి సాంప్రదాయ నిలయం"}
+                  <div className="font-marcellus text-xs sm:text-[13px] text-[#8b1e1e] font-semibold leading-tight mt-0.5">
+                    {data.wedding_venue || "Godavari Heritage Mandapam"}
                   </div>
                 </motion.div>
 
@@ -957,20 +957,20 @@ export default function KonaseemaKalyanamTemplate({
                   transition={{ duration: 0.6, ease: "easeOut" }}
                   className="relative z-10 w-full flex flex-col items-center text-center"
                 >
-                  <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#542d07] font-marcellus font-bold mb-1 ring-2 ring-[#784f18]/20">
+                  <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#542d07] font-cinzel font-bold mb-1 ring-2 ring-[#784f18]/20">
                     4
                   </div>
-                  <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.2em] text-[#783e0a] uppercase font-bold block leading-tight">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.2em] text-[#783e0a] uppercase font-bold block leading-tight">
                     TALAMBRALU &amp; VINDU
                   </span>
-                  <h4 className="font-ramabhadra text-sm sm:text-base font-bold text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                    తలంబ్రాలు &amp; గోదావరి విందు
+                  <h4 className="font-marcellus text-sm sm:text-base font-semibold text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+                    Sacred Rice Ceremony &amp; Grand Feast
                   </h4>
-                  <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
+                  <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#240e02] font-semibold leading-tight">
                     28 Nov 2026 · 12:30 PM
                   </div>
-                  <div className="font-suranna text-xs text-[#522a07] font-semibold leading-tight mt-0.5">
-                    {data.wedding_venue || "శ్రీ గోదావరి సాంప్రదాయ నిలయం"}
+                  <div className="font-marcellus text-xs text-[#522a07] font-medium leading-tight mt-0.5">
+                    {data.wedding_venue || "Godavari Heritage Mandapam"}
                   </div>
                 </motion.div>
               </div>
@@ -1004,11 +1004,11 @@ export default function KonaseemaKalyanamTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="w-full flex flex-col items-center z-15"
           >
-            <h2 className="font-ramabhadra text-xl sm:text-2xl text-[#1a0f07] tracking-[0.15em] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]">
-              మధుర స్మృతులు
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#1a0f07] tracking-[0.2em] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]">
+              SWEET MOMENTS
             </h2>
-            <p className="font-cormorant italic text-xs sm:text-sm text-[#4a2e12] font-semibold mb-6 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
-              Glimpses of our journey together along the Godavari
+            <p className="font-cormorant italic text-sm sm:text-base text-[#4a2e12] font-semibold mb-6 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
+              Cherished glimpses of our beautiful journey together
             </p>
 
             {/* Grand Borderless Photo Slideshow */}
@@ -1125,11 +1125,11 @@ export default function KonaseemaKalyanamTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-15 w-full max-w-[320px] sm:max-w-[340px] flex flex-col items-center"
           >
-            <h2 className="font-ramabhadra text-xl sm:text-2xl text-[#1a0f07] tracking-[0.18em] uppercase font-bold mb-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
-              కళ్యాణ వేదిక
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#1a0f07] tracking-[0.2em] uppercase font-bold mb-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
+              WEDDING VENUE
             </h2>
-            <p className="font-cormorant italic text-xs sm:text-sm text-[#4a2e12] font-semibold mb-4 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
-              Wedding Venue &amp; Navigation
+            <p className="font-cormorant italic text-sm sm:text-base text-[#4a2e12] font-semibold mb-4 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
+              Location &amp; Directions
             </p>
 
             <div className="w-full flex flex-col items-center">
@@ -1137,7 +1137,7 @@ export default function KonaseemaKalyanamTemplate({
               <div className="relative w-full aspect-square rounded-2xl overflow-hidden border-2 border-[#eed57c] shadow-[0_15px_40px_rgba(0,0,0,0.65)] bg-[#150d06]">
                 {/* Map top bar */}
                 <div className="absolute top-0 inset-x-0 z-10 px-3 py-1.5 flex items-center justify-between text-xs bg-black/80 backdrop-blur-md border-b border-[#eed57c]/40">
-                  <span className="font-marcellus text-[9.5px] tracking-wider uppercase font-bold text-[#fff2b2] flex items-center gap-1">
+                  <span className="font-cinzel text-[10px] tracking-wider uppercase font-semibold text-[#fff2b2] flex items-center gap-1">
                     <MapPin className="w-3 h-3 text-[#eed57c]" />
                     Interactive Map
                   </span>
@@ -1145,7 +1145,7 @@ export default function KonaseemaKalyanamTemplate({
                     href={gmapSearchUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[9.5px] font-marcellus tracking-wider uppercase font-bold text-[#eed57c] hover:underline flex items-center gap-1"
+                    className="text-[10px] font-cinzel tracking-wider uppercase font-semibold text-[#eed57c] hover:underline flex items-center gap-1"
                   >
                     <span>View Larger</span>
                     <ExternalLink className="w-2.5 h-2.5" />
@@ -1156,17 +1156,17 @@ export default function KonaseemaKalyanamTemplate({
                   {isPreview ? (
                     <div className="w-full h-full flex flex-col items-center justify-center bg-black/85 text-center p-4">
                       <MapPin className="w-8 h-8 text-[#eed57c] mb-2 animate-bounce" />
-                      <span className="font-ramabhadra text-base text-[#fff2b2] font-bold">
-                        {data.wedding_venue || "శ్రీ గోదావరి సాంప్రదాయ నిలయం"}
+                      <span className="font-cinzel text-base sm:text-lg text-[#fff2b2] font-semibold">
+                        {data.wedding_venue || "Godavari Heritage Mandapam"}
                       </span>
-                      <span className="font-suranna text-xs sm:text-sm text-[#eed57c]/90 mt-1 max-w-[220px]">
-                        {data.wedding_venue || "రావులపాలెం, కోనసీమ జిల్లా, ఆంధ్రప్రదేశ్"}
+                      <span className="font-marcellus text-xs sm:text-sm text-[#eed57c]/90 mt-1 max-w-[240px]">
+                        {data.wedding_venue || "Riverfront Heritage Road, Konaseema, Andhra Pradesh"}
                       </span>
                       <a
                         href={gmapSearchUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-3 px-4 py-1.5 rounded-full bg-[#eed57c]/20 border border-[#eed57c]/60 text-[#eed57c] text-[9.5px] font-marcellus font-bold uppercase tracking-widest hover:bg-[#eed57c] hover:text-black transition"
+                        className="mt-3 px-4 py-1.5 rounded-full bg-[#eed57c]/20 border border-[#eed57c]/60 text-[#eed57c] text-[10px] font-cinzel font-semibold uppercase tracking-widest hover:bg-[#eed57c] hover:text-black transition"
                       >
                         Open in Maps ↗
                       </a>
@@ -1191,17 +1191,17 @@ export default function KonaseemaKalyanamTemplate({
                   <div className="w-6 h-[1px] bg-current opacity-60" />
                 </div>
 
-                <h3 className="font-ramabhadra text-base sm:text-lg font-bold text-[#fff2b2] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                  {data.wedding_venue || "శ్రీ గోదావరి సాంప్రదాయ నిలయం"}
+                <h3 className="font-cinzel text-base sm:text-lg font-semibold text-[#fff2b2] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
+                  {data.wedding_venue || "Godavari Heritage Mandapam"}
                 </h3>
-                <p className="font-suranna text-xs sm:text-[13px] text-[#faedd0] mt-1 leading-relaxed max-w-[280px]">
-                  {data.wedding_venue || "వశిష్ట గోదావరి తీరం, రావులపాలెం, కోనసీమ జిల్లా, ఆంధ్రప్రదేశ్"}
+                <p className="font-marcellus text-xs sm:text-[13px] text-[#faedd0] mt-1.5 leading-relaxed max-w-[280px]">
+                  {data.wedding_venue || "Riverfront Heritage Mandapam, Konaseema, Andhra Pradesh"}
                 </p>
                 <a
                   href={gmapSearchUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3.5 inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#c59b27] text-[#1c0f05] font-marcellus text-xs font-bold uppercase tracking-wider hover:brightness-110 active:scale-98 transition shadow-[0_4px_15px_rgba(212,175,55,0.4)] cursor-pointer"
+                  className="mt-3.5 inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#c59b27] text-[#1c0f05] font-cinzel text-xs font-bold uppercase tracking-wider hover:brightness-110 active:scale-98 transition shadow-[0_4px_15px_rgba(212,175,55,0.4)] cursor-pointer"
                 >
                   <Navigation className="w-3.5 h-3.5 fill-[#1c0f05]" />
                   <span>Get Directions</span>
@@ -1233,12 +1233,12 @@ export default function KonaseemaKalyanamTemplate({
               {/* Top Inner Gold Accent Line */}
               <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
 
-              <h2 className="font-ramabhadra text-xl sm:text-2xl text-[#fff2b2] tracking-[0.2em] uppercase font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-                శుభాకాంక్షలు &amp; RSVP
+              <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.2em] uppercase font-semibold drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+                BLESSINGS &amp; RSVP
               </h2>
               <GoldDivider className="my-2 opacity-90" />
-              <p className="font-suranna text-sm text-[#faeed3] mb-4 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
-                తమ రాకను తెలియజేసి మమ్ములను ఆనందింపజేయండి
+              <p className="font-cormorant text-base sm:text-lg text-[#faeed3] mb-4 drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)] font-medium italic">
+                Please grace our celebration with your presence &amp; blessings
               </p>
 
               {rsvpSaved ? (
@@ -1246,13 +1246,13 @@ export default function KonaseemaKalyanamTemplate({
                   <div className="w-10 h-10 rounded-full bg-[#eed57c]/20 border-2 border-[#eed57c] flex items-center justify-center mx-auto mb-2 text-[#eed57c] shadow-md">
                     <Check className="w-5 h-5 stroke-[3]" />
                   </div>
-                  <h4 className="font-ramabhadra text-sm text-[#fff2b2] uppercase tracking-wider font-bold">
-                    {rsvpStatus === "attending" ? "ధన్యవాదములు!" : "సందేశం అందినది"}
+                  <h4 className="font-cinzel text-base text-[#fff2b2] uppercase tracking-wider font-semibold">
+                    {rsvpStatus === "attending" ? "Thank You!" : "Response Received"}
                   </h4>
-                  <p className="font-suranna text-xs sm:text-sm text-[#faedd0] mt-1.5 leading-relaxed">
+                  <p className="font-cormorant text-sm sm:text-base text-[#faedd0] mt-1.5 leading-relaxed font-medium">
                     {rsvpStatus === "attending"
-                      ? "తమ రాకకై మరియు అమూల్యమైన ఆశీస్సులకై ఎదురుచూచుచున్నాము."
-                      : "తమ ఆశీస్సులు ఎల్లప్పుడూ మాతోనే ఉంటాయని భావిస్తున్నాము."}
+                      ? "We eagerly look forward to celebrating with you and receiving your sacred blessings."
+                      : "Thank you for sending your heartfelt wishes and warm blessings."}
                   </p>
                 </div>
               ) : (
@@ -1262,27 +1262,27 @@ export default function KonaseemaKalyanamTemplate({
                     <button
                       type="button"
                       onClick={() => setRsvpStatus("attending")}
-                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-marcellus text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
+                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
                         rsvpStatus === "attending"
                           ? "bg-gradient-to-r from-[#eed57c] to-[#c59a3f] text-[#1c0f05] border-2 border-white ring-2 ring-[#eed57c]/50 scale-[1.02]"
                           : "bg-[#251508]/85 text-[#faedd0] hover:bg-[#341d0b] border border-[#eed57c]/50"
                       }`}
                     >
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
-                      <span>విచ్చేస్తాము</span>
+                      <span>Attending</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setRsvpStatus("declined")}
-                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-marcellus text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
+                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
                         rsvpStatus === "declined"
                           ? "bg-[#541217] text-[#ffe4e6] border-2 border-[#f87171] ring-2 ring-[#f87171]/40 scale-[1.02]"
                           : "bg-[#251508]/85 text-[#faedd0]/80 hover:bg-[#341d0b] border border-[#eed57c]/50"
                       }`}
                     >
                       <X className="w-3.5 h-3.5 stroke-[2.5]" />
-                      <span>రాలేకపోతున్నాము</span>
+                      <span>Declining</span>
                     </button>
                   </div>
 
@@ -1294,32 +1294,32 @@ export default function KonaseemaKalyanamTemplate({
                       className="w-full space-y-3 text-left mt-1"
                     >
                       <div>
-                        <label className="block text-[10px] tracking-[0.2em] font-marcellus text-[#eed57c] uppercase font-bold mb-1">
-                          అతిథుల పేర్లు (Guest Name)
+                        <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#eed57c] uppercase font-semibold mb-1">
+                          Guest / Family Name
                         </label>
                         <input
                           type="text"
                           value={guestName}
                           onChange={(e) => setGuestName(e.target.value)}
-                          placeholder="ఉదాహరణ: సుందరం & కుటుంబం"
-                          className="w-full px-3 py-2 rounded-xl bg-black/75 border-2 border-[#eed57c]/50 text-xs sm:text-sm text-[#fff9e6] placeholder-[#faedd0]/60 font-cormorant focus:outline-none focus:border-[#eed57c] focus:ring-1 focus:ring-[#eed57c]"
+                          placeholder="e.g. Sundaram & Family"
+                          className="w-full px-3 py-2 rounded-xl bg-black/75 border-2 border-[#eed57c]/50 text-sm text-[#fff9e6] placeholder-[#faedd0]/60 font-cormorant focus:outline-none focus:border-[#eed57c] focus:ring-1 focus:ring-[#eed57c]"
                         />
                       </div>
 
                       {rsvpStatus === "attending" && (
                         <div>
-                          <label className="block text-[10px] tracking-[0.2em] font-marcellus text-[#eed57c] uppercase font-bold mb-1">
-                            హాజరయ్యే వ్యక్తుల సంఖ్య
+                          <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#eed57c] uppercase font-semibold mb-1">
+                            Number of Guests
                           </label>
                           <select
                             value={guestCount}
                             onChange={(e) => setGuestCount(e.target.value)}
-                            className="w-full px-3 py-2 rounded-xl bg-[#1c1006] border-2 border-[#eed57c]/50 text-xs sm:text-sm text-[#fff9e6] font-cormorant focus:outline-none focus:border-[#eed57c]"
+                            className="w-full px-3 py-2 rounded-xl bg-[#1c1006] border-2 border-[#eed57c]/50 text-sm text-[#fff9e6] font-cormorant focus:outline-none focus:border-[#eed57c]"
                           >
-                            <option value="1">1 వ్యక్తి (1 Person)</option>
-                            <option value="2">2 వ్యక్తులు (2 Persons)</option>
-                            <option value="3">3 వ్యక్తులు (3 Persons)</option>
-                            <option value="4+">కుటుంబం (4+ Persons)</option>
+                            <option value="1">1 Guest</option>
+                            <option value="2">2 Guests</option>
+                            <option value="3">3 Guests</option>
+                            <option value="4+">Family (4+ Guests)</option>
                           </select>
                         </div>
                       )}
@@ -1327,9 +1327,9 @@ export default function KonaseemaKalyanamTemplate({
                       <button
                         type="button"
                         onClick={() => setRsvpSaved(true)}
-                        className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#eed57c] via-[#f5e6a8] to-[#c59a3f] text-[#1c0f05] font-marcellus text-xs uppercase font-bold tracking-[0.2em] hover:brightness-110 active:scale-98 transition shadow-[0_4px_16px_rgba(238,213,124,0.4)] cursor-pointer mt-1"
+                        className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#eed57c] via-[#f5e6a8] to-[#c59a3f] text-[#1c0f05] font-cinzel text-xs uppercase font-bold tracking-[0.2em] hover:brightness-110 active:scale-98 transition shadow-[0_4px_16px_rgba(238,213,124,0.4)] cursor-pointer mt-1"
                       >
-                        నిర్ధారించండి (Confirm Response)
+                        Confirm RSVP
                       </button>
                     </motion.div>
                   )}
@@ -1342,7 +1342,7 @@ export default function KonaseemaKalyanamTemplate({
                         className="inline-flex items-center gap-1.5 text-xs text-[#eed57c] hover:text-[#fff2b2] font-semibold transition"
                       >
                         <Phone className="w-3.5 h-3.5" />
-                        <span>సంప్రదించవలసిన నంబర్: {data.rsvp_phone}</span>
+                        <span className="font-marcellus tracking-wider">RSVP Helpline: {data.rsvp_phone}</span>
                       </a>
                     </div>
                   )}
@@ -1369,10 +1369,10 @@ export default function KonaseemaKalyanamTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-15 w-full max-w-[320px] flex flex-col items-center px-4 py-6 rounded-3xl bg-black/45 backdrop-blur-[2px] border border-[#eed57c]/30 shadow-[0_12px_40px_rgba(0,0,0,0.7)]"
           >
-            <span className="font-suranna text-sm sm:text-base text-[#eed57c] block mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-              శ్రీరస్తు • శుభమస్తు • కళ్యాణమస్తు
+            <span className="font-cinzel text-xs sm:text-sm tracking-[0.25em] text-[#eed57c] block mb-1 uppercase font-semibold drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)]">
+              LOVE • TRADITION • ETERNITY
             </span>
-            <h4 className="font-great-vibes text-5xl sm:text-6xl text-[#fff9e6] drop-shadow-[0_4px_16px_rgba(0,0,0,1)] tracking-wide leading-tight">
+            <h4 className="font-great-vibes text-5xl sm:text-6xl text-[#fff9e6] drop-shadow-[0_3px_12px_rgba(0,0,0,0.8)] tracking-wide leading-tight">
               {bride} &amp; {groom}
             </h4>
 
@@ -1383,8 +1383,8 @@ export default function KonaseemaKalyanamTemplate({
             </div>
 
             {data.family_names && (
-              <p className="font-suranna text-xs sm:text-[13px] tracking-[0.1em] text-[#faedd0] font-bold my-1 text-center drop-shadow-[0_2px_6px_rgba(0,0,0,1)] leading-relaxed">
-                ఆహ్వానించువారు: {data.family_names}
+              <p className="font-marcellus text-xs sm:text-sm tracking-[0.14em] text-[#faedd0] font-semibold my-1 text-center drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] leading-relaxed uppercase">
+                Warmly Invited By: {data.family_names}
               </p>
             )}
 

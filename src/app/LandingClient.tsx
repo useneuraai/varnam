@@ -197,7 +197,8 @@ export default function LandingClient() {
         {/* Premium Header */}
         <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-zinc-100">
           <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 group">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <img src="/logo.png" alt="Varnam" className="w-7 h-7 sm:w-8 sm:h-8 object-contain" />
               <span className="text-2xl md:text-3xl font-black tracking-widest text-zinc-900 group-hover:opacity-80 transition-opacity">
                 VARNAM
               </span>
@@ -852,88 +853,6 @@ export default function LandingClient() {
           </div>
         </section>
 
-        {/* Semantic SEO & Narrative Section */}
-        <section className="py-16 sm:py-24 px-4 sm:px-6 bg-white border-t border-zinc-150 relative z-10">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-              <span className="text-[11px] sm:text-xs font-bold tracking-[0.18em] text-[#916710] uppercase">
-                Modern Celebrations • Timeless Heritage
-              </span>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900 font-serif">
-                Interactive Digital Wedding Invitations for Indian Weddings
-              </h2>
-              <p className="mt-4 text-sm sm:text-base text-zinc-650 leading-relaxed font-normal">
-                Varnam Invites redefines traditional wedding invitations by transforming wedding cards into immersive, interactive wedding website experiences. From authentic South Indian temple architecture to palace mandapams and royal floral themes, every template is crafted with cinematic attention to detail.
-              </p>
-              <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-full" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              <div className="bg-zinc-50/80 border border-zinc-200/80 p-6 sm:p-8 rounded-[22px] flex flex-col justify-between">
-                <div>
-                  <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-[#916710] font-serif font-bold text-lg mb-4">
-                    01
-                  </div>
-                  <h3 className="text-lg font-bold font-serif text-zinc-900 mb-2">
-                    Cinematic Indian Cultural Themes
-                  </h3>
-                  <p className="text-xs sm:text-sm text-zinc-650 leading-relaxed mb-4">
-                    Choose from handcrafted designs honoring cultural traditions — including carved stone temple mandapams, royal crimson lotus archways, Konaseema riverfront heritage, Chettinad palace doorways, and festive marigold vizha ceremonies.
-                  </p>
-                </div>
-                <Link
-                  href="/templates"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#916710] hover:text-[#73510c] uppercase tracking-wider mt-2 group"
-                >
-                  Explore Collection
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-
-              <div className="bg-zinc-50/80 border border-zinc-200/80 p-6 sm:p-8 rounded-[22px] flex flex-col justify-between">
-                <div>
-                  <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-[#916710] font-serif font-bold text-lg mb-4">
-                    02
-                  </div>
-                  <h3 className="text-lg font-bold font-serif text-zinc-900 mb-2">
-                    Instant WhatsApp Sharing &amp; Real-Time RSVP
-                  </h3>
-                  <p className="text-xs sm:text-sm text-zinc-650 leading-relaxed mb-4">
-                    Send your customized wedding website link directly on WhatsApp, Instagram, or SMS. Guests open the invite instantly in their browser without downloading any apps. Collect headcounts, dietary notes, and heartfelt guestbook wishes directly in your live host dashboard.
-                  </p>
-                </div>
-                <Link
-                  href="/templates/kovil-thirumanam"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#916710] hover:text-[#73510c] uppercase tracking-wider mt-2 group"
-                >
-                  View Sample Temple Invite
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-
-              <div className="bg-zinc-50/80 border border-zinc-200/80 p-6 sm:p-8 rounded-[22px] flex flex-col justify-between">
-                <div>
-                  <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-[#916710] font-serif font-bold text-lg mb-4">
-                    03
-                  </div>
-                  <h3 className="text-lg font-bold font-serif text-zinc-900 mb-2">
-                    Interactive Maps, Music &amp; Photo Galleries
-                  </h3>
-                  <p className="text-xs sm:text-sm text-zinc-650 leading-relaxed mb-4">
-                    Guide your family and friends effortlessly with integrated Google Maps directions, multi-event schedules (Muhurtham, Reception, Sangeet), custom background music, and high-definition photo slideshows that celebrate your love story.
-                  </p>
-                </div>
-                <Link
-                  href="/templates/kamalam-kalyanam"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#916710] hover:text-[#73510c] uppercase tracking-wider mt-2 group"
-                >
-                  View Crimson Lotus Invite
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Accordion FAQ Section */}
         <FAQSection />
@@ -946,9 +865,12 @@ export default function LandingClient() {
         <footer className="w-full py-10 sm:py-12 px-4 sm:px-6 border-t border-zinc-150 bg-[#fafaf9] z-10">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
             <div className="flex flex-col items-center md:items-start gap-1">
-              <span className="text-lg font-black tracking-widest text-zinc-900">
-                VARNAM
-              </span>
+              <div className="flex items-center gap-2">
+                <img src="/logo.png" alt="Varnam" className="w-6 h-6 object-contain" />
+                <span className="text-lg font-black tracking-widest text-zinc-900">
+                  VARNAM
+                </span>
+              </div>
               <p className="text-xs text-zinc-600 max-w-sm mt-2 leading-relaxed text-center md:text-left">
                 Ultra-premium, cinematic digital wedding invitation websites. Exquisite interactive e-invites with RSVP, custom music, maps, and guest message walls for modern couples.
               </p>

@@ -802,9 +802,9 @@ export default function MayuraPalaceTemplate({
         <section className="relative w-full py-16 px-6 text-center flex flex-col items-center justify-center bg-[#f7fafb] overflow-hidden select-none">
           <SectionSeam />
 
-          {/* Blue Flower Garlands on Sides */}
-          <SideBlueFloralFlourish side="left" className="top-12" />
-          <SideBlueFloralFlourish side="right" className="top-12" />
+          {/* Blue Flower Garlands on Sides (Tucked Behind Margins) */}
+          <SideBlueFloralFlourish side="left" className="top-2 -left-2 z-0 opacity-35 w-10 sm:w-12" />
+          <SideBlueFloralFlourish side="right" className="top-2 -right-2 z-0 opacity-35 w-10 sm:w-12" />
 
           {/* Dynamic Peacock & Hydrangea Shower Effect */}
           <PeacockAndPetalsShower trigger={triggerShower} />
@@ -917,9 +917,7 @@ export default function MayuraPalaceTemplate({
         <section className="relative w-full py-16 px-6 text-center flex flex-col items-center justify-center bg-[#f0f5f7] overflow-hidden">
           <SectionSeam />
 
-          {/* Blue Flower Garlands on Sides */}
-          <SideBlueFloralFlourish side="left" className="top-10" />
-          <SideBlueFloralFlourish side="right" className="top-10" />
+
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -958,19 +956,17 @@ export default function MayuraPalaceTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 5. INTERACTIVE WEDDING ITINERARY: BANQUET PAVILION FRAME              */}
+        {/* 5. INTERACTIVE WEDDING ITINERARY: PROGRAM TIMELINE                    */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[790px] py-18 px-5 text-center flex flex-col items-center justify-center bg-cover bg-center overflow-hidden"
+          className="relative w-full py-18 px-5 text-center flex flex-col items-center justify-center bg-[#f0f6fa] overflow-hidden"
           style={{
-            backgroundImage: "url('/images/mayura-palace/garden_banquet_pavilion.jpg')",
+            backgroundImage: "radial-gradient(ellipse at top, #f6fafd 0%, #e3edf5 100%)",
           }}
         >
           <SectionSeam />
 
-          {/* Blue Flower Garlands on Sides */}
-          <SideBlueFloralFlourish side="left" className="top-12" />
-          <SideBlueFloralFlourish side="right" className="top-12" />
+
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -1069,9 +1065,7 @@ export default function MayuraPalaceTemplate({
         <section className="relative w-full py-18 px-4 text-center flex flex-col items-center justify-center bg-[#f0f5f7] overflow-hidden">
           <SectionSeam />
 
-          {/* Blue Flower Garlands on Sides */}
-          <SideBlueFloralFlourish side="left" className="top-12" />
-          <SideBlueFloralFlourish side="right" className="top-12" />
+
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -1183,9 +1177,7 @@ export default function MayuraPalaceTemplate({
         >
           <SectionSeam />
 
-          {/* Blue Flower Garlands on Sides */}
-          <SideBlueFloralFlourish side="left" className="top-10" />
-          <SideBlueFloralFlourish side="right" className="top-10" />
+          
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -1246,14 +1238,16 @@ export default function MayuraPalaceTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 8. RSVP DESK + WHATSAPP SHARE OPTION                                  */}
+        {/* 8. RSVP DESK + WHATSAPP SHARE OPTION (LIGHT BLUE HYDRANGEA TONE)      */}
         {/* ===================================================================== */}
-        <section className="relative w-full py-18 px-6 text-center flex flex-col items-center justify-center bg-[#f7fafb] overflow-hidden">
+        <section
+          className="relative w-full py-18 px-6 text-center flex flex-col items-center justify-center overflow-hidden"
+          style={{
+            backgroundColor: "#d8e7f3",
+            backgroundImage: "radial-gradient(ellipse at top, #e4eff8 0%, #cee1f0 100%)",
+          }}
+        >
           <SectionSeam />
-
-          {/* Blue Flower Garlands on Sides */}
-          <SideBlueFloralFlourish side="left" className="top-12" />
-          <SideBlueFloralFlourish side="right" className="top-12" />
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}

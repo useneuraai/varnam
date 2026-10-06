@@ -1,14 +1,10 @@
 import { MetadataRoute } from "next";
 import { TEMPLATES } from "@/lib/templates";
-import { headers } from "next/headers";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const headersList = await headers();
-  const host = headersList.get("host") || "www.varnaminvites.store";
-  const proto = headersList.get("x-forwarded-proto") || "https";
-  const baseUrl = `${proto}://${host}`;
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = "https://www.varnaminvites.store";
 
-  // Static routes
+  // Public static routes
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -19,23 +15,53 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${baseUrl}/templates`,
       lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/terms-of-service`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/privacy-policy`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/refund-policy`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
     },
     {
       url: `${baseUrl}/login`,
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 0.5,
+      priority: 0.4,
     },
   ];
 
-  // Dynamic template details routes
+  // Dynamic template preview & landing routes
   const templateRoutes: MetadataRoute.Sitemap = TEMPLATES.map((tpl) => ({
     url: `${baseUrl}/templates/${tpl.slug}`,
     lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.7,
+    changeFrequency: "weekly",
+    priority: 0.8,
   }));
 
   return [...staticRoutes, ...templateRoutes];

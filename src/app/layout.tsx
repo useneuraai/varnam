@@ -31,49 +31,57 @@ const greatVibes = Great_Vibes({
 import type { Viewport } from "next";
 
 export const metadata: Metadata = {
-  title: "Varnam | Premium Cinematic Digital Wedding Invitations with RSVP",
-  description: "Create premium cinematic digital wedding invitations with RSVP tracking. Easily customize luxury templates and share a WhatsApp link. Free to try — edit now!",
   metadataBase: new URL("https://www.varnaminvites.store"),
-  alternates: {
-    canonical: "/",
+  title: {
+    default: "Varnam Invites | Premium Digital Wedding Invitations",
+    template: "%s | Varnam Invites",
   },
+  description:
+    "Create beautiful, interactive digital wedding invitations with Varnam Invites. Premium wedding invitation websites for Indian weddings, designed to share beautifully with family and friends.",
   keywords: [
+    "Varnam Invites",
+    "Varnam",
     "digital wedding invitation",
-    "online wedding invite",
-    "cinematic wedding invitation",
-    "premium wedding invite",
-    "interactive wedding card",
-    "luxury wedding card",
-    "whatsapp wedding invitation",
+    "online wedding invitation",
+    "wedding invitation website",
+    "Indian wedding invitation",
+    "digital wedding invite",
+    "premium wedding invitation",
+    "wedding website India",
   ],
+  alternates: {
+    canonical: "https://www.varnaminvites.store",
+  },
   robots: {
     index: true,
     follow: true,
   },
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
   openGraph: {
-    title: "Varnam | Premium Cinematic Digital Wedding Invitations with RSVP",
-    description: "Create premium cinematic digital wedding invitations with RSVP tracking. Easily customize luxury templates and share a WhatsApp link. Free to try — edit now!",
     type: "website",
     url: "https://www.varnaminvites.store",
-    siteName: "Varnam",
+    siteName: "Varnam Invites",
+    title: "Varnam Invites | Premium Digital Wedding Invitations",
+    description:
+      "Premium interactive digital wedding invitation websites for modern Indian weddings.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Varnam - Premium Cinematic Wedding Invitations",
+        alt: "Varnam Invites - Premium Digital Wedding Invitations",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Varnam | Premium Cinematic Wedding Invitations",
-    description: "Create premium cinematic digital wedding invitations with RSVP tracking. Easily customize luxury templates and share a WhatsApp link. Free to try — edit now!",
-    images: ["/og-image.png"],
+    title: "Varnam Invites | Premium Digital Wedding Invitations",
+    description:
+      "Premium interactive digital wedding invitations for Indian weddings.",
+    images: ["/og-image.jpg"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 
@@ -84,10 +92,22 @@ export const viewport: Viewport = {
 
 import SmoothScroll from "@/components/animations/SmoothScroll";
 
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Varnam Invites",
+  url: "https://www.varnaminvites.store",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://www.varnaminvites.store/templates?q={search_term_string}",
+    "query-input": "required name=search_term_string",
+  },
+};
+
 const webAppSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Varnam",
+  "name": "Varnam Invites",
   "url": "https://www.varnaminvites.store",
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "All",
@@ -105,22 +125,26 @@ const webAppSchema = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Varnam",
-  "url": "https://www.varnaminvites.store",
-  "logo": "https://www.varnaminvites.store/apple-touch-icon.png",
-  "description": "Craft ultra-premium, interactive, and cinematic digital wedding invitations with online RSVP, slideshows, and custom music.",
-  "contactPoint": {
+  name: "Varnam Invites",
+  alternateName: ["Varnam", "Varnam Wedding Invites"],
+  url: "https://www.varnaminvites.store",
+  logo: "https://www.varnaminvites.store/logo.png",
+  description: "Premium digital wedding invitation websites for Indian weddings.",
+  sameAs: ["https://www.instagram.com/varnaminvites"],
+  contactPoint: {
     "@type": "ContactPoint",
-    "telephone": "+91-98765-43210",
-    "contactType": "customer service"
-  }
+    telephone: "+91 7200180268",
+    contactType: "customer service",
+    areaServed: "IN",
+    availableLanguage: ["English", "Tamil", "Hindi", "Telugu"],
+  },
 };
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Varnam Wedding Invites",
-  "image": "https://www.varnaminvites.store/og-image.png",
+  "image": "https://www.varnaminvites.store/og-image.jpg",
   "telephone": "+91 7200180268",
   "email": "support@varnam.in",
   "address": {
@@ -157,6 +181,10 @@ export default function RootLayout({
         suppressHydrationWarning
         className="bg-[#080708] text-[#fbf6df] selection:bg-[#d4a325] selection:text-[#080708]"
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}

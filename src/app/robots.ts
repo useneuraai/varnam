@@ -1,18 +1,12 @@
-import { MetadataRoute } from "next";
-import { headers } from "next/headers";
+import type { MetadataRoute } from "next";
 
-export default async function robots(): Promise<MetadataRoute.Robots> {
-  const headersList = await headers();
-  const host = headersList.get("host") || "www.varnaminvites.store";
-  const proto = headersList.get("x-forwarded-proto") || "https";
-  const baseUrl = `${proto}://${host}`;
-
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: ["/", "/templates", "/login"],
-      disallow: ["/dashboard", "/editor", "/admin", "/api", "/success", "/invite"],
+      allow: "/",
+      disallow: ["/admin/", "/dashboard/", "/editor/", "/api/", "/success/", "/invite/"],
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: "https://www.varnaminvites.store/sitemap.xml",
   };
 }

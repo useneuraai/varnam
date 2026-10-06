@@ -29,7 +29,6 @@ import {
 import { TEMPLATES } from "@/lib/templates";
 import LiveTemplatePreview from "@/components/LiveTemplatePreview";
 import { supabase } from "@/lib/supabase";
-import SocialShare from "@/components/SocialShare";
 
 // Helpers for the carousel indices
 const getWrappedOffset = (index: number, activeIndex: number, total: number) => {
@@ -840,19 +839,19 @@ export default function LandingClient() {
             </div>
 
             {/* Assurance strip */}
-            <div className="mt-12 max-w-2xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-              <div className="p-3 bg-white rounded-xl border border-zinc-150 text-[11px] text-zinc-600 font-medium flex items-center justify-center gap-1.5">
+            <div className="mt-6 max-w-2xl mx-auto flex flex-wrap items-center justify-center gap-x-6 gap-y-2.5 text-center text-xs text-zinc-500 font-medium">
+              <span className="flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Free to customize
-              </div>
-              <div className="p-3 bg-white rounded-xl border border-zinc-150 text-[11px] text-zinc-600 font-medium flex items-center justify-center gap-1.5">
+              </span>
+              <span className="flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Pay only to publish
-              </div>
-              <div className="p-3 bg-white rounded-xl border border-zinc-150 text-[11px] text-zinc-600 font-medium flex items-center justify-center gap-1.5">
+              </span>
+              <span className="flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Edit anytime
-              </div>
-              <div className="p-3 bg-white rounded-xl border border-zinc-150 text-[11px] text-zinc-600 font-medium flex items-center justify-center gap-1.5">
+              </span>
+              <span className="flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> 100% secure payment
-              </div>
+              </span>
             </div>
           </div>
         </section>
@@ -861,9 +860,6 @@ export default function LandingClient() {
         {/* Accordion FAQ Section */}
         <FAQSection />
         </main>
-
-        {/* Social Share Bar */}
-        <SocialShare />
 
         {/* Footer */}
         <footer className="w-full py-10 sm:py-12 px-4 sm:px-6 border-t border-zinc-150 bg-[#fafaf9] z-10">

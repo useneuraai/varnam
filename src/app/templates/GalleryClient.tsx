@@ -63,7 +63,7 @@ export default function GalleryClient() {
           <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3 group">
               <img
-                src="/logo.png"
+                src="/logo.png?v=lotus-gold"
                 alt="Varnam"
                 className="w-10 h-10 sm:w-11 sm:h-11 object-contain drop-shadow-[0_2px_8px_rgba(212,163,37,0.25)] transition-transform duration-300 group-hover:scale-105"
               />

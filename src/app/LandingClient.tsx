@@ -198,7 +198,7 @@ export default function LandingClient() {
           <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3.5 sm:gap-4 group">
               <img
-                src="/favicon.ico"
+                src="/logo.png?v=lotus-gold"
                 alt="Varnam"
                 className="w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain drop-shadow-[0_2px_10px_rgba(212,163,37,0.3)] transition-transform duration-300 group-hover:scale-105"
               />
@@ -866,7 +866,7 @@ export default function LandingClient() {
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
             <div className="flex flex-col items-center md:items-start gap-1">
               <div className="flex items-center gap-3">
-                <img src="/logo.png" alt="Varnam" className="w-8 h-8 sm:w-9 sm:h-9 object-contain drop-shadow-sm" />
+                <img src="/logo.png?v=lotus-gold" alt="Varnam" className="w-8 h-8 sm:w-9 sm:h-9 object-contain drop-shadow-sm" />
                 <span className="text-xl sm:text-2xl font-cinzel font-bold tracking-[0.2em] bg-gradient-to-r from-[#b3811b] via-[#d4a325] to-[#9a6f14] bg-clip-text text-transparent">
                   VARNAM
                 </span>

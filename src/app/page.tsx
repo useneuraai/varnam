@@ -8,15 +8,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://www.varnaminvites.store",
   },
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
-      { url: "/icon.png", type: "image/png" },
-    ],
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
 };
 
 export default function HomePage() {

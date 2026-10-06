@@ -197,9 +197,13 @@ export default function LandingClient() {
         {/* Premium Header */}
         <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-zinc-100">
           <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <img src="/logo.png" alt="Varnam" className="w-7 h-7 sm:w-8 sm:h-8 object-contain" />
-              <span className="text-2xl md:text-3xl font-black tracking-widest text-zinc-900 group-hover:opacity-80 transition-opacity">
+            <Link href="/" className="flex items-center gap-3 sm:gap-3.5 group">
+              <img
+                src="/logo.png"
+                alt="Varnam"
+                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 object-contain drop-shadow-[0_2px_8px_rgba(212,163,37,0.25)] transition-transform duration-300 group-hover:scale-105"
+              />
+              <span className="text-2xl md:text-3xl font-cinzel font-bold tracking-[0.22em] bg-gradient-to-r from-[#b3811b] via-[#d4a325] to-[#9a6f14] bg-clip-text text-transparent group-hover:brightness-110 transition-all">
                 VARNAM
               </span>
             </Link>
@@ -865,9 +869,9 @@ export default function LandingClient() {
         <footer className="w-full py-10 sm:py-12 px-4 sm:px-6 border-t border-zinc-150 bg-[#fafaf9] z-10">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
             <div className="flex flex-col items-center md:items-start gap-1">
-              <div className="flex items-center gap-2">
-                <img src="/logo.png" alt="Varnam" className="w-6 h-6 object-contain" />
-                <span className="text-lg font-black tracking-widest text-zinc-900">
+              <div className="flex items-center gap-3">
+                <img src="/logo.png" alt="Varnam" className="w-8 h-8 sm:w-9 sm:h-9 object-contain drop-shadow-sm" />
+                <span className="text-xl sm:text-2xl font-cinzel font-bold tracking-[0.2em] bg-gradient-to-r from-[#b3811b] via-[#d4a325] to-[#9a6f14] bg-clip-text text-transparent">
                   VARNAM
                 </span>
               </div>

@@ -61,8 +61,15 @@ export default function GalleryClient() {
         {/* Premium Header */}
         <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-zinc-100">
           <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <Link href="/" className="text-2xl font-black tracking-widest text-zinc-900">
-              VARNAM
+            <Link href="/" className="flex items-center gap-3 group">
+              <img
+                src="/logo.png"
+                alt="Varnam"
+                className="w-10 h-10 sm:w-11 sm:h-11 object-contain drop-shadow-[0_2px_8px_rgba(212,163,37,0.25)] transition-transform duration-300 group-hover:scale-105"
+              />
+              <span className="text-2xl md:text-3xl font-cinzel font-bold tracking-[0.22em] bg-gradient-to-r from-[#b3811b] via-[#d4a325] to-[#9a6f14] bg-clip-text text-transparent group-hover:brightness-110 transition-all">
+                VARNAM
+              </span>
             </Link>
             <span className="hidden sm:inline text-[11px] tracking-widest text-zinc-400 font-bold uppercase">
               DESIGN TEMPLATES

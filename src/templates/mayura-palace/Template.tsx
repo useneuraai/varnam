@@ -675,9 +675,6 @@ export default function MayuraPalaceTemplate({
             }}
           />
 
-          {/* Blue Flower Garlands on Left & Right Sides */}
-          <SideBlueFloralFlourish side="left" className="top-12 opacity-85" />
-          <SideBlueFloralFlourish side="right" className="top-12 opacity-85" />
 
           {/* Top Royal Callout */}
           <div
@@ -727,9 +724,7 @@ export default function MayuraPalaceTemplate({
               </h1>
 
               <div className="mt-3.5 pt-2.5 border-t border-[#eed57c]/50 w-full flex items-center justify-center">
-                <p className="font-marcellus text-xs sm:text-[13px] tracking-[0.22em] text-[#8a6314] uppercase font-bold">
-                  {weddingDateInfo.weekday}, {weddingDateInfo.month} {weddingDateInfo.day}, {weddingDateInfo.year}
-                </p>
+                
               </div>
             </div>
           </div>

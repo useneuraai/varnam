@@ -722,10 +722,6 @@ export default function MayuraPalaceTemplate({
               <h1 className="font-marcellus text-3xl sm:text-4xl md:text-[40px] font-bold tracking-[0.12em] text-[#0b2135] uppercase leading-tight drop-shadow-xs">
                 {groom}
               </h1>
-
-              <div className="mt-3.5 pt-2.5 border-t border-[#eed57c]/50 w-full flex items-center justify-center">
-                
-              </div>
             </div>
           </div>
 

@@ -714,12 +714,6 @@ export default function KamalamKalyanamTemplate({
             <h1 className="font-marcellus text-3xl sm:text-4xl md:text-5xl font-normal tracking-[0.12em] text-[#fff6db] uppercase leading-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
               {groom}
             </h1>
-
-            <div className="mt-5 pt-2.5 border-t border-[#eed57c]/35">
-              <p className="font-marcellus text-sm sm:text-base tracking-[0.22em] text-[#faedd0] uppercase font-medium">
-                {weddingDateInfo.weekday}, {weddingDateInfo.month} {weddingDateInfo.day}, {weddingDateInfo.year}
-              </p>
-            </div>
           </div>
 
           {/* Minimal Scroll Cue */}

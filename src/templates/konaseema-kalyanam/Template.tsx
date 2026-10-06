@@ -568,11 +568,6 @@ export default function KonaseemaKalyanamTemplate({
             <h1 className="font-cinzel text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.14em] text-[#fff9e6] uppercase leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]">
               {groom}
             </h1>
-
-            {/* Wedding Date Subtitle */}
-            <p className="font-marcellus text-sm sm:text-base tracking-[0.2em] text-[#faedd0] uppercase font-medium mt-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-              {weddingDateInfo.weekday}, {weddingDateInfo.day} {weddingDateInfo.month} {weddingDateInfo.year}
-            </p>
           </div>
 
           {/* Bottom Scroll Prompt */}

@@ -498,10 +498,6 @@ export default function KadhalEditorialTemplate({
             <h1 className="font-marcellus text-2xl sm:text-3xl md:text-[34px] font-semibold tracking-[0.14em] text-[#2c1505] uppercase leading-tight drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]">
               {groom}
             </h1>
-
-            <p className="font-marcellus text-xs sm:text-[13px] tracking-[0.2em] text-[#faedd0] uppercase font-bold mt-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-              {weddingDateInfo.weekday}, {weddingDateInfo.day} {weddingDateInfo.month} {weddingDateInfo.year}
-            </p>
           </div>
 
           {/* Scroll Prompt */}

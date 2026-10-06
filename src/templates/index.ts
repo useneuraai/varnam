@@ -7,6 +7,10 @@ export const templatesMap: Record<
   ComponentType<{ data: TemplateData; isPreview?: boolean }>
 > = {
   // The Definitive Premier 3D Animated Templates
+  "mayura-palace": dynamic(() => import("./mayura-palace/Template")),
+  "palace-garden": dynamic(() => import("./mayura-palace/Template")),
+  "royal-garden": dynamic(() => import("./mayura-palace/Template")),
+  "mayura-mandapam": dynamic(() => import("./mayura-palace/Template")),
   "kamalam-kalyanam": dynamic(() => import("./kamalam-kalyanam/Template")),
   "kovil-thirumanam": dynamic(() => import("./kovil-thirumanam/Template")),
   "kalyana-mandapam": dynamic(() => import("./kalyana-mandapam/Template")),

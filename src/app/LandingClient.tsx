@@ -66,6 +66,9 @@ const getCardStyles = (offset: number, isMobile: boolean) => {
 
 const getCoupleName = (slug: string) => {
   switch (slug) {
+    case "mayura-palace":
+    case "palace-garden":
+      return "Ananya & Siddharth";
     case "kamalam-kalyanam":
       return "Meenakshi & Sundar";
     case "kovil-thirumanam":
@@ -90,6 +93,9 @@ const getCoupleName = (slug: string) => {
 
 const getCategoryName = (template: any) => {
   switch (template.slug) {
+    case "mayura-palace":
+    case "palace-garden":
+      return "Royal Garden & Peacock";
     case "kamalam-kalyanam":
       return "Royal Lotus & Crimson";
     case "kovil-thirumanam":

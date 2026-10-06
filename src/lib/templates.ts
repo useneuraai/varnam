@@ -81,6 +81,53 @@ export interface TemplateDefinition {
 
 export const TEMPLATES: TemplateDefinition[] = [
   {
+    slug: "mayura-palace",
+    name: "Palace Garden",
+    description:
+      "Regal palace garden wedding invitation featuring carved marble jharokha, blue hydrangeas, crystal chandelier, and royal peacock motifs.",
+    category: "Classic",
+    religion: "",
+    language: "",
+    price: 999,
+    thumbnailUrl: "/images/mayura-palace/hero_peacock_arch.jpg",
+    previewMusicUrl:
+      "https://archive.org/download/r-12356661-1632393571-2601/01.%20Raag%20Bhimpalasi%20-%20Teen%20Taal.mp3",
+    fields: [
+      { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Ananya", required: true },
+      { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Siddharth", required: true },
+      { id: "wedding_date", label: "Wedding Date & Time", type: "datetime", required: true },
+      {
+        id: "wedding_venue",
+        label: "Wedding Venue",
+        type: "textarea",
+        placeholder: "The Leela Palace Courtyard, Adyar Seaface, MRC Nagar, Chennai - 600028",
+        required: true,
+      },
+      {
+        id: "quote",
+        label: "Wedding Verse / Quote",
+        type: "text",
+        placeholder: "Two souls united amidst royal gardens and serene waters, blessed with lifelong love and grace.",
+        required: false,
+      },
+      {
+        id: "family_names",
+        label: "Welcoming Families",
+        type: "text",
+        placeholder: "The Varma & Somayaji Families",
+        required: false,
+      },
+      { id: "rsvp_phone", label: "RSVP Contact", type: "text", placeholder: "+91 98401 23456", required: true },
+      {
+        id: "custom_message",
+        label: "Ceremonial Note",
+        type: "textarea",
+        placeholder: "We seek your gracious presence and heartfelt blessings on our special day.",
+        required: false,
+      },
+    ],
+  },
+  {
     slug: "kamalam-kalyanam",
     name: "Crimson Red",
     description:
@@ -415,6 +462,9 @@ export const getTemplateBySlug = (slug: string): TemplateDefinition | undefined 
   let t = TEMPLATES.find((tpl) => tpl.slug === slug);
   if (!t) {
     const legacyAliases: Record<string, string> = {
+      "palace-garden": "mayura-palace",
+      "royal-garden": "mayura-palace",
+      "mayura-mandapam": "mayura-palace",
       "crimson-red": "kamalam-kalyanam",
       "temple-heritage": "kovil-thirumanam",
       "royal-palace": "kalyana-mandapam",

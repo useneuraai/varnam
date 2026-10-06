@@ -884,7 +884,6 @@ export default function LandingClient() {
 
             <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-8 gap-y-3 text-xs tracking-wider text-zinc-650 font-bold uppercase">
               <Link href="/about" className="hover:text-zinc-950 transition-colors">ABOUT</Link>
-              <a href="mailto:hello@varnaminvites.store" className="hover:text-zinc-950 transition-colors">CONTACT</a>
               <a
                 href="https://www.instagram.com/varnaminvites"
                 target="_blank"

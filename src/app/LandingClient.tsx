@@ -198,7 +198,7 @@ export default function LandingClient() {
           <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3.5 sm:gap-4 group">
               <img
-                src="public/favicon.ico"
+                src="/favicon.ico"
                 alt="Varnam"
                 className="w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain drop-shadow-[0_2px_10px_rgba(212,163,37,0.3)] transition-transform duration-300 group-hover:scale-105"
               />

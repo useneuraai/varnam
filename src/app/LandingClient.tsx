@@ -473,28 +473,6 @@ export default function LandingClient() {
           </div>
         </section>
 
-        {/* Minimal Trust & Value Strip */}
-        <section className="w-full bg-gradient-to-b from-white to-[#fdfbf7] border-y border-zinc-150/80 py-8 sm:py-12 px-4 sm:px-6 relative z-10 flex flex-col items-center justify-center text-center">
-          <div className="max-w-4xl mx-auto flex flex-col items-center gap-3 sm:gap-4">
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[11px] sm:text-xs tracking-wider sm:tracking-[0.14em] text-zinc-800 font-semibold uppercase">
-              <span className="px-3 py-1 bg-white rounded-full border border-zinc-200/70 shadow-2xs">Choose Template</span>
-              <span className="text-[#b3811b]">❖</span>
-              <span className="px-3 py-1 bg-white rounded-full border border-zinc-200/70 shadow-2xs">Customize &amp; Music</span>
-              <span className="text-[#b3811b]">❖</span>
-              <span className="px-3 py-1 bg-white rounded-full border border-zinc-200/70 shadow-2xs">Share on WhatsApp</span>
-            </div>
-
-            <div className="h-[1px] w-20 bg-zinc-200/80 my-1" />
-            
-            <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 text-[10.5px] sm:text-xs tracking-wider sm:tracking-widest text-zinc-650 font-bold uppercase">
-              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-[#b3811b]" /> No app required</span>
-              <span className="hidden sm:inline text-[#b3811b]/40">•</span>
-              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-[#b3811b]" /> Interactive RSVP Tracking</span>
-              <span className="hidden sm:inline text-[#b3811b]/40">•</span>
-              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-[#b3811b]" /> Pay Only to Publish (from ₹999)</span>
-            </div>
-          </div>
-        </section>
 
         {/* Social Proof & Platform Stats */}
         <section className="w-full bg-[#fafaf9] py-10 sm:py-16 px-4 sm:px-6 relative z-10 border-b border-zinc-100">
@@ -975,10 +953,7 @@ export default function LandingClient() {
                 Ultra-premium, cinematic digital wedding invitation websites. Exquisite interactive e-invites with RSVP, custom music, maps, and guest message walls for modern couples.
               </p>
               <p className="text-xs text-zinc-500 mt-2 text-center md:text-left">
-                📍 115, Ekambaranathar Sannathi Street, Kanchipuram, Tamil Nadu - 631502
-              </p>
-              <p className="text-xs text-zinc-500 mt-1 text-center md:text-left">
-                📞 +91 7200180268 &nbsp;·&nbsp; ✉ support@varnam.in
+                ✉ <a href="mailto:hello@varnaminvites.store" className="hover:text-zinc-900 transition-colors">hello@varnaminvites.store</a>
               </p>
               <p className="text-[11px] text-zinc-400 mt-2 text-center md:text-left">
                 © {new Date().getFullYear()} Varnam Wedding Invites. All rights reserved.

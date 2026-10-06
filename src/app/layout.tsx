@@ -146,7 +146,7 @@ const localBusinessSchema = {
   "name": "Varnam Wedding Invites",
   "image": "https://www.varnaminvites.store/og-image.jpg",
   "telephone": "+91 7200180268",
-  "email": "support@varnam.in",
+  "email": "hello@varnaminvites.store",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "115, Ekambaranathar Sannathi Street",

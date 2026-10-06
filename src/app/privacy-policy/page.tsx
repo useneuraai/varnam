@@ -58,7 +58,7 @@ export default function PrivacyPolicyPage() {
       {/* Footer */}
       <footer className="w-full py-10 px-6 border-t border-zinc-100 bg-[#fafaf9] text-center flex flex-col items-center justify-center gap-3">
         <p className="text-xs text-zinc-600">
-          📍 115, Ekambaranathar Sannathi Street, Kanchipuram, Tamil Nadu - 631502 &nbsp;·&nbsp; 📞 +91 7200180268 &nbsp;·&nbsp; ✉ support@varnam.in
+          ✉ <a href="mailto:hello@varnaminvites.store" className="hover:text-zinc-900 transition-colors">hello@varnaminvites.store</a>
         </p>
         <div className="flex flex-wrap gap-4 sm:gap-6 text-[11px] tracking-wider text-zinc-500 font-bold uppercase justify-center">
           <Link href="/about" className="hover:text-zinc-900 transition-colors">About</Link>

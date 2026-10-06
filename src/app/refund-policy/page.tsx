@@ -90,7 +90,7 @@ export default function RefundPolicyPage() {
             To request assistance or initiate a refund, please contact our concierge team with your order reference ID:
           </p>
           <div className="p-4 bg-zinc-50 border border-zinc-200/80 rounded-xl text-xs space-y-1 text-zinc-700">
-            <p><strong>Email:</strong> support@varnam.in</p>
+            <p><strong>Email:</strong> hello@varnaminvites.store</p>
             <p><strong>WhatsApp:</strong> +91 7200180268</p>
             <p><strong>Operating Hours:</strong> Monday – Saturday, 9:00 AM – 8:00 PM IST</p>
           </div>

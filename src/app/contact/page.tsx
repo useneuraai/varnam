@@ -79,10 +79,10 @@ export default function ContactPage() {
               <p className="text-xs text-zinc-600 mb-4 leading-relaxed">
                 For order receipts, technical questions, partnership requests, or custom requirements.
               </p>
-              <p className="text-sm font-bold text-zinc-900">support@varnam.in</p>
+              <p className="text-sm font-bold text-zinc-900">hello@varnaminvites.store</p>
             </div>
             <a
-              href="mailto:support@varnam.in"
+              href="mailto:hello@varnaminvites.store"
               className="mt-6 inline-flex items-center justify-center px-4 py-2.5 bg-zinc-950 hover:bg-zinc-900 text-white text-xs font-bold tracking-wider uppercase rounded-xl transition-all shadow-xs"
             >
               SEND AN EMAIL

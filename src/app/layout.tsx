@@ -81,15 +81,15 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon-32x32.png?v=20261006", type: "image/png", sizes: "32x32" },
-      { url: "/favicon-16x16.png?v=20261006", type: "image/png", sizes: "16x16" },
-      { url: "/icon-192.png?v=20261006", type: "image/png", sizes: "192x192" },
-      { url: "/icon.png?v=20261006", type: "image/png", sizes: "500x500" },
-      { url: "/favicon.ico?v=20261006", sizes: "any" },
+      { url: "/favicon-32x32.png?v=4", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-16x16.png?v=4", type: "image/png", sizes: "16x16" },
+      { url: "/icon-192.png?v=4", type: "image/png", sizes: "192x192" },
+      { url: "/icon.png?v=4", type: "image/png", sizes: "500x500" },
+      { url: "/favicon.ico?v=4", sizes: "any" },
     ],
-    shortcut: "/favicon.ico?v=20261006",
+    shortcut: "/favicon.ico?v=4",
     apple: [
-      { url: "/apple-touch-icon.png?v=20261006", sizes: "180x180", type: "image/png" },
+      { url: "/apple-touch-icon.png?v=4", sizes: "180x180", type: "image/png" },
     ],
   },
 };
@@ -170,12 +170,12 @@ export default function RootLayout({
       className={`${cinzel.variable} ${playfair.variable} ${inter.variable} ${greatVibes.variable} antialiased`}
     >
       <head>
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=20261006" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=20261006" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=20261006" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20261006" />
-        <link rel="shortcut icon" href="/favicon.ico?v=20261006" />
-        <link rel="icon" href="/favicon.ico?v=20261006" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=4" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=4" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=4" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=4" />
+        <link rel="shortcut icon" href="/favicon.ico?v=4" />
+        <link rel="icon" href="/favicon.ico?v=4" sizes="any" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

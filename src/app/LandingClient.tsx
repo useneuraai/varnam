@@ -197,13 +197,13 @@ export default function LandingClient() {
         {/* Premium Header */}
         <header className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-zinc-100">
           <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3 sm:gap-3.5 group">
+            <Link href="/" className="flex items-center gap-3.5 sm:gap-4 group">
               <img
                 src="/logo.png"
                 alt="Varnam"
-                className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 object-contain drop-shadow-[0_2px_8px_rgba(212,163,37,0.25)] transition-transform duration-300 group-hover:scale-105"
+                className="w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain drop-shadow-[0_2px_10px_rgba(212,163,37,0.3)] transition-transform duration-300 group-hover:scale-105"
               />
-              <span className="text-2xl md:text-3xl font-cinzel font-bold tracking-[0.22em] bg-gradient-to-r from-[#b3811b] via-[#d4a325] to-[#9a6f14] bg-clip-text text-transparent group-hover:brightness-110 transition-all">
+              <span className="text-2xl sm:text-3xl md:text-4xl font-cinzel font-bold tracking-[0.22em] bg-gradient-to-r from-[#b3811b] via-[#d4a325] to-[#9a6f14] bg-clip-text text-transparent group-hover:brightness-110 transition-all">
                 VARNAM
               </span>
             </Link>

@@ -81,10 +81,16 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon.png", type: "image/png", sizes: "500x500" },
     ],
-    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.ico",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 
@@ -136,8 +142,8 @@ const organizationSchema = {
   sameAs: ["https://www.instagram.com/varnaminvites"],
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+91 7200180268",
     contactType: "customer service",
+    email: "hello@varnaminvites.store",
     areaServed: "IN",
     availableLanguage: ["English", "Tamil", "Hindi", "Telugu"],
   },
@@ -148,16 +154,7 @@ const localBusinessSchema = {
   "@type": "LocalBusiness",
   "name": "Varnam Wedding Invites",
   "image": "https://www.varnaminvites.store/og-image.jpg",
-  "telephone": "+91 7200180268",
   "email": "hello@varnaminvites.store",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "115, Ekambaranathar Sannathi Street",
-    "addressLocality": "Kanchipuram",
-    "addressRegion": "Tamil Nadu",
-    "postalCode": "631502",
-    "addressCountry": "IN"
-  },
   "priceRange": "₹₹"
 };
 
@@ -173,10 +170,16 @@ export default function RootLayout({
       className={`${cinzel.variable} ${playfair.variable} ${inter.variable} ${greatVibes.variable} antialiased`}
     >
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Marcellus&family=Ramabhadra&family=Suranna&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Marcellus&display=swap"
           rel="stylesheet"
         />
       </head>

@@ -530,11 +530,11 @@ export default function KovilThirumanamTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 w-[58%] max-w-[260px] flex flex-col items-center px-2 py-6 my-auto"
           >
-            {/* Sacred Tamil Calligraphy in Glistening Gold */}
-            <h2 className="font-serif text-lg sm:text-xl text-[#fff9e6] font-semibold leading-relaxed tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
-              &ldquo;இரு மனங்கள் இணையும்
+            {/* Sacred English Quote in Glistening Gold */}
+            <h2 className="font-serif text-lg sm:text-xl text-[#fff9e6] font-medium leading-relaxed tracking-wide drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+              &ldquo;Two Hearts United in Sacred Love,
               <br />
-              இனிய தருணம்.&rdquo;
+              Blessed for Eternity.&rdquo;
             </h2>
 
             <motion.div

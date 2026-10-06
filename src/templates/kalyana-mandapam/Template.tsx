@@ -438,7 +438,7 @@ export default function KalyanaMandapamTemplate({
           {/* Soft atmospheric gradient */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/15 to-[#1c1208] pointer-events-none" />
 
-          {/* Top Tamil Heritage Emblem */}
+          {/* Top Heritage Emblem */}
           <div
             className="relative z-20 flex flex-col items-center transition-all duration-300"
             style={{
@@ -446,16 +446,16 @@ export default function KalyanaMandapamTemplate({
               transform: `translateY(-${scrollProgress * 35}px)`,
             }}
           >
-            <div className="flex items-center justify-center gap-2 mb-1 text-[#eed57c]">
+            <div className="flex items-center justify-center gap-2 mb-1.5 text-[#eed57c]">
               <div className="w-8 h-[1px] bg-current opacity-80" />
               <span className="text-xs">❖</span>
               <div className="w-8 h-[1px] bg-current opacity-80" />
             </div>
-            <h2 className="font-marcellus text-[11px] sm:text-xs tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-              கல்யாண மண்டபம்
+            <h2 className="font-cinzel text-base sm:text-lg tracking-[0.25em] text-[#fff2b2] uppercase font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
+              ROYAL PALACE MANDAPAM
             </h2>
-            <span className="font-marcellus text-[9px] sm:text-[9.5px] tracking-[0.35em] text-[#eed57c] uppercase font-bold">
-              KALYANA MANDAPAM
+            <span className="font-marcellus text-[10px] sm:text-[11px] tracking-[0.3em] text-[#eed57c] uppercase font-medium mt-0.5">
+              AN AUSPICIOUS UNION
             </span>
           </div>
 
@@ -467,31 +467,31 @@ export default function KalyanaMandapamTemplate({
               transform: `translateY(-${scrollProgress * 50}px)`,
             }}
           >
-            <p className="font-marcellus text-[10px] tracking-[0.32em] text-[#eed57c] uppercase font-bold mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+            <p className="font-marcellus text-xs sm:text-[13px] tracking-[0.32em] text-[#eed57c] uppercase font-semibold mb-2.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
               WE&apos;RE GETTING MARRIED
             </p>
 
             {/* Bride Name */}
-            <h1 className="font-marcellus text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.16em] text-[#fff9e6] uppercase leading-tight drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]">
+            <h1 className="font-cinzel text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.14em] text-[#fff9e6] uppercase leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]">
               {bride}
             </h1>
 
             {/* Weds Divider */}
-            <div className="flex items-center justify-center gap-3 my-2 w-full">
+            <div className="flex items-center justify-center gap-3 my-2.5 w-full">
               <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-              <span className="font-cormorant italic text-sm tracking-[0.25em] text-[#eed57c] font-bold">
+              <span className="font-great-vibes text-2xl sm:text-3xl text-[#eed57c] italic">
                 weds
               </span>
               <div className="h-[1px] w-12 bg-gradient-to-l from-transparent via-[#eed57c] to-transparent" />
             </div>
 
             {/* Groom Name */}
-            <h1 className="font-marcellus text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.16em] text-[#fff9e6] uppercase leading-tight drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]">
+            <h1 className="font-cinzel text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.14em] text-[#fff9e6] uppercase leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]">
               {groom}
             </h1>
 
             {/* Wedding Date Subtitle */}
-            <p className="font-marcellus text-xs sm:text-[13px] tracking-[0.2em] text-[#faedd0] uppercase font-bold mt-2.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+            <p className="font-marcellus text-sm sm:text-base tracking-[0.2em] text-[#faedd0] uppercase font-medium mt-3 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
               {weddingDateInfo.weekday}, {weddingDateInfo.day} {weddingDateInfo.month} {weddingDateInfo.year}
             </p>
           </div>
@@ -534,13 +534,13 @@ export default function KalyanaMandapamTemplate({
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-[64%] max-w-[280px] flex flex-col items-center px-3 py-6 my-auto"
+            className="relative z-10 w-[78%] max-w-[320px] flex flex-col items-center px-3 py-6 my-auto"
           >
-            {/* Sacred Tamil Calligraphy in Glistening Gold */}
-            <h2 className="font-marcellus text-lg sm:text-xl text-[#fff9e6] font-semibold leading-relaxed tracking-wide drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
-              &ldquo;இரு மனங்கள் இணையும்
+            {/* Sacred English Marriage Blessing */}
+            <h2 className="font-cinzel text-xl sm:text-2xl text-[#fff9e6] font-semibold leading-relaxed tracking-wide drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+              &ldquo;Two hearts united in love,
               <br />
-              இல்லறத் தொடக்கம்.&rdquo;
+              blessed for a lifetime.&rdquo;
             </h2>
 
             <motion.div
@@ -551,12 +551,12 @@ export default function KalyanaMandapamTemplate({
               className="w-16 h-[1px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent my-3.5"
             />
 
-            {/* Custom Quote */}
-            <p className="font-cormorant italic text-sm sm:text-base text-[#eed57c] leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+            {/* Custom Quote in English */}
+            <p className="font-cormorant text-base sm:text-lg text-[#faedd0] leading-relaxed drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)] font-medium italic">
               {quote}
             </p>
 
-            <div className="flex items-center gap-2 mt-3.5 text-[#eed57c]/80">
+            <div className="flex items-center gap-2 mt-4 text-[#eed57c]/80">
               <div className="w-8 h-[1px] bg-current" />
               <span className="text-xs">❖</span>
               <div className="w-8 h-[1px] bg-current" />
@@ -597,7 +597,7 @@ export default function KalyanaMandapamTemplate({
             >
               {/* Header inside Card */}
               <div className="flex flex-col items-center pt-2">
-                <span className="font-marcellus text-[8.5px] sm:text-[9.5px] tracking-[0.24em] text-[#7a3407] font-bold uppercase drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+                <span className="font-cinzel text-[9.5px] sm:text-[10.5px] tracking-[0.24em] text-[#7a3407] font-bold uppercase drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
                   ✦ AUSPICIOUS MUHURTHAM ✦
                 </span>
                 <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#9e6b22] to-transparent mt-0.5" />
@@ -608,7 +608,7 @@ export default function KalyanaMandapamTemplate({
                 <div className="font-cormorant text-5xl sm:text-6xl font-bold text-[#230d02] leading-none tracking-tight drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
                   {weddingDateInfo.day}
                 </div>
-                <div className="font-marcellus text-xs sm:text-sm tracking-[0.28em] text-[#3b1704] font-bold uppercase mt-1">
+                <div className="font-cinzel text-xs sm:text-sm tracking-[0.28em] text-[#3b1704] font-bold uppercase mt-1">
                   {weddingDateInfo.month} {weddingDateInfo.year}
                 </div>
                 <div className="flex items-center gap-1.5 my-1 text-[#9e6b22]/70">
@@ -616,16 +616,16 @@ export default function KalyanaMandapamTemplate({
                   <span className="text-[7px]">❖</span>
                   <div className="w-4 h-[1px] bg-current" />
                 </div>
-                <div className="font-marcellus text-[9.5px] sm:text-[10.5px] text-[#4a2406] font-bold tracking-wider">
+                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#4a2406] font-semibold tracking-wider">
                   {weddingDateInfo.weekday} · {weddingDateInfo.time}
                 </div>
-                <div className="font-cormorant italic text-[9.5px] sm:text-[10px] text-[#6b3509] font-semibold mt-0.5 line-clamp-1 max-w-[140px]">
+                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#6b3509] font-semibold mt-0.5 line-clamp-1 max-w-[150px]">
                   {data.wedding_venue || "Sri Krishna Mahal"}
                 </div>
               </div>
 
               {/* Bottom Tag */}
-              <div className="pb-1 text-[7.5px] tracking-[0.2em] font-marcellus text-[#8a5518] uppercase font-bold">
+              <div className="pb-1 text-[8.5px] tracking-[0.22em] font-cinzel text-[#8a5518] uppercase font-bold">
                 ❖ Save The Date ❖
               </div>
             </div>
@@ -670,9 +670,9 @@ export default function KalyanaMandapamTemplate({
             <button
               type="button"
               onClick={() => setIsScratched(true)}
-              className="absolute bottom-8 z-20 px-5 py-2 rounded-full bg-gradient-to-r from-[#241105] via-[#432009] to-[#241105] border border-[#eed57c] text-[#fff2b2] text-[9.5px] tracking-[0.22em] uppercase font-marcellus font-bold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.85)] cursor-pointer flex items-center gap-1.5"
+              className="absolute bottom-8 z-20 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#241105] via-[#432009] to-[#241105] border border-[#eed57c] text-[#fff2b2] text-[10.5px] tracking-[0.22em] uppercase font-cinzel font-semibold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.85)] cursor-pointer flex items-center gap-1.5"
             >
-              <Sparkles className="w-3 h-3 text-[#eed57c]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#eed57c]" />
               <span>Click To Reveal Date</span>
             </button>
           )}
@@ -695,9 +695,12 @@ export default function KalyanaMandapamTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 w-full max-w-[290px] sm:max-w-[310px] flex flex-col items-center py-6 px-3"
           >
-            <h3 className="font-marcellus text-lg sm:text-xl text-[#241306] tracking-[0.18em] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]">
-              Counting Down to Forever
+            <h3 className="font-cinzel text-xl sm:text-2xl text-[#fff2b2] tracking-[0.2em] uppercase font-semibold drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+              AUSPICIOUS MUHURTHAM
             </h3>
+            <span className="font-marcellus text-[11px] sm:text-xs tracking-[0.24em] text-[#eed57c] uppercase font-medium mt-1">
+              Counting Down to Forever
+            </span>
             <GoldDivider className="my-2.5 opacity-90" />
 
             {/* 4 Countdown Boxes with Staggered Modern Animation */}
@@ -714,13 +717,13 @@ export default function KalyanaMandapamTemplate({
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.25 }}
                   transition={{ duration: 0.6, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
-                  className="py-3 px-2 rounded-xl bg-[#261306]/90 border border-[#d4af37]/60 shadow-[0_6px_18px_rgba(0,0,0,0.6)] backdrop-blur-xs flex flex-col items-center justify-center relative overflow-hidden"
+                  className="py-3.5 px-2 rounded-xl bg-[#261306]/90 border border-[#d4af37]/60 shadow-[0_6px_18px_rgba(0,0,0,0.6)] backdrop-blur-xs flex flex-col items-center justify-center relative overflow-hidden"
                 >
                   <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
                   <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#fff2b2] tabular-nums leading-none drop-shadow-[0_2px_6px_rgba(238,213,124,0.4)]">
                     {String(unit.value).padStart(2, "0")}
                   </span>
-                  <span className="font-marcellus text-[9.5px] tracking-[0.2em] text-[#eed57c] uppercase font-bold mt-1 text-center">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.2em] text-[#eed57c] uppercase font-semibold mt-1.5 text-center">
                     {unit.label}
                   </span>
                 </motion.div>
@@ -771,14 +774,14 @@ export default function KalyanaMandapamTemplate({
                 transition={{ duration: 0.6 }}
                 className="flex flex-col items-center mb-5 relative z-10"
               >
-                <span className="font-marcellus text-[8.5px] sm:text-[9.5px] tracking-[0.25em] text-[#7a3809] uppercase font-bold mb-0.5">
-                  ✦ திருமண சுபநிகழ்ச்சிகள் ✦
+                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#7a3809] uppercase font-bold mb-0.5">
+                  ✦ SACRED CEREMONIES ✦
                 </span>
-                <h2 className="font-marcellus text-lg sm:text-xl text-[#240e02] tracking-[0.16em] uppercase font-bold drop-shadow-[0_1px_1px_rgba(255,255,255,0.85)]">
+                <h2 className="font-cinzel text-xl sm:text-2xl text-[#240e02] tracking-[0.18em] uppercase font-bold drop-shadow-[0_1px_1px_rgba(255,255,255,0.85)]">
                   Wedding Program
                 </h2>
-                <p className="font-cormorant italic text-xs sm:text-[13px] text-[#542807] font-semibold mt-0.5">
-                  Auspicious Tamil Rituals &amp; Celebrations
+                <p className="font-cormorant italic text-sm sm:text-base text-[#542807] font-semibold mt-0.5">
+                  Auspicious Rituals &amp; Celebrations
                 </p>
                 <div className="flex items-center gap-2 mt-2 text-[#996a1a]">
                   <div className="w-8 h-[1px] bg-current" />
@@ -928,11 +931,11 @@ export default function KalyanaMandapamTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="w-full flex flex-col items-center z-15"
           >
-            <h2 className="font-marcellus text-xl sm:text-2xl text-[#241306] tracking-[0.18em] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]">
-              Our Moments
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#1a0f07] tracking-[0.2em] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]">
+              SWEET MOMENTS
             </h2>
-            <p className="font-cormorant italic text-xs sm:text-sm text-[#523314] font-semibold mb-6 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
-              Glimpses of our journey together
+            <p className="font-cormorant italic text-sm sm:text-base text-[#4a2e12] font-semibold mb-6 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
+              Cherished glimpses of our beautiful journey together
             </p>
 
             {/* Grand Borderless Photo Slideshow */}
@@ -1049,10 +1052,10 @@ export default function KalyanaMandapamTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-15 w-full max-w-[320px] sm:max-w-[340px] flex flex-col items-center"
           >
-            <h2 className="font-marcellus text-xl sm:text-2xl text-[#1a0f07] tracking-[0.18em] uppercase font-bold mb-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
-              Venue
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#1a0f07] tracking-[0.2em] uppercase font-bold mb-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
+              WEDDING VENUE
             </h2>
-            <p className="font-cormorant italic text-xs sm:text-sm text-[#4a2e12] font-semibold mb-4 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
+            <p className="font-cormorant italic text-sm sm:text-base text-[#4a2e12] font-semibold mb-4 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               We look forward to welcoming you
             </p>
 
@@ -1061,7 +1064,7 @@ export default function KalyanaMandapamTemplate({
               <div className="relative w-full aspect-square rounded-2xl overflow-hidden border-2 border-[#eed57c] shadow-[0_15px_40px_rgba(0,0,0,0.65)] bg-[#150d06]">
                 {/* Map top bar */}
                 <div className="absolute top-0 inset-x-0 z-10 px-3 py-1.5 flex items-center justify-between text-xs bg-black/80 backdrop-blur-md border-b border-[#eed57c]/40">
-                  <span className="font-marcellus text-[9.5px] tracking-wider uppercase font-bold text-[#fff2b2] flex items-center gap-1">
+                  <span className="font-cinzel text-[10px] tracking-wider uppercase font-semibold text-[#fff2b2] flex items-center gap-1">
                     <MapPin className="w-3 h-3 text-[#eed57c]" />
                     Interactive Map
                   </span>
@@ -1069,7 +1072,7 @@ export default function KalyanaMandapamTemplate({
                     href={gmapSearchUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[9.5px] font-marcellus tracking-wider uppercase font-bold text-[#eed57c] hover:underline flex items-center gap-1"
+                    className="text-[10px] font-cinzel tracking-wider uppercase font-semibold text-[#eed57c] hover:underline flex items-center gap-1"
                   >
                     <span>View Larger</span>
                     <ExternalLink className="w-2.5 h-2.5" />
@@ -1080,17 +1083,17 @@ export default function KalyanaMandapamTemplate({
                   {isPreview ? (
                     <div className="w-full h-full flex flex-col items-center justify-center bg-black/85 text-center p-4">
                       <MapPin className="w-8 h-8 text-[#eed57c] mb-2 animate-bounce" />
-                      <span className="font-marcellus text-base text-[#fff2b2] font-bold">
+                      <span className="font-cinzel text-base sm:text-lg text-[#fff2b2] font-semibold">
                         {data.wedding_venue || "Sri Krishna Mahal"}
                       </span>
-                      <span className="font-cormorant text-xs sm:text-sm text-[#eed57c]/90 mt-1 max-w-[220px]">
+                      <span className="font-marcellus text-xs sm:text-sm text-[#eed57c]/90 mt-1 max-w-[240px]">
                         {data.wedding_venue || "123, GST Road, Chromepet, Chennai - 600044"}
                       </span>
                       <a
                         href={gmapSearchUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-3 px-4 py-1.5 rounded-full bg-[#eed57c]/20 border border-[#eed57c]/60 text-[#eed57c] text-[9.5px] font-marcellus font-bold uppercase tracking-widest hover:bg-[#eed57c] hover:text-black transition"
+                        className="mt-3 px-4 py-1.5 rounded-full bg-[#eed57c]/20 border border-[#eed57c]/60 text-[#eed57c] text-[10px] font-cinzel font-semibold uppercase tracking-widest hover:bg-[#eed57c] hover:text-black transition"
                       >
                         Open in Maps ↗
                       </a>
@@ -1115,17 +1118,17 @@ export default function KalyanaMandapamTemplate({
                   <div className="w-6 h-[1px] bg-current opacity-60" />
                 </div>
 
-                <h3 className="font-marcellus text-base sm:text-lg font-bold text-[#fff2b2] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                <h3 className="font-cinzel text-base sm:text-lg font-semibold text-[#fff2b2] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
                   {data.wedding_venue || "Sri Krishna Mahal"}
                 </h3>
-                <p className="font-cormorant text-xs sm:text-[13px] text-[#faedd0] mt-1 leading-relaxed max-w-[280px]">
+                <p className="font-marcellus text-xs sm:text-[13px] text-[#faedd0] mt-1.5 leading-relaxed max-w-[280px]">
                   {data.wedding_venue || "123, GST Road, Chromepet, Chennai, Tamil Nadu 600044"}
                 </p>
                 <a
                   href={gmapSearchUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3.5 inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#c59b27] text-[#1c0f05] font-marcellus text-xs font-bold uppercase tracking-wider hover:brightness-110 active:scale-98 transition shadow-[0_4px_15px_rgba(212,175,55,0.4)] cursor-pointer"
+                  className="mt-3.5 inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#c59b27] text-[#1c0f05] font-cinzel text-xs font-bold uppercase tracking-wider hover:brightness-110 active:scale-98 transition shadow-[0_4px_15px_rgba(212,175,55,0.4)] cursor-pointer"
                 >
                   <Navigation className="w-3.5 h-3.5 fill-[#1c0f05]" />
                   <span>Get Directions</span>
@@ -1157,11 +1160,11 @@ export default function KalyanaMandapamTemplate({
               {/* Top Inner Gold Accent Line */}
               <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
 
-              <h2 className="font-marcellus text-xl sm:text-2xl text-[#fff2b2] tracking-[0.2em] uppercase font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-                RSVP
+              <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.2em] uppercase font-semibold drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+                BLESSINGS &amp; RSVP
               </h2>
               <GoldDivider className="my-2 opacity-90" />
-              <p className="font-cormorant italic text-sm text-[#faeed3] mb-4 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+              <p className="font-cormorant text-base sm:text-lg text-[#faeed3] mb-4 drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)] font-medium italic">
                 We would love to have you celebrate with us!
               </p>
 
@@ -1293,10 +1296,10 @@ export default function KalyanaMandapamTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-15 w-full max-w-[320px] flex flex-col items-center px-4 py-6 rounded-3xl bg-black/45 backdrop-blur-[2px] border border-[#eed57c]/30 shadow-[0_12px_40px_rgba(0,0,0,0.7)]"
           >
-            <span className="font-cormorant italic text-sm sm:text-base text-[#eed57c] block mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-              With love and heartfelt blessings,
+            <span className="font-cinzel text-xs sm:text-sm tracking-[0.25em] text-[#eed57c] block mb-1 uppercase font-semibold drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)]">
+              LOVE • TRADITION • ETERNITY
             </span>
-            <h4 className="font-great-vibes text-5xl sm:text-6xl text-[#fff9e6] drop-shadow-[0_4px_16px_rgba(0,0,0,1)] tracking-wide leading-tight">
+            <h4 className="font-great-vibes text-5xl sm:text-6xl text-[#fff9e6] drop-shadow-[0_3px_12px_rgba(0,0,0,0.8)] tracking-wide leading-tight">
               {bride} &amp; {groom}
             </h4>
 
@@ -1307,8 +1310,8 @@ export default function KalyanaMandapamTemplate({
             </div>
 
             {data.family_names && (
-              <p className="font-marcellus text-xs sm:text-[13px] tracking-[0.22em] text-[#faedd0] uppercase font-bold my-1 text-center drop-shadow-[0_2px_6px_rgba(0,0,0,1)] leading-relaxed">
-                Cordially invited by {data.family_names}
+              <p className="font-marcellus text-xs sm:text-sm tracking-[0.14em] text-[#faedd0] font-semibold my-1 text-center drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] leading-relaxed uppercase">
+                Warmly Invited By: {data.family_names}
               </p>
             )}
 

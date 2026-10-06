@@ -37,7 +37,7 @@ export const templatesMap: Record<
   "royal-tamil": dynamic(() => import("./kovil-thirumanam/Template")),
   "temple-gold": dynamic(() => import("./kovil-thirumanam/Template")),
   "traditional-red": dynamic(() => import("./kovil-thirumanam/Template")),
-  "floral-luxury": dynamic(() => import("./malligai-manam/Template")),
+  "floral-luxury": dynamic(() => import("./theertha-mandapam/Template")),
   "modern-minimal": dynamic(() => import("./kadhal-editorial/Template")),
   "royal-heritage": dynamic(() => import("./kovil-thirumanam/Template")),
   "elegant-muslim": dynamic(() => import("./kovil-thirumanam/Template")),

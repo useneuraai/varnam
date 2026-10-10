@@ -11,7 +11,6 @@ import { TEMPLATES } from "@/lib/templates";
 
 export default function InviteClient({ invitation }: { invitation: InvitationRecord }) {
   const [isDoorOpened, setIsDoorOpened] = useState(false);
-  const [hasCheckedSession, setHasCheckedSession] = useState(false);
   const [showRsvpModal, setShowRsvpModal] = useState(false);
   const [guestName, setGuestName] = useState("");
   const [guestCount, setGuestCount] = useState("1");
@@ -19,33 +18,6 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
   const [wishes, setWishes] = useState("");
   const [isSubmittingRsvp, setIsSubmittingRsvp] = useState(false);
   const [rsvpCompleted, setRsvpCompleted] = useState(false);
-
-  useEffect(() => {
-    try {
-      const storageKey = `invitation_opened_${invitation.slug}`;
-      const isAlreadyOpened = sessionStorage.getItem(storageKey) === "true";
-      const isReplayRequested =
-        typeof window !== "undefined" &&
-        new URLSearchParams(window.location.search).get("replay") === "1";
-
-      if (isAlreadyOpened && !isReplayRequested) {
-        setIsDoorOpened(true);
-      }
-    } catch (e) {
-      console.warn("Session storage check error:", e);
-    } finally {
-      setHasCheckedSession(true);
-    }
-  }, [invitation.slug]);
-
-  const handleDoorOpen = () => {
-    setIsDoorOpened(true);
-    try {
-      sessionStorage.setItem(`invitation_opened_${invitation.slug}`, "true");
-    } catch (e) {
-      console.warn("Failed to set session storage:", e);
-    }
-  };
 
   // States for guest wishes board
   const [wishesList, setWishesList] = useState<any[]>([]);
@@ -148,14 +120,13 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
         </div>
       )}
 
-      {/* 3D Invitation Card Reveal Entrance */}
-      {hasCheckedSession && !isDoorOpened && (
+      {/* 3D Double Door Reveal Entrance */}
+      {!isDoorOpened && (
         <DoorReveal
           brideName={invitation.bride_name}
           groomName={invitation.groom_name}
           templateSlug={invitation.template_slug}
-          bgImageUrl={invitation.bg_image_url}
-          onOpen={handleDoorOpen}
+          onOpen={() => setIsDoorOpened(true)}
         />
       )}
 

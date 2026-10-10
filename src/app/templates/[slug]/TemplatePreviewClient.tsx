@@ -3,11 +3,10 @@
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Wand2, Smartphone, Tablet, Monitor, Sparkles } from "lucide-react";
+import { ArrowLeft, Wand2, Smartphone, Tablet, Monitor } from "lucide-react";
 import { getTemplateBySlug, getDefaultTemplateData } from "@/lib/templates";
 import { templatesMap } from "@/templates";
 import MusicToggle from "@/components/animations/MusicToggle";
-import DoorReveal from "@/components/animations/DoorReveal";
 
 interface TemplatePreviewClientProps {
   slug: string;
@@ -16,10 +15,6 @@ interface TemplatePreviewClientProps {
 export default function TemplatePreviewClient({ slug }: TemplatePreviewClientProps) {
   const router = useRouter();
   const template = getTemplateBySlug(slug);
-
-  // Invitation Card Opening Animation States
-  const [isDoorOpened, setIsDoorOpened] = useState(false);
-  const [hasCheckedSession, setHasCheckedSession] = useState(false);
 
   // Client device classification:
   // "mobile": phone (< 768px)
@@ -31,25 +26,6 @@ export default function TemplatePreviewClient({ slug }: TemplatePreviewClientPro
 
   useEffect(() => {
     setMounted(true);
-
-    // Check if the user already watched the card opening animation in this session
-    try {
-      const storageKey = `invitation_opened_${slug}`;
-      const isAlreadyOpened = sessionStorage.getItem(storageKey) === "true";
-      const isReplayRequested =
-        typeof window !== "undefined" &&
-        new URLSearchParams(window.location.search).get("replay") === "1";
-
-      if (isAlreadyOpened && !isReplayRequested) {
-        setIsDoorOpened(true);
-      } else {
-        setIsDoorOpened(false);
-      }
-    } catch (e) {
-      console.warn("Session storage check error:", e);
-    } finally {
-      setHasCheckedSession(true);
-    }
 
     const detectDevice = () => {
       const width = window.innerWidth;
@@ -68,23 +44,7 @@ export default function TemplatePreviewClient({ slug }: TemplatePreviewClientPro
     detectDevice();
     window.addEventListener("resize", detectDevice);
     return () => window.removeEventListener("resize", detectDevice);
-  }, [slug]);
-
-  const handleDoorOpen = () => {
-    setIsDoorOpened(true);
-    try {
-      sessionStorage.setItem(`invitation_opened_${slug}`, "true");
-    } catch (e) {
-      console.warn("Failed to set session storage:", e);
-    }
-  };
-
-  const handleReplayCard = () => {
-    try {
-      sessionStorage.removeItem(`invitation_opened_${slug}`);
-    } catch (e) {}
-    setIsDoorOpened(false);
-  };
+  }, []);
 
   if (!template) {
     return (
@@ -179,20 +139,8 @@ export default function TemplatePreviewClient({ slug }: TemplatePreviewClientPro
           </div>
         )}
 
-        {/* Right Side: Replay Card + Price + CTA Button */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* Replay Card Button */}
-          <button
-            onClick={handleReplayCard}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-[9px] uppercase tracking-wider text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-300/80 rounded-full transition-all duration-300 font-bold shadow-sm cursor-pointer"
-            title="Replay Invitation Card Opening"
-            id="replay-card-btn"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-            <span className="hidden xs:inline">REPLAY CARD</span>
-            <span className="xs:hidden">CARD</span>
-          </button>
-
+        {/* Right Side: Price + CTA Button */}
+        <div className="flex items-center gap-2 sm:gap-4">
           <span className="hidden sm:inline text-zinc-800 text-xs sm:text-sm font-bold">₹{template.price}</span>
           <Link
             href={`/editor/${template.slug}`}
@@ -269,21 +217,8 @@ export default function TemplatePreviewClient({ slug }: TemplatePreviewClientPro
         </p>
       </footer>
 
-      {/* 3D Invitation Card Opening Reveal */}
-      {hasCheckedSession && !isDoorOpened && (
-        <DoorReveal
-          brideName={demoData.bride_name}
-          groomName={demoData.groom_name}
-          templateSlug={slug}
-          bgImageUrl={demoData.bg_image_url}
-          onOpen={handleDoorOpen}
-        />
-      )}
-
-      {/* Floating Ambient Music - Plays smoothly once card is unfolded */}
-      {isDoorOpened && (
-        <MusicToggle audioUrl={template.previewMusicUrl} autoPlay={true} />
-      )}
+      {/* Floating Ambient Music */}
+      <MusicToggle audioUrl={template.previewMusicUrl} autoPlay={true} />
     </div>
   );
 }

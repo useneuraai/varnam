@@ -132,17 +132,17 @@ function LoginContent() {
             </div>
           )}
 
-          {/* Google Sign In Button */}
+          {/* Google Sign In Button - Warm Royal Gold Accent */}
           <button
             type="button"
             disabled={loading}
             onClick={handleGoogleLogin}
-            className="w-full relative py-4 px-6 bg-zinc-950 hover:bg-zinc-900 active:scale-[0.98] text-white text-xs sm:text-sm font-bold tracking-wider uppercase rounded-2xl transition-all duration-300 shadow-md hover:shadow-lg border border-[#eed57c]/40 hover:border-[#eed57c] flex items-center justify-center gap-3.5 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed group"
+            className="w-full relative py-4 px-6 bg-gradient-to-r from-[#b3811b] via-[#d4a325] to-[#9a6f14] hover:brightness-105 active:scale-[0.98] text-white text-xs sm:text-sm font-bold tracking-wider uppercase rounded-2xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,163,37,0.35)] hover:shadow-[0_6px_25px_rgba(212,163,37,0.45)] border border-[#eed57c] flex items-center justify-center gap-3.5 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed group"
           >
             {loading ? (
               <>
-                <div className="w-4 h-4 border-2 border-[#eed57c] border-t-transparent rounded-full animate-spin" />
-                <span className="text-[#eed57c]">Connecting to Google...</span>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="text-white">Connecting to Google...</span>
               </>
             ) : (
               <>
@@ -167,43 +167,43 @@ function LoginContent() {
                     />
                   </svg>
                 </span>
-                <span>Continue with Google</span>
+                <span className="text-white drop-shadow-xs">Continue with Google</span>
               </>
             )}
           </button>
 
-          {/* Value Assurances */}
-          <div className="w-full mt-8 pt-6 border-t border-zinc-100 flex flex-col gap-2.5 text-left">
-            <div className="flex items-center gap-2.5 text-xs text-zinc-650 font-medium">
-              <div className="w-4 h-4 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+          {/* Value Assurances - High Contrast & Clearly Visible */}
+          <div className="w-full mt-8 pt-6 border-t border-zinc-200/80 flex flex-col gap-3 text-left">
+            <div className="flex items-center gap-3 text-xs text-zinc-800 font-medium">
+              <div className="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
                 <Check className="w-3 h-3 stroke-[2.5]" />
               </div>
-              <span>One-click sign in — no password to memorize</span>
+              <span className="text-zinc-800 font-medium">One-click sign in — no password to memorize</span>
             </div>
 
-            <div className="flex items-center gap-2.5 text-xs text-zinc-650 font-medium">
-              <div className="w-4 h-4 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-3 text-xs text-zinc-800 font-medium">
+              <div className="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
                 <Check className="w-3 h-3 stroke-[2.5]" />
               </div>
-              <span>Auto-saves drafts, guest RSVPs, and payments</span>
+              <span className="text-zinc-800 font-medium">Auto-saves drafts, guest RSVPs, and payments</span>
             </div>
 
-            <div className="flex items-center gap-2.5 text-xs text-zinc-650 font-medium">
-              <div className="w-4 h-4 rounded-full bg-amber-50 text-[#916710] flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-3 text-xs text-zinc-800 font-medium">
+              <div className="w-4 h-4 rounded-full bg-amber-100 text-[#916710] flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-3 h-3" />
               </div>
-              <span>256-bit encrypted authentication by Google</span>
+              <span className="text-zinc-800 font-medium">256-bit encrypted authentication by Google</span>
             </div>
           </div>
 
-          {/* Legal note */}
-          <p className="mt-8 text-[11px] text-zinc-400 leading-relaxed max-w-xs">
+          {/* Legal note - Crisp Contrast */}
+          <p className="mt-8 text-[11.5px] text-zinc-500 leading-relaxed max-w-xs">
             By signing in, you agree to Varnam Invites&apos;{" "}
-            <Link href="/terms-of-service" className="underline hover:text-zinc-700 transition-colors">
+            <Link href="/terms-of-service" className="underline text-zinc-700 hover:text-zinc-950 transition-colors">
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link href="/privacy-policy" className="underline hover:text-zinc-700 transition-colors">
+            <Link href="/privacy-policy" className="underline text-zinc-700 hover:text-zinc-950 transition-colors">
               Privacy Policy
             </Link>
             .
@@ -216,7 +216,7 @@ function LoginContent() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-[#faf8f5] relative flex items-center justify-center px-4 sm:px-6 py-12 font-sans selection:bg-gold-200 selection:text-black overflow-hidden">
+    <div className="min-h-screen bg-[#faf8f5] text-zinc-800 relative flex items-center justify-center px-4 sm:px-6 py-12 font-sans selection:bg-gold-200 selection:text-black overflow-hidden">
       {/* Warm Ambient Luxury Glow Background */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-100/40 via-orange-50/15 to-transparent blur-3xl pointer-events-none" />
 

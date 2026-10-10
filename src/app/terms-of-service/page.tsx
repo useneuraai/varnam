@@ -1,8 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata = {
-  title: "Terms & Conditions | Varnam",
-  description: "Read the terms and conditions for single template licensing and hosting on Varnam.",
+export const metadata: Metadata = {
+  title: "Terms & Conditions | Varnam Invites",
+  description: "Read the terms and conditions for single template licensing and hosting on Varnam Invites.",
+  alternates: {
+    canonical: "https://www.varnaminvites.store/terms-of-service",
+  },
 };
 
 export default function TermsOfServicePage() {
@@ -43,7 +47,7 @@ export default function TermsOfServicePage() {
         <h1 className="text-3xl sm:text-5xl font-bold font-serif text-zinc-900 tracking-tight mb-4">Terms &amp; Conditions</h1>
         <p className="text-xs text-zinc-500 font-bold mb-8 uppercase tracking-wider">Last Updated: October 5, 2026</p>
         
-        <div className="prose prose-zinc text-zinc-650 space-y-6 text-sm leading-relaxed">
+        <div className="prose prose-zinc text-zinc-600 space-y-6 text-sm leading-relaxed">
           <p>
             Welcome to Varnam! These Terms &amp; Conditions govern your use of our digital wedding invitation website builder, hosting services, and related features.
           </p>

@@ -1,8 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata = {
-  title: "Privacy Policy | Varnam",
+export const metadata: Metadata = {
+  title: "Privacy Policy | Varnam Invites",
   description: "Learn how we handle your personal data and invitation details securely.",
+  alternates: {
+    canonical: "https://www.varnaminvites.store/privacy-policy",
+  },
 };
 
 export default function PrivacyPolicyPage() {
@@ -17,7 +21,7 @@ export default function PrivacyPolicyPage() {
               VARNAM
             </span>
           </Link>
-          <Link href="/templates" className="text-[11px] tracking-widest text-zinc-650 hover:text-zinc-900 transition-colors font-bold uppercase">
+          <Link href="/templates" className="text-[11px] tracking-widest text-zinc-600 hover:text-zinc-900 transition-colors font-bold uppercase">
             TEMPLATES
           </Link>
         </div>
@@ -28,7 +32,7 @@ export default function PrivacyPolicyPage() {
         <h1 className="text-4xl font-extrabold text-zinc-900 tracking-tight mb-8">Privacy Policy</h1>
         <p className="text-sm text-zinc-500 mb-8 font-bold">Last Updated: July 15, 2026</p>
         
-        <div className="prose prose-zinc text-zinc-650 space-y-6 text-sm leading-relaxed">
+        <div className="prose prose-zinc text-zinc-600 space-y-6 text-sm leading-relaxed">
           <p>
             At Varnam, accessible from https://www.varnaminvites.store, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Varnam and how we use it.
           </p>

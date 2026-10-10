@@ -1,8 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata = {
-  title: "Cancellation & Refund Policy | Varnam",
+export const metadata: Metadata = {
+  title: "Cancellation & Refund Policy | Varnam Invites",
   description: "Read our transparent cancellation and refund policy for digital wedding invitation website licensing.",
+  alternates: {
+    canonical: "https://www.varnaminvites.store/refund-policy",
+  },
 };
 
 export default function RefundPolicyPage() {
@@ -47,7 +51,7 @@ export default function RefundPolicyPage() {
           Last Updated: October 5, 2026
         </p>
 
-        <div className="prose prose-zinc text-zinc-650 space-y-6 text-sm leading-relaxed">
+        <div className="prose prose-zinc text-zinc-600 space-y-6 text-sm leading-relaxed">
           <p className="text-base text-zinc-700 leading-relaxed font-normal">
             At Varnam, our goal is to ensure you and your guests are delighted with your digital wedding invitation website. We proudly operate on a <strong>"Try Before You Pay"</strong> model: you can customize your invitation, test features, and preview the full interactive website for free before making any financial commitment.
           </p>

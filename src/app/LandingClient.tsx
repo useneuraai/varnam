@@ -218,7 +218,7 @@ export default function LandingClient() {
               </span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-10 text-xs tracking-widest text-zinc-650 font-bold uppercase">
+            <nav className="hidden md:flex items-center gap-10 text-xs tracking-widest text-zinc-600 font-bold uppercase">
               <Link href="/templates" className="py-2.5 hover:text-zinc-950 transition-colors">TEMPLATES</Link>
               <a href="#how-it-works" className="py-2.5 hover:text-zinc-950 transition-colors">HOW IT WORKS</a>
               <a href="#why-choose" className="py-2.5 hover:text-zinc-950 transition-colors">WHY US</a>
@@ -237,7 +237,7 @@ export default function LandingClient() {
                 ) : mounted ? (
                   <Link
                     href="/login"
-                    className="px-5 py-2.5 text-xs tracking-widest text-zinc-650 hover:text-zinc-950 transition-all duration-300 font-bold uppercase min-h-[40px] flex items-center"
+                    className="px-5 py-2.5 text-xs tracking-widest text-zinc-600 hover:text-zinc-950 transition-all duration-300 font-bold uppercase min-h-[40px] flex items-center"
                   >
                     Sign In
                   </Link>
@@ -575,7 +575,7 @@ export default function LandingClient() {
                       <h3 className="text-base sm:text-lg font-bold text-zinc-900 tracking-tight">
                         {item.title}
                       </h3>
-                      <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-zinc-650">
+                      <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-zinc-600">
                         {item.desc}
                       </p>
                     </div>
@@ -641,7 +641,7 @@ export default function LandingClient() {
                     <h3 suppressHydrationWarning className="text-lg sm:text-xl text-zinc-900 font-bold font-serif tracking-wide mb-1.5 sm:mb-2">
                       {tpl.name}
                     </h3>
-                    <p suppressHydrationWarning className="text-xs sm:text-sm text-zinc-650 leading-relaxed mb-5 sm:mb-6 flex-grow font-normal line-clamp-3 sm:line-clamp-none">
+                    <p suppressHydrationWarning className="text-xs sm:text-sm text-zinc-600 leading-relaxed mb-5 sm:mb-6 flex-grow font-normal line-clamp-3 sm:line-clamp-none">
                       {tpl.description}
                     </p>
 
@@ -889,7 +889,7 @@ export default function LandingClient() {
               </p>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-8 gap-y-3 text-xs tracking-wider text-zinc-650 font-bold uppercase">
+            <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-8 gap-y-3 text-xs tracking-wider text-zinc-600 font-bold uppercase">
               <Link href="/about" className="hover:text-zinc-950 transition-colors">ABOUT</Link>
               <Link href="/contact" className="hover:text-zinc-950 transition-colors">CONTACT</Link>
               <a

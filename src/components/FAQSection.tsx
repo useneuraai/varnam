@@ -98,7 +98,7 @@ export default function FAQSection() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2, ease: "easeInOut" }}
                     >
-                      <div className="pb-4 sm:pb-5 pt-1 text-xs sm:text-sm text-zinc-650 leading-relaxed">
+                      <div className="pb-4 sm:pb-5 pt-1 text-xs sm:text-sm text-zinc-600 leading-relaxed">
                         {faq.a}
                       </div>
                     </motion.div>

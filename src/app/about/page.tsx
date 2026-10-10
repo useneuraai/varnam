@@ -46,7 +46,7 @@ export default function AboutPage() {
           Crafting Unforgettable Wedding Invitations for the Digital Age
         </h1>
 
-        <div className="prose prose-zinc max-w-none text-zinc-650 space-y-6 text-sm sm:text-base leading-relaxed">
+        <div className="prose prose-zinc max-w-none text-zinc-600 space-y-6 text-sm sm:text-base leading-relaxed">
           <p className="text-base sm:text-lg text-zinc-700 font-normal leading-relaxed">
             Varnam Invites was founded on a simple belief: your wedding invitation shouldn&apos;t be a flat paper card or a static PDF. It should be a living, breathing digital experience that captures the joy, elegance, and grandeur of your special day.
           </p>

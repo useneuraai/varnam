@@ -322,24 +322,17 @@ export default function LandingClient() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[420px] sm:h-[500px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-100/40 via-orange-50/15 to-transparent blur-3xl pointer-events-none -z-0" />
 
           <div className="max-w-5xl mx-auto flex flex-col items-center relative z-10 select-text">
-            <p className="text-[10.5px] sm:text-xs font-bold uppercase tracking-[0.16em] sm:tracking-widest text-[#916710] mb-3 sm:mb-5">
-              Varnam Invites • Premium Digital Wedding Invitations
-            </p>
             
-            <h1 className="text-[1.28rem] min-[360px]:text-[1.42rem] min-[390px]:text-[1.58rem] sm:text-4xl md:text-5xl lg:text-[3.4rem] xl:text-[3.8rem] font-bold leading-[1.2] sm:leading-[1.12] text-zinc-900 tracking-tight mb-4 sm:mb-6 font-serif max-w-5xl">
-              <span className="hidden sm:block sm:whitespace-nowrap">Premium Digital Wedding Invitations</span>
-              <span className="hidden sm:block gold-gradient-text drop-shadow-sm mt-1 sm:mt-2 sm:whitespace-nowrap">Online in Minutes</span>
+            <h1 className="text-[1.65rem] min-[360px]:text-[1.85rem] min-[390px]:text-[2.05rem] min-[430px]:text-[2.25rem] sm:text-5xl md:text-[3.4rem] lg:text-[4rem] xl:text-[4.5rem] font-bold leading-[1.18] sm:leading-[1.12] text-zinc-900 tracking-tight mb-4 sm:mb-6 font-serif max-w-5xl">
+              <span className="hidden sm:block">Premium Digital Wedding Invitations</span>
+              <span className="hidden sm:block gold-gradient-text drop-shadow-sm mt-1 sm:mt-2">Online in Minutes</span>
 
-              <span className="block sm:hidden whitespace-nowrap">Premium Digital Wedding</span>
-              <span className="block sm:hidden gold-gradient-text drop-shadow-sm mt-0.5 whitespace-nowrap">Invitations Online</span>
+              <span className="block sm:hidden">Premium Digital Wedding</span>
+              <span className="block sm:hidden gold-gradient-text drop-shadow-sm mt-1">Invitations Online</span>
             </h1>
 
-            {/* Subtitle: simple, clear copy that anyone can understand */}
-            <p className="block sm:hidden text-zinc-600 text-[12px] min-[360px]:text-[13px] leading-[1.5] mb-5 font-normal max-w-sm mx-auto px-1">
-              Create beautiful digital wedding invitations and personal wedding websites with instant customization, background music, RSVP tracking, and Google Maps venue navigation.
-            </p>
-
-            <p className="hidden sm:block max-w-3xl text-zinc-600 sm:text-base lg:text-lg leading-relaxed mb-8 sm:mb-10 font-normal">
+            {/* Subtitle: hidden on mobile and tablet, shown only on desktop */}
+            <p className="hidden lg:block max-w-3xl text-zinc-600 sm:text-base lg:text-lg leading-relaxed mb-8 sm:mb-10 font-normal">
               Create beautiful digital wedding invitations and personal wedding websites with instant customization, background music, RSVP tracking, and Google Maps venue navigation — ready to share in minutes.
             </p>
 
@@ -348,19 +341,13 @@ export default function LandingClient() {
               <span className="inline sm:hidden whitespace-nowrap">Customize for free • Plans from ₹999!</span>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
+            <div className="flex items-center justify-center w-full sm:w-auto px-4 sm:px-0">
               <Link
                 href="/templates"
-                className="w-full sm:w-auto px-7 sm:px-8 py-3.5 sm:py-4 bg-zinc-950 hover:bg-zinc-900 active:scale-[0.98] text-white font-extrabold text-xs tracking-widest uppercase transition-all duration-200 border border-[#eed57c] shadow-sm min-w-0 sm:min-w-[210px] min-h-[46px] sm:min-h-[48px] flex items-center justify-center gap-2 group rounded-xl max-w-xs sm:max-w-none"
+                className="w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 bg-zinc-950 hover:bg-zinc-900 active:scale-[0.98] text-white font-extrabold text-xs sm:text-sm tracking-widest uppercase transition-all duration-200 border border-[#eed57c] shadow-md hover:shadow-lg min-w-0 sm:min-w-[220px] min-h-[48px] flex items-center justify-center gap-2 group rounded-xl max-w-xs sm:max-w-none"
               >
                 Browse Templates
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-[#eed57c]" />
-              </Link>
-              <Link
-                href="/templates/kovil-thirumanam"
-                className="w-full sm:w-auto px-7 sm:px-8 py-3.5 sm:py-4 border border-zinc-300 hover:border-zinc-800 active:scale-[0.98] text-zinc-700 hover:bg-zinc-50 font-bold text-xs tracking-widest uppercase transition-all duration-200 min-w-0 sm:min-w-[210px] min-h-[46px] sm:min-h-[48px] flex items-center justify-center gap-2 rounded-xl max-w-xs sm:max-w-none"
-              >
-                View Sample Invite
               </Link>
             </div>
           </div>

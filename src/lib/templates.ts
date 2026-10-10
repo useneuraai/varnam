@@ -81,15 +81,15 @@ export interface TemplateDefinition {
 
 export const TEMPLATES: TemplateDefinition[] = [
   {
-    slug: "royal-classic",
-    name: "Royal Classic",
+    slug: "red-classic",
+    name: "Red Classic",
     description:
-      "Regal temple classic wedding invitation featuring sacred Lord Ganesha archway, wax-sealed royal card, antique parchment scroll timeline, and deep crimson velvet textures.",
+      "Regal temple classic wedding invitation featuring sacred Lord Ganesha archway, royal gold mandala date reveal, and rich crimson red textures.",
     category: "Classic",
     religion: "",
     language: "",
     price: 999,
-    thumbnailUrl: "/images/royal-classic/hero_ganesha_arch.jpg",
+    thumbnailUrl: "/images/red-classic/hero_ganesha_arch.jpg",
     previewMusicUrl:
       "https://archive.org/download/r-12356661-1632393571-2601/01.%20Raag%20Bhimpalasi%20-%20Teen%20Taal.mp3",
     fields: [
@@ -556,11 +556,12 @@ export const getTemplateBySlug = (slug: string): TemplateDefinition | undefined 
   let t = TEMPLATES.find((tpl) => tpl.slug === slug);
   if (!t) {
     const legacyAliases: Record<string, string> = {
-      "swarna-classic": "royal-classic",
-      "vinayaka-classic": "royal-classic",
-      "ganesha-classic": "royal-classic",
-      "shubha-classic": "royal-classic",
-      "classic-royal": "royal-classic",
+      "royal-classic": "red-classic",
+      "swarna-classic": "red-classic",
+      "vinayaka-classic": "red-classic",
+      "ganesha-classic": "red-classic",
+      "shubha-classic": "red-classic",
+      "classic-royal": "red-classic",
       "palace-garden": "mayura-palace",
       "royal-garden": "mayura-palace",
       "mayura-mandapam": "mayura-palace",

@@ -66,6 +66,7 @@ const getCardStyles = (offset: number, isMobile: boolean) => {
 
 const getCoupleName = (slug: string) => {
   switch (slug) {
+    case "red-classic":
     case "royal-classic":
     case "swarna-classic":
     case "vinayaka-classic":
@@ -100,6 +101,7 @@ const getCoupleName = (slug: string) => {
 
 const getCategoryName = (template: any) => {
   switch (template.slug) {
+    case "red-classic":
     case "royal-classic":
     case "swarna-classic":
     case "vinayaka-classic":

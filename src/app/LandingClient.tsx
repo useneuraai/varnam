@@ -472,32 +472,9 @@ export default function LandingClient() {
         </section>
 
 
-        {/* Social Proof & Platform Stats */}
-        <section className="w-full bg-[#fafaf9] py-10 sm:py-16 px-4 sm:px-6 relative z-10 border-b border-zinc-100">
-          <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
-            {[
-              { label: "Couples Trusted", value: "1,200+" },
-              { label: "RSVPs Tracked", value: "85,000+" },
-              { label: "Active Guest Books", value: "98%" },
-              { label: "Guest Satisfaction", value: "4.9/5" }
-            ].map((stat, idx) => (
-              <div 
-                key={idx} 
-                className="flex flex-col items-center justify-center text-center p-4 sm:p-6 bg-white rounded-2xl border border-zinc-150/70 shadow-xs hover:border-[#eed57c]/50 transition-colors"
-              >
-                <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif text-[#916710] tracking-tight">
-                  {stat.value}
-                </span>
-                <span className="text-[10px] sm:text-xs tracking-wider text-zinc-500 font-bold uppercase mt-1 sm:mt-2">
-                  {stat.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Why Choose Varnam / Features */}
-        <section id="why-choose" className="py-14 sm:py-24 px-4 sm:px-6 relative bg-white overflow-hidden scroll-mt-20">
+        <section id="why-choose" className="py-14 sm:py-24 px-4 sm:px-6 relative bg-white border-t border-zinc-150 overflow-hidden scroll-mt-20">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 lg:items-center">
             <div>
               <p className="font-bold text-[11px] sm:text-xs uppercase tracking-[0.18em] text-[#916710]">

@@ -81,6 +81,53 @@ export interface TemplateDefinition {
 
 export const TEMPLATES: TemplateDefinition[] = [
   {
+    slug: "royal-classic",
+    name: "Royal Classic",
+    description:
+      "Regal temple classic wedding invitation featuring sacred Lord Ganesha archway, wax-sealed royal card, antique parchment scroll timeline, and deep crimson velvet textures.",
+    category: "Classic",
+    religion: "",
+    language: "",
+    price: 999,
+    thumbnailUrl: "/images/royal-classic/hero_ganesha_arch.jpg",
+    previewMusicUrl:
+      "https://archive.org/download/r-12356661-1632393571-2601/01.%20Raag%20Bhimpalasi%20-%20Teen%20Taal.mp3",
+    fields: [
+      { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Ananya", required: true },
+      { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Siddharth", required: true },
+      { id: "wedding_date", label: "Wedding Date & Time", type: "datetime", required: true },
+      {
+        id: "wedding_venue",
+        label: "Wedding Venue",
+        type: "textarea",
+        placeholder: "The Leela Palace Courtyard, Adyar Seaface, MRC Nagar, Chennai - 600028",
+        required: true,
+      },
+      {
+        id: "quote",
+        label: "Wedding Verse / Quote",
+        type: "text",
+        placeholder: "Two souls united amidst royal blessings and sacred traditions, embarking on an eternal sacred journey together.",
+        required: false,
+      },
+      {
+        id: "family_names",
+        label: "Welcoming Families",
+        type: "text",
+        placeholder: "The Sundararajan & Ranganathan Families",
+        required: false,
+      },
+      { id: "rsvp_phone", label: "RSVP Contact", type: "text", placeholder: "+91 98401 23456", required: true },
+      {
+        id: "custom_message",
+        label: "Ceremonial Note",
+        type: "textarea",
+        placeholder: "We seek your gracious presence and heartfelt blessings on our special day.",
+        required: false,
+      },
+    ],
+  },
+  {
     slug: "mayura-classic",
     name: "Mayura Classic",
     description:
@@ -509,6 +556,11 @@ export const getTemplateBySlug = (slug: string): TemplateDefinition | undefined 
   let t = TEMPLATES.find((tpl) => tpl.slug === slug);
   if (!t) {
     const legacyAliases: Record<string, string> = {
+      "swarna-classic": "royal-classic",
+      "vinayaka-classic": "royal-classic",
+      "ganesha-classic": "royal-classic",
+      "shubha-classic": "royal-classic",
+      "classic-royal": "royal-classic",
       "palace-garden": "mayura-palace",
       "royal-garden": "mayura-palace",
       "mayura-mandapam": "mayura-palace",

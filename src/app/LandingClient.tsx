@@ -66,6 +66,11 @@ const getCardStyles = (offset: number, isMobile: boolean) => {
 
 const getCoupleName = (slug: string) => {
   switch (slug) {
+    case "royal-classic":
+    case "swarna-classic":
+    case "vinayaka-classic":
+    case "ganesha-classic":
+    case "shubha-classic":
     case "mayura-classic":
     case "peacock-classic":
     case "mayura-palace":
@@ -95,6 +100,12 @@ const getCoupleName = (slug: string) => {
 
 const getCategoryName = (template: any) => {
   switch (template.slug) {
+    case "royal-classic":
+    case "swarna-classic":
+    case "vinayaka-classic":
+    case "ganesha-classic":
+    case "shubha-classic":
+      return "Royal Temple Classic";
     case "mayura-classic":
     case "peacock-classic":
       return "Royal Peacock Classic";

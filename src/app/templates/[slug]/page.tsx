@@ -68,6 +68,11 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
   const template = getTemplateBySlug(slug);
+  const cleanName = template
+    ? template.name
+        .replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "")
+        .trim()
+    : "";
 
   const productSchema = template
     ? {
@@ -92,12 +97,45 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
       }
     : null;
 
+  const breadcrumbSchema = template
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: "https://www.varnaminvites.store/",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Templates",
+            item: "https://www.varnaminvites.store/templates",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: cleanName,
+            item: `https://www.varnaminvites.store/templates/${slug}`,
+          },
+        ],
+      }
+    : null;
+
   return (
     <>
       {productSchema && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+        />
+      )}
+      {breadcrumbSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
       )}
       <TemplatePreviewClient slug={slug} />

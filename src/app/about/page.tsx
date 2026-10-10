@@ -2,8 +2,9 @@ import Link from "next/link";
 import { Sparkles, Heart, Globe, ShieldCheck } from "lucide-react";
 
 export const metadata = {
-  title: "About Us | Varnam Digital Wedding Invitations",
-  description: "Learn about Varnam, our mission to create ultra-premium, interactive, and cinematic digital wedding invitation websites for modern couples.",
+  title: "About Us | Varnam Invites",
+  description:
+    "Learn about Varnam Invites, our mission to create ultra-premium, interactive, and cinematic digital wedding invitation websites for modern couples.",
 };
 
 export default function AboutPage() {
@@ -47,7 +48,7 @@ export default function AboutPage() {
 
         <div className="prose prose-zinc max-w-none text-zinc-650 space-y-6 text-sm sm:text-base leading-relaxed">
           <p className="text-base sm:text-lg text-zinc-700 font-normal leading-relaxed">
-            Varnam was founded on a simple belief: your wedding invitation shouldn't be a flat paper card or a static PDF. It should be a living, breathing digital experience that captures the joy, elegance, and grandeur of your special day.
+            Varnam Invites was founded on a simple belief: your wedding invitation shouldn&apos;t be a flat paper card or a static PDF. It should be a living, breathing digital experience that captures the joy, elegance, and grandeur of your special day.
           </p>
 
           <div className="my-10 grid grid-cols-1 sm:grid-cols-2 gap-6 not-prose">
@@ -98,7 +99,7 @@ export default function AboutPage() {
             Rooted in Heritage, Built for Tomorrow
           </h2>
           <p>
-            Based out of Kanchipuram, Tamil Nadu, we take deep inspiration from India's rich architectural motifs, festive floral traditions, and royal ceremonial heritage, harmonized with cutting-edge modern web animation technology.
+            Based out of Kanchipuram, Tamil Nadu, we take deep inspiration from India&apos;s rich architectural motifs, festive floral traditions, and royal ceremonial heritage, harmonized with cutting-edge modern web animation technology.
           </p>
         </div>
 

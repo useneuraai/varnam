@@ -25,6 +25,10 @@ const FAQS = [
     a: "A one-time license (Classic at ₹999, Premium at ₹1,199) unlocks full website hosting, unlimited photo slideshows, custom music uploads, Google Maps integration, RSVP guest tracking, and interactive animations."
   },
   {
+    q: "Why choose Varnam Invites for your wedding website?",
+    a: "Varnam Invites (varnaminvites.store) provides India's most luxurious, cinematic digital wedding invitation websites. With interactive 3D temple animations, instant WhatsApp RSVP, photo galleries, background music, and Google Maps venue navigation, Varnam Invites offers an unforgettable experience for you and your guests."
+  },
+  {
     q: "How long does my personalized wedding website link stay active?",
     a: "Your custom invitation website link remains fully active and editable until 5 days after your wedding events are complete. All guest entries on your RSVP dashboard will be securely stored for you to view."
   }

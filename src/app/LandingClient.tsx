@@ -342,7 +342,7 @@ export default function LandingClient() {
             </p>
 
             <p className="hidden sm:block max-w-3xl text-zinc-600 sm:text-base lg:text-lg leading-relaxed mb-8 sm:mb-10 font-normal">
-              <span className="block sm:whitespace-nowrap">Varnam creates beautifully designed, interactive digital wedding invitation websites for Indian weddings.</span>
+              <span className="block sm:whitespace-nowrap">Varnam Invites creates beautifully designed, interactive digital wedding invitation websites for Indian weddings.</span>
               <span className="block sm:mt-1 sm:whitespace-nowrap">Luxury 3D designs with scratch cards, photos &amp; maps,</span>
               <span className="block sm:mt-1 sm:whitespace-nowrap">ready to share with your guests instantly with a single WhatsApp link.</span>
             </p>
@@ -895,6 +895,7 @@ export default function LandingClient() {
 
             <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-8 gap-y-3 text-xs tracking-wider text-zinc-650 font-bold uppercase">
               <Link href="/about" className="hover:text-zinc-950 transition-colors">ABOUT</Link>
+              <Link href="/contact" className="hover:text-zinc-950 transition-colors">CONTACT</Link>
               <a
                 href="https://www.instagram.com/varnaminvites"
                 target="_blank"

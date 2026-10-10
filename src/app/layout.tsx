@@ -37,8 +37,15 @@ export const metadata: Metadata = {
     template: "%s | Varnam Invites",
   },
   description:
-    "Create beautiful, interactive digital wedding invitations with Varnam Invites. Premium wedding invitation websites for Indian weddings, designed to share beautifully with family and friends.",
+    "Create beautiful, interactive digital wedding invitations with Varnam Invites. Premium wedding invitation websites for Indian weddings with instant WhatsApp RSVP, luxury 3D temple animations, photo galleries, background music, and Google Maps venue navigation.",
   keywords: [
+    "varnam invites",
+    "varnam wedding invites",
+    "varnaminvites.store",
+    "varnam digital invite",
+    "varnam invites store",
+    "varnam invite",
+    "varnam wedding cards",
     "Varnam Invites",
     "Varnam",
     "digital wedding invitation",
@@ -48,24 +55,43 @@ export const metadata: Metadata = {
     "digital wedding invite",
     "premium wedding invitation",
     "wedding website India",
+    "Tamil wedding invitation website",
+    "South Indian wedding invites",
+    "WhatsApp wedding invitation",
+    "interactive wedding invitation card",
+    "luxury digital invites",
+    "வர்ணம் இன்வைட்ஸ்",
   ],
   alternates: {
-    canonical: "https://www.varnaminvites.store",
+    canonical: "https://www.varnaminvites.store/",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "",
+    other: {
+      ...(process.env.NEXT_PUBLIC_BING_VERIFICATION ? { "msvalidate.01": [process.env.NEXT_PUBLIC_BING_VERIFICATION] } : {}),
+    },
   },
   openGraph: {
     type: "website",
-    url: "https://www.varnaminvites.store",
+    url: "https://www.varnaminvites.store/",
     siteName: "Varnam Invites",
     title: "Varnam Invites | Premium Digital Wedding Invitations",
     description:
-      "Premium interactive digital wedding invitation websites for modern Indian weddings.",
+      "Premium interactive digital wedding invitation websites for modern Indian weddings. Instant WhatsApp RSVP, 3D animations, music, and maps.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "https://www.varnaminvites.store/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Varnam Invites - Premium Digital Wedding Invitations",
@@ -76,8 +102,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Varnam Invites | Premium Digital Wedding Invitations",
     description:
-      "Premium interactive digital wedding invitations for Indian weddings.",
-    images: ["/og-image.jpg"],
+      "Premium interactive digital wedding invitations for Indian weddings. Instant WhatsApp RSVP & 3D animations.",
+    images: ["https://www.varnaminvites.store/og-image.jpg"],
   },
   icons: {
     icon: "/favicon.ico?v=5",
@@ -97,7 +123,8 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Varnam Invites",
-  url: "https://www.varnaminvites.store",
+  alternateName: ["Varnam", "Varnam Digital Wedding Invitations"],
+  url: "https://www.varnaminvites.store/",
   potentialAction: {
     "@type": "SearchAction",
     target: "https://www.varnaminvites.store/templates?q={search_term_string}",
@@ -108,18 +135,19 @@ const websiteSchema = {
 const webAppSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Varnam Invites",
-  "url": "https://www.varnaminvites.store",
-  "applicationCategory": "MultimediaApplication",
-  "operatingSystem": "All",
-  "browserRequirements": "Requires HTML5 compatible browser",
-  "description": "Craft ultra-premium, interactive, and cinematic digital wedding invitations. Exquisite storytelling for your special day, inspired by luxury brands.",
-  "offers": {
+  name: "Varnam Invites",
+  alternateName: ["Varnam Wedding App", "Varnam Digital Wedding Invitations"],
+  url: "https://www.varnaminvites.store/",
+  applicationCategory: "MultimediaApplication",
+  operatingSystem: "All",
+  browserRequirements: "Requires HTML5 compatible browser",
+  description: "Craft ultra-premium, interactive, and cinematic digital wedding invitations. Exquisite storytelling for your special day, inspired by luxury brands.",
+  offers: {
     "@type": "Offer",
-    "price": "999.00",
-    "priceCurrency": "INR",
-    "availability": "https://schema.org/InStock",
-    "category": "Signature Event License"
+    price: "999.00",
+    priceCurrency: "INR",
+    availability: "https://schema.org/InStock",
+    category: "Signature Event License"
   }
 };
 
@@ -127,10 +155,10 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Varnam Invites",
-  alternateName: ["Varnam", "Varnam Wedding Invites"],
-  url: "https://www.varnaminvites.store",
+  alternateName: ["Varnam", "Varnam Digital Wedding Invitations"],
+  url: "https://www.varnaminvites.store/",
   logo: "https://www.varnaminvites.store/logo.png",
-  description: "Premium digital wedding invitation websites for Indian weddings.",
+  description: "Varnam Invites crafts premium digital wedding invitation websites for Indian weddings.",
   sameAs: ["https://www.instagram.com/varnaminvites"],
   contactPoint: {
     "@type": "ContactPoint",
@@ -144,10 +172,20 @@ const organizationSchema = {
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "name": "Varnam Wedding Invites",
-  "image": "https://www.varnaminvites.store/og-image.jpg",
-  "email": "hello@varnaminvites.store",
-  "priceRange": "₹₹"
+  name: "Varnam Invites",
+  alternateName: ["Varnam", "Varnam Digital Wedding Invitations"],
+  image: "https://www.varnaminvites.store/og-image.jpg",
+  url: "https://www.varnaminvites.store/",
+  email: "hello@varnaminvites.store",
+  priceRange: "₹₹",
+  currenciesAccepted: "INR",
+  paymentAccepted: "UPI, Credit Card, Debit Card, Net Banking",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Kanchipuram",
+    addressRegion: "Tamil Nadu",
+    addressCountry: "IN",
+  },
 };
 
 export default function RootLayout({

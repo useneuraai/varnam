@@ -4,7 +4,14 @@ import GalleryClient from "./GalleryClient";
 export const metadata: Metadata = {
   title: "Wedding Invitation Templates | Varnam Invites",
   description:
-    "Explore handcrafted digital wedding invitation templates for Indian weddings. Choose from South Indian temple designs, palace mandapams, and floral themes with RSVP tracking, music, and Google Maps.",
+    "Explore handcrafted digital wedding invitation templates by Varnam Invites. South Indian temple designs, palace mandapams, and floral themes with RSVP tracking, music, and Google Maps.",
+  keywords: [
+    "varnam invites templates",
+    "varnam wedding cards",
+    "varnam invites",
+    "digital wedding invitation templates",
+    "Indian wedding invitation websites",
+  ],
   alternates: {
     canonical: "https://www.varnaminvites.store/templates",
   },
@@ -16,7 +23,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "https://www.varnaminvites.store/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Varnam Invites - Wedding Invitation Templates",
@@ -28,7 +35,7 @@ export const metadata: Metadata = {
     title: "Wedding Invitation Templates | Varnam Invites",
     description:
       "Explore handcrafted digital wedding invitation templates for Indian weddings.",
-    images: ["/og-image.jpg"],
+    images: ["https://www.varnaminvites.store/og-image.jpg"],
   },
 };
 

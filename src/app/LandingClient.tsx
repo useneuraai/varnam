@@ -334,17 +334,13 @@ export default function LandingClient() {
               <span className="block sm:hidden gold-gradient-text drop-shadow-sm mt-0.5 whitespace-nowrap">Invitations Online</span>
             </h1>
 
-            {/* Subtitle: strictly 3 lines on mobile and 3 lines on desktop */}
-            <p className="block sm:hidden text-zinc-600 text-[11.5px] min-[360px]:text-[12.5px] min-[390px]:text-[13px] leading-[1.5] mb-5 font-normal max-w-xs mx-auto">
-              <span className="block whitespace-nowrap">Turn your story into a luxury wedding website.</span>
-              <span className="block whitespace-nowrap">3D temple designs, scratch cards, photos &amp; maps,</span>
-              <span className="block whitespace-nowrap">ready to share instantly with one WhatsApp link.</span>
+            {/* Subtitle: simple, clear copy that anyone can understand */}
+            <p className="block sm:hidden text-zinc-600 text-[12px] min-[360px]:text-[13px] leading-[1.5] mb-5 font-normal max-w-sm mx-auto px-1">
+              Create beautiful digital wedding invitations and personal wedding websites with instant customization, background music, RSVP tracking, and Google Maps venue navigation.
             </p>
 
             <p className="hidden sm:block max-w-3xl text-zinc-600 sm:text-base lg:text-lg leading-relaxed mb-8 sm:mb-10 font-normal">
-              <span className="block sm:whitespace-nowrap">Varnam Invites creates beautifully designed, interactive digital wedding invitation websites for Indian weddings.</span>
-              <span className="block sm:mt-1 sm:whitespace-nowrap">Luxury 3D designs with scratch cards, photos &amp; maps,</span>
-              <span className="block sm:mt-1 sm:whitespace-nowrap">ready to share with your guests instantly with a single WhatsApp link.</span>
+              Create beautiful digital wedding invitations and personal wedding websites with instant customization, background music, RSVP tracking, and Google Maps venue navigation — ready to share in minutes.
             </p>
 
             <div className="inline-flex items-center justify-center text-[11px] sm:text-xs font-bold text-[#916710] bg-[#fff9f2] px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full sm:rounded-xl border border-[#eed57c]/35 mb-6 sm:mb-8 select-none shadow-xs max-w-full">
@@ -883,7 +879,7 @@ export default function LandingClient() {
                 </span>
               </div>
               <p className="text-xs text-zinc-600 max-w-sm mt-2 leading-relaxed text-center md:text-left">
-                Ultra-premium, cinematic digital wedding invitation websites. Exquisite interactive e-invites with RSVP, custom music, maps, and guest message walls for modern couples.
+                Create beautiful digital wedding invitations and personal wedding websites with instant customization, background music, RSVP tracking, and Google Maps venue navigation.
               </p>
               <p className="text-xs text-zinc-500 mt-2 text-center md:text-left">
                 ✉ <a href="mailto:hello@varnaminvites.store" className="hover:text-zinc-900 transition-colors">hello@varnaminvites.store</a>

@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     template: "%s | Varnam Invites",
   },
   description:
-    "Create beautiful, interactive digital wedding invitations with Varnam Invites. Premium wedding invitation websites for Indian weddings with instant WhatsApp RSVP, luxury 3D temple animations, photo galleries, background music, and Google Maps venue navigation.",
+    "Create beautiful digital wedding invitations and personal wedding websites with instant customization, background music, RSVP tracking, and Google Maps venue navigation.",
   keywords: [
     "varnam invites",
     "varnam wedding invites",
@@ -59,8 +59,7 @@ export const metadata: Metadata = {
     "South Indian wedding invites",
     "WhatsApp wedding invitation",
     "interactive wedding invitation card",
-    "luxury digital invites",
-    "வர்ணம் இன்வைட்ஸ்",
+    "luxury digital invites"
   ],
   alternates: {
     canonical: "https://www.varnaminvites.store/",
@@ -88,7 +87,7 @@ export const metadata: Metadata = {
     siteName: "Varnam Invites",
     title: "Varnam Invites | Premium Digital Wedding Invitations",
     description:
-      "Premium interactive digital wedding invitation websites for modern Indian weddings. Instant WhatsApp RSVP, 3D animations, music, and maps.",
+      "Create beautiful digital wedding invitations and personal wedding websites with instant customization, background music, RSVP tracking, and Google Maps venue navigation.",
     images: [
       {
         url: "https://www.varnaminvites.store/og-image.jpg",
@@ -102,7 +101,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Varnam Invites | Premium Digital Wedding Invitations",
     description:
-      "Premium interactive digital wedding invitations for Indian weddings. Instant WhatsApp RSVP & 3D animations.",
+      "Create beautiful digital wedding invitations and personal wedding websites with instant customization, background music, RSVP tracking, and Google Maps venue navigation.",
     images: ["https://www.varnaminvites.store/og-image.jpg"],
   },
   icons: {

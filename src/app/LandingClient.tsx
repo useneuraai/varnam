@@ -321,7 +321,7 @@ export default function LandingClient() {
           {/* Subtle warm luxury ambient glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[420px] sm:h-[500px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-100/40 via-orange-50/15 to-transparent blur-3xl pointer-events-none -z-0" />
 
-          <div className="max-w-5xl mx-auto flex flex-col items-center relative z-10 select-none">
+          <div className="max-w-5xl mx-auto flex flex-col items-center relative z-10 select-text">
             <p className="text-[10.5px] sm:text-xs font-bold uppercase tracking-[0.16em] sm:tracking-widest text-[#916710] mb-3 sm:mb-5">
               Varnam Invites • Premium Digital Wedding Invitations
             </p>
@@ -343,7 +343,7 @@ export default function LandingClient() {
               Create beautiful digital wedding invitations and personal wedding websites with instant customization, background music, RSVP tracking, and Google Maps venue navigation — ready to share in minutes.
             </p>
 
-            <div className="inline-flex items-center justify-center text-[11px] sm:text-xs font-bold text-[#916710] bg-[#fff9f2] px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full sm:rounded-xl border border-[#eed57c]/35 mb-6 sm:mb-8 select-none shadow-xs max-w-full">
+            <div className="inline-flex items-center justify-center text-[11px] sm:text-xs font-bold text-[#916710] bg-[#fff9f2] px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full sm:rounded-xl border border-[#eed57c]/35 mb-6 sm:mb-8 shadow-xs max-w-full">
               <span className="hidden sm:inline">Try before you pay — customize your invitation for free, with plans starting at ₹999!</span>
               <span className="inline sm:hidden whitespace-nowrap">Customize for free • Plans from ₹999!</span>
             </div>

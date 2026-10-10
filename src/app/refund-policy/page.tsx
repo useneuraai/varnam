@@ -72,7 +72,7 @@ export default function RefundPolicyPage() {
               <li><strong>Premium 3D Template:</strong> ₹1,199.</li>
             </ul>
             <p>
-              Prices are intended to be inclusive of applicable taxes, subject to the operator&apos;s tax obligations and checkout configuration.
+              Prices are intended to be inclusive of applicable taxes, subject to tax obligations and checkout configuration.
             </p>
             <p>
               The purchase activates the selected invitation website and the associated publishing and hosting features described at checkout.
@@ -146,16 +146,19 @@ export default function RefundPolicyPage() {
           {/* Section 6 */}
           <section className="space-y-3 pt-4 border-t border-zinc-100">
             <h2 className="text-xl font-bold font-serif text-zinc-900 tracking-tight">
-              6. Hosting and Cancellation
+              6. Hosting, Cancellation, and Data Removal
             </h2>
             <p>
               Published invitation websites are intended to remain available on an ongoing basis. There is no automatic five-day post-wedding expiration under this policy.
             </p>
             <p>
-              Customers may request that their invitation be removed from public access. A removal request does not automatically create a right to a refund for a service that has already been provided, but it also does not waive any refund or consumer rights available under applicable law.
+              Customers may request that their invitation be removed from public access at any time. Once the removal request has been processed, the invitation will no longer be publicly accessible, and the associated invitation content and uploaded media will be deleted from Varnam&apos;s active systems, subject to limited records required by law.
             </p>
             <p>
-              Following removal, invitation data may be archived for a limited period and handled in accordance with the <Link href="/privacy-policy" className="text-[#916710] underline hover:text-zinc-950 font-medium">Privacy Policy</Link>. Customers should retain copies of important content before requesting removal.
+              A removal request does not automatically create a right to a refund for a service that has already been provided, but it also does not waive any refund or consumer rights available under applicable law.
+            </p>
+            <p>
+              Customers should download copies of important content before requesting removal, as deleted content may not be recoverable.
             </p>
           </section>
 
@@ -189,9 +192,15 @@ export default function RefundPolicyPage() {
               <li>Relevant screenshots or error details, where helpful.</li>
             </ul>
             <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-150 space-y-1.5 text-xs sm:text-sm mt-3">
-              <p><strong className="text-zinc-900">Email:</strong> <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">hello@varnaminvites.store</a></p>
-              <p><strong className="text-zinc-900">WhatsApp:</strong> <a href="https://wa.me/917200180268" target="_blank" rel="noopener noreferrer" className="text-[#916710] underline hover:text-zinc-950 font-medium">+91 7200180268</a></p>
-              <p><strong className="text-zinc-900">Support hours:</strong> Monday–Saturday, 9:00 AM–8:00 PM IST</p>
+              <p>
+                <strong className="text-zinc-900">Email:</strong>{" "}
+                <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">
+                  hello@varnaminvites.store
+                </a>
+              </p>
+              <p>
+                <strong className="text-zinc-900">Support Hours:</strong> Monday–Saturday, 9:00 AM–8:00 PM IST
+              </p>
             </div>
             <p className="text-xs text-zinc-500 mt-2">
               Please avoid sending full card numbers, passwords, or other unnecessary sensitive information.
@@ -207,13 +216,15 @@ export default function RefundPolicyPage() {
               9. Complaints and Escalation
             </h2>
             <p>
-              If a customer is dissatisfied with the handling of a refund or cancellation request, they may ask for the complaint to be reviewed by the responsible operator.
+              If a customer is dissatisfied with the handling of a refund or cancellation request, they may ask for the complaint to be reviewed by the support team.
             </p>
             <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-150 space-y-1.5 text-xs sm:text-sm">
-              <p><strong className="text-zinc-900">Responsible operator:</strong> [Insert full legal name]</p>
-              <p><strong className="text-zinc-900">Grievance contact / designation:</strong> [Confirm before publication]</p>
-              <p><strong className="text-zinc-900">Email:</strong> <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">hello@varnaminvites.store</a></p>
-              <p><strong className="text-zinc-900">Business address:</strong> [Insert required address]</p>
+              <p>
+                <strong className="text-zinc-900">Email:</strong>{" "}
+                <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">
+                  hello@varnaminvites.store
+                </a>
+              </p>
             </div>
             <p>
               Customers retain the right to approach the appropriate consumer-protection authority or other competent forum where permitted by law.

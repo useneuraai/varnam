@@ -54,7 +54,7 @@ export default function TermsOfServicePage() {
 
         <div className="prose prose-zinc max-w-none text-zinc-700 space-y-7 text-sm sm:text-[15px] leading-relaxed">
           <p className="text-base sm:text-lg text-zinc-800 font-normal leading-relaxed">
-            Welcome to Varnam Invites (&ldquo;Varnam,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;), a digital wedding invitation website service operated by an individual in India. These Terms &amp; Conditions govern your access to our website, invitation builder, templates, publishing and hosting services, and related features.
+            Welcome to Varnam Invites (&ldquo;Varnam,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;), a digital wedding invitation website service operated in India. These Terms &amp; Conditions govern your access to our website, invitation builder, templates, publishing and hosting services, and related features.
           </p>
 
           <p>
@@ -70,10 +70,18 @@ export default function TermsOfServicePage() {
               Varnam allows customers to create, customize, publish, and share digital wedding invitation websites. Depending on the selected template and features, the service may include photo galleries, music, event schedules, venue information, maps, countdowns, RSVPs, and guest wishes.
             </p>
             <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-150 space-y-1.5 text-xs sm:text-sm">
-              <p><strong className="text-zinc-900">Service operator:</strong> [Insert the operator&apos;s full legal name]</p>
-              <p><strong className="text-zinc-900">Business contact:</strong> <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">hello@varnaminvites.store</a></p>
-              <p><strong className="text-zinc-900">Business address:</strong> [Insert the required business/contact address]</p>
-              <p><strong className="text-zinc-900">Website:</strong> <a href="https://www.varnaminvites.store/" className="text-[#916710] underline hover:text-zinc-950 font-medium">https://www.varnaminvites.store/</a></p>
+              <p>
+                <strong className="text-zinc-900">Business Contact:</strong>{" "}
+                <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">
+                  hello@varnaminvites.store
+                </a>
+              </p>
+              <p>
+                <strong className="text-zinc-900">Website:</strong>{" "}
+                <a href="https://www.varnaminvites.store/" className="text-[#916710] underline hover:text-zinc-950 font-medium">
+                  https://www.varnaminvites.store/
+                </a>
+              </p>
             </div>
           </section>
 
@@ -88,7 +96,7 @@ export default function TermsOfServicePage() {
               <li><strong>Premium 3D Template License:</strong> ₹1,199 per invitation website.</li>
             </ul>
             <p>
-              These prices are inclusive of applicable taxes, subject to confirmation of the operator&apos;s tax obligations and checkout configuration.
+              These prices are inclusive of applicable taxes, subject to confirmation of tax obligations and checkout configuration.
             </p>
             <p>
               Each purchase grants the customer a non-exclusive, non-transferable license to use the selected template to create and publish one wedding invitation website for the event specified at purchase.
@@ -129,25 +137,25 @@ export default function TermsOfServicePage() {
           {/* Section 4 */}
           <section className="space-y-3 pt-4 border-t border-zinc-100">
             <h2 className="text-xl font-bold font-serif text-zinc-900 tracking-tight">
-              4. Hosting, Access, and Archiving
+              4. Hosting, Access, and Data Removal
             </h2>
             <p>
-              Published invitation websites are intended to remain available on an ongoing basis after purchase, subject to these Terms, technical availability, security requirements, and applicable law.
-            </p>
-            <p className="p-3.5 bg-amber-50/60 border border-amber-200/70 rounded-xl text-zinc-800 text-xs sm:text-sm">
-              <strong>Ongoing Access:</strong> Varnam does not impose an automatic five-day post-wedding expiration under this policy.
+              Published invitation websites are intended to remain available on an ongoing basis after purchase, subject to these Terms, technical availability, security requirements, and applicable law. There is no automatic five-day post-wedding expiration.
             </p>
             <p>
-              Customers should retain their own copies of important photographs and other uploaded content. Hosting availability does not guarantee that content will be stored indefinitely.
+              Customers are responsible for keeping their own copies of photographs and other content they wish to preserve.
             </p>
             <p>
-              If a customer requests removal of an invitation, Varnam will disable public access within a reasonable operational period and handle the associated data in accordance with the Privacy Policy and applicable law.
+              <strong>Removal at the Customer&apos;s Request:</strong> Customers may request removal of their published invitation at any time. Once the removal request has been processed, the invitation will no longer be publicly accessible, and the associated invitation content and uploaded media will be deleted from Varnam&apos;s active systems.
             </p>
             <p>
-              Varnam may archive an inactive invitation or restrict access where reasonably necessary for security, legal compliance, abuse prevention, or service maintenance. Where practicable, customers will be informed of material changes affecting access.
+              Following removal, Varnam will not access or use the deleted invitation content for ordinary service purposes. Customers should download any content they wish to retain before requesting removal, as deleted content may not be recoverable.
             </p>
             <p>
-              Archived data may be retained for a limited period for restoration, support, security, or legal purposes. Archiving does not necessarily mean permanent preservation or immediate deletion.
+              Certain limited records, such as payment, transaction, security, or complaint records, may be retained where required by law or necessary for a legitimate legal obligation. Such records will be limited to the information needed for that purpose and handled in accordance with the Privacy Policy.
+            </p>
+            <p>
+              Removal of an invitation does not automatically entitle the customer to a refund. Refund eligibility is governed by the <Link href="/refund-policy" className="text-[#916710] underline hover:text-zinc-950 font-medium">Cancellation &amp; Refund Policy</Link> and applicable law.
             </p>
           </section>
 
@@ -199,19 +207,19 @@ export default function TermsOfServicePage() {
           {/* Section 8 */}
           <section className="space-y-3 pt-4 border-t border-zinc-100">
             <h2 className="text-xl font-bold font-serif text-zinc-900 tracking-tight">
-              8. Suspension and Termination
+              8. Suspension, Termination, and Removal
             </h2>
             <p>
-              Varnam may temporarily restrict access when reasonably necessary to investigate suspected abuse, protect customers, address security risks, comply with legal obligations, or prevent harm to the platform.
+              Varnam may temporarily restrict access where reasonably necessary to investigate suspected abuse, address security risks, comply with legal obligations, or protect the platform and its users.
             </p>
             <p>
-              Where appropriate and legally permitted, Varnam will notify the customer and provide an opportunity to resolve the issue.
+              Customers may request removal of their invitation at any time. After the request is processed, the invitation will be taken offline and its associated content and uploaded media will be deleted from Varnam&apos;s active systems, subject to any limited retention required by law.
             </p>
             <p>
-              Customers may request removal of their published invitation at any time, subject to any necessary processing of transaction records or other information that must be retained by law.
+              Where appropriate and legally permitted, Varnam will notify the customer of restrictions and provide an opportunity to resolve the issue.
             </p>
             <p>
-              Termination or removal does not eliminate rights or obligations that accrued before termination, including applicable refund rights.
+              Removal or termination does not eliminate rights or obligations that accrued before termination, including applicable refund rights.
             </p>
           </section>
 
@@ -258,11 +266,15 @@ export default function TermsOfServicePage() {
             </h2>
             <p>For questions, complaints, or support:</p>
             <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-150 space-y-1.5 text-xs sm:text-sm">
-              <p><strong className="text-zinc-900">Email:</strong> <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">hello@varnaminvites.store</a></p>
-              <p><strong className="text-zinc-900">WhatsApp:</strong> <a href="https://wa.me/917200180268" target="_blank" rel="noopener noreferrer" className="text-[#916710] underline hover:text-zinc-950 font-medium">+91 7200180268</a></p>
-              <p><strong className="text-zinc-900">Support hours:</strong> Monday–Saturday, 9:00 AM–8:00 PM IST</p>
-              <p><strong className="text-zinc-900">Operator:</strong> [Insert full legal name]</p>
-              <p><strong className="text-zinc-900">Business address:</strong> [Insert required address]</p>
+              <p>
+                <strong className="text-zinc-900">Email:</strong>{" "}
+                <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">
+                  hello@varnaminvites.store
+                </a>
+              </p>
+              <p>
+                <strong className="text-zinc-900">Support Hours:</strong> Monday–Saturday, 9:00 AM–8:00 PM IST
+              </p>
             </div>
           </section>
         </div>

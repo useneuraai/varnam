@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Privacy Policy | Varnam Invites",
   description:
-    "Learn what personal information Varnam Invites collects, how it is used, and how your wedding invitation data is handled securely.",
+    "Learn what personal information Varnam Invites collects, how it is used, and how your wedding invitation data is handled and deleted upon request.",
   alternates: {
     canonical: "https://www.varnaminvites.store/privacy-policy",
   },
@@ -62,9 +62,12 @@ export default function PrivacyPolicyPage() {
           </p>
 
           <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-150 space-y-1.5 text-xs sm:text-sm">
-            <p><strong className="text-zinc-900">Data controller / responsible operator:</strong> [Insert full legal name]</p>
-            <p><strong className="text-zinc-900">Contact email:</strong> <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">hello@varnaminvites.store</a></p>
-            <p><strong className="text-zinc-900">Business address:</strong> [Insert required address]</p>
+            <p>
+              <strong className="text-zinc-900">Contact Email:</strong>{" "}
+              <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">
+                hello@varnaminvites.store
+              </a>
+            </p>
           </div>
 
           {/* Section 1 */}
@@ -190,22 +193,28 @@ export default function PrivacyPolicyPage() {
           {/* Section 5 */}
           <section className="space-y-3 pt-4 border-t border-zinc-100">
             <h2 className="text-xl font-bold font-serif text-zinc-900 tracking-tight">
-              5. Data Retention and Archiving
+              5. Data Retention and Deletion
             </h2>
             <p>
-              Published invitation websites are intended to remain available on an ongoing basis unless the customer requests removal or access is restricted for a legitimate reason.
+              Published invitation websites remain available on an ongoing basis unless the customer requests removal or access must be restricted for a legitimate reason.
             </p>
             <p>
-              An invitation may be archived after removal from public access. Archived information may be retained for a limited period for restoration, customer support, security, dispute resolution, or legal obligations.
+              When a customer requests removal of an invitation, Varnam will disable public access and delete the associated invitation content and uploaded media from its active systems as part of processing that request. Varnam will not access or use the deleted invitation content for ordinary service purposes after removal has been completed.
             </p>
             <p>
-              Archiving does not necessarily mean that all copies are retained indefinitely, nor does it mean that all data is deleted immediately.
+              Customers should download any photographs, text, or other content they wish to preserve before requesting removal. Deleted invitation content may not be recoverable.
             </p>
             <p>
-              Transaction records, accounting information, security logs, and other records may be retained for different periods where required by law or reasonably necessary for legitimate purposes.
+              Limited records, including payment records, transaction references, security logs, or complaint records, may be retained where required by law or necessary for a legitimate legal obligation. These records will be limited to the relevant purpose and retained only for the applicable period.
             </p>
             <p>
-              Before publication, Varnam will define and implement retention periods for archived invitations, uploaded media, guest responses, backups, and account data. Requests for deletion will be handled in accordance with applicable law, subject to any legitimate legal retention requirements.
+              Varnam will handle deletion in accordance with its technical capabilities and applicable legal obligations. Where data is held by third-party service providers or in backups, the applicable deletion process and any necessary retention periods must be taken into account.
+            </p>
+            <p>
+              For removal or privacy requests, contact{" "}
+              <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">
+                hello@varnaminvites.store
+              </a>.
             </p>
           </section>
 
@@ -234,7 +243,11 @@ export default function PrivacyPolicyPage() {
               Depending on applicable law and the circumstances, you may request access to, correction of, or deletion of personal information, withdraw consent where processing relies on consent, or raise a complaint about how information is handled.
             </p>
             <p>
-              To make a request, email <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">hello@varnaminvites.store</a> and explain what information or invitation the request concerns.
+              To make a request, email{" "}
+              <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">
+                hello@varnaminvites.store
+              </a>{" "}
+              and explain what information or invitation the request concerns.
             </p>
             <p>
               We may need to verify your identity or authority before acting on a request, particularly where the information relates to guests or another person.
@@ -287,12 +300,15 @@ export default function PrivacyPolicyPage() {
             </h2>
             <p>For privacy questions, data requests, or complaints:</p>
             <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-150 space-y-1.5 text-xs sm:text-sm">
-              <p><strong className="text-zinc-900">Email:</strong> <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">hello@varnaminvites.store</a></p>
-              <p><strong className="text-zinc-900">WhatsApp:</strong> <a href="https://wa.me/917200180268" target="_blank" rel="noopener noreferrer" className="text-[#916710] underline hover:text-zinc-950 font-medium">+91 7200180268</a></p>
-              <p><strong className="text-zinc-900">Support hours:</strong> Monday–Saturday, 9:00 AM–8:00 PM IST</p>
-              <p><strong className="text-zinc-900">Responsible operator:</strong> [Insert full legal name]</p>
-              <p><strong className="text-zinc-900">Business address:</strong> [Insert required address]</p>
-              <p><strong className="text-zinc-900">Privacy / grievance contact:</strong> [Confirm the responsible person&apos;s name and designation before publication]</p>
+              <p>
+                <strong className="text-zinc-900">Email:</strong>{" "}
+                <a href="mailto:hello@varnaminvites.store" className="text-[#916710] underline hover:text-zinc-950 font-medium">
+                  hello@varnaminvites.store
+                </a>
+              </p>
+              <p>
+                <strong className="text-zinc-900">Support Hours:</strong> Monday–Saturday, 9:00 AM–8:00 PM IST
+              </p>
             </div>
           </section>
         </div>

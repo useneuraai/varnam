@@ -66,6 +66,8 @@ const getCardStyles = (offset: number, isMobile: boolean) => {
 
 const getCoupleName = (slug: string) => {
   switch (slug) {
+    case "mayura-classic":
+    case "peacock-classic":
     case "mayura-palace":
     case "palace-garden":
       return "Ananya & Siddharth";
@@ -93,6 +95,9 @@ const getCoupleName = (slug: string) => {
 
 const getCategoryName = (template: any) => {
   switch (template.slug) {
+    case "mayura-classic":
+    case "peacock-classic":
+      return "Royal Peacock Classic";
     case "mayura-palace":
     case "palace-garden":
       return "Royal Garden & Peacock";

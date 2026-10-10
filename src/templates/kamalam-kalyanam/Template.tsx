@@ -17,17 +17,11 @@ import {
   Heart,
   Volume2,
   VolumeX,
-  Calendar,
-  Share2,
-  Flame,
-  Utensils,
-  Music,
-  Gift,
 } from "lucide-react";
 import CreatedByVarnam from "@/components/CreatedByVarnam";
 
 // ============================================================================
-// 1. FLOATING AMBIENT VELVET RED ROSE PETALS & LOTUS PETALS OVERLAY (GPU ACCELERATED)
+// 1. FLOATING AMBIENT VELVET RED ROSE & LOTUS PETALS OVERLAY
 // ============================================================================
 const RedRoseAndLotusOverlay = () => {
   const petals = [
@@ -60,7 +54,7 @@ const RedRoseAndLotusOverlay = () => {
             >
               <path
                 d="M12 1 C18 5 24 13 21 21 C18 28 6 28 3 21 C0 13 6 5 12 1 Z"
-                fill="url(#velvetRoseGrad)"
+                fill="url(#velvetRoseGradKK)"
               />
             </svg>
           ) : p.type === "lotus" ? (
@@ -72,7 +66,7 @@ const RedRoseAndLotusOverlay = () => {
             >
               <path
                 d="M10 0 C16 5 20 14 18 20 C16 26 4 26 2 20 C0 14 4 5 10 0 Z"
-                fill="url(#lotusBlushGrad)"
+                fill="url(#lotusBlushGradKK)"
               />
             </svg>
           ) : (
@@ -82,13 +76,13 @@ const RedRoseAndLotusOverlay = () => {
       ))}
       <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
         <defs>
-          <linearGradient id="velvetRoseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="velvetRoseGradKK" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#f43f5e" />
             <stop offset="40%" stopColor="#e11d48" />
             <stop offset="80%" stopColor="#be123c" />
             <stop offset="100%" stopColor="#881337" />
           </linearGradient>
-          <linearGradient id="lotusBlushGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="lotusBlushGradKK" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#fdf2f8" />
             <stop offset="50%" stopColor="#f472b6" />
             <stop offset="100%" stopColor="#db2777" />
@@ -100,174 +94,33 @@ const RedRoseAndLotusOverlay = () => {
 };
 
 // ============================================================================
-// 2. ROSE PETALS CELEBRATION SHOWER ON SCRATCH
-// ============================================================================
-const RosePetalShower = ({ trigger }: { trigger: boolean }) => {
-  const showerPetals = useMemo(() => {
-    return Array.from({ length: 42 }).map((_, i) => ({
-      id: i,
-      startX: (Math.random() - 0.5) * 240,
-      startY: (Math.random() - 0.5) * 60,
-      endX: (Math.random() - 0.5) * 360,
-      endY: 480 + Math.random() * 400,
-      size: 16 + Math.random() * 15,
-      rotateStart: Math.random() * 360,
-      rotateEnd: Math.random() * 720,
-      duration: 2.6 + Math.random() * 2.2,
-      delay: Math.random() * 0.9,
-    }));
-  }, [trigger]);
-
-  if (!trigger) return null;
-
-  return (
-    <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden">
-      {showerPetals.map((p) => (
-        <motion.div
-          key={p.id}
-          initial={{
-            x: p.startX,
-            y: p.startY,
-            opacity: 0,
-            scale: 0.5,
-            rotate: p.rotateStart,
-          }}
-          animate={{
-            x: p.endX,
-            y: p.endY,
-            opacity: [0, 1, 1, 0],
-            scale: [0.5, 1.1, 0.9, 0.7],
-            rotate: p.rotateEnd,
-          }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            ease: [0.25, 0.1, 0.25, 1],
-          }}
-          className="absolute left-1/2 top-[38%] will-change-transform"
-        >
-          <svg
-            width={p.size}
-            height={p.size * 1.3}
-            viewBox="0 0 24 28"
-            className="drop-shadow-[0_4px_12px_rgba(225,29,72,0.55)]"
-          >
-            <path
-              d="M12 0 C18 4 24 12 21 21 C18 28 6 28 3 21 C0 12 6 4 12 0 Z"
-              fill="url(#showerRoseGrad)"
-            />
-            <defs>
-              <linearGradient id="showerRoseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#fb7185" />
-                <stop offset="35%" stopColor="#e11d48" />
-                <stop offset="75%" stopColor="#be123c" />
-                <stop offset="100%" stopColor="#4c0519" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </motion.div>
-      ))}
-    </div>
-  );
-};
-
-// ============================================================================
-// 3. LOTUS ON SIDES (BOTANICAL CORNER / MARGIN FLOURISH)
-// ============================================================================
-const SideLotusFlourish = ({
-  side = "left",
-  className = "",
-}: {
-  side?: "left" | "right";
-  className?: string;
-}) => (
-  <div
-    className={`absolute ${
-      side === "left" ? "left-1 sm:left-2" : "right-1 sm:right-2 scale-x-[-1]"
-    } z-10 pointer-events-none select-none opacity-85 anim-float-subtle ${className}`}
-  >
-    <svg width="48" height="74" viewBox="0 0 44 68" fill="none">
-      <path
-        d="M6 68 C8 45 20 32 30 18 C34 12 30 4 22 2"
-        stroke="#eed57c"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeOpacity="0.7"
-      />
-      <path
-        d="M20 36 C12 36 6 42 8 48 C10 54 22 50 20 36 Z"
-        fill="url(#sideLeafGrad)"
-        fillOpacity="0.85"
-      />
-      <path
-        d="M28 20 C24 14 26 6 32 4 C38 6 40 14 36 20 C34 23 30 23 28 20 Z"
-        fill="url(#sideLotusGrad)"
-      />
-      <path
-        d="M22 18 C18 14 20 8 26 8 C28 12 28 16 22 18 Z"
-        fill="url(#sideLotusLightGrad)"
-      />
-      <path
-        d="M42 18 C46 14 44 8 38 8 C36 12 36 16 42 18 Z"
-        fill="url(#sideLotusLightGrad)"
-      />
-      <circle cx="32" cy="11" r="2.5" fill="#fef08a" />
-      <defs>
-        <linearGradient id="sideLotusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#fdf2f8" />
-          <stop offset="50%" stopColor="#f472b6" />
-          <stop offset="100%" stopColor="#be123c" />
-        </linearGradient>
-        <linearGradient id="sideLotusLightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#ffffff" />
-          <stop offset="100%" stopColor="#f472b6" />
-        </linearGradient>
-        <linearGradient id="sideLeafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#34d399" />
-          <stop offset="100%" stopColor="#064e3b" />
-        </linearGradient>
-      </defs>
-    </svg>
-  </div>
-);
-
-// ============================================================================
-// 4. REFINED MINIMAL DIVIDER & SEAMS
+// 2. ORNAMENTAL GOLD DIVIDERS & SECTION SEAMS
 // ============================================================================
 const MinimalGoldDivider = ({ className = "" }: { className?: string }) => (
   <div className={`flex items-center justify-center gap-3 ${className}`}>
-    <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-[#eed57c]/70 to-transparent" />
-    <span className="text-[#eed57c] text-xs opacity-90">❖</span>
-    <div className="h-[1px] w-12 bg-gradient-to-l from-transparent via-[#eed57c]/70 to-transparent" />
+    <div className="h-[1px] w-12 sm:w-16 bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
+    <span className="text-[#eed57c] text-xs">❖</span>
+    <div className="h-[1px] w-12 sm:w-16 bg-gradient-to-l from-transparent via-[#eed57c] to-transparent" />
   </div>
 );
 
-const SectionSeam = () => (
-  <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-center pointer-events-none">
-    <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#eed57c]/25 to-transparent" />
-  </div>
-);
-
-// Swaying Hanging Brass Lotus Lamp for Hero (GPU Accelerated)
-const SwayingHangingLamp = ({ side = "left" }: { side: "left" | "right" }) => (
-  <div
-    className={`absolute top-0 ${
-      side === "left" ? "left-4 sm:left-6 anim-lamp-sway-left" : "right-4 sm:right-6 anim-lamp-sway-right"
-    } z-20 pointer-events-none flex flex-col items-center select-none`}
-  >
-    <div className="w-[1px] h-12 sm:h-16 bg-gradient-to-b from-[#fae6a2] via-[#d4af37] to-[#8c5d13]" />
-    <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-b from-[#fae6a2] to-[#ab7726] my-0.5" />
-    <div className="relative">
-      <div className="w-6 h-5 rounded-b-full bg-gradient-to-b from-[#eed57c] via-[#c69238] to-[#855814] flex items-center justify-center shadow-md border border-[#fae6a2]/40">
-        <span className="text-[8px] text-[#fff2b2]">🪷</span>
+const SectionVignette = ({ hasSeam = true }: { hasSeam?: boolean }) => (
+  <>
+    <div className="absolute inset-x-0 top-0 h-28 sm:h-36 bg-gradient-to-b from-black/75 via-black/35 to-transparent pointer-events-none z-10" />
+    <div className="absolute inset-x-0 bottom-0 h-28 sm:h-36 bg-gradient-to-t from-black/75 via-black/35 to-transparent pointer-events-none z-10" />
+    {hasSeam && (
+      <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-center pointer-events-none">
+        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#eed57c]/45 to-transparent" />
+        <span className="absolute px-2.5 py-0.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-[8px] text-[#eed57c] font-serif shadow-sm">
+          ❖
+        </span>
       </div>
-      <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-2 h-2.5 bg-gradient-to-t from-[#f59e0b] via-[#fef08a] to-white rounded-full blur-[1px] shadow-[0_0_10px_#f59e0b] anim-flame-glow" />
-    </div>
-  </div>
+    )}
+  </>
 );
 
 // ============================================================================
-// 5. MAIN TEMPLATE COMPONENT: KAMALAM KALYANAM
+// 3. MAIN TEMPLATE COMPONENT: KAMALAM KALYANAM (CRIMSON RED LOTUS)
 // ============================================================================
 export default function KamalamKalyanamTemplate({
   data,
@@ -279,11 +132,22 @@ export default function KamalamKalyanamTemplate({
   const containerRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Minimal Clean English Text
-  const bride = data.bride_name || "Meenakshi";
-  const groom = data.groom_name || "Sundar";
+  // Standardized Names & Custom Copy
+  const bride = data.bride_name || "Ananya";
+  const groom = data.groom_name || "Siddharth";
   const quote =
-    data.quote || "Two souls united in love and sacred devotion.";
+    data.quote ||
+    "Two souls united amidst royal gardens and serene blessings, embarking on an eternal sacred journey together.";
+  const familyNames = data.family_names || "The Sundararajan & Ranganathan Families";
+  const rsvpPhone = data.rsvp_phone || "+91 98401 23456";
+  const venueName =
+    data.wedding_venue && data.wedding_venue.includes(",")
+      ? data.wedding_venue.split(",")[0].trim()
+      : data.wedding_venue || "The Leela Palace Courtyard";
+  const venueAddress =
+    data.wedding_venue && data.wedding_venue.includes(",")
+      ? data.wedding_venue.split(",").slice(1).join(",").trim()
+      : "MRC Nagar, Adyar Seaface, Chennai, Tamil Nadu - 600028";
 
   // Audio Playback
   const [isPlaying, setIsPlaying] = useState(false);
@@ -337,45 +201,15 @@ export default function KamalamKalyanamTemplate({
         month: "NOVEMBER",
         year: 2026,
         weekday: "Saturday",
-        time: "07:30 AM",
-        raw: new Date("2026-11-28T07:30:00"),
+        time: "08:42 AM",
+        raw: new Date("2026-11-28T08:42:00"),
       };
     }
   };
 
   const weddingDateInfo = useMemo(() => parseDate(data.wedding_date), [data.wedding_date]);
 
-  // Calendar Integration (Google Calendar)
-  const handleAddToCalendar = () => {
-    try {
-      const date = weddingDateInfo.raw;
-      const title = `Wedding: ${bride} & ${groom}`;
-      const location = data.wedding_venue || "Sri Padmavathi Palace, Chennai";
-      const startTime = date.toISOString().replace(/-|:|\.\d\d\d/g, "");
-      const endDate = new Date(date.getTime() + 4 * 60 * 60 * 1000);
-      const endTime = endDate.toISOString().replace(/-|:|\.\d\d\d/g, "");
-
-      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-        title
-      )}&dates=${startTime}/${endTime}&details=${encodeURIComponent(
-        `You're invited to celebrate the wedding union of ${bride} & ${groom}.`
-      )}&location=${encodeURIComponent(location)}`;
-
-      window.open(gcalUrl, "_blank");
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  // WhatsApp Share Integration
-  const handleShare = () => {
-    const inviteUrl = typeof window !== "undefined" ? window.location.href : "";
-    const shareText = `You're cordially invited to celebrate the wedding of ${bride} & ${groom} on ${weddingDateInfo.weekday}, ${weddingDateInfo.month} ${weddingDateInfo.day}, ${weddingDateInfo.year}. View the digital invitation here: ${inviteUrl}`;
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
-    window.open(whatsappUrl, "_blank");
-  };
-
-  // Scroll Progress Tracker for Parallax
+  // Scroll Progress Tracker for Hero Parallax
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
@@ -410,7 +244,7 @@ export default function KamalamKalyanamTemplate({
   const [timeLeft, setTimeLeft] = useState({
     days: 64,
     hours: 14,
-    minutes: 30,
+    minutes: 32,
     seconds: 45,
   });
 
@@ -439,16 +273,10 @@ export default function KamalamKalyanamTemplate({
     return () => clearInterval(interval);
   }, [targetTimestamp]);
 
-  // Scratch Canvas Logic & Rose Petal Shower Trigger
+  // Scratch Canvas Logic
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isScratched, setIsScratched] = useState(false);
-  const [triggerShower, setTriggerShower] = useState(false);
   const isDrawing = useRef(false);
-
-  const unveilDate = () => {
-    setIsScratched(true);
-    setTriggerShower(true);
-  };
 
   const initCanvas = (w?: number, h?: number) => {
     const canvas = canvasRef.current;
@@ -457,42 +285,43 @@ export default function KamalamKalyanamTemplate({
     if (!ctx) return;
 
     const rect = canvas.getBoundingClientRect();
-    const width = (canvas.width = Math.round(w || rect.width || canvas.clientWidth || 220));
-    const height = (canvas.height = Math.round(h || rect.height || canvas.clientHeight || 300));
+    const width = (canvas.width = Math.round(w || rect.width || canvas.clientWidth || 190));
+    const height = (canvas.height = Math.round(h || rect.height || canvas.clientHeight || 280));
     if (width <= 0 || height <= 0) return;
 
-    // Elegant antique gold metallic gradient
     const goldGrad = ctx.createLinearGradient(0, 0, width, height);
-    goldGrad.addColorStop(0, "#d4af37");
+    goldGrad.addColorStop(0, "#d8af56");
     goldGrad.addColorStop(0.25, "#fae6a2");
-    goldGrad.addColorStop(0.5, "#b37d22");
-    goldGrad.addColorStop(0.75, "#fae6a2");
-    goldGrad.addColorStop(1, "#8a5814");
+    goldGrad.addColorStop(0.5, "#c18c35");
+    goldGrad.addColorStop(0.75, "#edd380");
+    goldGrad.addColorStop(1, "#855814");
 
     ctx.fillStyle = goldGrad;
     ctx.fillRect(0, 0, width, height);
 
-    // Subtle fine stardust
     ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-    for (let i = 0; i < 300; i++) {
+    for (let i = 0; i < 350; i++) {
       const rx = Math.random() * width;
       const ry = Math.random() * height;
       ctx.fillRect(rx, ry, Math.random() > 0.8 ? 2 : 1, Math.random() > 0.8 ? 2 : 1);
     }
 
-    // Hairline border
     ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
-    ctx.lineWidth = 1.2;
+    ctx.lineWidth = 1;
+    ctx.strokeRect(6, 6, width - 12, height - 12);
+    ctx.strokeStyle = "rgba(100, 60, 10, 0.4)";
     ctx.strokeRect(8, 8, width - 16, height - 16);
 
-    ctx.fillStyle = "#340510";
-    ctx.font = "bold 12px 'Cinzel', serif, sans-serif";
+    ctx.fillStyle = "#4c0519";
+    ctx.font = "700 12px 'Cinzel', serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("SAVE THE DATE", width / 2, height / 2 - 12);
-    ctx.font = "italic 11px serif";
-    ctx.fillStyle = "#4a0b18";
-    ctx.fillText("Swipe to unveil", width / 2, height / 2 + 12);
+    ctx.fillText("✦ KAMALAM MUHURTHAM ✦", width / 2, height / 2 - 14);
+    ctx.font = "600 10px 'Cinzel', serif";
+    ctx.fillText("SWIPE TO REVEAL DATE", width / 2, height / 2 + 4);
+    ctx.font = "italic 9.5px 'Cormorant Garamond', Georgia, serif";
+    ctx.fillStyle = "#881337";
+    ctx.fillText("Scratch to unveil auspicious wedding date", width / 2, height / 2 + 20);
   };
 
   useEffect(() => {
@@ -506,10 +335,12 @@ export default function KamalamKalyanamTemplate({
       if (w > 20 && h > 20) initCanvas(w, h);
     };
     tryInit();
-    const t = setTimeout(tryInit, 250);
+    const t1 = setTimeout(tryInit, 80);
+    const t2 = setTimeout(tryInit, 300);
     window.addEventListener("resize", tryInit);
     return () => {
-      clearTimeout(t);
+      clearTimeout(t1);
+      clearTimeout(t2);
       window.removeEventListener("resize", tryInit);
     };
   }, [isScratched]);
@@ -526,7 +357,7 @@ export default function KamalamKalyanamTemplate({
 
     ctx.globalCompositeOperation = "destination-out";
     ctx.beginPath();
-    ctx.arc(x, y, 24, 0, Math.PI * 2);
+    ctx.arc(x, y, 22, 0, Math.PI * 2);
     ctx.fill();
 
     if (Math.random() > 0.5) {
@@ -538,45 +369,11 @@ export default function KamalamKalyanamTemplate({
         }
         const percent = Math.round((clear / (imgData.data.length / 16)) * 100);
         if (percent > 35) {
-          unveilDate();
+          setIsScratched(true);
         }
       } catch {}
     }
   };
-
-  // Interactive Timeline Highlight State
-  const [activeEventIdx, setActiveEventIdx] = useState<number | null>(0);
-
-  const timelineEvents = [
-    {
-      time: "07:30 AM",
-      title: "Kalyana Muhurtham",
-      subtitle: "The sacred union & exchange of vows",
-      details: "Conducted in the sacred presence of the Agni homam with traditional nadaswaram mangala isai.",
-      icon: Flame,
-    },
-    {
-      time: "10:00 AM",
-      title: "Mangala Aashirwad",
-      subtitle: "Parental blessings & Talambralu",
-      details: "Elders and guests shower the newlyweds with sacred akshata and divine heartfelt blessings.",
-      icon: Sparkles,
-    },
-    {
-      time: "12:00 PM",
-      title: "Traditional Wedding Feast",
-      subtitle: "Festive South Indian plantain leaf lunch",
-      details: "A grand authentic 24-delicacy banquet celebrating auspicious South Indian culinary traditions.",
-      icon: Utensils,
-    },
-    {
-      time: "06:30 PM",
-      title: "Grand Evening Reception",
-      subtitle: "Music, toasts & dinner banquet",
-      details: "Live classical fusion ensemble, couple felicitation, celebratory toast, and evening feast.",
-      icon: Music,
-    },
-  ];
 
   // Moments Carousel
   const defaultMoments = [
@@ -612,7 +409,7 @@ export default function KamalamKalyanamTemplate({
   const [rsvpSaved, setRsvpSaved] = useState(false);
 
   const venueLocation =
-    data.gmap_coordinates || data.wedding_venue || "Sri Padmavathi Palace, Chennai";
+    data.gmap_coordinates || data.wedding_venue || "The Leela Palace Courtyard, MRC Nagar, Chennai - 600028";
   const gmapSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     venueLocation
   )}`;
@@ -624,28 +421,30 @@ export default function KamalamKalyanamTemplate({
     <div
       ref={containerRef}
       className="relative min-h-screen w-full bg-[#150207] text-[#faedd0] font-serif overflow-x-hidden selection:bg-[#d4af37] selection:text-black flex flex-col items-center"
+      style={{
+        backgroundImage: "radial-gradient(ellipse at top, #28050e 0%, #110105 100%)",
+      }}
     >
-      {/* 1. Ambient Red Rose & Lotus Petals Overlay */}
       <RedRoseAndLotusOverlay />
 
-      {/* Floating Minimal Sound Toggle */}
+      {/* Floating Sound Toggle */}
       <div className="fixed top-6 right-6 z-50">
         <button
           onClick={toggleMusic}
-          className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1e020a]/85 backdrop-blur-md border border-[#eed57c]/40 shadow-lg text-[#eed57c] hover:border-[#eed57c] hover:scale-105 transition-all duration-300 cursor-pointer"
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/85 backdrop-blur-md border border-[#eed57c]/70 shadow-[0_4px_18px_rgba(0,0,0,0.8)] text-[#eed57c] hover:border-white hover:scale-105 transition-all duration-300 cursor-pointer"
           title="Toggle Music"
         >
           {isPlaying ? (
             <>
-              <Volume2 className="w-4 h-4 text-[#eed57c] animate-pulse" />
-              <span className="text-[10px] sm:text-xs tracking-widest font-marcellus font-semibold uppercase text-[#faedd0]">
+              <Volume2 className="w-3.5 h-3.5 text-[#f43f5e] animate-pulse" />
+              <span className="text-[10px] tracking-widest font-marcellus font-bold uppercase text-[#fff2b2]">
                 Sound On
               </span>
             </>
           ) : (
             <>
-              <VolumeX className="w-4 h-4 text-zinc-400" />
-              <span className="text-[10px] sm:text-xs tracking-widest font-marcellus text-zinc-400 uppercase">
+              <VolumeX className="w-3.5 h-3.5 text-zinc-400" />
+              <span className="text-[10px] tracking-widest font-marcellus text-zinc-400 uppercase">
                 Sound Off
               </span>
             </>
@@ -653,460 +452,548 @@ export default function KamalamKalyanamTemplate({
         </button>
       </div>
 
-      {/* Main Unified Mobile-First Portrait Stack */}
-      <div className="relative w-full max-w-[440px] shadow-[0_0_90px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col bg-[#22040d]">
+      {/* Main Unified Responsive Mobile & Tablet Template Container */}
+      <div className="relative w-full max-w-[440px] md:max-w-[580px] lg:max-w-[440px] shadow-[0_0_90px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col bg-[#22040d]">
         {/* ===================================================================== */}
-        {/* 1. HERO SECTION: THE PICTURE YOU GAVE (ROYAL CRIMSON LOTUS ARCH)       */}
+        {/* 1. HERO SECTION: ROYAL CRIMSON LOTUS ARCH                             */}
         {/* ===================================================================== */}
-        <section className="relative w-full aspect-[9/16] min-h-[680px] overflow-hidden flex flex-col items-center justify-between text-center pt-9 pb-8 px-5 bg-cover bg-center">
-          {/* Hero Arch Background Image with Parallax Zoom */}
+        <section className="relative w-full aspect-[9/16] min-h-[660px] overflow-hidden flex flex-col items-center justify-between text-center pt-8 pb-4 px-4 bg-cover bg-center">
           <div
             className="absolute inset-0 bg-cover bg-center pointer-events-none transition-transform duration-500 will-change-transform"
             style={{
               backgroundImage: "url('/images/kamalam-kalyanam/hero_lotus_arch.jpg')",
               transform: `scale(${1 + scrollProgress * 0.1})`,
-              transformOrigin: "50% 50%",
+              transformOrigin: "50% 30%",
             }}
           />
-          <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/60 via-black/20 to-transparent pointer-events-none" />
 
-          {/* Animated Swaying Brass Hanging Lamps */}
-          <SwayingHangingLamp side="left" />
-          <SwayingHangingLamp side="right" />
-
-          {/* Top Minimal Callout */}
+          {/* Top Emblem */}
           <div
-            className="relative z-20 flex flex-col items-center transition-all duration-300"
+            className="relative z-20 flex flex-col items-center transition-all duration-300 pt-1"
             style={{
               opacity: Math.max(0, 1 - scrollProgress * 1.5),
               transform: `translateY(-${scrollProgress * 30}px)`,
             }}
           >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.35em] text-[#eed57c] uppercase font-bold drop-shadow-sm">
-              WEDDING INVITATION
+            <div className="flex items-center justify-center gap-2 mb-1 text-[#eed57c]">
+              <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-[#eed57c] to-[#eed57c]" />
+              <span className="text-xs text-[#eed57c]">❖</span>
+              <div className="w-8 h-[1px] bg-gradient-to-l from-transparent via-[#eed57c] to-[#eed57c]" />
+            </div>
+            <h2 className="font-cinzel text-xs sm:text-sm tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+              AN AUSPICIOUS CELEBRATION
+            </h2>
+            <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.25em] text-[#eed57c] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+              SHUBHA VIVAHA MUHURTHAM
             </span>
           </div>
 
-          {/* Center Minimal Couple Typography */}
+          {/* Center Couple Names: Sized proportionally, No Date in Hero */}
           <div
-            className="relative z-20 w-full flex flex-col items-center px-4 my-auto transition-all duration-300"
+            className="relative z-20 w-[86%] max-w-[315px] flex flex-col items-center my-auto py-4 px-3 sm:px-4 rounded-2xl bg-[#fffdf8]/90 backdrop-blur-xs border border-[#c89b38]/50 shadow-[0_10px_30px_rgba(30,5,10,0.3)] transition-all duration-300"
             style={{
               opacity: Math.max(0, 1 - scrollProgress * 1.6),
               transform: `translateY(-${scrollProgress * 45}px)`,
             }}
           >
-            <p className="font-marcellus text-xs sm:text-sm tracking-[0.32em] text-[#eed57c]/90 uppercase font-medium mb-3">
-              TOGETHER WITH THEIR FAMILIES
+            <div className="absolute inset-1.5 border border-[#8f5e1a]/30 rounded-xl pointer-events-none" />
+
+            <p className="font-marcellus text-[10px] sm:text-[11px] tracking-[0.28em] text-[#6e370a] uppercase font-bold mb-1.5">
+              WE ARE GETTING MARRIED
             </p>
 
-            <h1 className="font-marcellus text-3xl sm:text-4xl md:text-5xl font-normal tracking-[0.12em] text-[#fff6db] uppercase leading-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
+            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold tracking-[0.08em] text-[#22040d] uppercase leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)] max-w-full break-words text-center px-1">
               {bride}
             </h1>
 
-            <div className="flex items-center justify-center gap-3 my-2.5 w-full">
-              <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-[#eed57c]/80 to-transparent" />
-              <span className="font-great-vibes text-2xl sm:text-3xl text-[#fbcfe8] italic">
-                and
+            <div className="flex items-center justify-center gap-3 my-1 w-full">
+              <div className="h-[1.5px] w-10 bg-gradient-to-r from-transparent via-[#be123c] to-transparent" />
+              <span className="font-great-vibes text-2xl sm:text-3xl text-[#be123c] italic">
+                weds
               </span>
-              <div className="h-[1px] w-12 bg-gradient-to-l from-transparent via-[#eed57c]/80 to-transparent" />
+              <div className="h-[1.5px] w-10 bg-gradient-to-l from-transparent via-[#be123c] to-transparent" />
             </div>
 
-            <h1 className="font-marcellus text-3xl sm:text-4xl md:text-5xl font-normal tracking-[0.12em] text-[#fff6db] uppercase leading-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
+            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold tracking-[0.08em] text-[#22040d] uppercase leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)] max-w-full break-words text-center px-1">
               {groom}
             </h1>
-          </div>
 
-          {/* Minimal Scroll Cue */}
-          <div
-            className="relative z-20 flex flex-col items-center gap-1.5 opacity-80 animate-bounce transition-opacity duration-300"
-            style={{ opacity: Math.max(0, 1 - scrollProgress * 2) }}
-          >
-            <span className="text-[10px] tracking-[0.3em] text-[#eed57c] uppercase font-medium">
-              SCROLL
-            </span>
-            <div className="w-4 h-6 rounded-full border border-[#eed57c]/70 flex items-start justify-center p-0.5">
-              <div className="w-1.5 h-2 rounded-full bg-[#eed57c]" />
+            <div className="mt-2 text-[#783e0a] text-[9.5px] font-cinzel tracking-widest uppercase font-bold">
+              ❖ Royal Wedding Celebration ❖
             </div>
           </div>
 
-          <SectionSeam />
+          {/* Bottom Scroll Cue */}
+          <div
+            className="relative z-20 flex flex-col items-center gap-1 transition-opacity duration-300 pb-1"
+            style={{ opacity: Math.max(0, 1 - scrollProgress * 2) }}
+          >
+            <span className="text-[9px] tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+              SCROLL TO CELEBRATE
+            </span>
+            <div className="w-4 h-6 rounded-full border border-[#eed57c] bg-black/40 flex items-start justify-center p-1 shadow-md">
+              <div className="w-1 h-2 rounded-full bg-[#eed57c] animate-bounce" />
+            </div>
+          </div>
+
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none z-15" />
+          <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-center pointer-events-none">
+            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#eed57c]/60 to-transparent" />
+            <span className="absolute px-2.5 py-0.5 rounded-full bg-black/85 border border-[#eed57c]/60 text-[8px] text-[#eed57c] font-serif shadow-sm">
+              ❖
+            </span>
+          </div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 2. SACRED BLESSINGS: LUSH ROSE CORNER & SIDE FRAME                   */}
+        {/* 2. SACRED VERSE: LUSH ROSE CORNER & SIDE FRAME                         */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-6 bg-cover bg-center overflow-hidden"
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-5 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/kamalam-kalyanam/rose_side_frame.jpg')",
           }}
         >
-          <SectionSeam />
-
+          <SectionVignette />
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full max-w-[320px] ml-auto mr-2 sm:mr-4 p-6 rounded-2xl bg-[#1b030a]/85 backdrop-blur-md border border-[#eed57c]/40 shadow-2xl flex flex-col items-center"
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-15 w-[85%] max-w-[315px] flex flex-col items-center px-5 py-7 my-auto rounded-2xl bg-[#fffdf8]/92 backdrop-blur-[2px] border border-[#c89b38]/45 shadow-[0_12px_36px_rgba(20,5,10,0.18)]"
           >
-            <span className="text-2xl mb-3 text-[#eed57c] opacity-90">🕉️</span>
+            <div className="absolute inset-1.5 border border-[#8f5e1a]/25 rounded-xl pointer-events-none" />
 
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#eed57c] uppercase font-bold mb-2">
-              DIVINE BLESSINGS
+            <span className="font-cinzel text-[10.5px] sm:text-[11px] tracking-[0.26em] text-[#783e0a] uppercase font-bold mb-1">
+              ✦ DIVINE INVOCATION ✦
             </span>
 
-            <MinimalGoldDivider className="my-2" />
-
-            <h2 className="font-marcellus text-2xl sm:text-3xl text-[#fff3cb] font-normal leading-relaxed tracking-wide mt-2">
-              A Sacred Union
+            <h2 className="font-cinzel text-lg sm:text-xl text-[#22040d] font-bold leading-relaxed tracking-wide drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+              &ldquo;United by destiny,
+              <br />
+              blessed by grace.&rdquo;
             </h2>
 
-            <p className="font-cormorant italic text-base sm:text-lg text-[#faedd0]/95 leading-relaxed mt-3.5 max-w-[280px]">
-              &ldquo;{quote}&rdquo;
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: false }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="w-16 h-[1.5px] bg-gradient-to-r from-transparent via-[#96631b] to-transparent my-2.5"
+            />
+
+            <p className="font-cormorant text-sm sm:text-base text-[#2c0611] leading-relaxed drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] font-semibold italic">
+              {quote}
             </p>
 
-            {data.custom_message && (
-              <p className="font-cormorant text-sm sm:text-base text-[#eed57c]/85 mt-3 leading-relaxed max-w-[260px]">
-                {data.custom_message}
-              </p>
-            )}
-          </motion.div>
-        </section>
-
-        {/* ===================================================================== */}
-        {/* 3. SCRATCH TO REVEAL: DATE + ROSE PETAL SHOWER ANIMATION              */}
-        {/* ===================================================================== */}
-        <section className="relative w-full py-16 px-6 text-center flex flex-col items-center justify-center bg-[#1f030b] overflow-hidden select-none">
-          <SectionSeam />
-
-          {/* Lotuses on Sides */}
-          <SideLotusFlourish side="left" className="top-14" />
-          <SideLotusFlourish side="right" className="top-14" />
-
-          {/* Dynamic Rose Petal Shower on Scratch Effect */}
-          <RosePetalShower trigger={triggerShower} />
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full flex flex-col items-center relative z-10"
-          >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#eed57c] uppercase font-bold mb-4">
-              AUSPICIOUS MUHURTHAM
-            </span>
-
-            {/* The Scratch Frame */}
-            <div className="relative w-64 sm:w-72 h-80 rounded-2xl overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.85)] border border-[#eed57c]/65 bg-[#2d0512]">
-              {/* Underlying Revealed Card Content */}
-              <div className="absolute inset-0 flex flex-col items-center justify-between p-6 text-center pointer-events-none select-none">
-                <div className="font-marcellus text-xs tracking-[0.25em] text-[#eed57c] uppercase font-semibold">
-                  MUHURTHAM DATE
-                </div>
-
-                <div className="my-auto flex flex-col items-center">
-                  <div className="font-cormorant text-7xl sm:text-8xl font-normal text-[#fff4ce] leading-none tracking-tight">
-                    {weddingDateInfo.day}
-                  </div>
-                  <div className="font-marcellus text-sm sm:text-base tracking-[0.25em] text-[#eed57c] uppercase mt-1.5 font-medium">
-                    {weddingDateInfo.month} {weddingDateInfo.year}
-                  </div>
-                  <div className="w-10 h-[1px] bg-[#eed57c]/60 my-2.5" />
-                  <div className="font-marcellus text-xs sm:text-sm text-[#faedd0] tracking-wider">
-                    {weddingDateInfo.weekday} · {weddingDateInfo.time}
-                  </div>
-                </div>
-
-                <div className="text-[10px] sm:text-xs tracking-[0.2em] font-marcellus text-[#eed57c]/90 uppercase font-medium">
-                  {data.wedding_venue || "Sri Padmavathi Palace"}
-                </div>
+            {familyNames && (
+              <div className="mt-3.5 pt-2.5 border-t border-[#96631b]/30 w-full">
+                <span className="text-[9.5px] font-cinzel tracking-widest text-[#783e0a] uppercase font-bold block mb-0.5">
+                  With Heartfelt Blessings
+                </span>
+                <p className="font-marcellus text-xs text-[#22040d] font-bold tracking-wider leading-snug">
+                  {familyNames}
+                </p>
               </div>
+            )}
 
-              {/* Interactive Scratch Canvas Foil */}
-              <canvas
-                ref={canvasRef}
-                style={{ touchAction: "none" }}
-                onMouseDown={() => (isDrawing.current = true)}
-                onMouseUp={() => (isDrawing.current = false)}
-                onMouseLeave={() => (isDrawing.current = false)}
-                onMouseMove={(e) => {
-                  if (isDrawing.current) handleScratchMove(e.clientX, e.clientY);
-                }}
-                onTouchStart={() => (isDrawing.current = true)}
-                onTouchEnd={() => (isDrawing.current = false)}
-                onTouchMove={(e) => {
-                  if (e.touches[0]) handleScratchMove(e.touches[0].clientX, e.touches[0].clientY);
-                }}
-                className={`absolute inset-0 w-full h-full cursor-pointer z-10 transition-opacity duration-700 ${
-                  isScratched ? "opacity-0 pointer-events-none" : "opacity-100"
-                }`}
-              />
-
-              {!isScratched && (
-                <div className="absolute bottom-3 inset-x-0 flex justify-center pointer-events-none z-20">
-                  <span className="px-3 py-1 rounded-full bg-black/75 border border-[#eed57c]/40 text-[9px] sm:text-[10px] font-marcellus text-[#faedd0] tracking-widest uppercase">
-                    ✨ Swipe to reveal
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Action Buttons: Reveal & Add to Calendar */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-5">
-              {!isScratched ? (
-                <button
-                  type="button"
-                  onClick={unveilDate}
-                  className="px-5 py-2 rounded-full bg-[#2a0510] border border-[#eed57c]/60 text-[#eed57c] text-xs tracking-[0.2em] uppercase font-marcellus font-semibold hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer flex items-center gap-1.5"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Click to Reveal</span>
-                </button>
-              ) : (
-                <>
-                  <button
-                    type="button"
-                    onClick={handleAddToCalendar}
-                    className="px-5 py-2 rounded-full bg-[#eed57c] text-[#1c0409] text-xs tracking-[0.18em] uppercase font-marcellus font-bold hover:brightness-110 active:scale-95 transition-all shadow-md cursor-pointer flex items-center gap-1.5"
-                  >
-                    <Calendar className="w-3.5 h-3.5 text-[#1c0409]" />
-                    <span>Add to Calendar</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setTriggerShower((prev) => !prev)}
-                    className="px-4 py-2 rounded-full bg-[#2a0510] border border-[#eed57c]/50 text-[#eed57c] text-xs tracking-[0.16em] uppercase font-marcellus font-medium hover:scale-105 active:scale-95 transition-all shadow-sm cursor-pointer flex items-center gap-1.5"
-                    title="Shower rose petals again"
-                  >
-                    <span>🌹 Shower Petals</span>
-                  </button>
-                </>
-              )}
+            <div className="flex items-center gap-2 mt-3 text-[#8a5518]">
+              <div className="w-8 h-[1px] bg-current" />
+              <span className="text-xs">❖</span>
+              <div className="w-8 h-[1px] bg-current" />
             </div>
           </motion.div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 4. COUNTDOWN TIMER (MINIMAL CRIMSON)                                  */}
-        {/* ===================================================================== */}
-        <section className="relative w-full py-16 px-6 text-center flex flex-col items-center justify-center bg-[#25040e] overflow-hidden">
-          <SectionSeam />
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[340px] flex flex-col items-center"
-          >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#eed57c] uppercase font-bold mb-2">
-              THE COUNTDOWN
-            </span>
-
-            <MinimalGoldDivider className="my-2" />
-
-            <div className="grid grid-cols-4 gap-2.5 w-full mt-4">
-              {[
-                { label: "DAYS", value: timeLeft.days },
-                { label: "HOURS", value: timeLeft.hours },
-                { label: "MINS", value: timeLeft.minutes },
-                { label: "SECS", value: timeLeft.seconds },
-              ].map((unit, idx) => (
-                <div
-                  key={idx}
-                  className="py-3.5 px-1.5 rounded-xl bg-[#1b030a] border border-[#eed57c]/35 shadow-md flex flex-col items-center justify-center"
-                >
-                  <span className="font-cormorant text-3xl sm:text-4xl font-normal text-[#fff4ce] tabular-nums leading-none">
-                    {String(unit.value).padStart(2, "0")}
-                  </span>
-                  <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.16em] text-[#eed57c] uppercase font-semibold mt-1.5">
-                    {unit.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </section>
-
-        {/* ===================================================================== */}
-        {/* 5. INTERACTIVE CEREMONIAL TIMELINE: ROSE BRANCHES SIDE FRAME          */}
+        {/* 3. SCRATCH TO REVEAL: SAVE THE DATE                                    */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[780px] py-18 px-5 text-center flex flex-col items-center justify-center bg-cover bg-center overflow-hidden"
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center bg-[#1f030b] bg-cover bg-center overflow-hidden select-none"
           style={{
             backgroundImage: "url('/images/kamalam-kalyanam/rose_branches_frame.jpg')",
           }}
         >
-          <SectionSeam />
+          <SectionVignette />
+          <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+
+          <div className="relative z-20 mb-4 flex flex-col items-center">
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              ✦ AUSPICIOUS INVITATION ✦
+            </span>
+            <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-[#fff2b2] tracking-[0.18em] uppercase mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
+              Save The Date
+            </h3>
+            <MinimalGoldDivider className="mt-1.5 opacity-80" />
+          </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[360px] flex flex-col items-center relative z-10"
+            initial={{ opacity: 0, y: 30, scale: 0.94 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative rounded-[26px] sm:rounded-[30px] overflow-hidden flex flex-col items-center justify-center text-center z-15 shadow-[0_20px_50px_rgba(0,0,0,0.9)] border-2 border-[#d4af37]"
+            style={{
+              width: "60%",
+              height: "44%",
+            }}
           >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#eed57c] uppercase font-bold mb-1">
-              THE CELEBRATION
+            <div
+              className="absolute inset-0 bg-cover bg-center flex flex-col items-center justify-between py-4 px-3 text-center pointer-events-none select-none z-0 bg-[#fffbf2]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(135deg, #fffcf5 0%, #faedd3 50%, #f4dec0 100%)",
+              }}
+            >
+              <div className="absolute inset-2 border border-[#b8860b]/40 rounded-2xl pointer-events-none" />
+
+              <div className="flex flex-col items-center pt-1 z-10">
+                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#7a3407] font-bold uppercase">
+                  ✦ AUSPICIOUS MUHURTHAM ✦
+                </span>
+                <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#9e6b22] to-transparent mt-0.5" />
+              </div>
+
+              <div className="flex flex-col items-center justify-center my-auto px-1 z-10">
+                <div className="font-cormorant text-5xl sm:text-6xl font-bold text-[#200d02] leading-none tracking-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+                  {weddingDateInfo.day}
+                </div>
+                <div className="font-cinzel text-xs sm:text-sm tracking-[0.28em] text-[#381603] font-bold uppercase mt-1">
+                  {weddingDateInfo.month} {weddingDateInfo.year}
+                </div>
+                <div className="flex items-center gap-1.5 my-1 text-[#9e6b22]">
+                  <div className="w-4 h-[1px] bg-current" />
+                  <span className="text-[7px]">❖</span>
+                  <div className="w-4 h-[1px] bg-current" />
+                </div>
+                <div className="font-marcellus text-[10.5px] sm:text-[11.5px] text-[#422005] font-bold tracking-wider">
+                  {weddingDateInfo.weekday} · {weddingDateInfo.time}
+                </div>
+                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#633208] font-bold mt-0.5 line-clamp-1 max-w-[170px]">
+                  {data.wedding_venue || "The Leela Palace Courtyard"}
+                </div>
+              </div>
+
+              <div className="pb-1 text-[8.5px] tracking-[0.22em] font-cinzel text-[#783e0a] uppercase font-bold z-10">
+                ❖ An Auspicious Union ❖
+              </div>
+            </div>
+
+            <canvas
+              ref={canvasRef}
+              style={{ touchAction: "none" }}
+              onMouseDown={() => (isDrawing.current = true)}
+              onMouseUp={() => (isDrawing.current = false)}
+              onMouseLeave={() => (isDrawing.current = false)}
+              onMouseMove={(e) => {
+                if (isDrawing.current) handleScratchMove(e.clientX, e.clientY);
+              }}
+              onTouchStart={() => (isDrawing.current = true)}
+              onTouchEnd={() => (isDrawing.current = false)}
+              onTouchMove={(e) => {
+                if (e.touches[0]) handleScratchMove(e.touches[0].clientX, e.touches[0].clientY);
+              }}
+              className={`absolute inset-0 w-full h-full cursor-pointer z-10 transition-opacity duration-700 ${
+                isScratched ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
+            />
+
+            {!isScratched && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.75, 1, 0.75], y: [0, -2, 0] }}
+                transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+                className="absolute bottom-2.5 pointer-events-none z-20 px-2.5 py-0.5 rounded-full bg-black/75 border border-[#eed57c]/70 text-[8px] font-marcellus text-[#fff2b2] tracking-widest uppercase flex items-center gap-1 shadow-md"
+              >
+                <span>✨ Swipe To Reveal</span>
+              </motion.div>
+            )}
+          </motion.div>
+
+          {!isScratched && (
+            <button
+              type="button"
+              onClick={() => setIsScratched(true)}
+              className="relative mt-5 z-20 px-5 py-2 rounded-full bg-gradient-to-r from-[#4c0519] via-[#881337] to-[#4c0519] border border-[#eed57c] text-[#fff2b2] text-[10px] sm:text-[10.5px] tracking-[0.22em] uppercase font-cinzel font-bold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.8)] cursor-pointer flex items-center gap-1.5"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#eed57c]" />
+              <span>Click To Reveal Date</span>
+            </button>
+          )}
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 4. COUNTDOWN TIMER: CRIMSON VELVET & ROSE FRAME                        */}
+        {/* ===================================================================== */}
+        <section
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-6 bg-cover bg-center overflow-hidden"
+          style={{
+            backgroundImage: "url('/images/kamalam-kalyanam/rose_branches_frame.jpg')",
+          }}
+        >
+          <SectionVignette />
+          <div className="absolute inset-0 bg-black/50 pointer-events-none" />
+
+          <motion.div
+            initial={{ opacity: 0, y: 35, scale: 0.94 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-15 w-full max-w-[320px] flex flex-col items-center py-6 px-3"
+          >
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+              ✦ AUSPICIOUS MUHURTHAM ✦
             </span>
-            <h3 className="font-marcellus text-2xl sm:text-3xl text-[#fff3cb] tracking-wide font-normal">
-              Wedding Itinerary
+            <h3 className="font-cinzel text-xl sm:text-2xl text-[#fff2b2] tracking-[0.2em] uppercase font-bold mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+              Counting Down
             </h3>
-            <p className="font-cormorant italic text-sm text-[#faedd0]/75 mt-1">
-              Tap any ceremony to view details
-            </p>
+            <span className="font-marcellus text-xs tracking-[0.24em] text-[#fb7185] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+              To Eternal Togetherness
+            </span>
+            <MinimalGoldDivider className="my-2.5 opacity-90" />
 
-            <MinimalGoldDivider className="my-3.5" />
+            <div className="grid grid-cols-2 gap-2.5 w-full mt-3">
+              {[
+                { label: "DAYS", value: timeLeft.days },
+                { label: "HOURS", value: timeLeft.hours },
+                { label: "MINUTES", value: timeLeft.minutes },
+                { label: "SECONDS", value: timeLeft.seconds },
+              ].map((unit, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20, scale: 0.92 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: false, amount: 0.25 }}
+                  transition={{ duration: 0.5, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
+                  className="py-3.5 px-2 rounded-xl bg-black/75 border border-[#eed57c]/60 shadow-[0_8px_24px_rgba(0,0,0,0.7)] backdrop-blur-md flex flex-col items-center justify-center relative overflow-hidden"
+                >
+                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
+                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#fff2b2] tabular-nums leading-none drop-shadow-[0_2px_8px_rgba(238,213,124,0.5)]">
+                    {String(unit.value).padStart(2, "0")}
+                  </span>
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#eed57c] uppercase font-bold mt-1.5 text-center">
+                    {unit.label}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
 
-            {/* Timeline with central glowing spine and interactive event cards */}
-            <div className="relative w-full flex flex-col space-y-4 mt-2">
-              {/* Vertical glowing timeline line */}
-              <div className="absolute left-6 top-3 bottom-3 w-[1.5px] bg-gradient-to-b from-[#eed57c]/30 via-[#eed57c] to-[#eed57c]/30 pointer-events-none" />
-
-              {timelineEvents.map((evt, idx) => {
-                const IconComponent = evt.icon;
-                const isSelected = activeEventIdx === idx;
-
-                return (
-                  <motion.div
-                    key={idx}
-                    onClick={() => setActiveEventIdx(isSelected ? null : idx)}
-                    className={`relative z-10 w-full pl-13 pr-4 py-3.5 rounded-xl border text-left cursor-pointer transition-all duration-300 ${
-                      isSelected
-                        ? "bg-[#330615] border-[#eed57c] shadow-[0_4px_20px_rgba(238,213,124,0.22)]"
-                        : "bg-[#27040e]/95 border-[#eed57c]/30 hover:border-[#eed57c]/60"
-                    }`}
-                  >
-                    {/* Glowing timeline node */}
-                    <div
-                      className={`absolute left-4 top-4.5 -translate-x-1/2 w-4 h-4 rounded-full flex items-center justify-center transition-all ${
-                        isSelected
-                          ? "bg-[#eed57c] ring-4 ring-[#eed57c]/30"
-                          : "bg-[#1f030b] border-2 border-[#eed57c]/60"
-                      }`}
-                    >
-                      <div
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          isSelected ? "bg-[#1c0409]" : "bg-[#eed57c]"
-                        }`}
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 text-xs tracking-[0.2em] font-marcellus text-[#eed57c] uppercase font-bold">
-                        <Clock className="w-3 h-3 text-[#eed57c]" />
-                        <span>{evt.time}</span>
-                      </div>
-                      <div className="w-6 h-6 rounded-full bg-[#1b0208] border border-[#eed57c]/35 flex items-center justify-center text-[#eed57c]">
-                        <IconComponent className="w-3 h-3" />
-                      </div>
-                    </div>
-
-                    <h4 className="font-marcellus text-base sm:text-lg font-medium text-[#fff4ce] mt-1">
-                      {evt.title}
-                    </h4>
-                    <p className="font-cormorant italic text-sm text-[#faedd0]/90">
-                      {evt.subtitle}
-                    </p>
-
-                    {/* Expandable Ceremony Details */}
-                    <AnimatePresence>
-                      {isSelected && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="overflow-hidden pt-2.5 mt-2.5 border-t border-[#eed57c]/25"
-                        >
-                          <p className="font-cormorant text-sm text-[#faedd0]/85 leading-relaxed">
-                            {evt.details}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
+            <div className="mt-4 px-4 py-1.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-center shadow-md">
+              <span className="font-marcellus text-xs text-[#faedd0] font-semibold tracking-wider">
+                {weddingDateInfo.weekday}, {weddingDateInfo.day} {weddingDateInfo.month} · {weddingDateInfo.time}
+              </span>
             </div>
           </motion.div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 6. OUR CHERISHED MOMENTS (MINIMAL PHOTO GALLERY)                      */}
+        {/* 5. PROGRAM TIMELINE: EXACTLY 3 PROGRAMS LYING DIRECTLY ON IMAGE        */}
         {/* ===================================================================== */}
-        <section className="relative w-full py-18 px-4 text-center flex flex-col items-center justify-center bg-[#25040e] overflow-hidden">
-          <SectionSeam />
+        <section
+          className="relative w-full min-h-[760px] sm:min-h-[800px] text-center flex flex-col items-center justify-between px-4 pt-9 pb-7 bg-center overflow-hidden"
+          style={{
+            backgroundImage: "url('/images/kamalam-kalyanam/rose_side_frame.jpg')",
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          <SectionVignette />
+          <div className="absolute inset-0 bg-black/60 pointer-events-none" />
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full flex flex-col items-center"
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center z-15 mt-1"
           >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#eed57c] uppercase font-bold mb-1">
-              GALLERY
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#fff2b2] uppercase font-bold mb-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+              ✦ SACRED RITUALS ✦
             </span>
-            <h3 className="font-marcellus text-2xl sm:text-3xl text-[#fff3cb] tracking-wide font-normal">
-              Cherished Moments
-            </h3>
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.16em] uppercase font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+              Wedding Program
+            </h2>
+            <div className="flex items-center gap-2 mt-1 text-[#eed57c] drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+              <div className="w-8 h-[1px] bg-current" />
+              <span className="text-[9px]">❖</span>
+              <div className="w-8 h-[1px] bg-current" />
+            </div>
+          </motion.div>
 
-            <MinimalGoldDivider className="my-3.5" />
+          <div className="relative w-[88%] max-w-[330px] my-auto py-2 flex flex-col items-center z-15">
+            <div className="absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-[1.5px] bg-gradient-to-b from-[#eed57c]/40 via-[#b3811b] to-[#eed57c]/40" />
+
+            <div className="relative w-full flex flex-col items-center space-y-4 sm:space-y-4.5 z-10">
+              {/* Program 1 */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="relative z-10 w-full flex flex-col items-center text-center"
+              >
+                <div className="w-6 h-6 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#4a2406] font-cinzel font-bold mb-1 ring-2 ring-[#b8860b]/30">
+                  1
+                </div>
+                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-[#eed57c] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  MANGALA SNANAM
+                </span>
+                <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#fffaf0] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  Auspicious Sacred Dawn Prayers
+                </h4>
+                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#faedd0] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  07:00 AM
+                </div>
+                <div className="font-marcellus text-xs text-[#eed57c]/95 font-semibold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  {venueName}
+                </div>
+              </motion.div>
+
+              {/* Program 2: Sacred Muhurtham (Highlight) */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="relative z-10 w-full flex flex-col items-center text-center py-2 px-3 rounded-xl bg-[#881337]/50 border border-[#eed57c]/70 shadow-lg backdrop-blur-xs"
+              >
+                <div className="w-7 h-7 rounded-full bg-[#881337] border-2 border-[#eed57c] shadow-lg flex items-center justify-center text-xs text-[#fff2b2] font-bold mb-1">
+                  ❖
+                </div>
+                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.24em] text-[#f43f5e] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  SACRED MUHURTHAM
+                </span>
+                <h4 className="font-cinzel text-base sm:text-lg font-bold text-[#fff2b2] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  Mangalya Dharanam &amp; Saptapadi
+                </h4>
+                <div className="mt-0.5 font-cormorant text-base sm:text-lg text-[#fff9e6] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  {weddingDateInfo.time || "08:42 AM"}
+                </div>
+                <div className="font-marcellus text-xs sm:text-[13px] text-[#eed57c] font-bold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  {venueName}
+                </div>
+              </motion.div>
+
+              {/* Program 3 */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="relative z-10 w-full flex flex-col items-center text-center"
+              >
+                <div className="w-6 h-6 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#4a2406] font-cinzel font-bold mb-1 ring-2 ring-[#b8860b]/30">
+                  3
+                </div>
+                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-[#eed57c] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  VIRUNDHU &amp; RECEPTION
+                </span>
+                <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#fffaf0] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  Traditional Feast &amp; Celebrations
+                </h4>
+                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#faedd0] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  12:30 PM &amp; 06:30 PM
+                </div>
+                <div className="font-marcellus text-xs text-[#eed57c] font-bold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  The Leela Palace Banquet Hall
+                </div>
+              </motion.div>
+            </div>
+          </div>
+
+          <div className="relative z-15 flex items-center justify-center gap-2 mb-2 text-[#eed57c] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+            <div className="w-8 h-[1px] bg-current" />
+            <span className="text-[10px]">❖</span>
+            <div className="w-8 h-[1px] bg-current" />
+          </div>
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 6. SWEET MOMENTS: 3D PHOTO FAN CAROUSEL                                */}
+        {/* ===================================================================== */}
+        <section
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-4 bg-cover bg-center overflow-hidden"
+          style={{
+            backgroundImage: "radial-gradient(ellipse at center, #26050e 0%, #100105 100%)",
+          }}
+        >
+          <SectionVignette />
+          <motion.div
+            initial={{ opacity: 0, y: 35, scale: 0.94 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full flex flex-col items-center z-15"
+          >
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              ✦ CHERISHED GLIMPSES ✦
+            </span>
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mt-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+              Sweet Moments
+            </h2>
+            <p className="font-cormorant italic text-sm sm:text-base text-[#faedd0] font-semibold mb-5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+              Treasured memories of our journey together
+            </p>
 
             <div
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
-              className="relative w-full max-w-[370px] flex items-center justify-center min-h-[320px] mt-2"
+              className="relative w-full max-w-[370px] sm:max-w-[410px] flex items-center justify-center min-h-[340px] sm:min-h-[370px]"
             >
-              {/* Previous Image */}
-              <div
+              <motion.div
+                initial={{ opacity: 0, x: -20, rotate: -10 }}
+                whileInView={{ opacity: 0.45, x: 0, rotate: -6 }}
+                viewport={{ once: false, amount: 0.3 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
                 onClick={() =>
                   setActivePhotoIdx((prev) => (prev - 1 + momentsList.length) % momentsList.length)
                 }
-                className="absolute left-1 w-32 sm:w-36 aspect-[3/4] rounded-xl overflow-hidden shadow-lg border border-[#eed57c]/35 opacity-40 hover:opacity-75 transition cursor-pointer scale-90 z-10 bg-black"
+                className="absolute left-1 sm:left-2 w-36 sm:w-42 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-[#d4af37]/50 hover:opacity-80 transition cursor-pointer scale-90 z-10 select-none bg-black"
               >
                 <img
                   src={momentsList[(activePhotoIdx - 1 + momentsList.length) % momentsList.length]}
                   alt="Moments"
                   className="w-full h-full object-cover"
                 />
-              </div>
+                <div className="absolute inset-0 bg-black/35" />
+              </motion.div>
 
-              {/* Active Image */}
-              <div className="relative z-20 w-56 sm:w-60 aspect-[3/4] rounded-xl overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.85)] border border-[#eed57c] bg-black">
+              <div className="relative z-20 w-60 sm:w-68 aspect-[3/4] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85)] border-2 border-[#eed57c] select-none transform hover:scale-[1.02] transition-transform duration-300 bg-black">
                 <img
                   src={momentsList[activePhotoIdx]}
                   alt="Couple Moment"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-black/80 text-xs tracking-widest text-[#eed57c] font-marcellus font-semibold">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-black/85 backdrop-blur-md border border-[#eed57c]/60 text-[10px] tracking-widest text-[#eed57c] font-marcellus font-bold">
                   {activePhotoIdx + 1} / {momentsList.length}
                 </div>
               </div>
 
-              {/* Next Image */}
-              <div
+              <motion.div
+                initial={{ opacity: 0, x: 20, rotate: 10 }}
+                whileInView={{ opacity: 0.45, x: 0, rotate: 6 }}
+                viewport={{ once: false, amount: 0.3 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
                 onClick={() => setActivePhotoIdx((prev) => (prev + 1) % momentsList.length)}
-                className="absolute right-1 w-32 sm:w-36 aspect-[3/4] rounded-xl overflow-hidden shadow-lg border border-[#eed57c]/35 opacity-40 hover:opacity-75 transition cursor-pointer scale-90 z-10 bg-black"
+                className="absolute right-1 sm:right-2 w-36 sm:w-42 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-[#d4af37]/50 hover:opacity-80 transition cursor-pointer scale-90 z-10 select-none bg-black"
               >
                 <img
                   src={momentsList[(activePhotoIdx + 1) % momentsList.length]}
                   alt="Moments"
                   className="w-full h-full object-cover"
                 />
-              </div>
+                <div className="absolute inset-0 bg-black/35" />
+              </motion.div>
 
-              {/* Navigation Chevrons */}
               <button
                 type="button"
                 aria-label="Previous Photo"
                 onClick={() =>
                   setActivePhotoIdx((prev) => (prev - 1 + momentsList.length) % momentsList.length)
                 }
-                className="absolute left-0 z-30 w-9 h-9 rounded-full bg-black/75 border border-[#eed57c]/70 text-[#eed57c] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-lg cursor-pointer"
+                className="absolute left-0 sm:left-1 z-30 w-9 h-9 rounded-full bg-black/85 border border-[#eed57c] text-[#eed57c] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-xl cursor-pointer"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
@@ -1114,24 +1001,23 @@ export default function KamalamKalyanamTemplate({
                 type="button"
                 aria-label="Next Photo"
                 onClick={() => setActivePhotoIdx((prev) => (prev + 1) % momentsList.length)}
-                className="absolute right-0 z-30 w-9 h-9 rounded-full bg-black/75 border border-[#eed57c]/70 text-[#eed57c] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-lg cursor-pointer"
+                className="absolute right-0 sm:right-1 z-30 w-9 h-9 rounded-full bg-black/85 border border-[#eed57c] text-[#eed57c] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-xl cursor-pointer"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Pagination Dots */}
-            <div className="flex gap-2 justify-center mt-3.5">
+            <div className="flex gap-1.5 justify-center mt-4">
               {momentsList.map((_, idx) => (
                 <button
                   key={idx}
                   type="button"
                   aria-label={`Photo ${idx + 1}`}
                   onClick={() => setActivePhotoIdx(idx)}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                     activePhotoIdx === idx
                       ? "w-5 bg-[#eed57c]"
-                      : "w-2 bg-[#eed57c]/30 hover:bg-[#eed57c]/60"
+                      : "w-1.5 bg-[#eed57c]/30 hover:bg-[#eed57c]/60"
                   }`}
                 />
               ))}
@@ -1140,162 +1026,204 @@ export default function KamalamKalyanamTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 7. VENUE & NAVIGATION (MINIMAL CRIMSON)                                */}
+        {/* 7. VENUE & GOOGLE MAPS: UNIFIED SINGLE CARD                            */}
         {/* ===================================================================== */}
-        <section className="relative w-full py-18 px-6 text-center flex flex-col items-center justify-center bg-[#1f030b] overflow-hidden">
-          <SectionSeam />
+        <section
+          className="relative w-full min-h-[660px] text-center flex flex-col items-center justify-center px-4 py-12 bg-cover bg-center overflow-hidden"
+          style={{
+            backgroundImage: "url('/images/kamalam-kalyanam/rose_branches_frame.jpg')",
+          }}
+        >
+          <SectionVignette />
+          <div className="absolute inset-0 bg-black/60 pointer-events-none" />
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[340px] flex flex-col items-center"
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-15 w-full max-w-[330px] sm:max-w-[350px] flex flex-col items-center"
           >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#eed57c] uppercase font-bold mb-1">
-              THE VENUE
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              ✦ CEREMONY LOCATION ✦
             </span>
-            <h3 className="font-marcellus text-2xl sm:text-3xl text-[#fff3cb] tracking-wide font-normal">
-              Location &amp; Directions
-            </h3>
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mb-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+              Wedding Venue
+            </h2>
+            <MinimalGoldDivider className="mb-4 opacity-80" />
 
-            <MinimalGoldDivider className="my-3.5" />
+            <div className="w-full rounded-2xl bg-[#1d030b]/95 border-2 border-[#eed57c]/70 shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-4 flex flex-col items-center text-center relative overflow-hidden backdrop-blur-md">
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
 
-            <div className="w-full rounded-xl overflow-hidden border border-[#eed57c]/45 shadow-lg bg-[#28040f] mt-1">
-              <div className="w-full h-48">
-                {isPreview ? (
-                  <div className="w-full h-full flex flex-col items-center justify-center bg-black/60 p-4">
-                    <MapPin className="w-7 h-7 text-[#eed57c] mb-1.5" />
-                    <span className="font-marcellus text-base text-[#fff4ce]">
-                      {data.wedding_venue || "Sri Padmavathi Palace"}
-                    </span>
-                  </div>
-                ) : (
-                  <iframe
-                    title="Venue Map"
-                    src={mapEmbedUrl}
-                    className="w-full h-full border-0"
-                    loading="lazy"
-                    allowFullScreen
-                  />
-                )}
+              <h3 className="font-cinzel text-base sm:text-lg font-bold text-[#fff2b2] tracking-wide drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                {venueName}
+              </h3>
+
+              <p className="font-marcellus text-xs sm:text-[13px] text-[#faedd0]/90 mt-1 mb-3.5 leading-relaxed max-w-[280px]">
+                {venueAddress}
+              </p>
+
+              <div className="relative w-full h-48 sm:h-52 rounded-xl overflow-hidden border border-[#eed57c]/50 shadow-md bg-[#130107] mb-3.5">
+                <div className="absolute top-0 inset-x-0 z-10 px-3 py-1 flex items-center justify-between text-[10px] bg-black/85 backdrop-blur-md border-b border-[#eed57c]/30">
+                  <span className="font-cinzel tracking-wider uppercase font-semibold text-[#fff2b2] flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-[#eed57c]" />
+                    Interactive Map
+                  </span>
+                  <a
+                    href={gmapSearchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-cinzel tracking-wider uppercase font-semibold text-[#eed57c] hover:underline flex items-center gap-1"
+                  >
+                    <span>View Larger</span>
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </div>
+
+                <div className="w-full h-full pt-6">
+                  {isPreview ? (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-black/85 text-center p-3">
+                      <MapPin className="w-7 h-7 text-[#eed57c] mb-1.5 animate-bounce" />
+                      <span className="font-cinzel text-sm text-[#fff2b2] font-semibold line-clamp-1">
+                        {data.wedding_venue || "The Leela Palace Courtyard"}
+                      </span>
+                      <a
+                        href={gmapSearchUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 px-3 py-1 rounded-full bg-[#eed57c]/20 border border-[#eed57c]/60 text-[#eed57c] text-[9.5px] font-cinzel font-semibold uppercase tracking-widest hover:bg-[#eed57c] hover:text-black transition"
+                      >
+                        Open in Maps ↗
+                      </a>
+                    </div>
+                  ) : (
+                    <iframe
+                      title="Venue Map"
+                      src={mapEmbedUrl}
+                      className="w-full h-full border-0"
+                      loading="lazy"
+                      allowFullScreen
+                    />
+                  )}
+                </div>
               </div>
 
-              <div className="p-4 sm:p-5 flex flex-col items-center text-center">
-                <h4 className="font-marcellus text-base sm:text-lg font-medium text-[#fff4ce]">
-                  {data.wedding_venue || "Sri Padmavathi Palace"}
-                </h4>
-                <p className="font-cormorant text-sm sm:text-base text-[#faedd0]/85 mt-1 max-w-[260px] leading-relaxed">
-                  {data.wedding_venue || "GST Road, Chromepet, Chennai - 600044"}
-                </p>
-
-                <a
-                  href={gmapSearchUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-4 rounded-full bg-[#eed57c] text-[#1c0409] font-marcellus text-xs sm:text-sm font-semibold uppercase tracking-wider hover:brightness-110 active:scale-98 transition shadow-md cursor-pointer"
-                >
-                  <Navigation className="w-3.5 h-3.5 fill-[#1c0409]" />
-                  <span>Get Directions</span>
-                </a>
-              </div>
+              <a
+                href={gmapSearchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#c59b27] text-[#1c0f05] font-cinzel text-xs font-bold uppercase tracking-wider hover:brightness-110 active:scale-98 transition shadow-[0_4px_15px_rgba(212,175,55,0.4)] cursor-pointer"
+              >
+                <Navigation className="w-3.5 h-3.5 fill-[#1c0f05]" />
+                <span>Get Directions</span>
+              </a>
             </div>
           </motion.div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 8. RSVP DESK + WHATSAPP SHARE OPTION                                  */}
+        {/* 8. BLESSINGS & RSVP: UNIFIED HIGH-CONTRAST CARD                        */}
         {/* ===================================================================== */}
-        <section className="relative w-full py-18 px-6 text-center flex flex-col items-center justify-center bg-[#25040e] overflow-hidden">
-          <SectionSeam />
-
-          {/* Lotuses on sides */}
-          <SideLotusFlourish side="left" className="top-12" />
-          <SideLotusFlourish side="right" className="top-12" />
-
+        <section
+          className="relative w-full min-h-[680px] text-center flex flex-col items-center justify-center px-4 py-12 bg-cover bg-center overflow-hidden"
+          style={{
+            backgroundImage: "radial-gradient(ellipse at bottom, #26050e 0%, #100105 100%)",
+          }}
+        >
+          <SectionVignette />
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[340px] flex flex-col items-center relative z-10"
+            initial={{ opacity: 0, y: 35, scale: 0.94 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-15 w-full max-w-[315px] sm:max-w-[335px] flex flex-col items-center"
           >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#eed57c] uppercase font-bold mb-1">
-              R. S. V. P.
-            </span>
-            <h3 className="font-marcellus text-2xl sm:text-3xl text-[#fff3cb] tracking-wide font-normal">
-              Kindly Respond
-            </h3>
+            <div className="w-full rounded-2xl bg-[#1d030b]/95 backdrop-blur-md border-2 border-[#d4af37]/75 shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-5 flex flex-col items-center text-center relative overflow-hidden">
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
 
-            <MinimalGoldDivider className="my-3.5" />
+              <span className="font-cinzel text-[10px] tracking-[0.24em] text-[#eed57c] uppercase font-bold">
+                ✦ WARM WISHES ✦
+              </span>
+              <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                Blessings &amp; RSVP
+              </h2>
+              <MinimalGoldDivider className="my-2 opacity-90" />
+              <p className="font-cormorant text-base sm:text-lg text-[#faedd0] mb-4 drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)] font-medium italic">
+                Please grace our celebration with your presence &amp; blessings
+              </p>
 
-            <div className="w-full rounded-2xl bg-[#1d030a] border border-[#eed57c]/45 p-5 sm:p-6 flex flex-col items-center shadow-lg">
               {rsvpSaved ? (
-                <div className="py-4 text-center w-full">
-                  <div className="w-10 h-10 rounded-full bg-[#eed57c]/20 border border-[#eed57c] flex items-center justify-center mx-auto mb-2 text-[#eed57c]">
+                <div className="p-4 rounded-xl bg-black/75 border border-[#eed57c]/60 text-center w-full shadow-lg">
+                  <div className="w-10 h-10 rounded-full bg-[#eed57c]/20 border-2 border-[#eed57c] flex items-center justify-center mx-auto mb-2 text-[#eed57c] shadow-md">
                     <Check className="w-5 h-5 stroke-[3]" />
                   </div>
-                  <h4 className="font-marcellus text-base text-[#fff4ce] uppercase tracking-wider">
-                    Thank You
+                  <h4 className="font-cinzel text-base text-[#fff2b2] uppercase tracking-wider font-bold">
+                    {rsvpStatus === "attending" ? "Thank You!" : "Response Received"}
                   </h4>
-                  <p className="font-cormorant text-sm sm:text-base text-[#faedd0]/90 mt-1.5">
+                  <p className="font-cormorant text-sm sm:text-base text-[#faedd0] mt-1.5 leading-relaxed font-medium">
                     {rsvpStatus === "attending"
-                      ? "Your response has been recorded with joy."
-                      : "Thank you for sending your warm wishes."}
+                      ? "We eagerly look forward to celebrating with you and receiving your heartfelt blessings."
+                      : "Thank you for sending your warm wishes and blessings."}
                   </p>
                 </div>
               ) : (
-                <div className="w-full flex flex-col gap-3.5">
+                <div className="w-full flex flex-col items-center gap-3">
                   <div className="grid grid-cols-2 gap-2.5 w-full">
                     <button
                       type="button"
                       onClick={() => setRsvpStatus("attending")}
-                      className={`py-2.5 px-2 rounded-xl text-xs sm:text-sm font-marcellus uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
                         rsvpStatus === "attending"
-                          ? "bg-[#eed57c] text-[#1c0409] font-bold shadow-md"
-                          : "bg-[#290510] text-[#faedd0] border border-[#eed57c]/35 hover:bg-[#340715]"
+                          ? "bg-gradient-to-r from-[#eed57c] to-[#c59a3f] text-[#1c0f05] border-2 border-white ring-2 ring-[#eed57c]/50 scale-[1.02]"
+                          : "bg-[#2d0510] text-[#faedd0] hover:bg-[#3d0816] border border-[#eed57c]/50"
                       }`}
                     >
-                      Attending
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                      <span>Attending</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setRsvpStatus("declined")}
-                      className={`py-2.5 px-2 rounded-xl text-xs sm:text-sm font-marcellus uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
                         rsvpStatus === "declined"
-                          ? "bg-[#4a0d18] text-[#fecdd3] border border-[#fda4af] font-bold shadow-md"
-                          : "bg-[#290510] text-[#faedd0] border border-[#eed57c]/35 hover:bg-[#340715]"
+                          ? "bg-[#541217] text-[#ffe4e6] border-2 border-[#f87171] ring-2 ring-[#f87171]/40 scale-[1.02]"
+                          : "bg-[#2d0510] text-[#faedd0]/80 hover:bg-[#3d0816] border border-[#eed57c]/50"
                       }`}
                     >
-                      Declining
+                      <X className="w-3.5 h-3.5 stroke-[2.5]" />
+                      <span>Declining</span>
                     </button>
                   </div>
 
                   {rsvpStatus !== "none" && (
-                    <div className="w-full space-y-3 text-left mt-1">
+                    <motion.div
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="w-full space-y-3 text-left mt-1"
+                    >
                       <div>
-                        <label className="block text-xs tracking-[0.2em] font-marcellus text-[#eed57c] uppercase mb-1">
-                          Full Name
+                        <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#eed57c] uppercase font-bold mb-1">
+                          Guest / Family Name
                         </label>
                         <input
                           type="text"
                           value={guestName}
                           onChange={(e) => setGuestName(e.target.value)}
-                          placeholder="e.g. Mr. & Mrs. Raghavan"
-                          className="w-full px-3 py-2 rounded-lg bg-black/60 border border-[#eed57c]/45 text-sm sm:text-base text-[#faedd0] placeholder-[#faedd0]/40 font-serif focus:outline-none focus:border-[#eed57c]"
+                          placeholder="e.g. Sundaram & Family"
+                          className="w-full px-3 py-2 rounded-xl bg-black/80 border-2 border-[#eed57c]/50 text-sm text-[#fff9e6] placeholder-[#faedd0]/50 font-cormorant focus:outline-none focus:border-[#eed57c] focus:ring-1 focus:ring-[#eed57c]"
                         />
                       </div>
 
                       {rsvpStatus === "attending" && (
                         <div>
-                          <label className="block text-xs tracking-[0.2em] font-marcellus text-[#eed57c] uppercase mb-1">
+                          <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#eed57c] uppercase font-bold mb-1">
                             Number of Guests
                           </label>
                           <select
                             value={guestCount}
                             onChange={(e) => setGuestCount(e.target.value)}
-                            className="w-full px-3 py-2 rounded-lg bg-[#140207] border border-[#eed57c]/45 text-sm sm:text-base text-[#faedd0] font-serif focus:outline-none focus:border-[#eed57c]"
+                            className="w-full px-3 py-2 rounded-xl bg-[#23040c] border-2 border-[#eed57c]/50 text-sm text-[#fff9e6] font-cormorant focus:outline-none focus:border-[#eed57c]"
                           >
                             <option value="1">1 Guest</option>
                             <option value="2">2 Guests</option>
@@ -1308,85 +1236,85 @@ export default function KamalamKalyanamTemplate({
                       <button
                         type="button"
                         onClick={() => setRsvpSaved(true)}
-                        className="w-full py-2.5 rounded-lg bg-[#eed57c] text-[#1c0409] font-marcellus text-xs sm:text-sm uppercase font-bold tracking-[0.18em] hover:brightness-110 active:scale-98 transition shadow-md cursor-pointer mt-1"
+                        className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#eed57c] via-[#f5e6a8] to-[#c59a3f] text-[#1c0f05] font-cinzel text-xs uppercase font-bold tracking-[0.2em] hover:brightness-110 active:scale-98 transition shadow-[0_4px_16px_rgba(238,213,124,0.4)] cursor-pointer mt-1"
                       >
                         Confirm RSVP
                       </button>
-                    </div>
+                    </motion.div>
                   )}
 
-                  {data.rsvp_phone && (
-                    <div className="pt-2.5 border-t border-[#eed57c]/25 w-full flex items-center justify-center">
+                  {rsvpPhone && (
+                    <div className="pt-2 border-t border-[#eed57c]/30 w-full flex items-center justify-center">
                       <a
-                        href={`tel:${data.rsvp_phone.replace(/[^0-9+]/g, "")}`}
-                        className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-[#eed57c]/90 hover:text-[#fff4ce] transition"
+                        href={`tel:${rsvpPhone.replace(/[^0-9+]/g, "")}`}
+                        className="inline-flex items-center gap-1.5 text-xs text-[#eed57c] hover:text-[#fff2b2] font-semibold transition"
                       >
                         <Phone className="w-3.5 h-3.5" />
-                        <span>Contact: {data.rsvp_phone}</span>
+                        <span className="font-marcellus tracking-wider">RSVP Helpline: {rsvpPhone}</span>
                       </a>
                     </div>
                   )}
                 </div>
               )}
             </div>
-
-            {/* Share Invitation Button */}
-            <button
-              type="button"
-              onClick={handleShare}
-              className="mt-4 px-5 py-2 rounded-full bg-[#28040f] border border-[#eed57c]/45 text-[#eed57c] text-xs tracking-[0.18em] uppercase font-marcellus font-medium hover:scale-105 active:scale-95 transition-all shadow-sm cursor-pointer flex items-center gap-1.5"
-            >
-              <Share2 className="w-3.5 h-3.5 text-[#eed57c]" />
-              <span>Share Invitation</span>
-            </button>
           </motion.div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 9. MINIMAL FOOTER & BLESSINGS + GIFT NOTE                             */}
+        {/* 9. FOOTER & SIGN-OFF: WITH CRIMSON BACKGROUND & COUPLE PORTRAIT       */}
         {/* ===================================================================== */}
-        <footer className="relative w-full py-18 px-6 text-center flex flex-col items-center justify-center bg-[#1c0209] overflow-hidden">
+        <footer
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-4 bg-cover bg-center overflow-hidden"
+          style={{
+            backgroundImage: "url('/images/kamalam-kalyanam/hero_lotus_arch.jpg')",
+          }}
+        >
+          <SectionVignette hasSeam={false} />
+          <div className="absolute inset-0 bg-black/60 pointer-events-none" />
+
           <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[340px] flex flex-col items-center"
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-15 w-full max-w-[325px] flex flex-col items-center px-4 py-7 rounded-3xl bg-black/75 backdrop-blur-md border border-[#eed57c]/50 shadow-[0_16px_50px_rgba(0,0,0,0.9)]"
           >
-            {/* Blessings Note */}
-            <div className="flex items-center justify-center gap-1.5 text-xs tracking-widest text-[#eed57c] uppercase font-marcellus mb-2 font-medium">
-              <Gift className="w-3.5 h-3.5 text-[#eed57c]" />
-              <span>GIFT OF BLESSINGS</span>
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-[#eed57c] shadow-[0_8px_25px_rgba(0,0,0,0.85)] mb-3 p-1 bg-gradient-to-tr from-[#d4af37] via-[#fff2b2] to-[#8f6018]">
+              <div className="w-full h-full rounded-full overflow-hidden bg-black">
+                <img
+                  src={momentsList[0] || "/images/kamalam-kalyanam/hero_lotus_arch.jpg"}
+                  alt={`${bride} & ${groom}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
-            <p className="font-cormorant italic text-sm sm:text-base text-[#faedd0]/80 mb-6 max-w-[280px] leading-relaxed">
-              Your love, presence, and heartfelt prayers are the greatest gift we could ever receive.
-            </p>
 
-            <span className="font-cormorant italic text-base sm:text-lg text-[#eed57c]/85 block mb-1">
-              With love and gratitude,
+            <span className="font-cinzel text-xs sm:text-sm tracking-[0.26em] text-[#eed57c] block mb-1 uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              LOVE • TRADITION • ETERNITY
             </span>
-
-            <h4 className="font-great-vibes text-5xl sm:text-6xl text-[#fff4ce] tracking-wide leading-tight">
+            <h4 className="font-great-vibes text-4xl sm:text-5xl text-[#fff9e6] drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)] tracking-wide leading-tight">
               {bride} &amp; {groom}
             </h4>
 
-            <div className="flex items-center justify-center gap-2 my-2.5 text-[#eed57c]/70">
-              <div className="w-10 h-[1px] bg-current" />
+            <div className="flex items-center justify-center gap-2 my-2 text-[#eed57c]">
+              <div className="w-10 h-[1px] bg-current opacity-80" />
               <Heart className="w-3.5 h-3.5 fill-current" />
-              <div className="w-10 h-[1px] bg-current" />
+              <div className="w-10 h-[1px] bg-current opacity-80" />
             </div>
 
-            {data.family_names && (
-              <p className="font-marcellus text-xs sm:text-sm tracking-[0.2em] text-[#faedd0]/90 uppercase font-medium mt-1">
-                {data.family_names}
+            {familyNames && (
+              <p className="font-marcellus text-xs sm:text-sm tracking-[0.14em] text-[#faedd0] font-semibold my-1 text-center drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] leading-relaxed uppercase">
+                Warmly Invited By: {familyNames}
               </p>
             )}
 
-            <div className="mt-7 flex justify-center w-full">
-              <CreatedByVarnam
-                theme="gold"
-                className="py-1 px-4 text-[#eed57c]/70 hover:text-[#eed57c]"
-              />
+            <div className="mt-3 flex justify-center w-full">
+              <div className="rounded-full bg-black/85 backdrop-blur-md border border-[#eed57c]/60 shadow-xl hover:border-[#eed57c] hover:bg-black transition-all hover:scale-105 active:scale-95">
+                <CreatedByVarnam
+                  theme="gold"
+                  className="py-1 px-4 text-[#fff2b2] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]"
+                />
+              </div>
             </div>
           </motion.div>
         </footer>

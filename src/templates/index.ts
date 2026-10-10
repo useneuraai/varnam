@@ -11,6 +11,8 @@ export const templatesMap: Record<
   "palace-garden": dynamic(() => import("./mayura-palace/Template")),
   "royal-garden": dynamic(() => import("./mayura-palace/Template")),
   "mayura-mandapam": dynamic(() => import("./mayura-palace/Template")),
+  "mayura-classic": dynamic(() => import("./mayura-classic/Template")),
+  "peacock-classic": dynamic(() => import("./mayura-classic/Template")),
   "kamalam-kalyanam": dynamic(() => import("./kamalam-kalyanam/Template")),
   "kovil-thirumanam": dynamic(() => import("./kovil-thirumanam/Template")),
   "kalyana-mandapam": dynamic(() => import("./kalyana-mandapam/Template")),

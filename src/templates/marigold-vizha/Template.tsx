@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { TemplateData } from "@/lib/templates";
 import {
   MapPin,
-  Calendar,
   Clock,
   Sparkles,
   ChevronLeft,
@@ -55,7 +54,7 @@ const MarigoldPetalsOverlay = () => {
             >
               <path
                 d="M10 0 C16 5 20 14 18 20 C16 26 4 26 2 20 C0 14 4 5 10 0 Z"
-                fill="url(#marigoldGrad)"
+                fill="url(#marigoldGradMV)"
               />
             </svg>
           ) : (
@@ -67,7 +66,7 @@ const MarigoldPetalsOverlay = () => {
             >
               <path
                 d="M10 0 C15 5 19 13 17 19 C15 25 5 25 3 19 C1 13 5 5 10 0 Z"
-                fill="url(#jasmineGrad)"
+                fill="url(#jasmineGradMV)"
               />
             </svg>
           )}
@@ -75,12 +74,12 @@ const MarigoldPetalsOverlay = () => {
       ))}
       <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
         <defs>
-          <linearGradient id="marigoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="marigoldGradMV" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#fef08a" />
             <stop offset="45%" stopColor="#f59e0b" />
             <stop offset="100%" stopColor="#b45309" />
           </linearGradient>
-          <linearGradient id="jasmineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="jasmineGradMV" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#ffffff" />
             <stop offset="65%" stopColor="#fef9ee" />
             <stop offset="100%" stopColor="#ecd6b1" />
@@ -94,20 +93,22 @@ const MarigoldPetalsOverlay = () => {
 // ============================================================================
 // 2. ORNAMENTAL GOLD DIVIDER & SECTION VIGNETTE
 // ============================================================================
-const GoldDivider = ({ className = "" }: { className?: string }) => (
+const MinimalGoldDivider = ({ className = "" }: { className?: string }) => (
   <div className={`flex items-center justify-center gap-3 ${className}`}>
-    <div className="h-[1px] w-10 sm:w-16 bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
+    <div className="h-[1px] w-12 sm:w-16 bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
     <span className="text-[#eed57c] text-xs">❖</span>
-    <div className="h-[1px] w-10 sm:w-16 bg-gradient-to-l from-transparent via-[#eed57c] to-transparent" />
+    <div className="h-[1px] w-12 sm:w-16 bg-gradient-to-l from-transparent via-[#eed57c] to-transparent" />
   </div>
 );
 
 const SectionVignette = ({ hasSeam = true }: { hasSeam?: boolean }) => (
   <>
+    <div className="absolute inset-x-0 top-0 h-28 sm:h-36 bg-gradient-to-b from-black/75 via-black/35 to-transparent pointer-events-none z-10" />
+    <div className="absolute inset-x-0 bottom-0 h-28 sm:h-36 bg-gradient-to-t from-black/75 via-black/35 to-transparent pointer-events-none z-10" />
     {hasSeam && (
       <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-center pointer-events-none">
-        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#eed57c]/40 to-transparent" />
-        <span className="absolute px-2.5 py-0.5 rounded-full bg-black/80 border-2 border-[#f59e0b]/50 text-[8px] text-[#eed57c] font-serif shadow-sm">
+        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#eed57c]/45 to-transparent" />
+        <span className="absolute px-2.5 py-0.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-[8px] text-[#eed57c] font-serif shadow-sm">
           ❖
         </span>
       </div>
@@ -116,7 +117,7 @@ const SectionVignette = ({ hasSeam = true }: { hasSeam?: boolean }) => (
 );
 
 // ============================================================================
-// 3. MAIN TEMPLATE COMPONENT: MARIGOLD VIZHA (TAMIL CLASSIC)
+// 3. MAIN TEMPLATE COMPONENT: MARIGOLD VIZHA
 // ============================================================================
 export default function MarigoldVizhaTemplate({
   data,
@@ -128,11 +129,22 @@ export default function MarigoldVizhaTemplate({
   const containerRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const bride = data.bride_name || "வித்யா (Vidhya)";
-  const groom = data.groom_name || "கார்த்திக் (Karthik)";
+  // Standardized Names & Custom Copy
+  const bride = data.bride_name || "Ananya";
+  const groom = data.groom_name || "Siddharth";
   const quote =
     data.quote ||
-    "அன்பும் அறனும் உடைத்தாயின் இல்வாழ்க்கை பண்பும் பயனும் அது — இரு மனங்கள் இணையும் இல்லறத் தொடக்கம்.";
+    "Two souls united amidst royal gardens and serene blessings, embarking on an eternal sacred journey together.";
+  const familyNames = data.family_names || "The Sundararajan & Ranganathan Families";
+  const rsvpPhone = data.rsvp_phone || "+91 98401 23456";
+  const venueName =
+    data.wedding_venue && data.wedding_venue.includes(",")
+      ? data.wedding_venue.split(",")[0].trim()
+      : data.wedding_venue || "The Leela Palace Courtyard";
+  const venueAddress =
+    data.wedding_venue && data.wedding_venue.includes(",")
+      ? data.wedding_venue.split(",").slice(1).join(",").trim()
+      : "MRC Nagar, Adyar Seaface, Chennai, Tamil Nadu - 600028";
 
   // Audio Playback
   const [isPlaying, setIsPlaying] = useState(false);
@@ -182,19 +194,19 @@ export default function MarigoldVizhaTemplate({
       };
     } catch {
       return {
-        day: 24,
+        day: 28,
         month: "NOVEMBER",
         year: 2026,
-        weekday: "Tuesday",
-        time: "07:30 AM",
-        raw: new Date("2026-11-24T07:30:00"),
+        weekday: "Saturday",
+        time: "08:42 AM",
+        raw: new Date("2026-11-28T08:42:00"),
       };
     }
   };
 
   const weddingDateInfo = useMemo(() => parseDate(data.wedding_date), [data.wedding_date]);
 
-  // Scroll Progress Tracker
+  // Scroll Progress Tracker for Hero Parallax
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
@@ -227,10 +239,10 @@ export default function MarigoldVizhaTemplate({
 
   // Countdown State
   const [timeLeft, setTimeLeft] = useState({
-    days: 60,
-    hours: 12,
-    minutes: 25,
-    seconds: 30,
+    days: 64,
+    hours: 14,
+    minutes: 32,
+    seconds: 45,
   });
 
   const targetTimestamp = weddingDateInfo.raw.getTime();
@@ -274,41 +286,39 @@ export default function MarigoldVizhaTemplate({
     const height = (canvas.height = Math.round(h || rect.height || canvas.clientHeight || 280));
     if (width <= 0 || height <= 0) return;
 
-    // Metallic gold marigold gradient
     const goldGrad = ctx.createLinearGradient(0, 0, width, height);
     goldGrad.addColorStop(0, "#d8af56");
-    goldGrad.addColorStop(0.2, "#fae6a2");
-    goldGrad.addColorStop(0.45, "#c18c35");
-    goldGrad.addColorStop(0.7, "#edd380");
-    goldGrad.addColorStop(0.9, "#ab7726");
+    goldGrad.addColorStop(0.25, "#fae6a2");
+    goldGrad.addColorStop(0.5, "#c18c35");
+    goldGrad.addColorStop(0.75, "#edd380");
     goldGrad.addColorStop(1, "#855814");
 
     ctx.fillStyle = goldGrad;
     ctx.fillRect(0, 0, width, height);
 
     ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-    for (let i = 0; i < 400; i++) {
+    for (let i = 0; i < 350; i++) {
       const rx = Math.random() * width;
       const ry = Math.random() * height;
       ctx.fillRect(rx, ry, Math.random() > 0.8 ? 2 : 1, Math.random() > 0.8 ? 2 : 1);
     }
 
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
     ctx.lineWidth = 1;
     ctx.strokeRect(6, 6, width - 12, height - 12);
-    ctx.strokeStyle = "rgba(100, 60, 10, 0.35)";
+    ctx.strokeStyle = "rgba(100, 60, 10, 0.4)";
     ctx.strokeRect(8, 8, width - 16, height - 16);
 
-    ctx.fillStyle = "#3e270c";
-    ctx.font = "bold 11px serif";
+    ctx.fillStyle = "#78350f";
+    ctx.font = "700 12px 'Cinzel', serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("✦ செவ்வந்தி சுபமுகூர்த்தம் ✦", width / 2, height / 2 - 12);
-    ctx.font = "bold 9px 'Cinzel', serif, sans-serif";
-    ctx.fillText("SWIPE TO REVEAL DATE", width / 2, height / 2 + 6);
-    ctx.font = "italic 8.5px serif";
-    ctx.fillStyle = "#5c3a12";
-    ctx.fillText("Scratch to unveil the sacred date", width / 2, height / 2 + 20);
+    ctx.fillText("✦ MARIGOLD MUHURTHAM ✦", width / 2, height / 2 - 14);
+    ctx.font = "600 10px 'Cinzel', serif";
+    ctx.fillText("SWIPE TO REVEAL DATE", width / 2, height / 2 + 4);
+    ctx.font = "italic 9.5px 'Cormorant Garamond', Georgia, serif";
+    ctx.fillStyle = "#92400e";
+    ctx.fillText("Scratch to unveil auspicious wedding date", width / 2, height / 2 + 20);
   };
 
   useEffect(() => {
@@ -322,10 +332,12 @@ export default function MarigoldVizhaTemplate({
       if (w > 20 && h > 20) initCanvas(w, h);
     };
     tryInit();
-    const t = setTimeout(tryInit, 200);
+    const t1 = setTimeout(tryInit, 80);
+    const t2 = setTimeout(tryInit, 300);
     window.addEventListener("resize", tryInit);
     return () => {
-      clearTimeout(t);
+      clearTimeout(t1);
+      clearTimeout(t2);
       window.removeEventListener("resize", tryInit);
     };
   }, [isScratched]);
@@ -353,7 +365,9 @@ export default function MarigoldVizhaTemplate({
           if (imgData.data[i] === 0) clear++;
         }
         const percent = Math.round((clear / (imgData.data.length / 16)) * 100);
-        if (percent > 35) setIsScratched(true);
+        if (percent > 35) {
+          setIsScratched(true);
+        }
       } catch {}
     }
   };
@@ -392,7 +406,7 @@ export default function MarigoldVizhaTemplate({
   const [rsvpSaved, setRsvpSaved] = useState(false);
 
   const venueLocation =
-    data.gmap_coordinates || data.wedding_venue || "ஸ்ரீ கிருஷ்ணா திருமண மஹால், சென்னை";
+    data.gmap_coordinates || data.wedding_venue || "The Leela Palace Courtyard, MRC Nagar, Chennai - 600028";
   const gmapSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     venueLocation
   )}`;
@@ -403,9 +417,9 @@ export default function MarigoldVizhaTemplate({
   return (
     <div
       ref={containerRef}
-      className="relative min-h-screen w-full bg-[#170e06] text-[#faeed3] font-serif overflow-x-hidden selection:bg-[#c69238] selection:text-black flex flex-col items-center"
+      className="relative min-h-screen w-full bg-[#1c0d02] text-[#faedd0] font-serif overflow-x-hidden selection:bg-[#f59e0b] selection:text-black flex flex-col items-center"
       style={{
-        backgroundImage: "radial-gradient(ellipse at top, #29180a 0%, #0d0702 100%)",
+        backgroundImage: "radial-gradient(ellipse at top, #2e1704 0%, #150901 100%)",
       }}
     >
       <MarigoldPetalsOverlay />
@@ -414,13 +428,13 @@ export default function MarigoldVizhaTemplate({
       <div className="fixed top-6 right-6 z-50">
         <button
           onClick={toggleMusic}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-[#eed57c]/60 shadow-[0_4px_18px_rgba(0,0,0,0.7)] text-[#eed57c] hover:border-[#eed57c] hover:scale-105 transition-all duration-300"
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/85 backdrop-blur-md border border-[#eed57c]/70 shadow-[0_4px_18px_rgba(0,0,0,0.8)] text-[#eed57c] hover:border-white hover:scale-105 transition-all duration-300 cursor-pointer"
           title="Toggle Music"
         >
           {isPlaying ? (
             <>
-              <Volume2 className="w-3.5 h-3.5 text-[#eed57c] animate-pulse" />
-              <span className="text-[10px] tracking-widest font-marcellus font-bold uppercase text-[#2b1704]">
+              <Volume2 className="w-3.5 h-3.5 text-[#f59e0b] animate-pulse" />
+              <span className="text-[10px] tracking-widest font-marcellus font-bold uppercase text-[#fff2b2]">
                 Sound On
               </span>
             </>
@@ -435,119 +449,127 @@ export default function MarigoldVizhaTemplate({
         </button>
       </div>
 
-      {/* Main Unified Mobile-First Portrait Stack */}
-      <div className="relative w-full max-w-[440px] shadow-[0_0_90px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col">
+      {/* Main Unified Responsive Mobile & Tablet Template Container */}
+      <div className="relative w-full max-w-[440px] md:max-w-[580px] lg:max-w-[440px] shadow-[0_0_90px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col bg-[#261002]">
         {/* ===================================================================== */}
-        {/* 1. HERO SECTION: MARIGOLD & PEACOCK TEMPLE ARCH                      */}
+        {/* 1. HERO SECTION: MARIGOLD ARCHWAY                                      */}
         {/* ===================================================================== */}
-        <section className="relative w-full aspect-[9/16] min-h-[640px] overflow-hidden flex flex-col items-center justify-between text-center pt-8 pb-6 px-4 bg-cover bg-center">
+        <section className="relative w-full aspect-[9/16] min-h-[660px] overflow-hidden flex flex-col items-center justify-between text-center pt-8 pb-4 px-4 bg-cover bg-center">
           <div
             className="absolute inset-0 bg-cover bg-center pointer-events-none transition-transform duration-500 will-change-transform"
             style={{
               backgroundImage: "url('/images/marigold-vizha/marigold_hero_v7.jpg')",
-              transform: `scale(${1 + scrollProgress * 0.12})`,
-              transformOrigin: "50% 50%",
+              transform: `scale(${1 + scrollProgress * 0.1})`,
+              transformOrigin: "50% 30%",
             }}
           />
-          <div className="absolute inset-0 bg-black/10 pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/60 via-black/20 to-transparent pointer-events-none" />
 
           {/* Top Emblem */}
           <div
-            className="relative z-20 flex flex-col items-center transition-all duration-300"
+            className="relative z-20 flex flex-col items-center transition-all duration-300 pt-1"
             style={{
               opacity: Math.max(0, 1 - scrollProgress * 1.5),
-              transform: `translateY(-${scrollProgress * 35}px)`,
+              transform: `translateY(-${scrollProgress * 30}px)`,
             }}
           >
             <div className="flex items-center justify-center gap-2 mb-1 text-[#eed57c]">
-              <div className="w-8 h-[1px] bg-current opacity-80" />
-              <span className="text-xs">❖</span>
-              <div className="w-8 h-[1px] bg-current opacity-80" />
+              <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-[#eed57c] to-[#eed57c]" />
+              <span className="text-xs text-[#eed57c]">❖</span>
+              <div className="w-8 h-[1px] bg-gradient-to-l from-transparent via-[#eed57c] to-[#eed57c]" />
             </div>
-            <h2 className="font-marcellus text-[11px] sm:text-xs tracking-[0.3em] text-[#2b1704] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-              மங்கள செவ்வந்தி விழா
+            <h2 className="font-cinzel text-xs sm:text-sm tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+              AN AUSPICIOUS CELEBRATION
             </h2>
-            <span className="font-marcellus text-[9px] sm:text-[9.5px] tracking-[0.35em] text-[#eed57c] uppercase font-bold">
-              MARIGOLD HERITAGE WEDDING
+            <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.25em] text-[#eed57c] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+              SHUBHA VIVAHA MUHURTHAM
             </span>
           </div>
 
-          {/* Center Couple Names */}
+          {/* Center Couple Names: Sized proportionally, No Date in Hero */}
           <div
-            className="relative z-20 w-full flex flex-col items-center px-2 my-auto transition-all duration-300"
+            className="relative z-20 w-[86%] max-w-[315px] flex flex-col items-center my-auto py-4 px-3 sm:px-4 rounded-2xl bg-[#fffdf8]/90 backdrop-blur-xs border border-[#c89b38]/50 shadow-[0_10px_30px_rgba(40,20,5,0.3)] transition-all duration-300"
             style={{
               opacity: Math.max(0, 1 - scrollProgress * 1.6),
-              transform: `translateY(-${scrollProgress * 50}px)`,
+              transform: `translateY(-${scrollProgress * 45}px)`,
             }}
           >
-            <p className="font-marcellus text-[10px] tracking-[0.32em] text-[#eed57c] uppercase font-bold mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-              WE&apos;RE GETTING MARRIED
+            <div className="absolute inset-1.5 border border-[#8f5e1a]/30 rounded-xl pointer-events-none" />
+
+            <p className="font-marcellus text-[10px] sm:text-[11px] tracking-[0.28em] text-[#6e370a] uppercase font-bold mb-1.5">
+              WE ARE GETTING MARRIED
             </p>
 
-            <h1 className="font-marcellus text-2xl sm:text-3xl md:text-[34px] font-semibold tracking-[0.14em] text-[#2b1704] uppercase leading-tight drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]">
+            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold tracking-[0.08em] text-[#220d03] uppercase leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)] max-w-full break-words text-center px-1">
               {bride}
             </h1>
 
-            <div className="flex items-center justify-center gap-3 my-1.5 w-full">
-              <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-              <span className="font-great-vibes text-lg sm:text-xl text-[#eed57c] italic">
+            <div className="flex items-center justify-center gap-3 my-1 w-full">
+              <div className="h-[1.5px] w-10 bg-gradient-to-r from-transparent via-[#b45309] to-transparent" />
+              <span className="font-great-vibes text-2xl sm:text-3xl text-[#b45309] italic">
                 weds
               </span>
-              <div className="h-[1px] w-12 bg-gradient-to-l from-transparent via-[#eed57c] to-transparent" />
+              <div className="h-[1.5px] w-10 bg-gradient-to-l from-transparent via-[#b45309] to-transparent" />
             </div>
 
-            <h1 className="font-marcellus text-2xl sm:text-3xl md:text-[34px] font-semibold tracking-[0.14em] text-[#2b1704] uppercase leading-tight drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]">
+            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold tracking-[0.08em] text-[#220d03] uppercase leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)] max-w-full break-words text-center px-1">
               {groom}
             </h1>
-          </div>
 
-          {/* Scroll Prompt */}
-          <div
-            className="relative z-20 flex flex-col items-center gap-1 opacity-85 animate-bounce transition-opacity duration-300"
-            style={{ opacity: Math.max(0, 1 - scrollProgress * 2) }}
-          >
-            <span className="text-[9px] tracking-[0.35em] text-[#eed57c] uppercase font-bold">
-              SCROLL
-            </span>
-            <div className="w-4 h-6 rounded-full border border-[#eed57c]/70 flex items-start justify-center p-1">
-              <div className="w-1 h-2 rounded-full bg-[#eed57c] animate-pulse" />
+            <div className="mt-2 text-[#783e0a] text-[9.5px] font-cinzel tracking-widest uppercase font-bold">
+              ❖ Royal Wedding Celebration ❖
             </div>
           </div>
 
+          {/* Bottom Scroll Cue */}
+          <div
+            className="relative z-20 flex flex-col items-center gap-1 transition-opacity duration-300 pb-1"
+            style={{ opacity: Math.max(0, 1 - scrollProgress * 2) }}
+          >
+            <span className="text-[9px] tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+              SCROLL TO CELEBRATE
+            </span>
+            <div className="w-4 h-6 rounded-full border border-[#eed57c] bg-black/40 flex items-start justify-center p-1 shadow-md">
+              <div className="w-1 h-2 rounded-full bg-[#eed57c] animate-bounce" />
+            </div>
+          </div>
+
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none z-15" />
           <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-center pointer-events-none">
-            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#eed57c]/45 to-transparent" />
-            <span className="absolute px-2.5 py-0.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-[8px] text-[#eed57c] font-serif shadow-sm">
+            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#eed57c]/60 to-transparent" />
+            <span className="absolute px-2.5 py-0.5 rounded-full bg-black/85 border border-[#eed57c]/60 text-[8px] text-[#eed57c] font-serif shadow-sm">
               ❖
             </span>
           </div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 2. SACRED QUOTE & INVOCATION                                          */}
+        {/* 2. SACRED VERSE: MARIGOLD GARLANDS                                     */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full aspect-[9/16] min-h-[640px] text-center flex flex-col items-center justify-center px-6 bg-cover bg-center overflow-hidden"
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-5 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/marigold-vizha/marigold_quote_v7.jpg')",
           }}
         >
           <SectionVignette />
           <motion.div
-            initial={{ opacity: 0, y: 45, scale: 0.94 }}
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-[76%] max-w-[310px] flex flex-col items-center px-4 py-7 my-auto bg-[#fffdf9]/95 backdrop-blur-md rounded-3xl border-2 border-[#f59e0b]/50 shadow-[0_16px_40px_rgba(120,53,15,0.14)]"
+            className="relative z-15 w-[85%] max-w-[315px] flex flex-col items-center px-5 py-7 my-auto rounded-2xl bg-[#fffdf8]/92 backdrop-blur-[2px] border border-[#c89b38]/45 shadow-[0_12px_36px_rgba(40,20,5,0.18)]"
           >
-            <div className="flex items-center justify-center gap-2 mb-2 text-[#d97706]">
-              <div className="w-6 h-[1px] bg-current" />
-              <span className="text-xs">🌼</span>
-              <div className="w-6 h-[1px] bg-current" />
-            </div>
-            <h2 className="font-marcellus text-lg sm:text-xl text-[#2b1704] font-bold leading-relaxed tracking-wide text-center">
-              &ldquo;இரு மனங்கள் இணையும்
+            <div className="absolute inset-1.5 border border-[#8f5e1a]/25 rounded-xl pointer-events-none" />
+
+            <span className="font-cinzel text-[10.5px] sm:text-[11px] tracking-[0.26em] text-[#783e0a] uppercase font-bold mb-1">
+              ✦ DIVINE INVOCATION ✦
+            </span>
+
+            <h2 className="font-cinzel text-lg sm:text-xl text-[#220d03] font-bold leading-relaxed tracking-wide drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+              &ldquo;United by destiny,
               <br />
-              மங்கள செவ்வந்தித் தொடக்கம்&rdquo;
+              blessed by grace.&rdquo;
             </h2>
 
             <motion.div
@@ -555,14 +577,25 @@ export default function MarigoldVizhaTemplate({
               whileInView={{ scaleX: 1 }}
               viewport={{ once: false }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-20 h-[1.5px] bg-gradient-to-r from-transparent via-[#f59e0b] to-transparent my-3.5"
+              className="w-16 h-[1.5px] bg-gradient-to-r from-transparent via-[#b45309] to-transparent my-2.5"
             />
 
-            <p className="font-cormorant italic text-sm sm:text-base text-[#78350f] leading-relaxed text-center font-medium">
+            <p className="font-cormorant text-sm sm:text-base text-[#2c1003] leading-relaxed drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] font-semibold italic">
               {quote}
             </p>
 
-            <div className="flex items-center gap-2 mt-3.5 text-[#eed57c]/80">
+            {familyNames && (
+              <div className="mt-3.5 pt-2.5 border-t border-[#b45309]/30 w-full">
+                <span className="text-[9.5px] font-cinzel tracking-widest text-[#783e0a] uppercase font-bold block mb-0.5">
+                  With Heartfelt Blessings
+                </span>
+                <p className="font-marcellus text-xs text-[#2c1003] font-bold tracking-wider leading-snug">
+                  {familyNames}
+                </p>
+              </div>
+            )}
+
+            <div className="flex items-center gap-2 mt-3 text-[#b45309]">
               <div className="w-8 h-[1px] bg-current" />
               <span className="text-xs">❖</span>
               <div className="w-8 h-[1px] bg-current" />
@@ -571,68 +604,79 @@ export default function MarigoldVizhaTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 3. SCRATCH TO REVEAL: GOLD CARTOUCHE                                  */}
+        {/* 3. SCRATCH TO REVEAL: SAVE THE DATE                                    */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full aspect-[9/16] min-h-[640px] text-center flex flex-col items-center justify-center bg-cover bg-center overflow-hidden select-none"
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center bg-cover bg-center overflow-hidden select-none"
           style={{
             backgroundImage: "url('/images/marigold-vizha/marigold_scratch_v7.jpg')",
           }}
         >
           <SectionVignette />
+          <div className="absolute inset-0 bg-black/45 pointer-events-none" />
+
+          <div className="relative z-20 mb-4 flex flex-col items-center">
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              ✦ AUSPICIOUS INVITATION ✦
+            </span>
+            <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-[#fff2b2] tracking-[0.18em] uppercase mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
+              Save The Date
+            </h3>
+            <MinimalGoldDivider className="mt-1.5 opacity-80" />
+          </div>
+
           <motion.div
-            initial={{ opacity: 0, y: 35, scale: 0.94 }}
+            initial={{ opacity: 0, y: 30, scale: 0.94 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute rounded-[26px] sm:rounded-[32px] overflow-hidden flex flex-col items-center justify-center text-center z-15 shadow-[0_16px_40px_rgba(0,0,0,0.85)] border-2 border-[#d4af37]/70"
+            className="relative rounded-[26px] sm:rounded-[30px] overflow-hidden flex flex-col items-center justify-center text-center z-15 shadow-[0_20px_50px_rgba(0,0,0,0.9)] border-2 border-[#d4af37]"
             style={{
-              left: "24%",
-              width: "52%",
-              top: "26%",
+              width: "60%",
               height: "44%",
             }}
           >
-            {/* Card Backing */}
             <div
-              className="absolute inset-0 bg-cover bg-center flex flex-col items-center justify-between py-3 px-2 text-center pointer-events-none select-none z-0"
+              className="absolute inset-0 bg-cover bg-center flex flex-col items-center justify-between py-4 px-3 text-center pointer-events-none select-none z-0 bg-[#fffbf2]"
               style={{
-                backgroundImage: "url('/images/marigold-vizha/marigold_card_backing_v4.jpg')",
+                backgroundImage:
+                  "linear-gradient(135deg, #fffcf5 0%, #faedd3 50%, #f4dec0 100%)",
               }}
             >
-              <div className="flex flex-col items-center pt-2">
-                <span className="font-marcellus text-[8.5px] sm:text-[9.5px] tracking-[0.24em] text-[#7a3407] font-bold uppercase drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+              <div className="absolute inset-2 border border-[#b8860b]/40 rounded-2xl pointer-events-none" />
+
+              <div className="flex flex-col items-center pt-1 z-10">
+                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#7a3407] font-bold uppercase">
                   ✦ AUSPICIOUS MUHURTHAM ✦
                 </span>
                 <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#9e6b22] to-transparent mt-0.5" />
               </div>
 
-              <div className="flex flex-col items-center justify-center my-auto px-1">
-                <div className="font-cormorant text-5xl sm:text-6xl font-bold text-[#230d02] leading-none tracking-tight drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
+              <div className="flex flex-col items-center justify-center my-auto px-1 z-10">
+                <div className="font-cormorant text-5xl sm:text-6xl font-bold text-[#200d02] leading-none tracking-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
                   {weddingDateInfo.day}
                 </div>
-                <div className="font-marcellus text-xs sm:text-sm tracking-[0.28em] text-[#3b1704] font-bold uppercase mt-1">
+                <div className="font-cinzel text-xs sm:text-sm tracking-[0.28em] text-[#381603] font-bold uppercase mt-1">
                   {weddingDateInfo.month} {weddingDateInfo.year}
                 </div>
-                <div className="flex items-center gap-1.5 my-1 text-[#9e6b22]/70">
+                <div className="flex items-center gap-1.5 my-1 text-[#9e6b22]">
                   <div className="w-4 h-[1px] bg-current" />
                   <span className="text-[7px]">❖</span>
                   <div className="w-4 h-[1px] bg-current" />
                 </div>
-                <div className="font-marcellus text-[9.5px] sm:text-[10.5px] text-[#4a2406] font-bold tracking-wider">
+                <div className="font-marcellus text-[10.5px] sm:text-[11.5px] text-[#422005] font-bold tracking-wider">
                   {weddingDateInfo.weekday} · {weddingDateInfo.time}
                 </div>
-                <div className="font-cormorant italic text-[9.5px] sm:text-[10px] text-[#6b3509] font-semibold mt-0.5 line-clamp-1 max-w-[140px]">
-                  {data.wedding_venue || "Sri Krishna Mahal"}
+                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#633208] font-bold mt-0.5 line-clamp-1 max-w-[170px]">
+                  {data.wedding_venue || "The Leela Palace Courtyard"}
                 </div>
               </div>
 
-              <div className="pb-1 text-[7.5px] tracking-[0.2em] font-marcellus text-[#8a5518] uppercase font-bold">
-                ❖ Save The Date ❖
+              <div className="pb-1 text-[8.5px] tracking-[0.22em] font-cinzel text-[#783e0a] uppercase font-bold z-10">
+                ❖ An Auspicious Union ❖
               </div>
             </div>
 
-            {/* Scratch Canvas */}
             <canvas
               ref={canvasRef}
               style={{ touchAction: "none" }}
@@ -657,7 +701,7 @@ export default function MarigoldVizhaTemplate({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: [0.75, 1, 0.75], y: [0, -2, 0] }}
                 transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-                className="absolute bottom-2 pointer-events-none z-20 px-2.5 py-0.5 rounded-full bg-black/70 border border-[#eed57c]/60 text-[8px] font-marcellus text-[#2b1704] tracking-widest uppercase flex items-center gap-1 shadow-md"
+                className="absolute bottom-2.5 pointer-events-none z-20 px-2.5 py-0.5 rounded-full bg-black/75 border border-[#eed57c]/70 text-[8px] font-marcellus text-[#fff2b2] tracking-widest uppercase flex items-center gap-1 shadow-md"
               >
                 <span>✨ Swipe To Reveal</span>
               </motion.div>
@@ -668,194 +712,233 @@ export default function MarigoldVizhaTemplate({
             <button
               type="button"
               onClick={() => setIsScratched(true)}
-              className="absolute bottom-8 z-20 px-5 py-2 rounded-full bg-gradient-to-r from-[#241105] via-[#432009] to-[#241105] border border-[#eed57c] text-[#2b1704] text-[9.5px] tracking-[0.22em] uppercase font-marcellus font-bold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.85)] cursor-pointer flex items-center gap-1.5"
+              className="relative mt-5 z-20 px-5 py-2 rounded-full bg-gradient-to-r from-[#451a03] via-[#78350f] to-[#451a03] border border-[#eed57c] text-[#fff2b2] text-[10px] sm:text-[10.5px] tracking-[0.22em] uppercase font-cinzel font-bold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.8)] cursor-pointer flex items-center gap-1.5"
             >
-              <Sparkles className="w-3 h-3 text-[#eed57c]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#eed57c]" />
               <span>Click To Reveal Date</span>
             </button>
           )}
         </section>
 
         {/* ===================================================================== */}
-        {/* 4. COUNTDOWN TIMER                                                    */}
+        {/* 4. COUNTDOWN TIMER: MARIGOLD VIZHA                                     */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full aspect-[9/16] min-h-[640px] text-center flex flex-col items-center justify-center px-6 bg-cover bg-center overflow-hidden"
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-6 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/marigold-vizha/marigold_countdown_v7.jpg')",
           }}
         >
           <SectionVignette />
+          <div className="absolute inset-0 bg-black/50 pointer-events-none" />
+
           <motion.div
-            initial={{ opacity: 0, y: 45, scale: 0.94 }}
+            initial={{ opacity: 0, y: 35, scale: 0.94 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full max-w-[310px] sm:max-w-[330px] flex flex-col items-center py-7 px-4 bg-[#fffdf9]/95 backdrop-blur-md rounded-3xl border-2 border-[#f59e0b]/50 shadow-[0_20px_50px_rgba(120,53,15,0.18)]"
+            className="relative z-15 w-full max-w-[320px] flex flex-col items-center py-6 px-3"
           >
-            <div className="flex items-center justify-center gap-2 mb-1 text-[#d97706]">
-              <div className="w-6 h-[1px] bg-current" />
-              <span className="text-xs">❖</span>
-              <div className="w-6 h-[1px] bg-current" />
-            </div>
-            <h3 className="font-marcellus text-lg sm:text-xl text-[#2b1704] tracking-[0.16em] uppercase font-bold">
-              முஹூர்த்த கவுண்டவுன்
-            </h3>
-            <span className="font-marcellus text-[9px] tracking-[0.25em] text-[#b45309] uppercase font-bold mt-0.5">
-              COUNTING DOWN TO FOREVER
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+              ✦ AUSPICIOUS MUHURTHAM ✦
             </span>
-            <div className="w-20 h-[1.5px] bg-gradient-to-r from-transparent via-[#f59e0b] to-transparent my-2.5" />
+            <h3 className="font-cinzel text-xl sm:text-2xl text-[#fff2b2] tracking-[0.2em] uppercase font-bold mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+              Counting Down
+            </h3>
+            <span className="font-marcellus text-xs tracking-[0.24em] text-[#f59e0b] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+              To Eternal Togetherness
+            </span>
+            <MinimalGoldDivider className="my-2.5 opacity-90" />
 
-            <div className="grid grid-cols-2 gap-2.5 w-full mt-2">
+            <div className="grid grid-cols-2 gap-2.5 w-full mt-3">
               {[
-                { label: "DAYS (நாட்கள்)", value: timeLeft.days },
-                { label: "HOURS (மணி)", value: timeLeft.hours },
-                { label: "MINUTES (நிமிடம்)", value: timeLeft.minutes },
-                { label: "SECONDS (நொடி)", value: timeLeft.seconds },
+                { label: "DAYS", value: timeLeft.days },
+                { label: "HOURS", value: timeLeft.hours },
+                { label: "MINUTES", value: timeLeft.minutes },
+                { label: "SECONDS", value: timeLeft.seconds },
               ].map((unit, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: 25, scale: 0.92 }}
+                  initial={{ opacity: 0, y: 20, scale: 0.92 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.25 }}
-                  transition={{ duration: 0.6, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
-                  className="py-3.5 px-2 rounded-2xl bg-gradient-to-b from-[#ffffff] to-[#fff7ed] border border-[#f59e0b]/60 shadow-md flex flex-col items-center justify-center relative overflow-hidden"
+                  transition={{ duration: 0.5, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
+                  className="py-3.5 px-2 rounded-xl bg-black/75 border border-[#eed57c]/60 shadow-[0_8px_24px_rgba(0,0,0,0.7)] backdrop-blur-md flex flex-col items-center justify-center relative overflow-hidden"
                 >
-                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#f59e0b] to-transparent" />
-                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#78350f] tabular-nums leading-none drop-shadow-xs">
+                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
+                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#fff2b2] tabular-nums leading-none drop-shadow-[0_2px_8px_rgba(238,213,124,0.5)]">
                     {String(unit.value).padStart(2, "0")}
                   </span>
-                  <span className="font-marcellus text-[8.5px] tracking-[0.15em] text-[#b45309] uppercase font-bold mt-1 text-center">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#eed57c] uppercase font-bold mt-1.5 text-center">
                     {unit.label}
                   </span>
                 </motion.div>
               ))}
             </div>
+
+            <div className="mt-4 px-4 py-1.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-center shadow-md">
+              <span className="font-marcellus text-xs text-[#faedd0] font-semibold tracking-wider">
+                {weddingDateInfo.weekday}, {weddingDateInfo.day} {weddingDateInfo.month} · {weddingDateInfo.time}
+              </span>
+            </div>
           </motion.div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 5. WEDDING PROGRAM PARCHMENT SCROLL                                   */}
+        {/* 5. PROGRAM TIMELINE: EXACTLY 3 PROGRAMS LYING DIRECTLY ON IMAGE        */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[920px] text-center flex flex-col items-center justify-center px-3 py-12 bg-cover bg-center overflow-hidden"
+          className="relative w-full min-h-[760px] sm:min-h-[800px] text-center flex flex-col items-center justify-between px-4 pt-9 pb-7 bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/marigold-vizha/marigold_program_v7.jpg')",
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="relative z-15 w-[94%] max-w-[340px] sm:max-w-[365px] mx-auto py-7 px-4 sm:px-5 rounded-3xl bg-[#fffdf9]/95 backdrop-blur-md border-2 border-[#f59e0b]/60 shadow-[0_20px_50px_rgba(120,53,15,0.18)] flex flex-col items-center">
-            <div className="flex flex-col items-center mb-6 relative z-10">
-              <div className="flex items-center justify-center gap-2 mb-1.5 text-[#d97706]">
-                <div className="w-8 h-[1px] bg-current" />
-                <span className="text-sm">🌼</span>
-                <div className="w-8 h-[1px] bg-current" />
-              </div>
-              <span className="font-marcellus text-[9px] tracking-[0.25em] text-[#b45309] uppercase font-bold mb-0.5">
-                ✦ திருமண சுபநிகழ்ச்சிகள் ✦
-              </span>
-              <h2 className="font-marcellus text-xl sm:text-2xl text-[#2b1704] tracking-[0.16em] uppercase font-bold">
-                Wedding Program
-              </h2>
-              <p className="font-cormorant italic text-xs sm:text-sm text-[#78350f] font-medium mt-0.5">
-                Auspicious Traditional Rituals &amp; Celebrations
-              </p>
-              <div className="w-24 h-[1.5px] bg-gradient-to-r from-transparent via-[#f59e0b] to-transparent mt-2.5" />
+          <SectionVignette />
+          <div className="absolute inset-0 bg-black/55 pointer-events-none" />
+
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center z-15 mt-1"
+          >
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#fff2b2] uppercase font-bold mb-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+              ✦ SACRED RITUALS ✦
+            </span>
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.16em] uppercase font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+              Wedding Program
+            </h2>
+            <div className="flex items-center gap-2 mt-1 text-[#eed57c] drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+              <div className="w-8 h-[1px] bg-current" />
+              <span className="text-[9px]">❖</span>
+              <div className="w-8 h-[1px] bg-current" />
             </div>
+          </motion.div>
 
-            <div className="relative w-full flex flex-col items-center space-y-4 sm:space-y-5 z-10">
-              <div className="absolute left-1/2 -translate-x-1/2 top-3 bottom-3 w-[1.5px] bg-gradient-to-b from-[#f59e0b]/30 via-[#d97706] to-[#f59e0b]/30" />
+          <div className="relative w-[88%] max-w-[330px] my-auto py-2 flex flex-col items-center z-15">
+            <div className="absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-[1.5px] bg-gradient-to-b from-[#eed57c]/40 via-[#b3811b] to-[#eed57c]/40" />
 
-              {/* Ritual 1 */}
+            <div className="relative w-full flex flex-col items-center space-y-4 sm:space-y-4.5 z-10">
+              {/* Program 1 */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ duration: 0.5 }}
-                className="relative z-10 w-full p-3.5 rounded-2xl bg-white/90 border border-[#fcd34d]/80 shadow-sm flex flex-col items-center text-center"
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="relative z-10 w-full flex flex-col items-center text-center"
               >
-                <div className="flex items-center gap-1.5 text-[#b45309] text-[9.5px] font-marcellus font-bold tracking-wider uppercase mb-1">
-                  <Clock className="w-3 h-3 text-[#d97706]" />
-                  <span>காலை 06:00 AM - 07:30 AM</span>
+                <div className="w-6 h-6 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#4a2406] font-cinzel font-bold mb-1 ring-2 ring-[#b8860b]/30">
+                  1
                 </div>
-                <h4 className="font-marcellus text-sm font-bold text-[#2b1704] tracking-wide">
-                  செவ்வந்தி சுபமுகூர்த்தம் (Muhurtham)
+                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-[#eed57c] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  MANGALA SNANAM
+                </span>
+                <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#fffaf0] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  Auspicious Sacred Dawn Prayers
                 </h4>
-                <p className="font-cormorant italic text-xs text-[#78350f] font-medium mt-0.5">
-                  மங்கல நாண் பூட்டுதல் &amp; அம்மி மிதித்தல்
-                </p>
+                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#faedd0] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  07:00 AM
+                </div>
+                <div className="font-marcellus text-xs text-[#eed57c]/95 font-semibold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  {venueName}
+                </div>
               </motion.div>
 
-              {/* Ritual 2 */}
+              {/* Program 2: Sacred Muhurtham (Highlight) */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="relative z-10 w-full p-3.5 rounded-2xl bg-white/90 border border-[#fcd34d]/80 shadow-sm flex flex-col items-center text-center"
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="relative z-10 w-full flex flex-col items-center text-center py-2 px-3 rounded-xl bg-[#78350f]/60 border border-[#eed57c]/70 shadow-lg backdrop-blur-xs"
               >
-                <div className="flex items-center gap-1.5 text-[#b45309] text-[9.5px] font-marcellus font-bold tracking-wider uppercase mb-1">
-                  <Clock className="w-3 h-3 text-[#d97706]" />
-                  <span>காலை 08:30 AM onwards</span>
+                <div className="w-7 h-7 rounded-full bg-[#b45309] border-2 border-[#eed57c] shadow-lg flex items-center justify-center text-xs text-[#fff2b2] font-bold mb-1">
+                  ❖
                 </div>
-                <h4 className="font-marcellus text-sm font-bold text-[#2b1704] tracking-wide">
-                  திருமண விருந்து (Traditional Feast)
+                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.24em] text-[#fbbf24] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  SACRED MUHURTHAM
+                </span>
+                <h4 className="font-cinzel text-base sm:text-lg font-bold text-[#fff2b2] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  Mangalya Dharanam &amp; Saptapadi
                 </h4>
-                <p className="font-cormorant italic text-xs text-[#78350f] font-medium mt-0.5">
-                  தலைவாழை இலை அறுசுவை உணவு
-                </p>
+                <div className="mt-0.5 font-cormorant text-base sm:text-lg text-[#fff9e6] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  {weddingDateInfo.time || "08:42 AM"}
+                </div>
+                <div className="font-marcellus text-xs sm:text-[13px] text-[#eed57c] font-bold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  {venueName}
+                </div>
               </motion.div>
 
-              {/* Ritual 3 */}
+              {/* Program 3 */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="relative z-10 w-full p-3.5 rounded-2xl bg-white/90 border border-[#fcd34d]/80 shadow-sm flex flex-col items-center text-center"
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="relative z-10 w-full flex flex-col items-center text-center"
               >
-                <div className="flex items-center gap-1.5 text-[#b45309] text-[9.5px] font-marcellus font-bold tracking-wider uppercase mb-1">
-                  <Clock className="w-3 h-3 text-[#d97706]" />
-                  <span>மாலை 06:30 PM onwards</span>
+                <div className="w-6 h-6 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#4a2406] font-cinzel font-bold mb-1 ring-2 ring-[#b8860b]/30">
+                  3
                 </div>
-                <h4 className="font-marcellus text-sm font-bold text-[#2b1704] tracking-wide">
-                  மங்கள வரவேற்பு (Reception)
+                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-[#eed57c] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  VIRUNDHU &amp; RECEPTION
+                </span>
+                <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#fffaf0] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  Traditional Feast &amp; Celebrations
                 </h4>
-                <p className="font-cormorant italic text-xs text-[#78350f] font-medium mt-0.5">
-                  இனிய சங்கீத நாதம் &amp; ஆசீர்வாதம்
-                </p>
+                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#faedd0] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  12:30 PM &amp; 06:30 PM
+                </div>
+                <div className="font-marcellus text-xs text-[#eed57c] font-bold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  The Leela Palace Banquet Hall
+                </div>
               </motion.div>
             </div>
+          </div>
+
+          <div className="relative z-15 flex items-center justify-center gap-2 mb-2 text-[#eed57c] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+            <div className="w-8 h-[1px] bg-current" />
+            <span className="text-[10px]">❖</span>
+            <div className="w-8 h-[1px] bg-current" />
           </div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 6. OUR MOMENTS CAROUSEL                                               */}
+        {/* 6. SWEET MOMENTS: 3D PHOTO FAN CAROUSEL                                */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full aspect-[9/16] min-h-[640px] text-center flex flex-col items-center justify-center px-4 bg-cover bg-center overflow-hidden"
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-4 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/marigold-vizha/marigold_moments_v7.jpg')",
           }}
         >
           <SectionVignette />
+          <div className="absolute inset-0 bg-black/45 pointer-events-none" />
+
           <motion.div
-            initial={{ opacity: 0, y: 45, scale: 0.94 }}
+            initial={{ opacity: 0, y: 35, scale: 0.94 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="w-full flex flex-col items-center z-15"
           >
-            <h2 className="font-marcellus text-xl sm:text-2xl text-[#2b1704] tracking-[0.18em] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-              மகிழ்ச்சியான தருணங்கள்
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              ✦ CHERISHED GLIMPSES ✦
+            </span>
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mt-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+              Sweet Moments
             </h2>
-            <p className="font-cormorant italic text-xs sm:text-sm text-[#eed57c] font-semibold mb-6 drop-shadow-[0_1px_1px_rgba(0,0,0,0.9)]">
-              Glimpses of our journey together
+            <p className="font-cormorant italic text-sm sm:text-base text-[#faedd0] font-semibold mb-5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+              Treasured memories of our journey together
             </p>
 
             <div
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
-              className="relative w-full max-w-[370px] sm:max-w-[410px] flex items-center justify-center min-h-[340px] sm:min-h-[380px]"
+              className="relative w-full max-w-[370px] sm:max-w-[410px] flex items-center justify-center min-h-[340px] sm:min-h-[370px]"
             >
               <motion.div
                 initial={{ opacity: 0, x: -20, rotate: -10 }}
@@ -872,17 +955,17 @@ export default function MarigoldVizhaTemplate({
                   alt="Moments"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black/30" />
+                <div className="absolute inset-0 bg-black/35" />
               </motion.div>
 
-              <div className="relative z-20 w-60 sm:w-68 aspect-[3/4] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.65)] border-2 border-[#eed57c] select-none transform hover:scale-[1.02] transition-transform duration-300 bg-black">
+              <div className="relative z-20 w-60 sm:w-68 aspect-[3/4] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85)] border-2 border-[#eed57c] select-none transform hover:scale-[1.02] transition-transform duration-300 bg-black">
                 <img
                   src={momentsList[activePhotoIdx]}
                   alt="Couple Moment"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-[#eed57c]/60 text-[10px] tracking-widest text-[#eed57c] font-marcellus font-bold">
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-black/85 backdrop-blur-md border border-[#eed57c]/60 text-[10px] tracking-widest text-[#eed57c] font-marcellus font-bold">
                   {activePhotoIdx + 1} / {momentsList.length}
                 </div>
               </div>
@@ -900,7 +983,7 @@ export default function MarigoldVizhaTemplate({
                   alt="Moments"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black/30" />
+                <div className="absolute inset-0 bg-black/35" />
               </motion.div>
 
               <button
@@ -909,7 +992,7 @@ export default function MarigoldVizhaTemplate({
                 onClick={() =>
                   setActivePhotoIdx((prev) => (prev - 1 + momentsList.length) % momentsList.length)
                 }
-                className="absolute left-0 sm:left-1 z-30 w-9 h-9 rounded-full bg-black/80 border border-[#eed57c] text-[#eed57c] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-xl cursor-pointer"
+                className="absolute left-0 sm:left-1 z-30 w-9 h-9 rounded-full bg-black/85 border border-[#eed57c] text-[#eed57c] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-xl cursor-pointer"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
@@ -917,7 +1000,7 @@ export default function MarigoldVizhaTemplate({
                 type="button"
                 aria-label="Next Photo"
                 onClick={() => setActivePhotoIdx((prev) => (prev + 1) % momentsList.length)}
-                className="absolute right-0 sm:right-1 z-30 w-9 h-9 rounded-full bg-black/80 border border-[#eed57c] text-[#eed57c] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-xl cursor-pointer"
+                className="absolute right-0 sm:right-1 z-30 w-9 h-9 rounded-full bg-black/85 border border-[#eed57c] text-[#eed57c] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-xl cursor-pointer"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -932,8 +1015,8 @@ export default function MarigoldVizhaTemplate({
                   onClick={() => setActivePhotoIdx(idx)}
                   className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                     activePhotoIdx === idx
-                      ? "w-5 bg-[#c2912e]"
-                      : "w-1.5 bg-[#c2912e]/30 hover:bg-[#c2912e]/60"
+                      ? "w-5 bg-[#eed57c]"
+                      : "w-1.5 bg-[#eed57c]/30 hover:bg-[#eed57c]/60"
                   }`}
                 />
               ))}
@@ -942,33 +1025,46 @@ export default function MarigoldVizhaTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 7. VENUE & GOOGLE MAPS                                                */}
+        {/* 7. VENUE & GOOGLE MAPS: UNIFIED SINGLE CARD                            */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[660px] text-center flex flex-col items-center justify-center px-4 py-10 bg-cover bg-center overflow-hidden"
+          className="relative w-full min-h-[660px] text-center flex flex-col items-center justify-center px-4 py-12 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/marigold-vizha/marigold_venue_v7.jpg')",
           }}
         >
           <SectionVignette />
+          <div className="absolute inset-0 bg-black/55 pointer-events-none" />
+
           <motion.div
-            initial={{ opacity: 0, y: 45, scale: 0.94 }}
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-15 w-full max-w-[320px] sm:max-w-[340px] flex flex-col items-center"
+            className="relative z-15 w-full max-w-[330px] sm:max-w-[350px] flex flex-col items-center"
           >
-            <h2 className="font-marcellus text-xl sm:text-2xl text-[#2b1704] tracking-[0.18em] uppercase font-bold mb-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-              திருமண மஹால்
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              ✦ CEREMONY LOCATION ✦
+            </span>
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mb-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+              Wedding Venue
             </h2>
-            <p className="font-cormorant italic text-xs sm:text-sm text-[#eed57c] font-semibold mb-4 drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)]">
-              Wedding Venue &amp; Navigation
-            </p>
+            <MinimalGoldDivider className="mb-4 opacity-80" />
 
-            <div className="w-full flex flex-col items-center">
-              <div className="relative w-full aspect-square rounded-2xl overflow-hidden border-2 border-[#eed57c] shadow-[0_15px_40px_rgba(0,0,0,0.65)] bg-[#fef8ee]">
-                <div className="absolute top-0 inset-x-0 z-10 px-3 py-1.5 flex items-center justify-between text-xs bg-black/80 backdrop-blur-md border-b border-[#eed57c]/40">
-                  <span className="font-marcellus text-[9.5px] tracking-wider uppercase font-bold text-[#2b1704] flex items-center gap-1">
+            <div className="w-full rounded-2xl bg-[#241002]/95 border-2 border-[#eed57c]/70 shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-4 flex flex-col items-center text-center relative overflow-hidden backdrop-blur-md">
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
+
+              <h3 className="font-cinzel text-base sm:text-lg font-bold text-[#fff2b2] tracking-wide drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                {venueName}
+              </h3>
+
+              <p className="font-marcellus text-xs sm:text-[13px] text-[#faedd0]/90 mt-1 mb-3.5 leading-relaxed max-w-[280px]">
+                {venueAddress}
+              </p>
+
+              <div className="relative w-full h-48 sm:h-52 rounded-xl overflow-hidden border border-[#eed57c]/50 shadow-md bg-[#130701] mb-3.5">
+                <div className="absolute top-0 inset-x-0 z-10 px-3 py-1 flex items-center justify-between text-[10px] bg-black/85 backdrop-blur-md border-b border-[#eed57c]/30">
+                  <span className="font-cinzel tracking-wider uppercase font-semibold text-[#fff2b2] flex items-center gap-1">
                     <MapPin className="w-3 h-3 text-[#eed57c]" />
                     Interactive Map
                   </span>
@@ -976,28 +1072,25 @@ export default function MarigoldVizhaTemplate({
                     href={gmapSearchUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[9.5px] font-marcellus tracking-wider uppercase font-bold text-[#eed57c] hover:underline flex items-center gap-1"
+                    className="font-cinzel tracking-wider uppercase font-semibold text-[#eed57c] hover:underline flex items-center gap-1"
                   >
                     <span>View Larger</span>
                     <ExternalLink className="w-2.5 h-2.5" />
                   </a>
                 </div>
 
-                <div className="w-full h-full pt-7">
+                <div className="w-full h-full pt-6">
                   {isPreview ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-black/85 text-center p-4">
-                      <MapPin className="w-8 h-8 text-[#eed57c] mb-2 animate-bounce" />
-                      <span className="font-marcellus text-base text-[#2b1704] font-bold">
-                        {data.wedding_venue || "ஸ்ரீ கிருஷ்ணா திருமண மஹால்"}
-                      </span>
-                      <span className="font-cormorant text-xs sm:text-sm text-[#eed57c]/90 mt-1 max-w-[220px]">
-                        {data.wedding_venue || "123, ஜிஎസ്ടி சாலை, குரோம்பேட்டை, சென்னை - 600044"}
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-black/85 text-center p-3">
+                      <MapPin className="w-7 h-7 text-[#eed57c] mb-1.5 animate-bounce" />
+                      <span className="font-cinzel text-sm text-[#fff2b2] font-semibold line-clamp-1">
+                        {data.wedding_venue || "The Leela Palace Courtyard"}
                       </span>
                       <a
                         href={gmapSearchUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-3 px-4 py-1.5 rounded-full bg-[#eed57c]/20 border border-[#eed57c]/60 text-[#eed57c] text-[9.5px] font-marcellus font-bold uppercase tracking-widest hover:bg-[#eed57c] hover:text-black transition"
+                        className="mt-2 px-3 py-1 rounded-full bg-[#eed57c]/20 border border-[#eed57c]/60 text-[#eed57c] text-[9.5px] font-cinzel font-semibold uppercase tracking-widest hover:bg-[#eed57c] hover:text-black transition"
                       >
                         Open in Maps ↗
                       </a>
@@ -1014,73 +1107,64 @@ export default function MarigoldVizhaTemplate({
                 </div>
               </div>
 
-              <div className="w-full mt-3.5 p-4 rounded-xl bg-[#1c1209]/95 border border-[#eed57c]/60 shadow-2xl flex flex-col items-center text-center">
-                <div className="flex items-center justify-center gap-2 mb-1 text-[#eed57c]">
-                  <div className="w-6 h-[1px] bg-current opacity-60" />
-                  <span className="text-xs">❖</span>
-                  <div className="w-6 h-[1px] bg-current opacity-60" />
-                </div>
-
-                <h3 className="font-marcellus text-base sm:text-lg font-bold text-[#2b1704] tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                  {data.wedding_venue || "ஸ்ரீ கிருஷ்ணா திருமண மஹால்"}
-                </h3>
-                <p className="font-cormorant text-xs sm:text-[13px] text-[#faedd0] mt-1 leading-relaxed max-w-[280px]">
-                  {data.wedding_venue || "123, ஜிஎസ്ടி சாலை, குரோம்பேட்டை, சென்னை - 600044"}
-                </p>
-                <a
-                  href={gmapSearchUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3.5 inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#c59b27] text-[#1c0f05] font-marcellus text-xs font-bold uppercase tracking-wider hover:brightness-110 active:scale-98 transition shadow-[0_4px_15px_rgba(212,175,55,0.4)] cursor-pointer"
-                >
-                  <Navigation className="w-3.5 h-3.5 fill-[#1c0f05]" />
-                  <span>Get Directions</span>
-                </a>
-              </div>
+              <a
+                href={gmapSearchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#c59b27] text-[#1c0f05] font-cinzel text-xs font-bold uppercase tracking-wider hover:brightness-110 active:scale-98 transition shadow-[0_4px_15px_rgba(212,175,55,0.4)] cursor-pointer"
+              >
+                <Navigation className="w-3.5 h-3.5 fill-[#1c0f05]" />
+                <span>Get Directions</span>
+              </a>
             </div>
           </motion.div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 8. RSVP CONCIERGE                                                     */}
+        {/* 8. BLESSINGS & RSVP: UNIFIED HIGH-CONTRAST CARD                        */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[660px] text-center flex flex-col items-center justify-center px-4 py-10 bg-cover bg-center overflow-hidden"
+          className="relative w-full min-h-[680px] text-center flex flex-col items-center justify-center px-4 py-12 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/marigold-vizha/marigold_rsvp_v7.jpg')",
           }}
         >
           <SectionVignette />
+          <div className="absolute inset-0 bg-black/60 pointer-events-none" />
+
           <motion.div
-            initial={{ opacity: 0, y: 45, scale: 0.94 }}
+            initial={{ opacity: 0, y: 35, scale: 0.94 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-15 w-full max-w-[310px] sm:max-w-[330px] flex flex-col items-center"
+            className="relative z-15 w-full max-w-[315px] sm:max-w-[335px] flex flex-col items-center"
           >
-            <div className="w-full rounded-2xl bg-[#140b05]/94 backdrop-blur-md border-2 border-[#f59e0b]/60 shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-5 flex flex-col items-center text-center relative overflow-hidden">
+            <div className="w-full rounded-2xl bg-[#241002]/95 backdrop-blur-md border-2 border-[#d4af37]/75 shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-5 flex flex-col items-center text-center relative overflow-hidden">
               <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
 
-              <h2 className="font-marcellus text-xl sm:text-2xl text-[#2b1704] tracking-[0.2em] uppercase font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-                வருகையை உறுதிசெய்க
+              <span className="font-cinzel text-[10px] tracking-[0.24em] text-[#eed57c] uppercase font-bold">
+                ✦ WARM WISHES ✦
+              </span>
+              <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                Blessings &amp; RSVP
               </h2>
-              <GoldDivider className="my-2 opacity-90" />
-              <p className="font-cormorant italic text-sm text-[#faeed3] mb-4 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
-                தங்கள் நல்வரவை ஆவலுடன் எதிர்நோக்குகிறோம்
+              <MinimalGoldDivider className="my-2 opacity-90" />
+              <p className="font-cormorant text-base sm:text-lg text-[#faedd0] mb-4 drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)] font-medium italic">
+                Please grace our celebration with your presence &amp; blessings
               </p>
 
               {rsvpSaved ? (
-                <div className="p-4 rounded-xl bg-black/70 border border-[#eed57c]/60 text-center w-full shadow-lg">
+                <div className="p-4 rounded-xl bg-black/75 border border-[#eed57c]/60 text-center w-full shadow-lg">
                   <div className="w-10 h-10 rounded-full bg-[#eed57c]/20 border-2 border-[#eed57c] flex items-center justify-center mx-auto mb-2 text-[#eed57c] shadow-md">
                     <Check className="w-5 h-5 stroke-[3]" />
                   </div>
-                  <h4 className="font-marcellus text-sm text-[#2b1704] uppercase tracking-wider font-bold">
-                    {rsvpStatus === "attending" ? "நன்றியுடன் பதிவு செய்யப்பட்டது!" : "தகவல் பெறப்பட்டது"}
+                  <h4 className="font-cinzel text-base text-[#fff2b2] uppercase tracking-wider font-bold">
+                    {rsvpStatus === "attending" ? "Thank You!" : "Response Received"}
                   </h4>
-                  <p className="font-cormorant text-xs sm:text-sm text-[#faedd0] mt-1.5 leading-relaxed">
+                  <p className="font-cormorant text-sm sm:text-base text-[#faedd0] mt-1.5 leading-relaxed font-medium">
                     {rsvpStatus === "attending"
-                      ? "தங்கள் வருகைக்கும் நல்லாசிகளுக்கும் எங்கள் மனமார்ந்த நன்றிகள்."
-                      : "தங்களின் அன்பான வாழ்த்துகள் எங்கள் நெஞ்சில் நிலைத்திருக்கும்."}
+                      ? "We eagerly look forward to celebrating with you and receiving your heartfelt blessings."
+                      : "Thank you for sending your warm wishes and blessings."}
                   </p>
                 </div>
               ) : (
@@ -1089,27 +1173,27 @@ export default function MarigoldVizhaTemplate({
                     <button
                       type="button"
                       onClick={() => setRsvpStatus("attending")}
-                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-marcellus text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
+                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
                         rsvpStatus === "attending"
                           ? "bg-gradient-to-r from-[#eed57c] to-[#c59a3f] text-[#1c0f05] border-2 border-white ring-2 ring-[#eed57c]/50 scale-[1.02]"
-                          : "bg-[#251508]/85 text-[#faedd0] hover:bg-[#341d0b] border border-[#eed57c]/50"
+                          : "bg-[#381a05] text-[#faedd0] hover:bg-[#4d2407] border border-[#eed57c]/50"
                       }`}
                     >
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
-                      <span>வருகை தருகிறோம்</span>
+                      <span>Attending</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setRsvpStatus("declined")}
-                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-marcellus text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
+                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
                         rsvpStatus === "declined"
                           ? "bg-[#541217] text-[#ffe4e6] border-2 border-[#f87171] ring-2 ring-[#f87171]/40 scale-[1.02]"
-                          : "bg-[#251508]/85 text-[#faedd0]/80 hover:bg-[#341d0b] border border-[#eed57c]/50"
+                          : "bg-[#381a05] text-[#faedd0]/80 hover:bg-[#4d2407] border border-[#eed57c]/50"
                       }`}
                     >
                       <X className="w-3.5 h-3.5 stroke-[2.5]" />
-                      <span>இயலவில்லை</span>
+                      <span>Declining</span>
                     </button>
                   </div>
 
@@ -1120,32 +1204,32 @@ export default function MarigoldVizhaTemplate({
                       className="w-full space-y-3 text-left mt-1"
                     >
                       <div>
-                        <label className="block text-[10px] tracking-[0.2em] font-marcellus text-[#eed57c] uppercase font-bold mb-1">
-                          அழைப்பாளர் / குடும்பப் பெயர்
+                        <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#eed57c] uppercase font-bold mb-1">
+                          Guest / Family Name
                         </label>
                         <input
                           type="text"
                           value={guestName}
                           onChange={(e) => setGuestName(e.target.value)}
-                          placeholder="எ.கா. சுந்தரம் & குடும்பத்தினர்"
-                          className="w-full px-3 py-2 rounded-xl bg-black/75 border-2 border-[#eed57c]/50 text-xs sm:text-sm text-[#2b1704] placeholder-[#faedd0]/60 font-cormorant focus:outline-none focus:border-[#eed57c]"
+                          placeholder="e.g. Sundaram & Family"
+                          className="w-full px-3 py-2 rounded-xl bg-black/80 border-2 border-[#eed57c]/50 text-sm text-[#fff9e6] placeholder-[#faedd0]/50 font-cormorant focus:outline-none focus:border-[#eed57c] focus:ring-1 focus:ring-[#eed57c]"
                         />
                       </div>
 
                       {rsvpStatus === "attending" && (
                         <div>
-                          <label className="block text-[10px] tracking-[0.2em] font-marcellus text-[#eed57c] uppercase font-bold mb-1">
-                            வருகையாளர்கள் எண்ணிக்கை
+                          <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#eed57c] uppercase font-bold mb-1">
+                            Number of Guests
                           </label>
                           <select
                             value={guestCount}
                             onChange={(e) => setGuestCount(e.target.value)}
-                            className="w-full px-3 py-2 rounded-xl bg-[#1c1006] border-2 border-[#eed57c]/50 text-xs sm:text-sm text-[#2b1704] font-cormorant focus:outline-none focus:border-[#eed57c]"
+                            className="w-full px-3 py-2 rounded-xl bg-[#241002] border-2 border-[#eed57c]/50 text-sm text-[#fff9e6] font-cormorant focus:outline-none focus:border-[#eed57c]"
                           >
-                            <option value="1">1 நபர்</option>
-                            <option value="2">2 நபர்கள்</option>
-                            <option value="3">3 நபர்கள்</option>
-                            <option value="4+">குடும்பத்தினர் (4+ நபர்கள்)</option>
+                            <option value="1">1 Guest</option>
+                            <option value="2">2 Guests</option>
+                            <option value="3">3 Guests</option>
+                            <option value="4+">Family (4+ Guests)</option>
                           </select>
                         </div>
                       )}
@@ -1153,21 +1237,21 @@ export default function MarigoldVizhaTemplate({
                       <button
                         type="button"
                         onClick={() => setRsvpSaved(true)}
-                        className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#eed57c] via-[#f5e6a8] to-[#c59a3f] text-[#1c0f05] font-marcellus text-xs uppercase font-bold tracking-[0.2em] hover:brightness-110 active:scale-98 transition shadow-[0_4px_16px_rgba(238,213,124,0.4)] cursor-pointer mt-1"
+                        className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#eed57c] via-[#f5e6a8] to-[#c59a3f] text-[#1c0f05] font-cinzel text-xs uppercase font-bold tracking-[0.2em] hover:brightness-110 active:scale-98 transition shadow-[0_4px_16px_rgba(238,213,124,0.4)] cursor-pointer mt-1"
                       >
-                        உறுதிப்படுத்துக (Confirm RSVP)
+                        Confirm RSVP
                       </button>
                     </motion.div>
                   )}
 
-                  {data.rsvp_phone && (
+                  {rsvpPhone && (
                     <div className="pt-2 border-t border-[#eed57c]/30 w-full flex items-center justify-center">
                       <a
-                        href={`tel:${data.rsvp_phone.replace(/[^0-9+]/g, "")}`}
-                        className="inline-flex items-center gap-1.5 text-xs text-[#eed57c] hover:text-[#2b1704] font-semibold transition"
+                        href={`tel:${rsvpPhone.replace(/[^0-9+]/g, "")}`}
+                        className="inline-flex items-center gap-1.5 text-xs text-[#eed57c] hover:text-[#fff2b2] font-semibold transition"
                       >
                         <Phone className="w-3.5 h-3.5" />
-                        <span>தொடர்புக்கு: {data.rsvp_phone}</span>
+                        <span className="font-marcellus tracking-wider">RSVP Helpline: {rsvpPhone}</span>
                       </a>
                     </div>
                   )}
@@ -1178,46 +1262,58 @@ export default function MarigoldVizhaTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 9. FOOTER & BLESSINGS SIGN-OFF                                        */}
+        {/* 9. FOOTER & SIGN-OFF: WITH MARIGOLD BACKGROUND & COUPLE PORTRAIT      */}
         {/* ===================================================================== */}
         <footer
-          className="relative w-full aspect-[9/16] min-h-[640px] text-center flex flex-col items-center justify-center px-4 bg-cover bg-center overflow-hidden"
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-4 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/marigold-vizha/marigold_footer_v7.jpg')",
           }}
         >
           <SectionVignette hasSeam={false} />
+          <div className="absolute inset-0 bg-black/60 pointer-events-none" />
+
           <motion.div
-            initial={{ opacity: 0, y: 35, scale: 0.95 }}
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-15 w-full max-w-[320px] flex flex-col items-center px-4 py-7 rounded-3xl bg-[#fffdf9]/95 backdrop-blur-md border-2 border-[#f59e0b]/50 shadow-[0_16px_40px_rgba(120,53,15,0.18)]"
+            className="relative z-15 w-full max-w-[325px] flex flex-col items-center px-4 py-7 rounded-3xl bg-black/75 backdrop-blur-md border border-[#eed57c]/50 shadow-[0_16px_50px_rgba(0,0,0,0.9)]"
           >
-            <span className="font-cormorant italic text-sm sm:text-base text-[#eed57c] block mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-              எங்கள் இல்லத் திருமண விழாவிற்கு வருகை தந்து வாழ்த்த வேண்டுகிறோம்,
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-[#eed57c] shadow-[0_8px_25px_rgba(0,0,0,0.85)] mb-3 p-1 bg-gradient-to-tr from-[#d4af37] via-[#fff2b2] to-[#8f6018]">
+              <div className="w-full h-full rounded-full overflow-hidden bg-black">
+                <img
+                  src={momentsList[0] || "/images/marigold-vizha/marigold_hero_v7.jpg"}
+                  alt={`${bride} & ${groom}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            <span className="font-cinzel text-xs sm:text-sm tracking-[0.26em] text-[#eed57c] block mb-1 uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              LOVE • TRADITION • ETERNITY
             </span>
-            <h4 className="font-great-vibes text-5xl sm:text-6xl text-[#2b1704] drop-shadow-[0_4px_16px_rgba(0,0,0,1)] tracking-wide leading-tight">
+            <h4 className="font-great-vibes text-4xl sm:text-5xl text-[#fff9e6] drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)] tracking-wide leading-tight">
               {bride} &amp; {groom}
             </h4>
 
-            <div className="flex items-center justify-center gap-2 my-2.5 text-[#eed57c]">
+            <div className="flex items-center justify-center gap-2 my-2 text-[#eed57c]">
               <div className="w-10 h-[1px] bg-current opacity-80" />
               <Heart className="w-3.5 h-3.5 fill-current" />
               <div className="w-10 h-[1px] bg-current opacity-80" />
             </div>
 
-            {data.family_names && (
-              <p className="font-marcellus text-xs sm:text-[13px] tracking-[0.22em] text-[#faedd0] uppercase font-bold my-1 text-center drop-shadow-[0_2px_6px_rgba(0,0,0,1)] leading-relaxed">
-                அன்புடன் அழைக்கும் {data.family_names}
+            {familyNames && (
+              <p className="font-marcellus text-xs sm:text-sm tracking-[0.14em] text-[#faedd0] font-semibold my-1 text-center drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] leading-relaxed uppercase">
+                Warmly Invited By: {familyNames}
               </p>
             )}
 
             <div className="mt-3 flex justify-center w-full">
-              <div className="rounded-full bg-black/80 backdrop-blur-md border border-[#eed57c]/50 shadow-xl hover:border-[#eed57c] hover:bg-black/95 transition-all hover:scale-105 active:scale-95">
+              <div className="rounded-full bg-black/85 backdrop-blur-md border border-[#eed57c]/60 shadow-xl hover:border-[#eed57c] hover:bg-black transition-all hover:scale-105 active:scale-95">
                 <CreatedByVarnam
                   theme="gold"
-                  className="py-1 px-4 text-[#2b1704] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]"
+                  className="py-1 px-4 text-[#fff2b2] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]"
                 />
               </div>
             </div>

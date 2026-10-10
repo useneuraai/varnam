@@ -491,4 +491,15 @@ header.h-20.border-b.border-\[\#eed57c\]\/20 .text-\[\#b3811b\] {
   line-height: 2.75rem !important;
 }
 
+/* ========================================================================= */
+/* Tablet Device and Tablet Preview Mode Container Overrides                 */
+/* Ensures that inside tablet view, templates adapt with wider comfortable   */
+/* proportions while maintaining their luxury typography and animations.     */
+/* ========================================================================= */
+.preview-mode-tablet .max-w-\[440px\],
+.tablet-view .max-w-\[440px\] {
+  max-width: 580px !important;
+  width: 100% !important;
+}
+
 

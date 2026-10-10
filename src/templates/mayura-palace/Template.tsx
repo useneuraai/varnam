@@ -10,17 +10,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Check,
+  X,
   Phone,
   Navigation,
+  ExternalLink,
   Heart,
   Volume2,
   VolumeX,
-  Calendar,
-  Share2,
-  Flame,
-  Utensils,
-  Music,
-  Gift,
 } from "lucide-react";
 import CreatedByVarnam from "@/components/CreatedByVarnam";
 
@@ -50,7 +46,6 @@ const HydrangeaAndRoseOverlay = () => {
           className={`absolute ${p.anim}`}
         >
           {p.type === "hydrangea" ? (
-            // Delicate 4-petal powder blue hydrangea floret
             <svg
               width={p.size}
               height={p.size}
@@ -64,7 +59,6 @@ const HydrangeaAndRoseOverlay = () => {
               <circle cx="12" cy="12" r="2.2" fill="#fef9ee" />
             </svg>
           ) : p.type === "rose" ? (
-            // Soft English tea rose petal (blush pink)
             <svg
               width={p.size}
               height={p.size * 1.25}
@@ -77,7 +71,6 @@ const HydrangeaAndRoseOverlay = () => {
               />
             </svg>
           ) : p.type === "jasmine" ? (
-            // White pearl blossom floret
             <svg
               width={p.size}
               height={p.size}
@@ -90,13 +83,11 @@ const HydrangeaAndRoseOverlay = () => {
               />
             </svg>
           ) : (
-            // Iridescent golden teal sparkle
             <div className="w-2 h-2 rounded-full bg-gradient-to-tr from-[#2dd4bf] via-[#eed57c] to-[#fef08a] opacity-85 shadow-[0_0_10px_#2dd4bf]" />
           )}
         </div>
       ))}
 
-      {/* Shared Gradient Definitions */}
       <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
         <defs>
           <linearGradient id="hydrangeaBlueGradMP" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -123,153 +114,33 @@ const HydrangeaAndRoseOverlay = () => {
 };
 
 // ============================================================================
-// 2. CELEBRATION SHOWER ON SCRATCH UNVEIL (PEACOCK & PETALS)
-// ============================================================================
-const PeacockAndPetalsShower = ({ trigger }: { trigger: boolean }) => {
-  const showerPetals = useMemo(() => {
-    return Array.from({ length: 48 }).map((_, i) => ({
-      id: i,
-      startX: (Math.random() - 0.5) * 260,
-      startY: (Math.random() - 0.5) * 60,
-      endX: (Math.random() - 0.5) * 400,
-      endY: 480 + Math.random() * 420,
-      size: 15 + Math.random() * 16,
-      rotateStart: Math.random() * 360,
-      rotateEnd: Math.random() * 720,
-      duration: 2.5 + Math.random() * 2.2,
-      delay: Math.random() * 0.9,
-      type: i % 3 === 0 ? "hydrangea" : i % 3 === 1 ? "rose" : "peacockTeal",
-    }));
-  }, [trigger]);
-
-  if (!trigger) return null;
-
-  return (
-    <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden">
-      {showerPetals.map((p) => (
-        <motion.div
-          key={p.id}
-          initial={{
-            x: p.startX,
-            y: p.startY,
-            opacity: 0,
-            scale: 0.5,
-            rotate: p.rotateStart,
-          }}
-          animate={{
-            x: p.endX,
-            y: p.endY,
-            opacity: [0, 1, 1, 0],
-            scale: [0.5, 1.15, 0.95, 0.7],
-            rotate: p.rotateEnd,
-          }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            ease: [0.25, 0.1, 0.25, 1],
-          }}
-          className="absolute left-1/2 top-[38%] will-change-transform"
-        >
-          {p.type === "hydrangea" ? (
-            <svg
-              width={p.size}
-              height={p.size}
-              viewBox="0 0 24 24"
-              className="drop-shadow-[0_4px_12px_rgba(93,142,196,0.65)]"
-            >
-              <circle cx="12" cy="7" r="4.5" fill="#93c5fd" />
-              <circle cx="7" cy="12" r="4.5" fill="#60a5fa" />
-              <circle cx="17" cy="12" r="4.5" fill="#3b82f6" />
-              <circle cx="12" cy="17" r="4.5" fill="#2563eb" />
-              <circle cx="12" cy="12" r="2" fill="#fff" />
-            </svg>
-          ) : p.type === "rose" ? (
-            <svg
-              width={p.size}
-              height={p.size * 1.25}
-              viewBox="0 0 24 28"
-              className="drop-shadow-[0_4px_12px_rgba(244,114,182,0.6)]"
-            >
-              <path
-                d="M12 0 C18 4 24 12 21 21 C18 28 6 28 3 21 C0 12 6 4 12 0 Z"
-                fill="url(#showerRoseGradMP2)"
-              />
-              <defs>
-                <linearGradient id="showerRoseGradMP2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#fbcfe8" />
-                  <stop offset="40%" stopColor="#f472b6" />
-                  <stop offset="85%" stopColor="#db2777" />
-                  <stop offset="100%" stopColor="#9d174d" />
-                </linearGradient>
-              </defs>
-            </svg>
-          ) : (
-            <svg
-              width={p.size}
-              height={p.size * 1.3}
-              viewBox="0 0 22 28"
-              className="drop-shadow-[0_4px_12px_rgba(45,212,191,0.65)]"
-            >
-              <ellipse cx="11" cy="14" rx="9" ry="13" fill="url(#peacockFeatherShowerGradMP)" />
-              <circle cx="11" cy="14" r="5" fill="#0284c7" />
-              <circle cx="11" cy="14" r="2.5" fill="#facc15" />
-              <defs>
-                <linearGradient id="peacockFeatherShowerGradMP" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#34d399" />
-                  <stop offset="45%" stopColor="#0d9488" />
-                  <stop offset="100%" stopColor="#065f46" />
-                </linearGradient>
-              </defs>
-            </svg>
-          )}
-        </motion.div>
-      ))}
-    </div>
-  );
-};
-
-// ============================================================================
-// 3. BLUE BOTANICAL FLOWER VINE ON SIDES FOR EACH SECTION (IMAGE-DRIVEN)
-// ============================================================================
-const SideBlueFloralFlourish = ({
-  side = "left",
-  className = "",
-}: {
-  side?: "left" | "right";
-  className?: string;
-}) => (
-  <div
-    className={`absolute ${
-      side === "left" ? "left-0" : "right-0 scale-x-[-1]"
-    } z-10 pointer-events-none select-none w-16 sm:w-20 h-64 sm:h-84 overflow-hidden opacity-95 anim-float-subtle ${className}`}
-  >
-    <img
-      src="/images/mayura-palace/blue_floral_side_vine.jpg"
-      alt="Blue floral flourish"
-      className="w-full h-full object-cover object-left mix-blend-multiply drop-shadow-xs"
-    />
-  </div>
-);
-
-// ============================================================================
-// 4. REFINED MINIMAL GOLD DIVIDERS & SEAMS
+// 2. ORNAMENTAL GOLD DIVIDERS & SEAMS
 // ============================================================================
 const MinimalGoldDivider = ({ className = "" }: { className?: string }) => (
   <div className={`flex items-center justify-center gap-3 ${className}`}>
-    <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-[#b3811b]/80 to-transparent" />
+    <div className="h-[1px] w-12 sm:w-16 bg-gradient-to-r from-transparent via-[#b3811b] to-transparent" />
     <span className="text-[#8a6314] text-xs">❖</span>
-    <div className="h-[1px] w-12 bg-gradient-to-l from-transparent via-[#b3811b]/80 to-transparent" />
+    <div className="h-[1px] w-12 sm:w-16 bg-gradient-to-l from-transparent via-[#b3811b] to-transparent" />
   </div>
 );
 
-const SectionSeam = () => (
-  <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-center pointer-events-none">
-    <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#b3811b]/35 to-transparent" />
-  </div>
+const SectionVignette = ({ hasSeam = true }: { hasSeam?: boolean }) => (
+  <>
+    <div className="absolute inset-x-0 top-0 h-28 sm:h-36 bg-gradient-to-b from-black/70 via-black/30 to-transparent pointer-events-none z-10" />
+    <div className="absolute inset-x-0 bottom-0 h-28 sm:h-36 bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none z-10" />
+    {hasSeam && (
+      <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-center pointer-events-none">
+        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#eed57c]/45 to-transparent" />
+        <span className="absolute px-2.5 py-0.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-[8px] text-[#eed57c] font-serif shadow-sm">
+          ❖
+        </span>
+      </div>
+    )}
+  </>
 );
 
 // ============================================================================
-// 5. MAIN TEMPLATE COMPONENT: MAYURA PALACE (PALACE GARDEN)
+// 3. MAIN TEMPLATE COMPONENT: MAYURA PALACE (PALACE GARDEN)
 // ============================================================================
 export default function MayuraPalaceTemplate({
   data,
@@ -281,12 +152,22 @@ export default function MayuraPalaceTemplate({
   const containerRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Graceful English Typography
+  // Standardized Names & Custom Copy
   const bride = data.bride_name || "Ananya";
   const groom = data.groom_name || "Siddharth";
   const quote =
     data.quote ||
-    "Two souls united amidst royal gardens and serene waters, blessed with lifelong love and grace.";
+    "Two souls united amidst royal gardens and serene blessings, embarking on an eternal sacred journey together.";
+  const familyNames = data.family_names || "The Sundararajan & Ranganathan Families";
+  const rsvpPhone = data.rsvp_phone || "+91 98401 23456";
+  const venueName =
+    data.wedding_venue && data.wedding_venue.includes(",")
+      ? data.wedding_venue.split(",")[0].trim()
+      : data.wedding_venue || "The Leela Palace Courtyard";
+  const venueAddress =
+    data.wedding_venue && data.wedding_venue.includes(",")
+      ? data.wedding_venue.split(",").slice(1).join(",").trim()
+      : "MRC Nagar, Adyar Seaface, Chennai, Tamil Nadu - 600028";
 
   // Audio Playback
   const [isPlaying, setIsPlaying] = useState(false);
@@ -336,47 +217,17 @@ export default function MayuraPalaceTemplate({
       };
     } catch {
       return {
-        day: 18,
-        month: "DECEMBER",
+        day: 28,
+        month: "NOVEMBER",
         year: 2026,
-        weekday: "Friday",
-        time: "08:30 AM",
-        raw: new Date("2026-12-18T08:30:00"),
+        weekday: "Saturday",
+        time: "08:42 AM",
+        raw: new Date("2026-11-28T08:42:00"),
       };
     }
   };
 
   const weddingDateInfo = useMemo(() => parseDate(data.wedding_date), [data.wedding_date]);
-
-  // Calendar Integration (Google Calendar)
-  const handleAddToCalendar = () => {
-    try {
-      const date = weddingDateInfo.raw;
-      const title = `Wedding: ${bride} & ${groom}`;
-      const location = data.wedding_venue || "The Leela Palace Courtyard, Chennai";
-      const startTime = date.toISOString().replace(/-|:|\.\d\d\d/g, "");
-      const endDate = new Date(date.getTime() + 4 * 60 * 60 * 1000);
-      const endTime = endDate.toISOString().replace(/-|:|\.\d\d\d/g, "");
-
-      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-        title
-      )}&dates=${startTime}/${endTime}&details=${encodeURIComponent(
-        `You're cordially invited to celebrate the wedding union of ${bride} & ${groom}.`
-      )}&location=${encodeURIComponent(location)}`;
-
-      window.open(gcalUrl, "_blank");
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  // WhatsApp Share Integration
-  const handleShare = () => {
-    const inviteUrl = typeof window !== "undefined" ? window.location.href : "";
-    const shareText = `You're cordially invited to celebrate the royal wedding union of ${bride} & ${groom} on ${weddingDateInfo.weekday}, ${weddingDateInfo.month} ${weddingDateInfo.day}, ${weddingDateInfo.year}. View our digital invitation here: ${inviteUrl}`;
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
-    window.open(whatsappUrl, "_blank");
-  };
 
   // Scroll Progress Tracker for Hero Parallax
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -411,10 +262,10 @@ export default function MayuraPalaceTemplate({
 
   // Countdown State
   const [timeLeft, setTimeLeft] = useState({
-    days: 72,
-    hours: 18,
-    minutes: 45,
-    seconds: 20,
+    days: 64,
+    hours: 14,
+    minutes: 32,
+    seconds: 45,
   });
 
   const targetTimestamp = weddingDateInfo.raw.getTime();
@@ -442,16 +293,10 @@ export default function MayuraPalaceTemplate({
     return () => clearInterval(interval);
   }, [targetTimestamp]);
 
-  // Scratch Canvas Logic & Celebration Shower Trigger
+  // Scratch Canvas Logic
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isScratched, setIsScratched] = useState(false);
-  const [triggerShower, setTriggerShower] = useState(false);
   const isDrawing = useRef(false);
-
-  const unveilDate = () => {
-    setIsScratched(true);
-    setTriggerShower(true);
-  };
 
   const initCanvas = (w?: number, h?: number) => {
     const canvas = canvasRef.current;
@@ -460,42 +305,44 @@ export default function MayuraPalaceTemplate({
     if (!ctx) return;
 
     const rect = canvas.getBoundingClientRect();
-    const width = (canvas.width = Math.round(w || rect.width || canvas.clientWidth || 220));
-    const height = (canvas.height = Math.round(h || rect.height || canvas.clientHeight || 300));
+    const width = (canvas.width = Math.round(w || rect.width || canvas.clientWidth || 190));
+    const height = (canvas.height = Math.round(h || rect.height || canvas.clientHeight || 280));
     if (width <= 0 || height <= 0) return;
 
-    // Elegant antique royal gold metallic gradient
+    // Elegant royal gold metallic gradient
     const goldGrad = ctx.createLinearGradient(0, 0, width, height);
-    goldGrad.addColorStop(0, "#d4af37");
+    goldGrad.addColorStop(0, "#d8af56");
     goldGrad.addColorStop(0.25, "#fae6a2");
-    goldGrad.addColorStop(0.5, "#b37d22");
-    goldGrad.addColorStop(0.75, "#fae6a2");
-    goldGrad.addColorStop(1, "#8a5814");
+    goldGrad.addColorStop(0.5, "#c18c35");
+    goldGrad.addColorStop(0.75, "#edd380");
+    goldGrad.addColorStop(1, "#855814");
 
     ctx.fillStyle = goldGrad;
     ctx.fillRect(0, 0, width, height);
 
-    // Subtle fine stardust particles
-    ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
-    for (let i = 0; i < 300; i++) {
+    ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+    for (let i = 0; i < 350; i++) {
       const rx = Math.random() * width;
       const ry = Math.random() * height;
       ctx.fillRect(rx, ry, Math.random() > 0.8 ? 2 : 1, Math.random() > 0.8 ? 2 : 1);
     }
 
-    // Elegant filigree border
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
-    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(6, 6, width - 12, height - 12);
+    ctx.strokeStyle = "rgba(100, 60, 10, 0.4)";
     ctx.strokeRect(8, 8, width - 16, height - 16);
 
-    ctx.fillStyle = "#0b2135";
-    ctx.font = "bold 12px 'Cinzel', serif, sans-serif";
+    ctx.fillStyle = "#1e3a8a";
+    ctx.font = "700 12px 'Cinzel', serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("SAVE THE DATE", width / 2, height / 2 - 12);
-    ctx.font = "italic 11px serif";
-    ctx.fillStyle = "#1e3a8a";
-    ctx.fillText("Swipe to unveil", width / 2, height / 2 + 12);
+    ctx.fillText("✦ PALACE MUHURTHAM ✦", width / 2, height / 2 - 14);
+    ctx.font = "600 10px 'Cinzel', serif";
+    ctx.fillText("SWIPE TO REVEAL DATE", width / 2, height / 2 + 4);
+    ctx.font = "italic 9.5px 'Cormorant Garamond', Georgia, serif";
+    ctx.fillStyle = "#172554";
+    ctx.fillText("Scratch to unveil auspicious wedding date", width / 2, height / 2 + 20);
   };
 
   useEffect(() => {
@@ -509,10 +356,12 @@ export default function MayuraPalaceTemplate({
       if (w > 20 && h > 20) initCanvas(w, h);
     };
     tryInit();
-    const t = setTimeout(tryInit, 250);
+    const t1 = setTimeout(tryInit, 80);
+    const t2 = setTimeout(tryInit, 300);
     window.addEventListener("resize", tryInit);
     return () => {
-      clearTimeout(t);
+      clearTimeout(t1);
+      clearTimeout(t2);
       window.removeEventListener("resize", tryInit);
     };
   }, [isScratched]);
@@ -529,7 +378,7 @@ export default function MayuraPalaceTemplate({
 
     ctx.globalCompositeOperation = "destination-out";
     ctx.beginPath();
-    ctx.arc(x, y, 24, 0, Math.PI * 2);
+    ctx.arc(x, y, 22, 0, Math.PI * 2);
     ctx.fill();
 
     if (Math.random() > 0.5) {
@@ -541,45 +390,11 @@ export default function MayuraPalaceTemplate({
         }
         const percent = Math.round((clear / (imgData.data.length / 16)) * 100);
         if (percent > 35) {
-          unveilDate();
+          setIsScratched(true);
         }
       } catch {}
     }
   };
-
-  // Interactive Timeline Highlight State
-  const [activeEventIdx, setActiveEventIdx] = useState<number | null>(0);
-
-  const timelineEvents = [
-    {
-      time: "08:30 AM",
-      title: "Kalyana Muhurtham",
-      subtitle: "The sacred union & exchange of vows",
-      details: "Performed amidst fragrant flowers and sacred Agni homam with traditional mangala nadaswaram melodies.",
-      icon: Flame,
-    },
-    {
-      time: "10:30 AM",
-      title: "Mangala Aashirwad",
-      subtitle: "Talambralu & floral blessing shower",
-      details: "Elders, family, and loved ones shower sacred pearl-hued akshata and pastel flower petals upon the couple.",
-      icon: Sparkles,
-    },
-    {
-      time: "12:30 PM",
-      title: "Royal Garden Feast",
-      subtitle: "Celebratory royal banquet luncheon",
-      details: "A grand authentic feast featuring exquisite delicacies served in the palace courtyard pavilion.",
-      icon: Utensils,
-    },
-    {
-      time: "06:30 PM",
-      title: "Sangeet & Reception Gala",
-      subtitle: "Music, toasts & evening celebration",
-      details: "Live classical fusion ensemble, crystal chandeliers aglow, celebratory toasts, and joyful dancing.",
-      icon: Music,
-    },
-  ];
 
   // Moments Carousel
   const defaultMoments = [
@@ -615,7 +430,7 @@ export default function MayuraPalaceTemplate({
   const [rsvpSaved, setRsvpSaved] = useState(false);
 
   const venueLocation =
-    data.gmap_coordinates || data.wedding_venue || "The Leela Palace Courtyard, Chennai";
+    data.gmap_coordinates || data.wedding_venue || "The Leela Palace Courtyard, MRC Nagar, Chennai - 600028";
   const gmapSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     venueLocation
   )}`;
@@ -626,32 +441,32 @@ export default function MayuraPalaceTemplate({
   return (
     <div
       ref={containerRef}
-      className="relative min-h-screen w-full bg-[#eef3f5] text-[#0b2135] font-serif overflow-x-hidden selection:bg-[#93c5fd] selection:text-black flex flex-col items-center"
+      className="relative min-h-screen w-full bg-[#0a1824] text-[#faedd0] font-serif overflow-x-hidden selection:bg-[#93c5fd] selection:text-black flex flex-col items-center"
       style={{
-        backgroundImage: "radial-gradient(ellipse at top, #f5f8fb 0%, #dbe5ee 100%)",
+        backgroundImage: "radial-gradient(ellipse at top, #112d3b 0%, #061117 100%)",
       }}
     >
-      {/* 1. Ambient Hydrangea & Rose Petals Overlay */}
+      {/* Floating Hydrangea & Rose Petals Overlay */}
       <HydrangeaAndRoseOverlay />
 
       {/* Floating Sound Toggle */}
       <div className="fixed top-6 right-6 z-50">
         <button
           onClick={toggleMusic}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-[#eed57c] shadow-[0_4px_18px_rgba(11,33,53,0.14)] text-[#0b2135] hover:border-[#b3811b] hover:scale-105 transition-all duration-300 cursor-pointer"
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/85 backdrop-blur-md border border-[#eed57c]/70 shadow-[0_4px_18px_rgba(0,0,0,0.8)] text-[#eed57c] hover:border-white hover:scale-105 transition-all duration-300 cursor-pointer"
           title="Toggle Music"
         >
           {isPlaying ? (
             <>
-              <Volume2 className="w-3.5 h-3.5 text-[#2563eb] animate-pulse" />
-              <span className="text-[10px] tracking-widest font-marcellus font-bold uppercase text-[#0b2135]">
+              <Volume2 className="w-3.5 h-3.5 text-[#60a5fa] animate-pulse" />
+              <span className="text-[10px] tracking-widest font-marcellus font-bold uppercase text-[#fff2b2]">
                 Sound On
               </span>
             </>
           ) : (
             <>
-              <VolumeX className="w-3.5 h-3.5 text-zinc-500" />
-              <span className="text-[10px] tracking-widest font-marcellus text-zinc-500 uppercase font-semibold">
+              <VolumeX className="w-3.5 h-3.5 text-zinc-400" />
+              <span className="text-[10px] tracking-widest font-marcellus text-zinc-400 uppercase">
                 Sound Off
               </span>
             </>
@@ -659,472 +474,549 @@ export default function MayuraPalaceTemplate({
         </button>
       </div>
 
-      {/* Main Unified Mobile-First Portrait Stack */}
-      <div className="relative w-full max-w-[440px] shadow-[0_0_90px_rgba(15,35,55,0.22)] overflow-hidden flex flex-col bg-[#fdfefe] border-x border-[#eed57c]/30">
+      {/* Main Unified Responsive Mobile & Tablet Template Container */}
+      <div className="relative w-full max-w-[440px] md:max-w-[580px] lg:max-w-[440px] shadow-[0_0_90px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col">
         {/* ===================================================================== */}
         {/* 1. HERO SECTION: PALATIAL JHAROKHA WITH CHANDELIER & PEACOCK           */}
         {/* ===================================================================== */}
-        <section className="relative w-full aspect-[9/16] min-h-[690px] overflow-hidden flex flex-col items-center justify-between text-center pt-8 pb-7 px-4 bg-cover bg-center">
-          {/* Hero Jharokha Background with Parallax Zoom */}
+        <section className="relative w-full aspect-[9/16] min-h-[660px] overflow-hidden flex flex-col items-center justify-between text-center pt-8 pb-4 px-4 bg-cover bg-center">
           <div
             className="absolute inset-0 bg-cover bg-center pointer-events-none transition-transform duration-500 will-change-transform"
             style={{
               backgroundImage: "url('/images/mayura-palace/hero_peacock_arch.jpg')",
               transform: `scale(${1 + scrollProgress * 0.1})`,
-              transformOrigin: "50% 50%",
+              transformOrigin: "50% 30%",
             }}
           />
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/50 via-black/15 to-transparent pointer-events-none" />
 
-
-          {/* Top Royal Callout */}
+          {/* Top Emblem */}
           <div
-            className="relative z-20 flex flex-col items-center transition-all duration-300 mt-1"
+            className="relative z-20 flex flex-col items-center transition-all duration-300 pt-1"
             style={{
               opacity: Math.max(0, 1 - scrollProgress * 1.5),
               transform: `translateY(-${scrollProgress * 30}px)`,
             }}
           >
-            <div className="flex items-center justify-center gap-2 mb-1 text-[#8a6314]">
-              <div className="w-8 h-[1px] bg-current opacity-80" />
-              <span className="text-xs">❖</span>
-              <div className="w-8 h-[1px] bg-current opacity-80" />
+            <div className="flex items-center justify-center gap-2 mb-1 text-[#eed57c]">
+              <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-[#eed57c] to-[#eed57c]" />
+              <span className="text-xs text-[#eed57c]">❖</span>
+              <div className="w-8 h-[1px] bg-gradient-to-l from-transparent via-[#eed57c] to-[#eed57c]" />
             </div>
-            <span className="font-marcellus text-[11px] sm:text-xs tracking-[0.35em] text-[#8a6314] uppercase font-bold drop-shadow-sm">
-              WEDDING INVITATION
+            <h2 className="font-cinzel text-xs sm:text-sm tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+              AN AUSPICIOUS CELEBRATION
+            </h2>
+            <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.25em] text-[#eed57c] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+              SHUBHA VIVAHA MUHURTHAM
             </span>
           </div>
 
-          {/* Center Couple Names: High-Contrast Royal Typography with Soft Frost Halo */}
+          {/* Center Couple Names: Sized proportionally, No Date in Hero */}
           <div
-            className="relative z-20 w-full flex flex-col items-center px-2 my-auto transition-all duration-300"
+            className="relative z-20 w-[86%] max-w-[315px] flex flex-col items-center my-auto py-4 px-3 sm:px-4 rounded-2xl bg-[#fffdf8]/90 backdrop-blur-xs border border-[#c89b38]/50 shadow-[0_10px_30px_rgba(10,25,40,0.3)] transition-all duration-300"
             style={{
               opacity: Math.max(0, 1 - scrollProgress * 1.6),
               transform: `translateY(-${scrollProgress * 45}px)`,
             }}
           >
-            <div className="w-full max-w-[325px] py-6 px-4 rounded-3xl bg-white/75 backdrop-blur-[4px] border border-[#eed57c]/60 shadow-[0_12px_36px_rgba(11,33,53,0.12)] flex flex-col items-center">
-              <p className="font-marcellus text-[10px] sm:text-[11px] tracking-[0.32em] text-[#8a6314] uppercase font-bold mb-2">
-                TOGETHER WITH THEIR FAMILIES
-              </p>
+            <div className="absolute inset-1.5 border border-[#8f5e1a]/30 rounded-xl pointer-events-none" />
 
-              <h1 className="font-marcellus text-3xl sm:text-4xl md:text-[40px] font-bold tracking-[0.12em] text-[#0b2135] uppercase leading-tight drop-shadow-xs">
-                {bride}
-              </h1>
+            <p className="font-marcellus text-[10px] sm:text-[11px] tracking-[0.28em] text-[#6e370a] uppercase font-bold mb-1.5">
+              WE ARE GETTING MARRIED
+            </p>
 
-              <div className="flex items-center justify-center gap-3 my-2 w-full">
-                <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-                <span className="font-great-vibes text-2xl sm:text-3xl text-[#2563eb] italic">
-                  and
-                </span>
-                <div className="h-[1px] w-12 bg-gradient-to-l from-transparent via-[#eed57c] to-transparent" />
-              </div>
+            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold tracking-[0.08em] text-[#0b2135] uppercase leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)] max-w-full break-words text-center px-1">
+              {bride}
+            </h1>
 
-              <h1 className="font-marcellus text-3xl sm:text-4xl md:text-[40px] font-bold tracking-[0.12em] text-[#0b2135] uppercase leading-tight drop-shadow-xs">
-                {groom}
-              </h1>
+            <div className="flex items-center justify-center gap-3 my-1 w-full">
+              <div className="h-[1.5px] w-10 bg-gradient-to-r from-transparent via-[#2563eb] to-transparent" />
+              <span className="font-great-vibes text-2xl sm:text-3xl text-[#2563eb] italic">
+                weds
+              </span>
+              <div className="h-[1.5px] w-10 bg-gradient-to-l from-transparent via-[#2563eb] to-transparent" />
+            </div>
+
+            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold tracking-[0.08em] text-[#0b2135] uppercase leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)] max-w-full break-words text-center px-1">
+              {groom}
+            </h1>
+
+            <div className="mt-2 text-[#8a6314] text-[9.5px] font-cinzel tracking-widest uppercase font-bold">
+              ❖ Royal Wedding Celebration ❖
             </div>
           </div>
 
-          {/* Minimal Scroll Cue */}
+          {/* Bottom Scroll Cue */}
           <div
-            className="relative z-20 flex flex-col items-center gap-1 opacity-90 animate-bounce transition-opacity duration-300"
+            className="relative z-20 flex flex-col items-center gap-1 transition-opacity duration-300 pb-1"
             style={{ opacity: Math.max(0, 1 - scrollProgress * 2) }}
           >
-            <span className="text-[9px] tracking-[0.35em] text-[#8a6314] uppercase font-bold">
-              SCROLL
+            <span className="text-[9px] tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+              SCROLL TO CELEBRATE
             </span>
-            <div className="w-4 h-6 rounded-full border border-[#eed57c] flex items-start justify-center p-0.5 bg-white/60 shadow-xs">
-              <div className="w-1.5 h-2 rounded-full bg-[#8a6314]" />
+            <div className="w-4 h-6 rounded-full border border-[#eed57c] bg-black/40 flex items-start justify-center p-1 shadow-md">
+              <div className="w-1 h-2 rounded-full bg-[#eed57c] animate-bounce" />
             </div>
           </div>
 
-          <SectionSeam />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none z-15" />
+          <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-center pointer-events-none">
+            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#eed57c]/60 to-transparent" />
+            <span className="absolute px-2.5 py-0.5 rounded-full bg-black/85 border border-[#eed57c]/60 text-[8px] text-[#eed57c] font-serif shadow-sm">
+              ❖
+            </span>
+          </div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 2. SACRED BLESSINGS: BLUE HYDRANGEA & ROYAL ARCH FRAME                 */}
+        {/* 2. SACRED VERSE: BLUE HYDRANGEA & ROYAL ARCH FRAME                     */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-6 bg-cover bg-center overflow-hidden"
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-5 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/mayura-palace/blue_hydrangea_arch.jpg')",
           }}
         >
-          <SectionSeam />
-
-          {/* Side Floral Garlands */}
-          <SideBlueFloralFlourish side="left" className="top-8" />
-          <SideBlueFloralFlourish side="right" className="top-8" />
-
+          <SectionVignette />
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full max-w-[325px] mx-auto p-6 rounded-3xl bg-white/92 backdrop-blur-md border-2 border-[#eed57c]/70 shadow-[0_16px_40px_rgba(11,33,53,0.14)] flex flex-col items-center"
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-15 w-[85%] max-w-[315px] flex flex-col items-center px-5 py-7 my-auto rounded-2xl bg-[#fffdf8]/92 backdrop-blur-[2px] border border-[#c89b38]/45 shadow-[0_12px_36px_rgba(10,25,40,0.18)]"
           >
-            <span className="text-3xl mb-2 drop-shadow-sm">🦚</span>
+            <div className="absolute inset-1.5 border border-[#8f5e1a]/25 rounded-xl pointer-events-none" />
 
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#8a6314] uppercase font-bold mb-1">
-              DIVINE BLESSINGS
+            <span className="font-cinzel text-[10.5px] sm:text-[11px] tracking-[0.26em] text-[#783e0a] uppercase font-bold mb-1">
+              ✦ DIVINE INVOCATION ✦
             </span>
 
-            <MinimalGoldDivider className="my-2" />
-
-            <h2 className="font-marcellus text-2xl sm:text-3xl text-[#0b2135] font-bold leading-relaxed tracking-wide mt-1">
-              Grace &amp; Devotion
+            <h2 className="font-cinzel text-lg sm:text-xl text-[#0b2135] font-bold leading-relaxed tracking-wide drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+              &ldquo;United by destiny,
+              <br />
+              blessed by grace.&rdquo;
             </h2>
 
-            <p className="font-cormorant italic text-base sm:text-lg text-[#1e293b] leading-relaxed mt-3 max-w-[280px]">
-              &ldquo;{quote}&rdquo;
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: false }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="w-16 h-[1.5px] bg-gradient-to-r from-transparent via-[#b3811b] to-transparent my-2.5"
+            />
+
+            <p className="font-cormorant text-sm sm:text-base text-[#1e293b] leading-relaxed drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] font-semibold italic">
+              {quote}
             </p>
 
-            {data.custom_message && (
-              <p className="font-cormorant text-sm sm:text-base text-[#475569] mt-3 leading-relaxed max-w-[260px]">
-                {data.custom_message}
-              </p>
+            {familyNames && (
+              <div className="mt-3.5 pt-2.5 border-t border-[#b3811b]/30 w-full">
+                <span className="text-[9.5px] font-cinzel tracking-widest text-[#783e0a] uppercase font-bold block mb-0.5">
+                  With Heartfelt Blessings
+                </span>
+                <p className="font-marcellus text-xs text-[#0b2135] font-bold tracking-wider leading-snug">
+                  {familyNames}
+                </p>
+              </div>
             )}
+
+            <div className="flex items-center gap-2 mt-3 text-[#8a6314]">
+              <div className="w-8 h-[1px] bg-current" />
+              <span className="text-xs">❖</span>
+              <div className="w-8 h-[1px] bg-current" />
+            </div>
           </motion.div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 3. SCRATCH TO REVEAL: DATE + CELEBRATION SHOWER                       */}
+        {/* 3. SCRATCH TO REVEAL: SAVE THE DATE (PALACE COURTYARD FRAME)           */}
         {/* ===================================================================== */}
-        <section className="relative w-full py-16 px-6 text-center flex flex-col items-center justify-center bg-[#f7fafb] overflow-hidden select-none">
-          <SectionSeam />
+        <section
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center bg-[#071318] bg-cover bg-center overflow-hidden select-none"
+          style={{
+            backgroundImage: "url('/images/mayura-palace/scratch_courtyard_table.jpg')",
+          }}
+        >
+          <SectionVignette />
+          <div className="absolute inset-0 bg-black/45 pointer-events-none" />
 
-          {/* Blue Flower Garlands on Sides (Tucked Behind Margins) */}
-          <SideBlueFloralFlourish side="left" className="top-2 -left-2 z-0 opacity-35 w-10 sm:w-12" />
-          <SideBlueFloralFlourish side="right" className="top-2 -right-2 z-0 opacity-35 w-10 sm:w-12" />
-
-          {/* Dynamic Peacock & Hydrangea Shower Effect */}
-          <PeacockAndPetalsShower trigger={triggerShower} />
+          <div className="relative z-20 mb-4 flex flex-col items-center">
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              ✦ AUSPICIOUS INVITATION ✦
+            </span>
+            <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-[#fff2b2] tracking-[0.18em] uppercase mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
+              Save The Date
+            </h3>
+            <MinimalGoldDivider className="mt-1.5 opacity-80" />
+          </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full flex flex-col items-center relative z-10"
+            initial={{ opacity: 0, y: 30, scale: 0.94 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative rounded-[26px] sm:rounded-[30px] overflow-hidden flex flex-col items-center justify-center text-center z-15 shadow-[0_20px_50px_rgba(0,0,0,0.9)] border-2 border-[#d4af37]"
+            style={{
+              width: "60%",
+              height: "44%",
+            }}
           >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#8a6314] uppercase font-bold mb-4">
-              AUSPICIOUS MUHURTHAM
-            </span>
+            <div
+              className="absolute inset-0 bg-cover bg-center flex flex-col items-center justify-between py-4 px-3 text-center pointer-events-none select-none z-0 bg-[#fffbf2]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(135deg, #fffcf5 0%, #faedd3 50%, #f4dec0 100%)",
+              }}
+            >
+              <div className="absolute inset-2 border border-[#b8860b]/40 rounded-2xl pointer-events-none" />
 
-            {/* The Scratch Frame */}
-            <div className="relative w-64 sm:w-72 h-80 rounded-3xl overflow-hidden shadow-[0_16px_40px_rgba(11,33,53,0.16)] border-2 border-[#eed57c] bg-white">
-              {/* Underlying Revealed Card Content */}
-              <div className="absolute inset-0 flex flex-col items-center justify-between p-6 text-center pointer-events-none select-none">
-                <div className="font-marcellus text-xs tracking-[0.25em] text-[#8a6314] uppercase font-bold">
-                  MUHURTHAM DATE
+              <div className="flex flex-col items-center pt-1 z-10">
+                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#7a3407] font-bold uppercase">
+                  ✦ AUSPICIOUS MUHURTHAM ✦
+                </span>
+                <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#9e6b22] to-transparent mt-0.5" />
+              </div>
+
+              <div className="flex flex-col items-center justify-center my-auto px-1 z-10">
+                <div className="font-cormorant text-5xl sm:text-6xl font-bold text-[#0b2135] leading-none tracking-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+                  {weddingDateInfo.day}
                 </div>
-
-                <div className="my-auto flex flex-col items-center">
-                  <div className="font-cormorant text-7xl sm:text-8xl font-bold text-[#0b2135] leading-none tracking-tight">
-                    {weddingDateInfo.day}
-                  </div>
-                  <div className="font-marcellus text-sm sm:text-base tracking-[0.25em] text-[#8a6314] uppercase mt-1.5 font-bold">
-                    {weddingDateInfo.month} {weddingDateInfo.year}
-                  </div>
-                  <div className="w-10 h-[1.5px] bg-[#eed57c] my-2.5" />
-                  <div className="font-marcellus text-xs sm:text-sm text-[#334155] tracking-wider font-semibold">
-                    {weddingDateInfo.weekday} · {weddingDateInfo.time}
-                  </div>
+                <div className="font-cinzel text-xs sm:text-sm tracking-[0.28em] text-[#1e3a8a] font-bold uppercase mt-1">
+                  {weddingDateInfo.month} {weddingDateInfo.year}
                 </div>
-
-                <div className="text-[10px] sm:text-xs tracking-[0.2em] font-marcellus text-[#8a6314] uppercase font-bold">
+                <div className="flex items-center gap-1.5 my-1 text-[#9e6b22]">
+                  <div className="w-4 h-[1px] bg-current" />
+                  <span className="text-[7px]">❖</span>
+                  <div className="w-4 h-[1px] bg-current" />
+                </div>
+                <div className="font-marcellus text-[10.5px] sm:text-[11.5px] text-[#0b2135] font-bold tracking-wider">
+                  {weddingDateInfo.weekday} · {weddingDateInfo.time}
+                </div>
+                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#633208] font-bold mt-0.5 line-clamp-1 max-w-[170px]">
                   {data.wedding_venue || "The Leela Palace Courtyard"}
                 </div>
               </div>
 
-              {/* Interactive Scratch Canvas Foil */}
-              <canvas
-                ref={canvasRef}
-                style={{ touchAction: "none" }}
-                onMouseDown={() => (isDrawing.current = true)}
-                onMouseUp={() => (isDrawing.current = false)}
-                onMouseLeave={() => (isDrawing.current = false)}
-                onMouseMove={(e) => {
-                  if (isDrawing.current) handleScratchMove(e.clientX, e.clientY);
-                }}
-                onTouchStart={() => (isDrawing.current = true)}
-                onTouchEnd={() => (isDrawing.current = false)}
-                onTouchMove={(e) => {
-                  if (e.touches[0]) handleScratchMove(e.touches[0].clientX, e.touches[0].clientY);
-                }}
-                className={`absolute inset-0 w-full h-full cursor-pointer z-10 transition-opacity duration-700 ${
-                  isScratched ? "opacity-0 pointer-events-none" : "opacity-100"
-                }`}
-              />
-
-              {!isScratched && (
-                <div className="absolute bottom-3 inset-x-0 flex justify-center pointer-events-none z-20">
-                  <span className="px-3.5 py-1 rounded-full bg-white/90 border border-[#eed57c] text-[9px] sm:text-[10px] font-marcellus text-[#8a6314] tracking-widest uppercase font-bold shadow-sm">
-                    ✨ Swipe to reveal
-                  </span>
-                </div>
-              )}
+              <div className="pb-1 text-[8.5px] tracking-[0.22em] font-cinzel text-[#783e0a] uppercase font-bold z-10">
+                ❖ An Auspicious Union ❖
+              </div>
             </div>
 
-            {/* Action Buttons: Reveal & Add to Calendar */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-5">
-              {!isScratched ? (
-                <button
-                  type="button"
-                  onClick={unveilDate}
-                  className="px-5 py-2.5 rounded-full bg-white border-2 border-[#eed57c] text-[#8a6314] text-xs tracking-[0.2em] uppercase font-marcellus font-bold hover:bg-[#fef9ee] hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer flex items-center gap-1.5"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Click to Reveal</span>
-                </button>
-              ) : (
-                <>
-                  <button
-                    type="button"
-                    onClick={handleAddToCalendar}
-                    className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#d4a325] via-[#eed57c] to-[#c59b27] text-[#0b2135] text-xs tracking-[0.18em] uppercase font-marcellus font-bold hover:brightness-105 active:scale-95 transition-all shadow-md cursor-pointer flex items-center gap-1.5"
-                  >
-                    <Calendar className="w-3.5 h-3.5 text-[#0b2135]" />
-                    <span>Add to Calendar</span>
-                  </button>
+            <canvas
+              ref={canvasRef}
+              style={{ touchAction: "none" }}
+              onMouseDown={() => (isDrawing.current = true)}
+              onMouseUp={() => (isDrawing.current = false)}
+              onMouseLeave={() => (isDrawing.current = false)}
+              onMouseMove={(e) => {
+                if (isDrawing.current) handleScratchMove(e.clientX, e.clientY);
+              }}
+              onTouchStart={() => (isDrawing.current = true)}
+              onTouchEnd={() => (isDrawing.current = false)}
+              onTouchMove={(e) => {
+                if (e.touches[0]) handleScratchMove(e.touches[0].clientX, e.touches[0].clientY);
+              }}
+              className={`absolute inset-0 w-full h-full cursor-pointer z-10 transition-opacity duration-700 ${
+                isScratched ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
+            />
 
-                  <button
-                    type="button"
-                    onClick={() => setTriggerShower((prev) => !prev)}
-                    className="px-4 py-2.5 rounded-full bg-white border border-[#eed57c] text-[#0b2135] text-xs tracking-[0.16em] uppercase font-marcellus font-semibold hover:bg-zinc-50 active:scale-95 transition-all shadow-sm cursor-pointer flex items-center gap-1.5"
-                    title="Shower petals again"
-                  >
-                    <span>🦚 Shower Petals</span>
-                  </button>
-                </>
-              )}
-            </div>
+            {!isScratched && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.75, 1, 0.75], y: [0, -2, 0] }}
+                transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+                className="absolute bottom-2.5 pointer-events-none z-20 px-2.5 py-0.5 rounded-full bg-black/75 border border-[#eed57c]/70 text-[8px] font-marcellus text-[#fff2b2] tracking-widest uppercase flex items-center gap-1 shadow-md"
+              >
+                <span>✨ Swipe To Reveal</span>
+              </motion.div>
+            )}
           </motion.div>
+
+          {!isScratched && (
+            <button
+              type="button"
+              onClick={() => setIsScratched(true)}
+              className="relative mt-5 z-20 px-5 py-2 rounded-full bg-gradient-to-r from-[#172554] via-[#1e3a8a] to-[#172554] border border-[#eed57c] text-[#fff2b2] text-[10px] sm:text-[10.5px] tracking-[0.22em] uppercase font-cinzel font-bold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.8)] cursor-pointer flex items-center gap-1.5"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#eed57c]" />
+              <span>Click To Reveal Date</span>
+            </button>
+          )}
         </section>
 
         {/* ===================================================================== */}
-        {/* 4. COUNTDOWN TIMER                                                    */}
+        {/* 4. COUNTDOWN TIMER: LAKESIDE GARDEN PALACE FRAME                       */}
         {/* ===================================================================== */}
-        <section className="relative w-full py-16 px-6 text-center flex flex-col items-center justify-center bg-[#f0f5f7] overflow-hidden">
-          <SectionSeam />
-
-
+        <section
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-6 bg-cover bg-center overflow-hidden"
+          style={{
+            backgroundImage: "url('/images/mayura-palace/lakeside_garden_frame.jpg')",
+          }}
+        >
+          <SectionVignette />
+          <div className="absolute inset-0 bg-black/35 pointer-events-none" />
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[340px] flex flex-col items-center"
+            initial={{ opacity: 0, y: 35, scale: 0.94 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-15 w-full max-w-[320px] flex flex-col items-center py-6 px-3"
           >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#8a6314] uppercase font-bold mb-2">
-              THE COUNTDOWN
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+              ✦ AUSPICIOUS MUHURTHAM ✦
             </span>
+            <h3 className="font-cinzel text-xl sm:text-2xl text-[#fff2b2] tracking-[0.2em] uppercase font-bold mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+              Counting Down
+            </h3>
+            <span className="font-marcellus text-xs tracking-[0.24em] text-[#93c5fd] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+              To Eternal Togetherness
+            </span>
+            <MinimalGoldDivider className="my-2.5 opacity-90" />
 
-            <MinimalGoldDivider className="my-2" />
-
-            <div className="grid grid-cols-4 gap-2.5 w-full mt-4">
+            <div className="grid grid-cols-2 gap-2.5 w-full mt-3">
               {[
                 { label: "DAYS", value: timeLeft.days },
                 { label: "HOURS", value: timeLeft.hours },
-                { label: "MINS", value: timeLeft.minutes },
-                { label: "SECS", value: timeLeft.seconds },
+                { label: "MINUTES", value: timeLeft.minutes },
+                { label: "SECONDS", value: timeLeft.seconds },
               ].map((unit, idx) => (
-                <div
+                <motion.div
                   key={idx}
-                  className="py-3.5 px-1.5 rounded-2xl bg-white border border-[#eed57c]/60 shadow-[0_6px_20px_rgba(11,33,53,0.08)] flex flex-col items-center justify-center"
+                  initial={{ opacity: 0, y: 20, scale: 0.92 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: false, amount: 0.25 }}
+                  transition={{ duration: 0.5, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
+                  className="py-3.5 px-2 rounded-xl bg-black/75 border border-[#eed57c]/60 shadow-[0_8px_24px_rgba(0,0,0,0.7)] backdrop-blur-md flex flex-col items-center justify-center relative overflow-hidden"
                 >
-                  <span className="font-cormorant text-3xl sm:text-4xl font-bold text-[#0b2135] tabular-nums leading-none">
+                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
+                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#fff2b2] tabular-nums leading-none drop-shadow-[0_2px_8px_rgba(238,213,124,0.5)]">
                     {String(unit.value).padStart(2, "0")}
                   </span>
-                  <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.16em] text-[#8a6314] uppercase font-bold mt-1.5">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#eed57c] uppercase font-bold mt-1.5 text-center">
                     {unit.label}
                   </span>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </motion.div>
-        </section>
 
-        {/* ===================================================================== */}
-        {/* 5. INTERACTIVE WEDDING ITINERARY: PROGRAM TIMELINE                    */}
-        {/* ===================================================================== */}
-        <section
-          className="relative w-full py-18 px-5 text-center flex flex-col items-center justify-center bg-[#f0f6fa] overflow-hidden"
-          style={{
-            backgroundImage: "radial-gradient(ellipse at top, #f6fafd 0%, #e3edf5 100%)",
-          }}
-        >
-          <SectionSeam />
-
-
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[360px] flex flex-col items-center relative z-10"
-          >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#8a6314] uppercase font-bold mb-1 drop-shadow-sm">
-              THE CELEBRATION
-            </span>
-            <h3 className="font-marcellus text-2xl sm:text-3xl text-[#0b2135] tracking-wide font-bold drop-shadow-sm">
-              Wedding Itinerary
-            </h3>
-            <p className="font-cormorant italic text-sm text-[#334155] mt-1 font-medium">
-              Tap any ceremony to view details
-            </p>
-
-            <MinimalGoldDivider className="my-3.5" />
-
-            {/* Timeline with central glowing spine and interactive event cards */}
-            <div className="relative w-full flex flex-col space-y-4 mt-2">
-              <div className="absolute left-6 top-3 bottom-3 w-[1.5px] bg-gradient-to-b from-[#eed57c]/40 via-[#b3811b] to-[#eed57c]/40 pointer-events-none" />
-
-              {timelineEvents.map((evt, idx) => {
-                const IconComponent = evt.icon;
-                const isSelected = activeEventIdx === idx;
-
-                return (
-                  <motion.div
-                    key={idx}
-                    onClick={() => setActiveEventIdx(isSelected ? null : idx)}
-                    className={`relative z-10 w-full pl-13 pr-4 py-3.5 rounded-2xl border text-left cursor-pointer transition-all duration-300 backdrop-blur-md ${
-                      isSelected
-                        ? "bg-white/95 border-[#b3811b] shadow-[0_8px_25px_rgba(179,129,27,0.22)]"
-                        : "bg-white/88 border-[#eed57c]/60 hover:border-[#b3811b]/80 shadow-sm"
-                    }`}
-                  >
-                    {/* Timeline node */}
-                    <div
-                      className={`absolute left-4 top-4.5 -translate-x-1/2 w-4 h-4 rounded-full flex items-center justify-center transition-all ${
-                        isSelected
-                          ? "bg-[#eed57c] ring-4 ring-[#eed57c]/40 border border-[#b3811b]"
-                          : "bg-white border-2 border-[#b3811b]"
-                      }`}
-                    >
-                      <div
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          isSelected ? "bg-[#0b2135]" : "bg-[#b3811b]"
-                        }`}
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 text-xs tracking-[0.2em] font-marcellus text-[#8a6314] uppercase font-bold">
-                        <Clock className="w-3 h-3 text-[#8a6314]" />
-                        <span>{evt.time}</span>
-                      </div>
-                      <div className="w-6 h-6 rounded-full bg-white border border-[#eed57c] flex items-center justify-center text-[#8a6314] shadow-xs">
-                        <IconComponent className="w-3 h-3" />
-                      </div>
-                    </div>
-
-                    <h4 className="font-marcellus text-base sm:text-lg font-bold text-[#0b2135] mt-1">
-                      {evt.title}
-                    </h4>
-                    <p className="font-cormorant italic text-sm text-[#475569]">
-                      {evt.subtitle}
-                    </p>
-
-                    {/* Expandable Ceremony Details */}
-                    <AnimatePresence>
-                      {isSelected && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="overflow-hidden pt-2.5 mt-2.5 border-t border-[#eed57c]/40"
-                        >
-                          <p className="font-cormorant text-sm text-[#1e293b] leading-relaxed">
-                            {evt.details}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
+            <div className="mt-4 px-4 py-1.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-center shadow-md">
+              <span className="font-marcellus text-xs text-[#faedd0] font-semibold tracking-wider">
+                {weddingDateInfo.weekday}, {weddingDateInfo.day} {weddingDateInfo.month} · {weddingDateInfo.time}
+              </span>
             </div>
           </motion.div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 6. CHERISHED MOMENTS (PHOTO GALLERY CAROUSEL)                         */}
+        {/* 5. PROGRAM TIMELINE: EXACTLY 3 PROGRAMS LYING DIRECTLY ON IMAGE        */}
         {/* ===================================================================== */}
-        <section className="relative w-full py-18 px-4 text-center flex flex-col items-center justify-center bg-[#f0f5f7] overflow-hidden">
-          <SectionSeam />
-
-
+        <section
+          className="relative w-full min-h-[760px] sm:min-h-[800px] text-center flex flex-col items-center justify-between px-4 pt-9 pb-7 bg-center overflow-hidden"
+          style={{
+            backgroundImage: "url('/images/mayura-palace/garden_banquet_pavilion.jpg')",
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          <SectionVignette />
+          <div className="absolute inset-0 bg-black/50 pointer-events-none" />
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full flex flex-col items-center"
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center z-15 mt-1"
           >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#8a6314] uppercase font-bold mb-1">
-              GALLERY
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#fff2b2] uppercase font-bold mb-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+              ✦ SACRED RITUALS ✦
             </span>
-            <h3 className="font-marcellus text-2xl sm:text-3xl text-[#0b2135] tracking-wide font-bold">
-              Cherished Moments
-            </h3>
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.16em] uppercase font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
+              Wedding Program
+            </h2>
+            <div className="flex items-center gap-2 mt-1 text-[#eed57c] drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+              <div className="w-8 h-[1px] bg-current" />
+              <span className="text-[9px]">❖</span>
+              <div className="w-8 h-[1px] bg-current" />
+            </div>
+          </motion.div>
 
-            <MinimalGoldDivider className="my-3.5" />
+          {/* 3 Programs Lying Directly on the Image (NO separate card box) */}
+          <div className="relative w-[88%] max-w-[330px] my-auto py-2 flex flex-col items-center z-15">
+            <div className="absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-[1.5px] bg-gradient-to-b from-[#eed57c]/40 via-[#b3811b] to-[#eed57c]/40" />
+
+            <div className="relative w-full flex flex-col items-center space-y-4 sm:space-y-4.5 z-10">
+              {/* Program 1 */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="relative z-10 w-full flex flex-col items-center text-center"
+              >
+                <div className="w-6 h-6 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#4a2406] font-cinzel font-bold mb-1 ring-2 ring-[#b8860b]/30">
+                  1
+                </div>
+                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-[#eed57c] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  MANGALA SNANAM
+                </span>
+                <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#fffaf0] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  Auspicious Sacred Dawn Prayers
+                </h4>
+                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#faedd0] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  07:00 AM
+                </div>
+                <div className="font-marcellus text-xs text-[#eed57c]/95 font-semibold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  {venueName}
+                </div>
+              </motion.div>
+
+              {/* Program 2: Sacred Muhurtham (Highlight) */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="relative z-10 w-full flex flex-col items-center text-center py-2 px-3 rounded-xl bg-black/60 border border-[#eed57c]/70 shadow-lg backdrop-blur-xs"
+              >
+                <div className="w-7 h-7 rounded-full bg-[#1e3a8a] border-2 border-[#eed57c] shadow-lg flex items-center justify-center text-xs text-[#fff2b2] font-bold mb-1">
+                  ❖
+                </div>
+                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.24em] text-[#60a5fa] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  SACRED MUHURTHAM
+                </span>
+                <h4 className="font-cinzel text-base sm:text-lg font-bold text-[#fff2b2] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  Mangalya Dharanam &amp; Saptapadi
+                </h4>
+                <div className="mt-0.5 font-cormorant text-base sm:text-lg text-[#fff9e6] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  {weddingDateInfo.time || "08:42 AM"}
+                </div>
+                <div className="font-marcellus text-xs sm:text-[13px] text-[#eed57c] font-bold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                  {venueName}
+                </div>
+              </motion.div>
+
+              {/* Program 3 */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="relative z-10 w-full flex flex-col items-center text-center"
+              >
+                <div className="w-6 h-6 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#4a2406] font-cinzel font-bold mb-1 ring-2 ring-[#b8860b]/30">
+                  3
+                </div>
+                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-[#eed57c] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  VIRUNDHU &amp; RECEPTION
+                </span>
+                <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#fffaf0] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  Traditional Feast &amp; Celebrations
+                </h4>
+                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#faedd0] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  12:30 PM &amp; 06:30 PM
+                </div>
+                <div className="font-marcellus text-xs text-[#eed57c] font-bold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+                  The Leela Palace Banquet Hall
+                </div>
+              </motion.div>
+            </div>
+          </div>
+
+          <div className="relative z-15 flex items-center justify-center gap-2 mb-2 text-[#eed57c] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+            <div className="w-8 h-[1px] bg-current" />
+            <span className="text-[10px]">❖</span>
+            <div className="w-8 h-[1px] bg-current" />
+          </div>
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 6. SWEET MOMENTS: 3D PHOTO FAN CAROUSEL                                */}
+        {/* ===================================================================== */}
+        <section
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-4 bg-cover bg-center overflow-hidden"
+          style={{
+            backgroundImage: "radial-gradient(ellipse at center, #0e2733 0%, #061217 100%)",
+          }}
+        >
+          <SectionVignette />
+          <motion.div
+            initial={{ opacity: 0, y: 35, scale: 0.94 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full flex flex-col items-center z-15"
+          >
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              ✦ CHERISHED GLIMPSES ✦
+            </span>
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mt-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+              Sweet Moments
+            </h2>
+            <p className="font-cormorant italic text-sm sm:text-base text-[#faedd0] font-semibold mb-5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+              Treasured memories of our journey together
+            </p>
 
             <div
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
-              className="relative w-full max-w-[370px] flex items-center justify-center min-h-[320px] mt-2"
+              className="relative w-full max-w-[370px] sm:max-w-[410px] flex items-center justify-center min-h-[340px] sm:min-h-[370px]"
             >
-              {/* Previous Image */}
-              <div
+              <motion.div
+                initial={{ opacity: 0, x: -20, rotate: -10 }}
+                whileInView={{ opacity: 0.45, x: 0, rotate: -6 }}
+                viewport={{ once: false, amount: 0.3 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
                 onClick={() =>
                   setActivePhotoIdx((prev) => (prev - 1 + momentsList.length) % momentsList.length)
                 }
-                className="absolute left-1 w-32 sm:w-36 aspect-[3/4] rounded-2xl overflow-hidden shadow-lg border border-[#eed57c]/60 opacity-40 hover:opacity-75 transition cursor-pointer scale-90 z-10 bg-black"
+                className="absolute left-1 sm:left-2 w-36 sm:w-42 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-[#d4af37]/50 hover:opacity-80 transition cursor-pointer scale-90 z-10 select-none bg-black"
               >
                 <img
                   src={momentsList[(activePhotoIdx - 1 + momentsList.length) % momentsList.length]}
                   alt="Moments"
                   className="w-full h-full object-cover"
                 />
-              </div>
+                <div className="absolute inset-0 bg-black/35" />
+              </motion.div>
 
-              {/* Active Image */}
-              <div className="relative z-20 w-56 sm:w-60 aspect-[3/4] rounded-2xl overflow-hidden shadow-[0_16px_40px_rgba(11,33,53,0.18)] border-2 border-[#eed57c] bg-black">
+              <div className="relative z-20 w-60 sm:w-68 aspect-[3/4] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85)] border-2 border-[#eed57c] select-none transform hover:scale-[1.02] transition-transform duration-300 bg-black">
                 <img
                   src={momentsList[activePhotoIdx]}
                   alt="Couple Moment"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-white/90 text-xs tracking-widest text-[#0b2135] font-marcellus font-bold shadow-md">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-black/85 backdrop-blur-md border border-[#eed57c]/60 text-[10px] tracking-widest text-[#eed57c] font-marcellus font-bold">
                   {activePhotoIdx + 1} / {momentsList.length}
                 </div>
               </div>
 
-              {/* Next Image */}
-              <div
+              <motion.div
+                initial={{ opacity: 0, x: 20, rotate: 10 }}
+                whileInView={{ opacity: 0.45, x: 0, rotate: 6 }}
+                viewport={{ once: false, amount: 0.3 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
                 onClick={() => setActivePhotoIdx((prev) => (prev + 1) % momentsList.length)}
-                className="absolute right-1 w-32 sm:w-36 aspect-[3/4] rounded-2xl overflow-hidden shadow-lg border border-[#eed57c]/60 opacity-40 hover:opacity-75 transition cursor-pointer scale-90 z-10 bg-black"
+                className="absolute right-1 sm:right-2 w-36 sm:w-42 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-[#d4af37]/50 hover:opacity-80 transition cursor-pointer scale-90 z-10 select-none bg-black"
               >
                 <img
                   src={momentsList[(activePhotoIdx + 1) % momentsList.length]}
                   alt="Moments"
                   className="w-full h-full object-cover"
                 />
-              </div>
+                <div className="absolute inset-0 bg-black/35" />
+              </motion.div>
 
-              {/* Navigation Chevrons */}
               <button
                 type="button"
                 aria-label="Previous Photo"
                 onClick={() =>
                   setActivePhotoIdx((prev) => (prev - 1 + momentsList.length) % momentsList.length)
                 }
-                className="absolute left-0 z-30 w-9 h-9 rounded-full bg-white/90 border border-[#eed57c] text-[#0b2135] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-md cursor-pointer"
+                className="absolute left-0 sm:left-1 z-30 w-9 h-9 rounded-full bg-black/85 border border-[#eed57c] text-[#eed57c] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-xl cursor-pointer"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
@@ -1132,24 +1024,23 @@ export default function MayuraPalaceTemplate({
                 type="button"
                 aria-label="Next Photo"
                 onClick={() => setActivePhotoIdx((prev) => (prev + 1) % momentsList.length)}
-                className="absolute right-0 z-30 w-9 h-9 rounded-full bg-white/90 border border-[#eed57c] text-[#0b2135] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-md cursor-pointer"
+                className="absolute right-0 sm:right-1 z-30 w-9 h-9 rounded-full bg-black/85 border border-[#eed57c] text-[#eed57c] flex items-center justify-center hover:bg-[#eed57c] hover:text-black transition shadow-xl cursor-pointer"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Pagination Dots */}
-            <div className="flex gap-2 justify-center mt-3.5">
+            <div className="flex gap-1.5 justify-center mt-4">
               {momentsList.map((_, idx) => (
                 <button
                   key={idx}
                   type="button"
                   aria-label={`Photo ${idx + 1}`}
                   onClick={() => setActivePhotoIdx(idx)}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                     activePhotoIdx === idx
-                      ? "w-5 bg-[#8a6314]"
-                      : "w-2 bg-[#8a6314]/30 hover:bg-[#8a6314]/60"
+                      ? "w-5 bg-[#eed57c]"
+                      : "w-1.5 bg-[#eed57c]/30 hover:bg-[#eed57c]/60"
                   }`}
                 />
               ))}
@@ -1158,171 +1049,205 @@ export default function MayuraPalaceTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 7. VENUE & DIRECTIONS: LAKESIDE MANDAP TERRACE FRAME                  */}
+        {/* 7. VENUE & GOOGLE MAPS: UNIFIED SINGLE CARD                            */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[720px] py-18 px-6 text-center flex flex-col items-center justify-center bg-cover bg-center overflow-hidden"
+          className="relative w-full min-h-[660px] text-center flex flex-col items-center justify-center px-4 py-12 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/mayura-palace/lakeside_mandap_terrace.jpg')",
           }}
         >
-          <SectionSeam />
-
-          
+          <SectionVignette />
+          <div className="absolute inset-0 bg-black/55 pointer-events-none" />
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[340px] flex flex-col items-center relative z-10"
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-15 w-full max-w-[330px] sm:max-w-[350px] flex flex-col items-center"
           >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#8a6314] uppercase font-bold mb-1 drop-shadow-sm">
-              THE VENUE
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              ✦ CEREMONY LOCATION ✦
             </span>
-            <h3 className="font-marcellus text-2xl sm:text-3xl text-[#0b2135] tracking-wide font-bold drop-shadow-sm">
-              Location &amp; Directions
-            </h3>
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mb-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+              Wedding Venue
+            </h2>
+            <MinimalGoldDivider className="mb-4 opacity-80" />
 
-            <MinimalGoldDivider className="my-3.5" />
+            {/* ONE SINGLE UNIFIED CARD */}
+            <div className="w-full rounded-2xl bg-[#09171f]/95 border-2 border-[#eed57c]/70 shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-4 flex flex-col items-center text-center relative overflow-hidden backdrop-blur-md">
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
 
-            <div className="w-full rounded-3xl overflow-hidden border-2 border-[#eed57c]/70 shadow-2xl bg-white/95 backdrop-blur-md mt-1">
-              <div className="w-full h-48">
-                {isPreview ? (
-                  <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-100 p-4">
-                    <MapPin className="w-7 h-7 text-[#8a6314] mb-1.5" />
-                    <span className="font-marcellus text-base text-[#0b2135] font-bold">
-                      {data.wedding_venue || "The Leela Palace Courtyard"}
-                    </span>
-                  </div>
-                ) : (
-                  <iframe
-                    title="Venue Map"
-                    src={mapEmbedUrl}
-                    className="w-full h-full border-0"
-                    loading="lazy"
-                    allowFullScreen
-                  />
-                )}
+              <h3 className="font-cinzel text-base sm:text-lg font-bold text-[#fff2b2] tracking-wide drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                {venueName}
+              </h3>
+
+              <p className="font-marcellus text-xs sm:text-[13px] text-[#faedd0]/90 mt-1 mb-3.5 leading-relaxed max-w-[280px]">
+                {venueAddress}
+              </p>
+
+              <div className="relative w-full h-48 sm:h-52 rounded-xl overflow-hidden border border-[#eed57c]/50 shadow-md bg-[#0a161c] mb-3.5">
+                <div className="absolute top-0 inset-x-0 z-10 px-3 py-1 flex items-center justify-between text-[10px] bg-black/85 backdrop-blur-md border-b border-[#eed57c]/30">
+                  <span className="font-cinzel tracking-wider uppercase font-semibold text-[#fff2b2] flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-[#eed57c]" />
+                    Interactive Map
+                  </span>
+                  <a
+                    href={gmapSearchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-cinzel tracking-wider uppercase font-semibold text-[#eed57c] hover:underline flex items-center gap-1"
+                  >
+                    <span>View Larger</span>
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </div>
+
+                <div className="w-full h-full pt-6">
+                  {isPreview ? (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-black/85 text-center p-3">
+                      <MapPin className="w-7 h-7 text-[#eed57c] mb-1.5 animate-bounce" />
+                      <span className="font-cinzel text-sm text-[#fff2b2] font-semibold line-clamp-1">
+                        {data.wedding_venue || "The Leela Palace Courtyard"}
+                      </span>
+                      <a
+                        href={gmapSearchUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 px-3 py-1 rounded-full bg-[#eed57c]/20 border border-[#eed57c]/60 text-[#eed57c] text-[9.5px] font-cinzel font-semibold uppercase tracking-widest hover:bg-[#eed57c] hover:text-black transition"
+                      >
+                        Open in Maps ↗
+                      </a>
+                    </div>
+                  ) : (
+                    <iframe
+                      title="Venue Map"
+                      src={mapEmbedUrl}
+                      className="w-full h-full border-0"
+                      loading="lazy"
+                      allowFullScreen
+                    />
+                  )}
+                </div>
               </div>
 
-              <div className="p-4 sm:p-5 flex flex-col items-center text-center">
-                <h4 className="font-marcellus text-base sm:text-lg font-bold text-[#0b2135]">
-                  {data.wedding_venue || "The Leela Palace Courtyard"}
-                </h4>
-                <p className="font-cormorant text-sm sm:text-base text-[#334155] mt-1 max-w-[260px] leading-relaxed">
-                  {data.wedding_venue || "Adyar Seaface, MRC Nagar, Chennai - 600028"}
-                </p>
-
-                <a
-                  href={gmapSearchUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#d4a325] via-[#eed57c] to-[#c59b27] text-[#0b2135] font-marcellus text-xs sm:text-sm font-bold uppercase tracking-wider hover:brightness-105 active:scale-98 transition shadow-md cursor-pointer"
-                >
-                  <Navigation className="w-3.5 h-3.5 fill-[#0b2135]" />
-                  <span>Get Directions</span>
-                </a>
-              </div>
+              <a
+                href={gmapSearchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#c59b27] text-[#1c0f05] font-cinzel text-xs font-bold uppercase tracking-wider hover:brightness-110 active:scale-98 transition shadow-[0_4px_15px_rgba(212,175,55,0.4)] cursor-pointer"
+              >
+                <Navigation className="w-3.5 h-3.5 fill-[#1c0f05]" />
+                <span>Get Directions</span>
+              </a>
             </div>
           </motion.div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 8. RSVP DESK + WHATSAPP SHARE OPTION (LIGHT BLUE HYDRANGEA TONE)      */}
+        {/* 8. BLESSINGS & RSVP: UNIFIED HIGH-CONTRAST CARD                        */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full py-18 px-6 text-center flex flex-col items-center justify-center overflow-hidden"
+          className="relative w-full min-h-[680px] text-center flex flex-col items-center justify-center px-4 py-12 bg-cover bg-center overflow-hidden"
           style={{
-            backgroundColor: "#d8e7f3",
-            backgroundImage: "radial-gradient(ellipse at top, #e4eff8 0%, #cee1f0 100%)",
+            backgroundImage: "radial-gradient(ellipse at bottom, #0e2733 0%, #051015 100%)",
           }}
         >
-          <SectionSeam />
-
+          <SectionVignette />
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[340px] flex flex-col items-center relative z-10"
+            initial={{ opacity: 0, y: 35, scale: 0.94 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-15 w-full max-w-[315px] sm:max-w-[335px] flex flex-col items-center"
           >
-            <span className="font-marcellus text-xs sm:text-[13px] tracking-[0.3em] text-[#8a6314] uppercase font-bold mb-1">
-              R. S. V. P.
-            </span>
-            <h3 className="font-marcellus text-2xl sm:text-3xl text-[#0b2135] tracking-wide font-bold">
-              Kindly Respond
-            </h3>
+            <div className="w-full rounded-2xl bg-[#09171f]/95 backdrop-blur-md border-2 border-[#d4af37]/75 shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-5 flex flex-col items-center text-center relative overflow-hidden">
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
 
-            <MinimalGoldDivider className="my-3.5" />
+              <span className="font-cinzel text-[10px] tracking-[0.24em] text-[#eed57c] uppercase font-bold">
+                ✦ WARM WISHES ✦
+              </span>
+              <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                Blessings &amp; RSVP
+              </h2>
+              <MinimalGoldDivider className="my-2 opacity-90" />
+              <p className="font-cormorant text-base sm:text-lg text-[#faedd0] mb-4 drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)] font-medium italic">
+                Please grace our celebration with your presence &amp; blessings
+              </p>
 
-            <div className="w-full rounded-3xl bg-white border-2 border-[#eed57c]/60 p-5 sm:p-6 flex flex-col items-center shadow-[0_16px_40px_rgba(11,33,53,0.1)]">
               {rsvpSaved ? (
-                <div className="py-4 text-center w-full">
-                  <div className="w-10 h-10 rounded-full bg-[#eed57c]/30 border border-[#b3811b] flex items-center justify-center mx-auto mb-2 text-[#8a6314]">
+                <div className="p-4 rounded-xl bg-black/75 border border-[#eed57c]/60 text-center w-full shadow-lg">
+                  <div className="w-10 h-10 rounded-full bg-[#eed57c]/20 border-2 border-[#eed57c] flex items-center justify-center mx-auto mb-2 text-[#eed57c] shadow-md">
                     <Check className="w-5 h-5 stroke-[3]" />
                   </div>
-                  <h4 className="font-marcellus text-base text-[#0b2135] font-bold uppercase tracking-wider">
-                    Thank You
+                  <h4 className="font-cinzel text-base text-[#fff2b2] uppercase tracking-wider font-bold">
+                    {rsvpStatus === "attending" ? "Thank You!" : "Response Received"}
                   </h4>
-                  <p className="font-cormorant text-sm sm:text-base text-[#334155] mt-1.5">
+                  <p className="font-cormorant text-sm sm:text-base text-[#faedd0] mt-1.5 leading-relaxed font-medium">
                     {rsvpStatus === "attending"
-                      ? "Your response has been recorded with joy."
-                      : "Thank you for sending your warm wishes."}
+                      ? "We eagerly look forward to celebrating with you and receiving your heartfelt blessings."
+                      : "Thank you for sending your warm wishes and blessings."}
                   </p>
                 </div>
               ) : (
-                <div className="w-full flex flex-col gap-3.5">
+                <div className="w-full flex flex-col items-center gap-3">
                   <div className="grid grid-cols-2 gap-2.5 w-full">
                     <button
                       type="button"
                       onClick={() => setRsvpStatus("attending")}
-                      className={`py-2.5 px-2 rounded-xl text-xs sm:text-sm font-marcellus uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
                         rsvpStatus === "attending"
-                          ? "bg-[#eed57c] text-[#0b2135] font-bold shadow-md"
-                          : "bg-zinc-50 text-[#0b2135] border border-zinc-200 hover:bg-zinc-100"
+                          ? "bg-gradient-to-r from-[#eed57c] to-[#c59a3f] text-[#1c0f05] border-2 border-white ring-2 ring-[#eed57c]/50 scale-[1.02]"
+                          : "bg-[#142630] text-[#faedd0] hover:bg-[#1d3542] border border-[#eed57c]/50"
                       }`}
                     >
-                      Attending
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                      <span>Attending</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setRsvpStatus("declined")}
-                      className={`py-2.5 px-2 rounded-xl text-xs sm:text-sm font-marcellus uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
                         rsvpStatus === "declined"
-                          ? "bg-[#fee2e2] text-[#991b1b] border border-[#f87171] font-bold shadow-md"
-                          : "bg-zinc-50 text-[#0b2135] border border-zinc-200 hover:bg-zinc-100"
+                          ? "bg-[#541217] text-[#ffe4e6] border-2 border-[#f87171] ring-2 ring-[#f87171]/40 scale-[1.02]"
+                          : "bg-[#142630] text-[#faedd0]/80 hover:bg-[#1d3542] border border-[#eed57c]/50"
                       }`}
                     >
-                      Declining
+                      <X className="w-3.5 h-3.5 stroke-[2.5]" />
+                      <span>Declining</span>
                     </button>
                   </div>
 
                   {rsvpStatus !== "none" && (
-                    <div className="w-full space-y-3 text-left mt-1">
+                    <motion.div
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="w-full space-y-3 text-left mt-1"
+                    >
                       <div>
-                        <label className="block text-xs tracking-[0.2em] font-marcellus text-[#8a6314] uppercase font-bold mb-1">
-                          Full Name
+                        <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#eed57c] uppercase font-bold mb-1">
+                          Guest / Family Name
                         </label>
                         <input
                           type="text"
                           value={guestName}
                           onChange={(e) => setGuestName(e.target.value)}
-                          placeholder="e.g. Mr. & Mrs. Sharma"
-                          className="w-full px-3 py-2 rounded-xl bg-[#f8fafc] border border-[#eed57c]/80 text-sm sm:text-base text-[#0b2135] placeholder-zinc-400 font-serif focus:outline-none focus:border-[#b3811b]"
+                          placeholder="e.g. Sundaram & Family"
+                          className="w-full px-3 py-2 rounded-xl bg-black/80 border-2 border-[#eed57c]/50 text-sm text-[#fff9e6] placeholder-[#faedd0]/50 font-cormorant focus:outline-none focus:border-[#eed57c] focus:ring-1 focus:ring-[#eed57c]"
                         />
                       </div>
 
                       {rsvpStatus === "attending" && (
                         <div>
-                          <label className="block text-xs tracking-[0.2em] font-marcellus text-[#8a6314] uppercase font-bold mb-1">
+                          <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#eed57c] uppercase font-bold mb-1">
                             Number of Guests
                           </label>
                           <select
                             value={guestCount}
                             onChange={(e) => setGuestCount(e.target.value)}
-                            className="w-full px-3 py-2 rounded-xl bg-[#f8fafc] border border-[#eed57c]/80 text-sm sm:text-base text-[#0b2135] font-serif focus:outline-none focus:border-[#b3811b]"
+                            className="w-full px-3 py-2 rounded-xl bg-[#0c1c24] border-2 border-[#eed57c]/50 text-sm text-[#fff9e6] font-cormorant focus:outline-none focus:border-[#eed57c]"
                           >
                             <option value="1">1 Guest</option>
                             <option value="2">2 Guests</option>
@@ -1335,100 +1260,87 @@ export default function MayuraPalaceTemplate({
                       <button
                         type="button"
                         onClick={() => setRsvpSaved(true)}
-                        className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#d4a325] via-[#eed57c] to-[#c59b27] text-[#0b2135] font-marcellus text-xs sm:text-sm uppercase font-bold tracking-[0.18em] hover:brightness-105 active:scale-98 transition shadow-md cursor-pointer mt-1"
+                        className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#eed57c] via-[#f5e6a8] to-[#c59a3f] text-[#1c0f05] font-cinzel text-xs uppercase font-bold tracking-[0.2em] hover:brightness-110 active:scale-98 transition shadow-[0_4px_16px_rgba(238,213,124,0.4)] cursor-pointer mt-1"
                       >
                         Confirm RSVP
                       </button>
-                    </div>
+                    </motion.div>
                   )}
 
-                  {data.rsvp_phone && (
-                    <div className="pt-2.5 border-t border-[#eed57c]/40 w-full flex items-center justify-center">
+                  {rsvpPhone && (
+                    <div className="pt-2 border-t border-[#eed57c]/30 w-full flex items-center justify-center">
                       <a
-                        href={`tel:${data.rsvp_phone.replace(/[^0-9+]/g, "")}`}
-                        className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-[#8a6314] font-bold hover:text-[#0b2135] transition"
+                        href={`tel:${rsvpPhone.replace(/[^0-9+]/g, "")}`}
+                        className="inline-flex items-center gap-1.5 text-xs text-[#eed57c] hover:text-[#fff2b2] font-semibold transition"
                       >
                         <Phone className="w-3.5 h-3.5" />
-                        <span>Contact: {data.rsvp_phone}</span>
+                        <span className="font-marcellus tracking-wider">RSVP Helpline: {rsvpPhone}</span>
                       </a>
                     </div>
                   )}
                 </div>
               )}
             </div>
-
-            {/* Share Invitation Button */}
-            <button
-              type="button"
-              onClick={handleShare}
-              className="mt-4 px-5 py-2.5 rounded-full bg-white border border-[#eed57c] text-[#0b2135] text-xs tracking-[0.18em] uppercase font-marcellus font-bold hover:bg-zinc-50 active:scale-95 transition-all shadow-sm cursor-pointer flex items-center gap-1.5"
-            >
-              <Share2 className="w-3.5 h-3.5 text-[#8a6314]" />
-              <span>Share Invitation</span>
-            </button>
           </motion.div>
         </section>
 
         {/* ===================================================================== */}
-        {/* 9. ROYAL BLESSINGS & GIFT NOTE FOOTER (END OF TEMPLATE WITH FLOWERS)  */}
+        {/* 9. FOOTER & SIGN-OFF: WITH PALACE BACKGROUND & COUPLE PORTRAIT        */}
         {/* ===================================================================== */}
-        <footer className="relative w-full pt-16 pb-8 px-4 text-center flex flex-col items-center justify-center bg-[#fdfefe] overflow-hidden">
-          {/* Blue Flower Garlands on Sides */}
-          <SideBlueFloralFlourish side="left" className="top-8" />
-          <SideBlueFloralFlourish side="right" className="top-8" />
+        <footer
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-4 bg-cover bg-center overflow-hidden"
+          style={{
+            backgroundImage: "url('/images/mayura-palace/blue_hydrangea_arch.jpg')",
+          }}
+        >
+          <SectionVignette hasSeam={false} />
+          <div className="absolute inset-0 bg-black/55 pointer-events-none" />
 
           <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[340px] flex flex-col items-center relative z-10"
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-15 w-full max-w-[325px] flex flex-col items-center px-4 py-7 rounded-3xl bg-black/75 backdrop-blur-md border border-[#eed57c]/50 shadow-[0_16px_50px_rgba(0,0,0,0.9)]"
           >
-            {/* Blessings Note */}
-            <div className="flex items-center justify-center gap-1.5 text-xs tracking-widest text-[#8a6314] uppercase font-marcellus mb-2 font-bold">
-              <Gift className="w-3.5 h-3.5 text-[#8a6314]" />
-              <span>GIFT OF BLESSINGS</span>
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-[#eed57c] shadow-[0_8px_25px_rgba(0,0,0,0.85)] mb-3 p-1 bg-gradient-to-tr from-[#d4af37] via-[#fff2b2] to-[#8f6018]">
+              <div className="w-full h-full rounded-full overflow-hidden bg-black">
+                <img
+                  src={momentsList[0] || "/images/mayura-palace/hero_peacock_arch.jpg"}
+                  alt={`${bride} & ${groom}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
-            <p className="font-cormorant italic text-sm sm:text-base text-[#475569] mb-5 max-w-[280px] leading-relaxed">
-              Your love, presence, and heartfelt prayers are the greatest gift we could ever receive.
-            </p>
 
-            <span className="font-cormorant italic text-base sm:text-lg text-[#8a6314] block mb-1">
-              With love and gratitude,
+            <span className="font-cinzel text-xs sm:text-sm tracking-[0.26em] text-[#eed57c] block mb-1 uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              LOVE • TRADITION • ETERNITY
             </span>
-
-            <h4 className="font-great-vibes text-5xl sm:text-6xl text-[#0b2135] tracking-wide leading-tight">
+            <h4 className="font-great-vibes text-4xl sm:text-5xl text-[#fff9e6] drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)] tracking-wide leading-tight">
               {bride} &amp; {groom}
             </h4>
 
-            <div className="flex items-center justify-center gap-2 my-2.5 text-[#b3811b]">
-              <div className="w-10 h-[1px] bg-current" />
-              <Heart className="w-3.5 h-3.5 fill-current text-[#b3811b]" />
-              <div className="w-10 h-[1px] bg-current" />
+            <div className="flex items-center justify-center gap-2 my-2 text-[#eed57c]">
+              <div className="w-10 h-[1px] bg-current opacity-80" />
+              <Heart className="w-3.5 h-3.5 fill-current" />
+              <div className="w-10 h-[1px] bg-current opacity-80" />
             </div>
 
-            {data.family_names && (
-              <p className="font-marcellus text-xs sm:text-sm tracking-[0.2em] text-[#334155] uppercase font-bold mt-1">
-                {data.family_names}
+            {familyNames && (
+              <p className="font-marcellus text-xs sm:text-sm tracking-[0.14em] text-[#faedd0] font-semibold my-1 text-center drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] leading-relaxed uppercase">
+                Warmly Invited By: {familyNames}
               </p>
             )}
+
+            <div className="mt-3 flex justify-center w-full">
+              <div className="rounded-full bg-black/85 backdrop-blur-md border border-[#eed57c]/60 shadow-xl hover:border-[#eed57c] hover:bg-black transition-all hover:scale-105 active:scale-95">
+                <CreatedByVarnam
+                  theme="gold"
+                  className="py-1 px-4 text-[#fff2b2] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]"
+                />
+              </div>
+            </div>
           </motion.div>
-
-          {/* Bottom Blooming Blue Hydrangea & Garden Rose Garland (End of Template) */}
-          <div className="w-full max-w-[420px] px-2 mt-6 -mb-1 pointer-events-none select-none overflow-hidden flex justify-center">
-            <img
-              src="/images/mayura-palace/blue_floral_bottom_border.jpg"
-              alt="Blue floral bottom border"
-              className="w-full h-auto object-contain mix-blend-multiply drop-shadow-xs"
-            />
-          </div>
-
-          <div className="mt-5 flex justify-center w-full relative z-10">
-            <CreatedByVarnam
-              theme="gold"
-              className="py-1 px-4 text-[#8a6314] hover:text-[#b3811b]"
-            />
-          </div>
         </footer>
       </div>
     </div>

@@ -81,6 +81,53 @@ export interface TemplateDefinition {
 
 export const TEMPLATES: TemplateDefinition[] = [
   {
+    slug: "rose-classic",
+    name: "Rose Classic",
+    description:
+      "Regal romance classic wedding invitation featuring grand chandelier floral archway, delicate blush roses, gold foil scratch-to-reveal card, and antique parchment program.",
+    category: "Classic",
+    religion: "",
+    language: "",
+    price: 999,
+    thumbnailUrl: "/images/rose-classic/hero.jpg",
+    previewMusicUrl:
+      "https://archive.org/download/r-12356661-1632393571-2601/01.%20Raag%20Bhimpalasi%20-%20Teen%20Taal.mp3",
+    fields: [
+      { id: "bride_name", label: "Bride Name", type: "text", placeholder: "Ananya", required: true },
+      { id: "groom_name", label: "Groom Name", type: "text", placeholder: "Siddharth", required: true },
+      { id: "wedding_date", label: "Wedding Date & Time", type: "datetime", required: true },
+      {
+        id: "wedding_venue",
+        label: "Wedding Venue",
+        type: "textarea",
+        placeholder: "The Leela Palace Courtyard, Adyar Seaface, MRC Nagar, Chennai - 600028",
+        required: true,
+      },
+      {
+        id: "quote",
+        label: "Wedding Verse / Quote",
+        type: "text",
+        placeholder: "Two souls united amidst sacred blessings and timeless traditions, embarking on an eternal auspicious journey together.",
+        required: false,
+      },
+      {
+        id: "family_names",
+        label: "Welcoming Families",
+        type: "text",
+        placeholder: "The Sundararajan & Ranganathan Families",
+        required: false,
+      },
+      { id: "rsvp_phone", label: "RSVP Contact", type: "text", placeholder: "+91 98401 23456", required: true },
+      {
+        id: "custom_message",
+        label: "Ceremonial Note",
+        type: "textarea",
+        placeholder: "We seek your gracious presence and heartfelt blessings on our special day.",
+        required: false,
+      },
+    ],
+  },
+  {
     slug: "red-classic",
     name: "Red Classic",
     description:
@@ -557,6 +604,9 @@ export const getTemplateBySlug = (slug: string): TemplateDefinition | undefined 
   if (!t) {
     const legacyAliases: Record<string, string> = {
       "royal-classic": "red-classic",
+      "classic-rose": "rose-classic",
+      "swarna-rose": "rose-classic",
+      "blush-classic": "rose-classic",
       "swarna-classic": "red-classic",
       "vinayaka-classic": "red-classic",
       "ganesha-classic": "red-classic",

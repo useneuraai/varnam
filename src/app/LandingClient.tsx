@@ -66,6 +66,10 @@ const getCardStyles = (offset: number, isMobile: boolean) => {
 
 const getCoupleName = (slug: string) => {
   switch (slug) {
+    case "rose-classic":
+    case "classic-rose":
+    case "swarna-rose":
+    case "blush-classic":
     case "red-classic":
     case "royal-classic":
     case "swarna-classic":
@@ -101,6 +105,11 @@ const getCoupleName = (slug: string) => {
 
 const getCategoryName = (template: any) => {
   switch (template.slug) {
+    case "rose-classic":
+    case "classic-rose":
+    case "swarna-rose":
+    case "blush-classic":
+      return "Royal Rose Romance";
     case "red-classic":
     case "royal-classic":
     case "swarna-classic":

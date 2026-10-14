@@ -222,7 +222,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     ],
   },
   {
-    slug: "mayura-palace",
+    slug: "palace-garden",
     name: "Palace Garden",
     description:
       "Regal palace garden wedding invitation featuring carved marble jharokha, blue hydrangeas, crystal chandelier, and royal peacock motifs.",
@@ -269,7 +269,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     ],
   },
   {
-    slug: "kamalam-kalyanam",
+    slug: "crimson-red",
     name: "Crimson Red",
     description:
       "Minimalist royal crimson wedding invitation framed with golden lotus archway, elegant typography, and smooth scroll motion.",
@@ -316,7 +316,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     ],
   },
   {
-    slug: "theertha-mandapam",
+    slug: "lotus-swans",
     name: "Lotus & Swans",
     description:
       "Serene sacred water wedding invitation adorned with royal swans, floating lotus blossoms, and traditional hanging bells.",
@@ -363,7 +363,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     ],
   },
   {
-    slug: "marigold-vizha",
+    slug: "marigold-festive",
     name: "Marigold Festive",
     description:
       "Joyous celebration adorned with cascading marigold garlands, peacock archway motifs, and glowing terracotta lamps.",
@@ -410,7 +410,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     ],
   },
   {
-    slug: "kadhal-editorial",
+    slug: "classical-gold",
     name: "Classical Gold",
     description:
       "Graceful classical wedding invitation adorned with royal gold filigree archway, divine Veena and Mridangam melodies.",
@@ -457,7 +457,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     ],
   },
   {
-    slug: "kovil-thirumanam",
+    slug: "temple-heritage",
     name: "Temple Heritage",
     description:
       "Grand temple wedding invitation featuring carved stone architecture, sacred oil lamps, and cinematic gold foil reveal.",
@@ -504,7 +504,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     ],
   },
   {
-    slug: "kalyana-mandapam",
+    slug: "royal-palace",
     name: "Royal Palace",
     description:
       "Palace mandapam wedding invitation with carved heritage pillars, traditional scroll timeline, and gold filigree animations.",
@@ -551,7 +551,7 @@ export const TEMPLATES: TemplateDefinition[] = [
     ],
   },
   {
-    slug: "konaseema-kalyanam",
+    slug: "heritage-courtyard",
     name: "Heritage Courtyard",
     description:
       "River heritage wedding invitation featuring ancestral wooden doorway reveal, brass deepams, and festive courtyard celebration.",
@@ -603,6 +603,17 @@ export const getTemplateBySlug = (slug: string): TemplateDefinition | undefined 
   let t = TEMPLATES.find((tpl) => tpl.slug === slug);
   if (!t) {
     const legacyAliases: Record<string, string> = {
+      // Primary redirects from old names to new template slugs
+      "kadhal-editorial": "classical-gold",
+      "kalyana-mandapam": "royal-palace",
+      "konaseema-kalyanam": "heritage-courtyard",
+      "kovil-thirumanam": "temple-heritage",
+      "mayura-palace": "palace-garden",
+      "theertha-mandapam": "lotus-swans",
+      "kamalam-kalyanam": "crimson-red",
+      "marigold-vizha": "marigold-festive",
+
+      // Historical name aliases & variants
       "royal-classic": "red-classic",
       "classic-rose": "rose-classic",
       "swarna-rose": "rose-classic",
@@ -612,44 +623,36 @@ export const getTemplateBySlug = (slug: string): TemplateDefinition | undefined 
       "ganesha-classic": "red-classic",
       "shubha-classic": "red-classic",
       "classic-royal": "red-classic",
-      "palace-garden": "mayura-palace",
-      "royal-garden": "mayura-palace",
-      "mayura-mandapam": "mayura-palace",
+      "royal-garden": "palace-garden",
+      "mayura-mandapam": "palace-garden",
       "peacock-classic": "mayura-classic",
-      "crimson-red": "kamalam-kalyanam",
-      "temple-heritage": "kovil-thirumanam",
-      "royal-palace": "kalyana-mandapam",
-      "heritage-courtyard": "konaseema-kalyanam",
-      "lotus-swans": "theertha-mandapam",
-      "marigold-festive": "marigold-vizha",
-      "classical-gold": "kadhal-editorial",
-      thiruvizha: "marigold-vizha",
-      vizha: "marigold-vizha",
-      kamalam: "kamalam-kalyanam",
-      padmam: "kamalam-kalyanam",
-      "padma-kalyanam": "kamalam-kalyanam",
-      "radha-krishna": "kamalam-kalyanam",
-      manamagan: "theertha-mandapam",
-      "malligai-manam": "theertha-mandapam",
-      mangalam: "kovil-thirumanam",
-      kadhal: "kadhal-editorial",
-      "thanjavur-heritage": "kadhal-editorial",
-      "chettinad-rajamaligai": "marigold-vizha",
-      "chettinad-vintage": "marigold-vizha",
-      "jasmine-romance": "theertha-mandapam",
-      "temple-grandeur": "kovil-thirumanam",
-      "modern-tamil-minimal": "kadhal-editorial",
-      gopuram: "kadhal-editorial",
-      koyil: "kovil-thirumanam",
-      "royal-tamil": "kovil-thirumanam",
-      "temple-gold": "kovil-thirumanam",
-      "traditional-red": "kalyana-mandapam",
-      "floral-luxury": "theertha-mandapam",
-      "modern-minimal": "kadhal-editorial",
-      "royal-heritage": "marigold-vizha",
-      "elegant-muslim": "kalyana-mandapam",
-      "modern-christian": "kalyana-mandapam",
-      "luxury-floral": "theertha-mandapam",
+      thiruvizha: "marigold-festive",
+      vizha: "marigold-festive",
+      kamalam: "crimson-red",
+      padmam: "crimson-red",
+      "padma-kalyanam": "crimson-red",
+      "radha-krishna": "crimson-red",
+      manamagan: "lotus-swans",
+      "malligai-manam": "lotus-swans",
+      mangalam: "temple-heritage",
+      kadhal: "classical-gold",
+      "thanjavur-heritage": "classical-gold",
+      "chettinad-rajamaligai": "marigold-festive",
+      "chettinad-vintage": "marigold-festive",
+      "jasmine-romance": "lotus-swans",
+      "temple-grandeur": "temple-heritage",
+      "modern-tamil-minimal": "classical-gold",
+      gopuram: "classical-gold",
+      koyil: "temple-heritage",
+      "royal-tamil": "temple-heritage",
+      "temple-gold": "temple-heritage",
+      "traditional-red": "royal-palace",
+      "floral-luxury": "lotus-swans",
+      "modern-minimal": "classical-gold",
+      "royal-heritage": "temple-heritage",
+      "elegant-muslim": "royal-palace",
+      "modern-christian": "royal-palace",
+      "luxury-floral": "lotus-swans",
     };
     const targetSlug = legacyAliases[slug];
     if (targetSlug) {

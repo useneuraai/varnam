@@ -4,7 +4,7 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/",
+      allow: ["/", "/templates", "/login", "/about", "/contact"],
       disallow: ["/admin/", "/dashboard/", "/editor/", "/api/", "/success/", "/invite/"],
     },
     sitemap: "https://www.varnaminvites.store/sitemap.xml",

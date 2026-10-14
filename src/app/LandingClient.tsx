@@ -81,20 +81,27 @@ const getCoupleName = (slug: string) => {
     case "mayura-palace":
     case "palace-garden":
       return "Ananya & Siddharth";
+    case "crimson-red":
     case "kamalam-kalyanam":
       return "Meenakshi & Sundar";
+    case "temple-heritage":
     case "kovil-thirumanam":
       return "Sriya & Karthik";
+    case "royal-palace":
     case "kalyana-mandapam":
       return "Nila & Aravind";
+    case "heritage-courtyard":
     case "konaseema-kalyanam":
       return "Tejaswi & Aditya";
+    case "lotus-swans":
     case "theertha-mandapam":
     case "malligai-manam":
       return "Eleanor & Alexander";
+    case "marigold-festive":
     case "marigold-vizha":
     case "chettinad-rajamaligai":
       return "Victoria & Julian";
+    case "classical-gold":
     case "kadhal-editorial":
     case "thanjavur-heritage":
       return "Clara & Sebastian";
@@ -123,20 +130,27 @@ const getCategoryName = (template: any) => {
     case "mayura-palace":
     case "palace-garden":
       return "Royal Garden & Peacock";
+    case "crimson-red":
     case "kamalam-kalyanam":
       return "Royal Lotus & Crimson";
+    case "temple-heritage":
     case "kovil-thirumanam":
       return "Temple Mandapam";
+    case "royal-palace":
     case "kalyana-mandapam":
       return "Palace Mandapam";
+    case "heritage-courtyard":
     case "konaseema-kalyanam":
       return "River Heritage";
+    case "lotus-swans":
     case "theertha-mandapam":
     case "malligai-manam":
       return "Royal Swan & Lotus";
+    case "marigold-festive":
     case "marigold-vizha":
     case "chettinad-rajamaligai":
       return "Marigold Celebration";
+    case "classical-gold":
     case "kadhal-editorial":
     case "thanjavur-heritage":
       return "Classical Melodies";
@@ -879,7 +893,7 @@ export default function LandingClient() {
               <Link href="/about" className="hover:text-zinc-950 transition-colors">ABOUT</Link>
               <Link href="/contact" className="hover:text-zinc-950 transition-colors">CONTACT</Link>
               <a
-                href="https://www.instagram.com/varnaminvites"
+                href="https://www.instagram.com/varnam_invites"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-zinc-950 transition-colors"

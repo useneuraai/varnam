@@ -83,15 +83,7 @@ export default function LiveTemplatePreview({ slug, autoScroll = false }: { slug
     };
   }, [slug, autoScroll, mounted]);
 
-  if (!mounted) {
-    return (
-      <div className="w-full h-full bg-zinc-50 flex items-center justify-center">
-        <div className="w-6 h-6 rounded-full border-2 border-zinc-200 border-t-[#eed57c] animate-spin" />
-      </div>
-    );
-  }
-
-  // Ultra-fast optimized image preview for static thumbnail cards
+  // Ultra-fast optimized image preview for static thumbnail cards (Server-rendered for SEO & crawlers)
   if (!autoScroll) {
     const template = TEMPLATES.find((t) => t.slug === slug);
     return (
@@ -104,6 +96,14 @@ export default function LiveTemplatePreview({ slug, autoScroll = false }: { slug
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out select-none will-change-transform"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+      </div>
+    );
+  }
+
+  if (!mounted) {
+    return (
+      <div className="w-full h-full bg-zinc-50 flex items-center justify-center">
+        <div className="w-6 h-6 rounded-full border-2 border-zinc-200 border-t-[#eed57c] animate-spin" />
       </div>
     );
   }

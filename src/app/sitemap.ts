@@ -51,8 +51,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${baseUrl}/login`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.4,
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
   ];
 
@@ -61,7 +61,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${baseUrl}/templates/${tpl.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
-    priority: 0.8,
+    priority: 0.9,
   }));
 
   return [...staticRoutes, ...templateRoutes];

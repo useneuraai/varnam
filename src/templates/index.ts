@@ -7,8 +7,8 @@ export const templatesMap: Record<
   ComponentType<{ data: TemplateData; isPreview?: boolean }>
 > = {
   // The Definitive Premier 3D Animated Templates
-  "mayura-palace": dynamic(() => import("./mayura-palace/Template")),
   "palace-garden": dynamic(() => import("./mayura-palace/Template")),
+  "mayura-palace": dynamic(() => import("./mayura-palace/Template")),
   "royal-garden": dynamic(() => import("./mayura-palace/Template")),
   "mayura-mandapam": dynamic(() => import("./mayura-palace/Template")),
   "red-classic": dynamic(() => import("./red-classic/Template")),
@@ -23,14 +23,21 @@ export const templatesMap: Record<
   "shubha-classic": dynamic(() => import("./royal-classic/Template")),
   "mayura-classic": dynamic(() => import("./mayura-classic/Template")),
   "peacock-classic": dynamic(() => import("./mayura-classic/Template")),
+  "crimson-red": dynamic(() => import("./kamalam-kalyanam/Template")),
   "kamalam-kalyanam": dynamic(() => import("./kamalam-kalyanam/Template")),
+  "temple-heritage": dynamic(() => import("./kovil-thirumanam/Template")),
   "kovil-thirumanam": dynamic(() => import("./kovil-thirumanam/Template")),
+  "royal-palace": dynamic(() => import("./kalyana-mandapam/Template")),
   "kalyana-mandapam": dynamic(() => import("./kalyana-mandapam/Template")),
+  "heritage-courtyard": dynamic(() => import("./konaseema-kalyanam/Template")),
   "konaseema-kalyanam": dynamic(() => import("./konaseema-kalyanam/Template")),
+  "lotus-swans": dynamic(() => import("./theertha-mandapam/Template")),
   "theertha-mandapam": dynamic(() => import("./theertha-mandapam/Template")),
   "malligai-manam": dynamic(() => import("./theertha-mandapam/Template")),
+  "marigold-festive": dynamic(() => import("./marigold-vizha/Template")),
   "marigold-vizha": dynamic(() => import("./marigold-vizha/Template")),
   "chettinad-rajamaligai": dynamic(() => import("./marigold-vizha/Template")),
+  "classical-gold": dynamic(() => import("./kadhal-editorial/Template")),
   "kadhal-editorial": dynamic(() => import("./kadhal-editorial/Template")),
   "thanjavur-heritage": dynamic(() => import("./kadhal-editorial/Template")),
 

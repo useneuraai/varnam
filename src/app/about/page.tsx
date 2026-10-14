@@ -5,6 +5,13 @@ export const metadata = {
   title: "About Us | Varnam Invites",
   description:
     "Learn about Varnam Invites, our mission to create ultra-premium, interactive, and cinematic digital wedding invitation websites for modern couples.",
+  alternates: {
+    canonical: "https://www.varnaminvites.store/about",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function AboutPage() {

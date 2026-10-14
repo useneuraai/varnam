@@ -13,8 +13,8 @@ export default async function AdminDashboard() {
   const totalInvites = invitations.length;
   
   // Sum up revenue from actual payments or fallback to calculated
-  const recordedRevenue = payments.reduce((acc, p) => acc + (Number(p.amount) || 0), 0);
-  const totalRevenue = recordedRevenue > 0 ? recordedRevenue : invitations.reduce((acc, inv) => {
+  const recordedRevenue = payments.reduce((acc: number, p: any) => acc + (Number(p.amount_inr || p.amount) || 0), 0);
+  const totalRevenue = recordedRevenue > 0 ? recordedRevenue : invitations.reduce((acc: number, inv: any) => {
     const template = TEMPLATES.find((t) => t.slug === inv.template_slug);
     const price = template ? template.price : 999;
     return acc + price;
@@ -24,7 +24,7 @@ export default async function AdminDashboard() {
 
   // Calculate template stats
   const templateUsage: Record<string, number> = {};
-  invitations.forEach((inv) => {
+  invitations.forEach((inv: any) => {
     templateUsage[inv.template_slug] = (templateUsage[inv.template_slug] || 0) + 1;
   });
 

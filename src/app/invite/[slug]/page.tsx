@@ -55,7 +55,8 @@ export default async function InvitePage({ params }: PageProps) {
 
   const invitation = await getInvitationBySlug(slug);
 
-  if (!invitation) {
+  // Gating check: Must be published, paid, and not deleted
+  if (!invitation || invitation.status !== "published" || !invitation.is_paid || invitation.deleted_at) {
     return (
       <div className="min-h-screen bg-[#080708] text-[#fbf6df] flex flex-col items-center justify-center p-6 text-center select-none border-4 border-double border-gold-600/20">
         {/* Ornate border accents */}

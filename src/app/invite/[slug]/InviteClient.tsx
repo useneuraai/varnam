@@ -31,7 +31,7 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
   const fetchWishes = async () => {
     try {
       setIsLoadingWishes(true);
-      const res = await fetch(`/api/rsvps?slug=${invitation.slug}`);
+      const res = await fetch(`/api/wishes?slug=${invitation.slug}`);
       if (res.ok) {
         const data = await res.json();
         setWishesList(data);

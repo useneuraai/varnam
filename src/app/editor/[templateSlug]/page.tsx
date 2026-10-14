@@ -83,6 +83,8 @@ function EditorPageContent() {
   const [error, setError] = useState<string | null>(null);
   const [draftSlug, setDraftSlug] = useState<string | null>(null);
   const [isAutosaving, setIsAutosaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"saving" | "saved" | "error">("saved");
+  const [currentRevision, setCurrentRevision] = useState<number>(1);
   const [activeMobileView, setActiveMobileView] = useState<"form" | "preview">("form");
 
   useEffect(() => {
@@ -273,11 +275,11 @@ function EditorPageContent() {
     }
   }, [templateSlug, editSlug]);
 
-  // Debounced autosave to database (if authenticated)
+  // Debounced autosave to database (500–1000ms debounce per spec)
   useEffect(() => {
     if (!user || !formData || isArchived) return;
 
-    // Check if the form is empty / just initialized
+    // Check if the form is empty / uninitialized
     if (!formData.bride_name && !formData.groom_name && !formData.wedding_venue) {
       return;
     }
@@ -285,6 +287,7 @@ function EditorPageContent() {
     const saveDraft = async () => {
       try {
         setIsAutosaving(true);
+        setSaveStatus("saving");
         const { data: { session } } = await supabase.auth.getSession();
         const headers: Record<string, string> = { "Content-Type": "application/json" };
         if (session) {
@@ -292,13 +295,21 @@ function EditorPageContent() {
         }
 
         if (isEditMode && (editSlug || draftSlug)) {
-          // Update existing
+          // Update existing draft with revision check
           const slugToUse = editSlug || draftSlug;
-          await fetch(`/api/invitations/${slugToUse}`, {
+          const res = await fetch(`/api/invitations/${slugToUse}`, {
             method: "PUT",
             headers,
-            body: JSON.stringify({ formData }),
+            body: JSON.stringify({ formData, revision: currentRevision }),
           });
+
+          if (!res.ok) {
+            setSaveStatus("error");
+          } else {
+            const data = await res.json();
+            if (data.revision) setCurrentRevision(data.revision);
+            setSaveStatus("saved");
+          }
         } else {
           let activeSlug = draftSlug;
           if (!activeSlug) {
@@ -306,7 +317,6 @@ function EditorPageContent() {
             activeSlug = randomStr;
             setDraftSlug(activeSlug);
             
-            // Update URL query parameter dynamically
             const newUrl = `${window.location.pathname}?edit=${activeSlug}`;
             window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, "", newUrl);
           }
@@ -318,25 +328,32 @@ function EditorPageContent() {
               slug: activeSlug,
               templateSlug: templateSlug,
               formData,
+              revision: currentRevision,
             }),
           });
           if (res.ok) {
+            const data = await res.json();
+            if (data.revision) setCurrentRevision(data.revision);
             setIsEditMode(true);
+            setSaveStatus("saved");
+          } else {
+            setSaveStatus("error");
           }
         }
-        setIsAutosaving(false);
       } catch (err) {
         console.error("Autosave error:", err);
+        setSaveStatus("error");
+      } finally {
         setIsAutosaving(false);
       }
     };
 
     const timer = setTimeout(() => {
       saveDraft();
-    }, 2000);
+    }, 800); // 800ms debounce
 
     return () => clearTimeout(timer);
-  }, [formData, user, templateSlug, isArchived]);
+  }, [formData, user, templateSlug, isArchived, currentRevision]);
 
   // Load Google Maps script dynamically (only if API key is present)
   useEffect(() => {
@@ -522,21 +539,60 @@ function EditorPageContent() {
     }
   };
 
-  // Helper for file to Base64 conversion
-  const handleFileUpload = (fieldId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+  // Asset upload with Supabase Storage integration
+  const handleFileUpload = async (fieldId: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 2.5 * 1024 * 1024) {
-      alert("Warning: Local file size is large. Files under 2MB are recommended for optimal load speed.");
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File size exceeds 5MB limit. Please upload a smaller image.");
+      return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const base64 = event.target?.result as string;
-      handleInputChange(fieldId, base64);
-    };
-    reader.readAsDataURL(file);
+    try {
+      setIsAutosaving(true);
+      setSaveStatus("saving");
+      const { data: { session } } = await supabase.auth.getSession();
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
+
+      const headers: Record<string, string> = {};
+      if (session?.access_token) {
+        headers["Authorization"] = `Bearer ${session.access_token}`;
+      }
+
+      const res = await fetch("/api/media/upload", {
+        method: "POST",
+        headers,
+        body: uploadFormData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.url) {
+          handleInputChange(fieldId, data.url);
+          setSaveStatus("saved");
+        }
+      } else {
+        // Fallback to base64 if storage is not yet configured
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64 = event.target?.result as string;
+          handleInputChange(fieldId, base64);
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (err) {
+      console.error("Upload failed, falling back to local base64:", err);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64 = event.target?.result as string;
+        handleInputChange(fieldId, base64);
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setIsAutosaving(false);
+    }
   };
 
   const handlePayment = async (e: React.FormEvent) => {
@@ -558,6 +614,7 @@ function EditorPageContent() {
     setIsSubmitting(true);
     setError(null);
 
+    // If already in edit mode for an existing paid invitation, save and redirect
     if (isEditMode && editSlug) {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -569,7 +626,7 @@ function EditorPageContent() {
         const response = await fetch(`/api/invitations/${editSlug}`, {
           method: "PUT",
           headers,
-          body: JSON.stringify({ formData }),
+          body: JSON.stringify({ formData, revision: currentRevision }),
         });
 
         if (!response.ok) {
@@ -578,26 +635,112 @@ function EditorPageContent() {
         }
 
         router.push(`/success/${editSlug}?mode=edit`);
+        return;
       } catch (err: any) {
         console.error(err);
         setError(err.message || "An unexpected error occurred during save.");
         setIsSubmitting(false);
+        return;
       }
-      return;
     }
-    setError(null);
 
     try {
-      // Direct dummy checkout - bypass Razorpay completely to verify flows easily
-      const randomStr = Math.random().toString(36).substring(2, 9);
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (session) {
+        headers["Authorization"] = `Bearer ${session.access_token}`;
+      }
+
+      // 1. Create order on server with trusted template price
+      const orderRes = await fetch("/api/payments/order", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          templateSlug: template.slug,
+          invitationSlug: editSlug || draftSlug,
+        }),
+      });
+
+      if (!orderRes.ok) {
+        const errData = await orderRes.json();
+        throw new Error(errData.message || "Failed to initialize payment order.");
+      }
+
+      const orderData = await orderRes.json();
+
+      // 2. If live Razorpay checkout is available on client
+      if (
+        typeof window !== "undefined" &&
+        (window as any).Razorpay &&
+        orderData.key &&
+        !orderData.mock &&
+        !orderData.id.startsWith("order_mock_")
+      ) {
+        const options = {
+          key: orderData.key,
+          amount: orderData.amount,
+          currency: orderData.currency || "INR",
+          name: "Varnam Invites",
+          description: `${template.name} Digital Wedding Invitation`,
+          order_id: orderData.id,
+          prefill: {
+            name: user?.user_metadata?.full_name || "",
+            email: user?.email || "",
+          },
+          theme: {
+            color: "#b3811b",
+          },
+          handler: async function (response: any) {
+            try {
+              const verifyResponse = await fetch("/api/payments/verify", {
+                method: "POST",
+                headers,
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  formData,
+                  templateSlug: template.slug,
+                  userId: user?.id,
+                  existingSlug: editSlug || draftSlug,
+                }),
+              });
+
+              if (!verifyResponse.ok) {
+                const err = await verifyResponse.json();
+                throw new Error(err.message || "Payment verification failed.");
+              }
+
+              const verifyResult = await verifyResponse.json();
+              router.push(`/success/${verifyResult.slug}`);
+            } catch (err: any) {
+              console.error(err);
+              setError(err.message || "Verification failed after payment.");
+              setIsSubmitting(false);
+            }
+          },
+          modal: {
+            ondismiss: function () {
+              setIsSubmitting(false);
+            },
+          },
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+        return;
+      }
+
+      // Mock Mode Fallback (when credentials are not yet configured)
+      console.log("[CHECKOUT] Using mock payment flow for order:", orderData.id);
       const verifyResponse = await fetch("/api/payments/verify", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
-          razorpay_order_id: `order_mock_${randomStr}`,
-          razorpay_payment_id: `pay_mock_${randomStr}`,
+          razorpay_order_id: orderData.id,
+          razorpay_payment_id: `pay_mock_${Date.now()}`,
           razorpay_signature: "mock_signature",
-          formData: formData,
+          formData,
           templateSlug: template.slug,
           userId: user?.id,
           existingSlug: editSlug || draftSlug,
@@ -648,10 +791,15 @@ function EditorPageContent() {
                 CUSTOMIZING: {template.name}
               </span>
               <span className="text-[9px] text-[#8a725d]/40 font-montserrat">•</span>
-              {isAutosaving ? (
+              {saveStatus === "saving" ? (
                 <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider animate-pulse flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 animate-ping" />
                   Saving...
+                </span>
+              ) : saveStatus === "error" ? (
+                <span className="text-[9px] text-rose-500 font-bold uppercase tracking-wider flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                  Save failed
                 </span>
               ) : (
                 <span className="text-[9px] text-[#b3811b] font-bold uppercase tracking-wider flex items-center gap-1">

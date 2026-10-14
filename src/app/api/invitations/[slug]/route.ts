@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getInvitationBySlug, updateInvitation, deleteInvitation } from "@/lib/db";
+import { getInvitationBySlug, getPublicInvitationBySlug, updateInvitation, deleteInvitation } from "@/lib/db";
 import { getUserIdFromAuthHeader } from "@/lib/auth";
+import { isSupabaseConfigured } from "@/lib/supabase";
 
 export async function GET(
   req: NextRequest,
@@ -9,13 +10,41 @@ export async function GET(
   try {
     const params = await props.params;
     const slug = params.slug;
-    const invitation = await getInvitationBySlug(slug);
 
-    if (!invitation) {
+    // Check if caller provides authentication
+    const authHeader = req.headers.get("Authorization");
+    let userId = await getUserIdFromAuthHeader(authHeader);
+    if (!userId && !isSupabaseConfigured) {
+      // In offline mock mode without auth header, allow mock user if set
+      if (authHeader === "Bearer mock-user-token") {
+        userId = "mock-user-123";
+      }
+    }
+
+    const invitation = await getInvitationBySlug(slug);
+    if (!invitation || invitation.deleted_at) {
       return NextResponse.json({ message: "Invitation not found" }, { status: 404 });
     }
 
-    return NextResponse.json(invitation);
+    // If caller is the authenticated owner, return full record
+    if (userId && invitation.user_id === userId) {
+      return NextResponse.json(invitation);
+    }
+
+    // Public guest access: Must be published and paid
+    if (invitation.status !== "published" || !invitation.is_paid) {
+      return NextResponse.json(
+        { message: "This invitation is private, unpublished, or pending payment." },
+        { status: 404 }
+      );
+    }
+
+    const publicInvitation = await getPublicInvitationBySlug(slug);
+    if (!publicInvitation) {
+      return NextResponse.json({ message: "Invitation not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(publicInvitation);
   } catch (error: any) {
     console.error("Error fetching invitation:", error);
     return NextResponse.json(
@@ -33,23 +62,42 @@ export async function PUT(
     const params = await props.params;
     const slug = params.slug;
     const body = await req.json();
-    const { formData } = body;
+    const { formData, revision } = body;
 
     if (!formData) {
       return NextResponse.json({ message: "Missing update data" }, { status: 400 });
     }
 
     const invitation = await getInvitationBySlug(slug);
-    if (!invitation) {
+    if (!invitation || invitation.deleted_at) {
       return NextResponse.json({ message: "Invitation not found" }, { status: 404 });
     }
 
-    // Check ownership if user_id is set on the invitation
-    if (invitation.user_id) {
-      const authHeader = req.headers.get("Authorization");
-      const userId = await getUserIdFromAuthHeader(authHeader);
-      if (!userId || invitation.user_id !== userId) {
-        return NextResponse.json({ message: "Forbidden: You do not own this invitation" }, { status: 403 });
+    // Check authentication and ownership
+    const authHeader = req.headers.get("Authorization");
+    let userId = await getUserIdFromAuthHeader(authHeader);
+    if (!userId && !isSupabaseConfigured) {
+      userId = "mock-user-123";
+    }
+
+    if (!userId) {
+      return NextResponse.json({ message: "Unauthorized: Please log in" }, { status: 401 });
+    }
+
+    if (invitation.user_id && invitation.user_id !== userId) {
+      return NextResponse.json({ message: "Forbidden: You do not own this invitation" }, { status: 403 });
+    }
+
+    // Concurrency check: prevent older client overwrites
+    if (typeof revision === "number" && typeof invitation.revision === "number") {
+      if (revision < invitation.revision) {
+        return NextResponse.json(
+          {
+            message: "Conflict: Newer changes exist on server. Please refresh.",
+            serverRevision: invitation.revision,
+          },
+          { status: 409 }
+        );
       }
     }
 
@@ -60,7 +108,7 @@ export async function PUT(
 
     if (now > archiveLimitDate) {
       return NextResponse.json(
-        { message: "This invitation is archived and cannot be edited. The license has been exhausted." },
+        { message: "This invitation is archived and cannot be edited. The license has expired." },
         { status: 403 }
       );
     }
@@ -94,11 +142,14 @@ export async function PUT(
       dress_code_enabled: formData.dress_code_enabled || "yes",
       transport_enabled: formData.transport_enabled || "yes",
       custom_sections: formData.custom_sections || "",
+      content_json: formData,
+      revision: (invitation.revision || 1) + 1,
     });
 
     return NextResponse.json({
       success: true,
       message: "Invitation updated successfully.",
+      revision: updated.revision,
       invitation: updated,
     });
   } catch (error: any) {
@@ -124,14 +175,21 @@ export async function DELETE(
     }
 
     const authHeader = req.headers.get("Authorization");
-    const userId = await getUserIdFromAuthHeader(authHeader);
+    let userId = await getUserIdFromAuthHeader(authHeader);
+    if (!userId && !isSupabaseConfigured) {
+      userId = "mock-user-123";
+    }
+
+    if (!userId) {
+      return NextResponse.json({ message: "Unauthorized: Please log in" }, { status: 401 });
+    }
 
     if (invitation.user_id && invitation.user_id !== userId) {
       return NextResponse.json({ message: "Forbidden: You do not own this invitation" }, { status: 403 });
     }
 
     await deleteInvitation(slug, userId);
-    return NextResponse.json({ success: true, message: "Invitation deleted successfully." });
+    return NextResponse.json({ success: true, message: "Invitation removed successfully." });
   } catch (error: any) {
     console.error("Error deleting invitation:", error);
     return NextResponse.json(

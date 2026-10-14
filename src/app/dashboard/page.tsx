@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -22,7 +22,11 @@ import {
   AlertCircle,
   CreditCard,
   Receipt,
-  Trash2
+  Trash2,
+  ChevronDown,
+  Package,
+  User,
+  LayoutGrid
 } from "lucide-react";
 
 interface Invitation {
@@ -33,6 +37,7 @@ interface Invitation {
   groom_name: string;
   wedding_date: string;
   wedding_venue: string;
+  status?: string;
   is_paid: boolean;
   payment_id?: string;
   order_id?: string;
@@ -42,10 +47,16 @@ interface Invitation {
 
 interface RSVP {
   id: string;
-  name: string;
-  attendance: string;
+  name?: string;
+  guest_name?: string;
+  attendance?: string;
+  attendance_status?: string;
   guest_count: number;
-  wishes: string;
+  guest_contact?: string;
+  phone?: string;
+  email?: string;
+  wishes?: string;
+  message?: string;
   created_at: string;
 }
 
@@ -82,6 +93,25 @@ export default function DashboardPage() {
   // Share tooltip state
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close profile dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(e.target as Node)) {
+        setShowProfileDropdown(false);
+      }
+    };
+    if (showProfileDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [showProfileDropdown]);
 
   useEffect(() => {
     const isMockSupabase = !isSupabaseConfigured;
@@ -217,7 +247,15 @@ export default function DashboardPage() {
     setLoadingRsvps(true);
     setRsvps([]);
     try {
-      const res = await fetch(`/api/rsvps?slug=${invite.slug}`);
+      const isMockSupabase = !isSupabaseConfigured;
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = isMockSupabase ? "mock-user-token" : session?.access_token || "";
+
+      const res = await fetch(`/api/rsvps?slug=${invite.slug}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
       if (!res.ok) {
         throw new Error("Failed to load RSVPs");
       }
@@ -227,6 +265,91 @@ export default function DashboardPage() {
       console.error(err);
     } finally {
       setLoadingRsvps(false);
+    }
+  };
+
+  const handlePublish = async (slug: string) => {
+    try {
+      const isMockSupabase = !isSupabaseConfigured;
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = isMockSupabase ? "mock-user-token" : session?.access_token || "";
+
+      const res = await fetch(`/api/invitations/${slug}/publish`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (res.ok) {
+        setInvitations((prev) =>
+          prev.map((i) => (i.slug === slug ? { ...i, status: "published" } : i))
+        );
+      } else {
+        const err = await res.json();
+        alert(err.message || "Failed to publish invitation.");
+      }
+    } catch (err: any) {
+      console.error("Publish error:", err);
+      alert(err.message || "Error publishing invitation.");
+    }
+  };
+
+  const handleUnpublish = async (slug: string) => {
+    if (!window.confirm("Are you sure you want to unpublish this invitation? Guests will not be able to view it until you publish it again.")) return;
+    try {
+      const isMockSupabase = !isSupabaseConfigured;
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = isMockSupabase ? "mock-user-token" : session?.access_token || "";
+
+      const res = await fetch(`/api/invitations/${slug}/unpublish`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (res.ok) {
+        setInvitations((prev) =>
+          prev.map((i) => (i.slug === slug ? { ...i, status: "unpublished" } : i))
+        );
+      } else {
+        const err = await res.json();
+        alert(err.message || "Failed to unpublish invitation.");
+      }
+    } catch (err: any) {
+      console.error("Unpublish error:", err);
+      alert(err.message || "Error unpublishing invitation.");
+    }
+  };
+
+  const handleExportCsv = (slug: string) => {
+    const isMockSupabase = !isSupabaseConfigured;
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const token = isMockSupabase ? "mock-user-token" : session?.access_token || "";
+      window.open(`/api/rsvps/export?slug=${slug}`, "_blank");
+    });
+  };
+
+  const handleDeleteRsvpItem = async (rsvpId: string) => {
+    if (!window.confirm("Are you sure you want to remove this RSVP entry?")) return;
+    try {
+      const isMockSupabase = !isSupabaseConfigured;
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = isMockSupabase ? "mock-user-token" : session?.access_token || "";
+
+      const res = await fetch(`/api/rsvps?id=${rsvpId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (res.ok) {
+        setRsvps((prev) => prev.filter((r) => r.id !== rsvpId));
+      }
+    } catch (err) {
+      console.error("Error deleting RSVP:", err);
     }
   };
 
@@ -280,43 +403,183 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f3efe9] font-sans text-neutral-800 flex flex-col selection:bg-gold-200 selection:text-black">
       
-      {/* Dashboard Header */}
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-zinc-150">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group">
-            <img src="/logo.png" alt="Varnam" className="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow-sm" />
-            <span className="text-xl sm:text-2xl font-cinzel font-bold tracking-[0.2em] bg-gradient-to-r from-[#b3811b] via-[#d4a325] to-[#9a6f14] bg-clip-text text-transparent">
+      {/* Dashboard Header - Responsive with Top-Right Profile */}
+      <header className="sticky top-0 z-40 bg-white/85 backdrop-blur-md border-b border-zinc-150">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
+            <img src="/logo.png" alt="Varnam" className="w-8 h-8 sm:w-10 sm:h-10 object-contain drop-shadow-xs" />
+            <span className="text-lg sm:text-2xl font-cinzel font-bold tracking-[0.18em] sm:tracking-[0.2em] bg-gradient-to-r from-[#b3811b] via-[#d4a325] to-[#9a6f14] bg-clip-text text-transparent">
               VARNAM
             </span>
           </Link>
           
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowPaymentsModal(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 border border-zinc-200 hover:border-zinc-900 bg-white rounded-full text-xs font-bold uppercase tracking-wider text-zinc-700 hover:text-zinc-900 transition-all cursor-pointer shadow-none"
+          <div className="flex items-center gap-2.5 sm:gap-3.5">
+            {/* Create New button (Quick Header Access on Desktop) */}
+            <Link
+              href="/templates"
+              className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-white rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
             >
-              <Receipt className="w-3.5 h-3.5 text-[#b3811b]" />
-              <span className="hidden sm:inline">Billing & Receipts</span>
-              <span className="text-[10px] bg-zinc-100 text-zinc-700 px-1.5 py-0.2 rounded-full font-mono font-bold">
-                {payments.length}
-              </span>
-            </button>
-            <span className="hidden md:inline text-xs text-zinc-500 font-medium">
-              Signed in as: <strong className="text-zinc-800">{user?.email}</strong>
-            </span>
-            <button
-              onClick={() => setShowSignOutConfirm(true)}
-              className="flex items-center gap-2 px-4 py-2 border border-zinc-200 hover:border-zinc-900 hover:bg-zinc-50 rounded-full text-xs font-bold uppercase tracking-wider text-zinc-700 hover:text-zinc-900 transition-all cursor-pointer"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              Sign Out
-            </button>
+              <Plus className="w-3.5 h-3.5" />
+              New Invite
+            </Link>
+
+            {/* Profile Avatar & Interactive Dropdown Menu */}
+            <div className="relative" ref={profileDropdownRef}>
+              <button
+                type="button"
+                onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1.5 rounded-full bg-white border border-zinc-200 hover:border-[#b3811b] transition-all cursor-pointer shadow-xs group focus:outline-none focus:ring-2 focus:ring-[#eed57c]/40"
+                aria-expanded={showProfileDropdown}
+                aria-label="User Profile Menu"
+              >
+                {/* Avatar Initial with Gold Gradient */}
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#b3811b] via-[#d4a325] to-[#eed57c] text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
+                  {user?.email ? user.email.charAt(0).toUpperCase() : "U"}
+                </div>
+                <span className="hidden sm:inline text-xs font-semibold text-zinc-800 max-w-[120px] truncate">
+                  {user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Account"}
+                </span>
+                <ChevronDown className={`w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-800 transition-transform duration-200 ${showProfileDropdown ? "rotate-180" : ""}`} />
+              </button>
+
+              {/* Mobile Screen Backdrop */}
+              {showProfileDropdown && (
+                <div
+                  className="fixed inset-0 z-40 sm:hidden bg-black/20 backdrop-blur-xs"
+                  onClick={() => setShowProfileDropdown(false)}
+                />
+              )}
+
+              {/* Profile Dropdown Menu */}
+              {showProfileDropdown && (
+                <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 max-w-[calc(100vw-24px)] bg-white/95 backdrop-blur-xl border border-zinc-200/90 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-2.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                  {/* User Profile Header Card */}
+                  <div className="px-3 py-3 rounded-xl bg-gradient-to-br from-[#fffcf7] to-[#fcf8f0] border border-[#eed57c]/35 mb-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#b3811b] via-[#d4a325] to-[#eed57c] text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
+                        {user?.email ? user.email.charAt(0).toUpperCase() : "U"}
+                      </div>
+                      <div className="min-w-0 flex-grow">
+                        <p className="text-xs font-bold text-zinc-900 truncate">
+                          {user?.user_metadata?.full_name || "Wedding Studio Owner"}
+                        </p>
+                        <p className="text-[11px] text-zinc-500 truncate mt-0.5">
+                          {user?.email}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Dropdown Items */}
+                  <div className="space-y-1">
+                    {/* 1. Templates */}
+                    <Link
+                      href="/templates"
+                      onClick={() => setShowProfileDropdown(false)}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100/80 transition-colors text-left group cursor-pointer"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-amber-50 text-[#916710] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <Sparkles className="w-4 h-4 text-[#b3811b]" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-zinc-800 group-hover:text-zinc-950">
+                          Templates
+                        </p>
+                        <p className="text-[10px] text-zinc-500">
+                          Browse & explore wedding templates
+                        </p>
+                      </div>
+                    </Link>
+
+                    {/* 2. Orders */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowProfileDropdown(false);
+                        const el = document.getElementById("invitations-section");
+                        if (el) el.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100/80 transition-colors text-left group cursor-pointer"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <Package className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div className="min-w-0 flex-grow">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-bold text-zinc-800 group-hover:text-zinc-950">
+                            Orders
+                          </p>
+                          <span className="text-[10px] font-mono font-bold bg-zinc-100 text-zinc-700 px-1.5 py-0.2 rounded-full">
+                            {invitations.length}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-zinc-500">
+                          Your active projects & drafts
+                        </p>
+                      </div>
+                    </button>
+
+                    {/* 3. Invoice & Billing */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowProfileDropdown(false);
+                        setShowPaymentsModal(true);
+                      }}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-100/80 transition-colors text-left group cursor-pointer"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <Receipt className="w-4 h-4 text-emerald-600" />
+                      </div>
+                      <div className="min-w-0 flex-grow">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs font-bold text-zinc-800 group-hover:text-zinc-950">
+                            Invoice & Receipts
+                          </p>
+                          <span className="text-[10px] font-mono font-bold bg-zinc-100 text-zinc-700 px-1.5 py-0.2 rounded-full">
+                            {payments.length}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-zinc-500">
+                          Billing history & payment receipts
+                        </p>
+                      </div>
+                    </button>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="my-1.5 h-px bg-zinc-100" />
+
+                  {/* 4. Sign Out */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowProfileDropdown(false);
+                      setShowSignOutConfirm(true);
+                    }}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 text-zinc-700 hover:text-red-700 transition-colors text-left group cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      <LogOut className="w-4 h-4 text-red-600" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-bold">
+                        Sign Out
+                      </p>
+                      <p className="text-[10px] text-zinc-400 group-hover:text-red-500">
+                        Securely end current session
+                      </p>
+                    </div>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Container */}
-      <main className="max-w-7xl mx-auto px-6 py-12 flex-grow w-full">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 flex-grow w-full">
         
         {/* Welcome Section */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10 pb-8 border-b border-zinc-200">
@@ -346,6 +609,7 @@ export default function DashboardPage() {
         )}
 
         {/* Loading invitations list */}
+        <section id="invitations-section" className="scroll-mt-24">
         {loadingInvites ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
             <div className="w-8 h-8 border-3 border-[#b3811b] border-t-transparent rounded-full animate-spin" />
@@ -440,49 +704,68 @@ export default function DashboardPage() {
                   {/* Actions footer */}
                   <div className="bg-zinc-50 border-t border-zinc-150 p-4">
                     {invite.is_paid ? (
-                      <div className="grid grid-cols-2 gap-2">
-                        <Link
-                          href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
-                          className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
-                        >
-                          <Edit className="w-3.5 h-3.5 text-zinc-500" />
-                          Edit Details
-                        </Link>
+                      <div className="space-y-2">
+                        <div className="grid grid-cols-2 gap-2">
+                          <Link
+                            href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
+                            className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
+                          >
+                            <Edit className="w-3.5 h-3.5 text-zinc-500" />
+                            Edit Details
+                          </Link>
 
-                        <button
-                          onClick={() => handleViewRsvps(invite)}
-                          className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer"
-                        >
-                          <Users className="w-3.5 h-3.5 text-zinc-500" />
-                          View RSVPs
-                        </button>
+                          <button
+                            onClick={() => handleViewRsvps(invite)}
+                            className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer"
+                          >
+                            <Users className="w-3.5 h-3.5 text-zinc-500" />
+                            View RSVPs
+                          </button>
 
-                        <a
-                          href={`/invite/${invite.id || invite.slug}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5 text-zinc-300" />
-                          Live Invite
-                        </a>
+                          <a
+                            href={`/invite/${invite.id || invite.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5 text-zinc-300" />
+                            Live Link
+                          </a>
 
-                        <button
-                          onClick={() => handleCopyLink(invite.id || invite.slug)}
-                          className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer relative"
-                        >
-                          {copiedSlug === (invite.id || invite.slug) ? (
-                            <>
-                              <ClipboardCheck className="w-3.5 h-3.5 text-emerald-600" />
-                              <span className="text-emerald-600">Copied!</span>
-                            </>
-                          ) : (
-                            <>
-                              <Share2 className="w-3.5 h-3.5 text-zinc-500" />
-                              Share Link
-                            </>
-                          )}
-                        </button>
+                          <button
+                            onClick={() => handleCopyLink(invite.id || invite.slug)}
+                            className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer relative"
+                          >
+                            {copiedSlug === (invite.id || invite.slug) ? (
+                              <>
+                                <ClipboardCheck className="w-3.5 h-3.5 text-emerald-600" />
+                                <span className="text-emerald-600">Copied!</span>
+                              </>
+                            ) : (
+                              <>
+                                <Share2 className="w-3.5 h-3.5 text-zinc-500" />
+                                Share Link
+                              </>
+                            )}
+                          </button>
+                        </div>
+
+                        {/* Publish / Unpublish Toggle */}
+                        {invite.status === "published" ? (
+                          <button
+                            onClick={() => handleUnpublish(invite.slug)}
+                            className="w-full flex items-center justify-center gap-1.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 py-2 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer"
+                          >
+                            Unpublish (Make Private)
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handlePublish(invite.slug)}
+                            className="w-full flex items-center justify-center gap-1.5 bg-[#b3811b] hover:bg-[#9a6f14] text-white py-2 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer shadow-sm"
+                          >
+                            Publish & Make Live
+                          </button>
+                        )}
                       </div>
                     ) : (
                       <div className="space-y-2">
@@ -518,6 +801,7 @@ export default function DashboardPage() {
             })}
           </div>
         )}
+        </section>
       </main>
 
       {/* RSVP Modal Overlay */}
@@ -625,7 +909,16 @@ export default function DashboardPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t border-zinc-150 bg-zinc-50 rounded-b-[32px] flex justify-end">
+            <div className="p-4 border-t border-zinc-150 bg-zinc-50 rounded-b-[32px] flex items-center justify-between">
+              {selectedInviteForRsvps && (
+                <button
+                  onClick={() => handleExportCsv(selectedInviteForRsvps.slug)}
+                  className="px-4 py-2 bg-white hover:bg-zinc-100 border border-zinc-300 text-zinc-800 font-bold text-[10px] tracking-wider uppercase rounded-lg transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  <ClipboardCheck className="w-3.5 h-3.5 text-[#b3811b]" />
+                  Export CSV
+                </button>
+              )}
               <button
                 onClick={() => setSelectedInviteForRsvps(null)}
                 className="px-5 py-2 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-[10px] tracking-wider uppercase rounded-lg transition-colors cursor-pointer"

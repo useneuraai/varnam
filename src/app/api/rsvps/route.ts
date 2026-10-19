@@ -6,10 +6,10 @@ import { isSupabaseConfigured } from "@/lib/supabase";
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const slug = searchParams.get("slug");
+    const identifier = searchParams.get("slug") || searchParams.get("id") || searchParams.get("template_id");
 
-    if (!slug) {
-      return NextResponse.json({ message: "Missing invitation slug" }, { status: 400 });
+    if (!identifier) {
+      return NextResponse.json({ message: "Missing invitation slug or template ID" }, { status: 400 });
     }
 
     // Enforce Owner Authentication: Only the owner can view RSVPs
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const invitation = await getInvitationBySlug(slug);
+    const invitation = await getInvitationBySlug(identifier);
     if (!invitation || invitation.deleted_at) {
       return NextResponse.json({ message: "Invitation not found" }, { status: 404 });
     }
@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const rsvps = await getRsvpsByInvitationSlug(slug, userId);
+    const rsvps = await getRsvpsByInvitationSlug(invitation.slug, userId);
     return NextResponse.json(rsvps);
   } catch (error: any) {
     console.error("Error fetching RSVPs:", error);

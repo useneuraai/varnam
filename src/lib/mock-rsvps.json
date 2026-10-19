@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "invitation_id": "inv_dndrhbw9",
+    "invitation_slug": "uovfokt",
+    "guest_name": "Mr. Ramesh Sundaram",
+    "name": "Mr. Ramesh Sundaram",
+    "attendance_status": "attending",
+    "attendance": "yes",
+    "guest_count": 2,
+    "guest_contact": "",
+    "phone": "",
+    "message": "Heartiest congratulations to Ananya and Siddharth on your auspicious union!",
+    "wishes": "Heartiest congratulations to Ananya and Siddharth on your auspicious union!",
+    "ip_address": "::1",
+    "id": "rsvp_owj0l2ly",
+    "created_at": "2026-10-19T05:48:25.055Z",
+    "updated_at": "2026-10-19T05:48:25.055Z"
+  }
+]

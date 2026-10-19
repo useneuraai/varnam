@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { getTemplateBySlug } from "@/lib/templates";
 import { 
   LogOut, 
   Plus, 
@@ -26,7 +27,8 @@ import {
   ChevronDown,
   Package,
   User,
-  LayoutGrid
+  LayoutGrid,
+  MoreVertical
 } from "lucide-react";
 
 interface Invitation {
@@ -97,15 +99,21 @@ export default function DashboardPage() {
   const [isDeletingDraft, setIsDeletingDraft] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
+  const [openMenuSlug, setOpenMenuSlug] = useState<string | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  // Close profile dropdown on outside click
+  // Close profile dropdown and actions overflow menu on outside click or touch
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent | TouchEvent) => {
-      if (profileDropdownRef.current && !profileDropdownRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(target)) {
         setShowProfileDropdown(false);
       }
+      if (menuRef.current && !menuRef.current.contains(target)) {
+        setOpenMenuSlug(null);
+      }
     };
-    if (showProfileDropdown) {
+    if (showProfileDropdown || openMenuSlug) {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("touchstart", handleClickOutside);
     }
@@ -113,7 +121,7 @@ export default function DashboardPage() {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
     };
-  }, [showProfileDropdown]);
+  }, [showProfileDropdown, openMenuSlug]);
 
   useEffect(() => {
     const isMockSupabase = !isSupabaseConfigured;
@@ -243,9 +251,31 @@ export default function DashboardPage() {
 
   const handleCopyLink = (idOrSlug: string) => {
     const link = `${window.location.origin}/invite/${idOrSlug}`;
-    navigator.clipboard.writeText(link);
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(link);
+    }
     setCopiedSlug(idOrSlug);
-    setTimeout(() => setCopiedSlug(null), 2000);
+    setTimeout(() => setCopiedSlug(null), 2500);
+  };
+
+  const handleShareInvite = async (invite: Invitation) => {
+    const targetId = invite.id || invite.slug;
+    const link = `${window.location.origin}/invite/${targetId}`;
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: `${invite.bride_name} & ${invite.groom_name}'s Wedding Invitation`,
+          text: `You're cordially invited to celebrate the wedding of ${invite.bride_name} & ${invite.groom_name}!`,
+          url: link,
+        });
+        return;
+      } catch (err: any) {
+        if (err?.name === "AbortError") {
+          return;
+        }
+      }
+    }
+    handleCopyLink(targetId);
   };
 
   const handleViewRsvps = async (invite: Invitation) => {
@@ -420,21 +450,12 @@ export default function DashboardPage() {
           </Link>
           
           <div className="flex items-center gap-2.5 sm:gap-3.5">
-            {/* Create New button (Quick Header Access on Desktop) */}
-            <Link
-              href="/templates"
-              className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-white rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              New Invite
-            </Link>
-
             {/* Profile Avatar & Interactive Dropdown Menu */}
             <div className="relative" ref={profileDropdownRef}>
               <button
                 type="button"
                 onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1.5 rounded-full bg-white border border-zinc-200 hover:border-[#b3811b] transition-all cursor-pointer shadow-xs group focus:outline-none focus:ring-2 focus:ring-[#eed57c]/40"
+                className="flex items-center gap-2 min-h-[44px] min-w-[44px] p-1.5 sm:px-2.5 sm:py-1.5 rounded-full bg-white border border-zinc-200 hover:border-[#b3811b] transition-all cursor-pointer shadow-xs group focus:outline-none focus:ring-2 focus:ring-[#eed57c]/40"
                 aria-expanded={showProfileDropdown}
                 aria-label="User Profile Menu"
               >
@@ -588,22 +609,22 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 flex-grow w-full">
         
         {/* Welcome Section */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10 pb-8 border-b border-zinc-200">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 sm:gap-6 mb-5 pb-5 sm:mb-8 sm:pb-6 border-b border-zinc-200">
           <div>
-            <h1 className="font-sans text-3xl font-bold tracking-tight text-zinc-900">
+            <h1 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900">
               MY STUDIO
             </h1>
-            <p className="text-sm text-zinc-500 mt-1.5 font-normal">
-              Manage your published invitations, track guest RSVPs, and edit event schedules.
+            <p className="text-xs sm:text-sm text-zinc-500 mt-1 font-normal">
+              Your wedding invitations, all in one place.
             </p>
           </div>
 
           <Link
             href="/templates"
-            className="inline-flex items-center gap-2 bg-zinc-950 hover:bg-zinc-850 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 rounded-xl transition-all shadow-sm self-start md:self-auto cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 bg-zinc-950 hover:bg-zinc-850 text-white font-bold text-xs tracking-wider uppercase px-5 py-3 min-h-[44px] rounded-xl transition-all shadow-sm self-start md:self-auto cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            Create New invitation
+            <span>Create New Invitation</span>
           </Link>
         </div>
 
@@ -651,8 +672,12 @@ export default function DashboardPage() {
           </div>
         ) : (
           /* Grid list of invitations */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {invitations.map((invite) => {
+              const template = getTemplateBySlug(invite.template_slug);
+              const templateName = template?.name || invite.template_slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+              const thumbnailUrl = template?.thumbnailUrl || `/images/${invite.template_slug}/hero.jpg`;
+
               const formattedDate = new Date(invite.wedding_date).toLocaleDateString("en-US", {
                 weekday: "short",
                 year: "numeric",
@@ -663,143 +688,201 @@ export default function DashboardPage() {
               return (
                 <div 
                   key={invite.slug}
-                  className="bg-white border border-zinc-150 rounded-2xl overflow-hidden shadow-none transition-all duration-300 flex flex-col justify-between"
+                  className="group bg-white border border-zinc-200/90 rounded-[24px] overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
                 >
-                  <div className="p-6">
-                    {/* Header */}
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="bg-[#FBF3DB] border border-[#eed57c]/40 text-[#956400] text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-lg">
-                        {invite.template_slug.replace("-", " ")}
-                      </span>
+                  {/* Zoomed & Cropped Template Preview Image Header (Like Template Page) */}
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-zinc-950 border-b border-zinc-150">
+                    <img
+                      src={thumbnailUrl}
+                      alt={templateName}
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out select-none will-change-transform"
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/images/rose-classic/hero.jpg";
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+
+                    {/* Top Status Badge Overlay */}
+                    <div className="absolute top-3.5 right-3.5 pointer-events-none">
                       {invite.is_paid ? (
-                        <span className="bg-[#EDF3EC] text-[#346538] border border-emerald-100 text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-lg">
-                          Paid & Live
+                        <span className={`text-[10px] tracking-wider uppercase px-2.5 py-1 font-bold rounded-lg shadow-sm backdrop-blur-md ${
+                          invite.status === "published"
+                            ? "bg-emerald-950/85 text-emerald-300 border border-emerald-500/30"
+                            : "bg-zinc-950/85 text-white border border-zinc-700"
+                        }`}>
+                          {invite.status === "published" ? "Published" : "Paid & Live"}
                         </span>
                       ) : (
-                        <span className="bg-[#FDEBEC] text-[#9F2F2D] border border-red-150 text-[9px] tracking-widest uppercase px-3 py-1 font-bold rounded-lg animate-pulse">
+                        <span className="bg-red-950/85 backdrop-blur-md text-red-200 border border-red-500/30 text-[10px] tracking-wider uppercase px-2.5 py-1 font-bold rounded-lg shadow-sm">
                           Draft (Unpaid)
                         </span>
                       )}
                     </div>
+                  </div>
 
-                    {/* Couple Names */}
-                    <h3 className="font-sans text-xl font-bold text-zinc-900 tracking-tight mb-4 uppercase">
-                      {invite.bride_name} & {invite.groom_name}
-                    </h3>
+                  <div className="p-5 sm:p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                      {/* h2 Template Name */}
+                      <h2 className="text-xl sm:text-2xl font-bold font-serif text-zinc-900 tracking-wide uppercase text-center">
+                        {templateName}
+                      </h2>
 
-                    {/* Event summary details */}
-                    <div className="space-y-3 pt-2 border-t border-zinc-100">
-                      <div className="flex gap-2.5 items-start text-xs text-zinc-600">
-                        <Calendar className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
-                        <div>
-                          <p className="font-bold text-zinc-800">Date & Time</p>
-                          <p className="text-zinc-500 mt-0.5">{formattedDate}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex gap-2.5 items-start text-xs text-zinc-600">
-                        <MapPin className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
-                        <div>
-                          <p className="font-bold text-zinc-800">Venue</p>
-                          <p className="text-zinc-500 mt-0.5 line-clamp-2">{invite.wedding_venue}</p>
-                        </div>
+                      {/* Bride & Groom Names and Date */}
+                      <div className="text-center mt-2 space-y-1">
+                        <p className="text-sm sm:text-base font-semibold text-zinc-800 uppercase tracking-wide">
+                          {invite.bride_name} & {invite.groom_name}
+                        </p>
+                        <p className="text-xs text-zinc-500">
+                          {formattedDate}
+                        </p>
+                        {invite.wedding_venue && (
+                          <p className="text-xs text-zinc-400 line-clamp-1 max-w-xs mx-auto pt-0.5">
+                            {invite.wedding_venue}
+                          </p>
+                        )}
                       </div>
                     </div>
+
+                    {/* Reassurance note for unpaid drafts */}
+                    {!invite.is_paid && (
+                      <div className="mt-4 flex items-center justify-center gap-2 p-2.5 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-600 text-xs font-medium leading-relaxed text-center">
+                        <Sparkles className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+                        <span>Your invitation is saved. Complete payment to publish it.</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Actions footer */}
-                  <div className="bg-zinc-50 border-t border-zinc-150 p-4">
+                  <div className="bg-zinc-50/80 border-t border-zinc-150 p-3.5 sm:p-4">
                     {invite.is_paid ? (
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-2.5">
+                        {/* 1. Share Invitation (Black Primary Action) */}
+                        <button
+                          type="button"
+                          onClick={() => handleShareInvite(invite)}
+                          className="w-full min-h-[44px] flex items-center justify-center gap-2 bg-zinc-950 hover:bg-zinc-850 active:scale-[0.99] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-xs cursor-pointer"
+                        >
+                          {copiedSlug === (invite.id || invite.slug) ? (
+                            <>
+                              <ClipboardCheck className="w-4 h-4 text-white" />
+                              <span>Invitation Link Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Share2 className="w-4 h-4" />
+                              <span>Share Invitation</span>
+                            </>
+                          )}
+                        </button>
+
+                        {/* 2 & 3. Preview and Edit */}
                         <div className="grid grid-cols-2 gap-2">
-                          <Link
-                            href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
-                            className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
-                          >
-                            <Edit className="w-3.5 h-3.5 text-zinc-500" />
-                            Edit Details
-                          </Link>
-
-                          <button
-                            onClick={() => handleViewRsvps(invite)}
-                            className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer"
-                          >
-                            <Users className="w-3.5 h-3.5 text-zinc-500" />
-                            View RSVPs
-                          </button>
-
                           <a
                             href={`/invite/${invite.id || invite.slug}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
+                            className="min-h-[44px] flex items-center justify-center gap-1.5 sm:gap-2 bg-white hover:bg-zinc-50 active:scale-[0.99] border border-zinc-300 text-zinc-800 hover:text-zinc-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-colors"
                           >
-                            <ExternalLink className="w-3.5 h-3.5 text-zinc-300" />
-                            Live Link
+                            <ExternalLink className="w-4 h-4 text-zinc-500" />
+                            <span>Preview</span>
                           </a>
 
-                          <button
-                            onClick={() => handleCopyLink(invite.id || invite.slug)}
-                            className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer relative"
+                          <Link
+                            href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
+                            className="min-h-[44px] flex items-center justify-center gap-1.5 sm:gap-2 bg-white hover:bg-zinc-50 active:scale-[0.99] border border-zinc-300 text-zinc-800 hover:text-zinc-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-colors"
                           >
-                            {copiedSlug === (invite.id || invite.slug) ? (
-                              <>
-                                <ClipboardCheck className="w-3.5 h-3.5 text-emerald-600" />
-                                <span className="text-emerald-600">Copied!</span>
-                              </>
-                            ) : (
-                              <>
-                                <Share2 className="w-3.5 h-3.5 text-zinc-500" />
-                                Share Link
-                              </>
-                            )}
-                          </button>
+                            <Edit className="w-4 h-4 text-zinc-500" />
+                            <span>Edit</span>
+                          </Link>
                         </div>
+
+                        {/* 4. Show RSVPs */}
+                        <Link
+                          href={`/dashboard/rsvps/${invite.slug}`}
+                          className="w-full min-h-[44px] flex items-center justify-center gap-2 bg-white hover:bg-zinc-50 active:scale-[0.99] border border-zinc-300 text-zinc-800 hover:text-zinc-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-colors cursor-pointer"
+                        >
+                          <Users className="w-4 h-4 text-zinc-500" />
+                          <span>Show RSVPs</span>
+                        </Link>
 
                         {/* Publish / Unpublish Toggle */}
                         {invite.status === "published" ? (
                           <button
+                            type="button"
                             onClick={() => handleUnpublish(invite.slug)}
-                            className="w-full flex items-center justify-center gap-1.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 py-2 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer"
+                            className="w-full min-h-[38px] flex items-center justify-center gap-1.5 text-zinc-500 hover:text-zinc-700 hover:bg-zinc-100 rounded-lg font-medium text-[11px] tracking-wide transition-colors cursor-pointer mt-0.5"
                           >
                             Unpublish (Make Private)
                           </button>
                         ) : (
                           <button
+                            type="button"
                             onClick={() => handlePublish(invite.slug)}
-                            className="w-full flex items-center justify-center gap-1.5 bg-zinc-950 hover:bg-zinc-850 text-white py-2 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer shadow-sm"
+                            className="w-full min-h-[44px] flex items-center justify-center gap-1.5 bg-zinc-900 hover:bg-zinc-850 text-white rounded-xl font-bold text-xs tracking-wider uppercase transition-colors cursor-pointer shadow-xs"
                           >
                             Publish & Make Live
                           </button>
                         )}
                       </div>
                     ) : (
-                      <div className="space-y-2">
-                        <div className="grid grid-cols-2 gap-2">
+                      <div className="flex flex-col gap-2.5">
+                        {/* 1. Primary Black Pay & Activate */}
+                        <Link
+                          href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
+                          className="w-full min-h-[44px] flex items-center justify-center gap-2 bg-zinc-950 hover:bg-zinc-850 active:scale-[0.99] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-xs"
+                        >
+                          <CreditCard className="w-4 h-4" />
+                          <span>Pay & Activate</span>
+                        </Link>
+
+                        {/* 2 & 3. Outlined Continue Editing + Three-dot Overflow Menu for Delete Draft */}
+                        <div className="flex items-center gap-2">
                           <Link
                             href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
-                            className="flex items-center justify-center gap-2 bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 hover:text-zinc-900 py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors"
+                            className="flex-1 min-h-[44px] flex items-center justify-center gap-2 bg-white hover:bg-zinc-50 active:scale-[0.99] border border-zinc-300 text-zinc-800 hover:text-zinc-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-colors"
                           >
-                            <Edit className="w-3.5 h-3.5 text-zinc-500" />
-                            Continue Edit
+                            <Edit className="w-4 h-4 text-zinc-500" />
+                            <span>Continue Editing</span>
                           </Link>
 
-                          <Link
-                            href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
-                            className="flex items-center justify-center gap-2 bg-zinc-950 hover:bg-zinc-850 text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm"
-                          >
-                            <CreditCard className="w-3.5 h-3.5" />
-                            Pay & Activate
-                          </Link>
+                          {/* Three-dot overflow menu for Delete Draft */}
+                          <div className="relative">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setOpenMenuSlug(openMenuSlug === invite.slug ? null : invite.slug);
+                              }}
+                              className="min-w-[44px] min-h-[44px] w-11 h-11 flex items-center justify-center rounded-xl bg-white hover:bg-zinc-100 active:bg-zinc-200 border border-zinc-300 text-zinc-600 hover:text-zinc-900 transition-colors cursor-pointer"
+                              aria-label="More draft options"
+                              aria-haspopup="true"
+                              aria-expanded={openMenuSlug === invite.slug}
+                            >
+                              <MoreVertical className="w-4 h-4" />
+                            </button>
+
+                            {openMenuSlug === invite.slug && (
+                              <div 
+                                ref={menuRef}
+                                className="absolute right-0 bottom-full mb-2 w-44 bg-white border border-zinc-200 rounded-xl shadow-lg p-1.5 z-30 animate-in fade-in zoom-in-95 duration-150"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setOpenMenuSlug(null);
+                                    setDraftToDelete(invite.slug);
+                                  }}
+                                  className="w-full min-h-[44px] flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer text-left"
+                                >
+                                  <Trash2 className="w-4 h-4 text-red-500 shrink-0" />
+                                  <span>Delete Draft</span>
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => setDraftToDelete(invite.slug)}
-                          className="w-full flex items-center justify-center gap-1.5 bg-white hover:bg-red-50 border border-zinc-200 hover:border-red-200 text-zinc-500 hover:text-red-600 py-2 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                          Delete Draft
-                        </button>
                       </div>
                     )}
                   </div>
@@ -828,7 +911,7 @@ export default function DashboardPage() {
               </div>
               <button
                 onClick={() => setSelectedInviteForRsvps(null)}
-                className="w-8 h-8 rounded-lg border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-colors cursor-pointer text-sm font-sans"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-colors cursor-pointer text-base font-sans"
               >
                 ✕
               </button>
@@ -920,15 +1003,15 @@ export default function DashboardPage() {
               {selectedInviteForRsvps && (
                 <button
                   onClick={() => handleExportCsv(selectedInviteForRsvps.slug)}
-                  className="px-4 py-2 bg-white hover:bg-zinc-100 border border-zinc-300 text-zinc-800 font-bold text-[10px] tracking-wider uppercase rounded-lg transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="min-h-[44px] px-4 py-2.5 bg-white hover:bg-zinc-100 border border-zinc-300 text-zinc-800 font-bold text-xs tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex items-center gap-1.5"
                 >
-                  <ClipboardCheck className="w-3.5 h-3.5 text-[#b3811b]" />
-                  Export CSV
+                  <ClipboardCheck className="w-4 h-4 text-[#b3811b]" />
+                  <span>Export CSV</span>
                 </button>
               )}
               <button
                 onClick={() => setSelectedInviteForRsvps(null)}
-                className="px-5 py-2 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-[10px] tracking-wider uppercase rounded-lg transition-colors cursor-pointer"
+                className="min-h-[44px] px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex items-center justify-center"
               >
                 Close
               </button>
@@ -953,7 +1036,7 @@ export default function DashboardPage() {
               </div>
               <button
                 onClick={() => setShowPaymentsModal(false)}
-                className="w-8 h-8 rounded-lg border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-colors cursor-pointer text-sm font-sans"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-colors cursor-pointer text-base font-sans"
               >
                 ✕
               </button>
@@ -1035,7 +1118,7 @@ export default function DashboardPage() {
             <div className="p-4 border-t border-zinc-150 bg-zinc-50 rounded-b-[32px] flex justify-end">
               <button
                 onClick={() => setShowPaymentsModal(false)}
-                className="px-5 py-2 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-[10px] tracking-wider uppercase rounded-lg transition-colors cursor-pointer"
+                className="min-h-[44px] px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-xs tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex items-center justify-center"
               >
                 Close
               </button>
@@ -1057,7 +1140,7 @@ export default function DashboardPage() {
             <div className="flex gap-3 justify-center">
               <button
                 onClick={() => setShowSignOutConfirm(false)}
-                className="px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-[10px] tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex-1 font-sans"
+                className="min-h-[44px] px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-xs tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex-1 font-sans flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1066,7 +1149,7 @@ export default function DashboardPage() {
                   setShowSignOutConfirm(false);
                   handleSignOut();
                 }}
-                className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] tracking-wider uppercase rounded-xl transition-all cursor-pointer flex-1 shadow-md font-sans"
+                className="min-h-[44px] px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs tracking-wider uppercase rounded-xl transition-all cursor-pointer flex-1 shadow-md font-sans flex items-center justify-center"
               >
                 Sign Out
               </button>
@@ -1093,7 +1176,7 @@ export default function DashboardPage() {
                 type="button"
                 onClick={() => setDraftToDelete(null)}
                 disabled={isDeletingDraft}
-                className="px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-[10px] tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex-1 font-sans disabled:opacity-50"
+                className="min-h-[44px] px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-xs tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex-1 font-sans disabled:opacity-50 flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1101,7 +1184,7 @@ export default function DashboardPage() {
                 type="button"
                 onClick={confirmDeleteDraft}
                 disabled={isDeletingDraft}
-                className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] tracking-wider uppercase rounded-xl transition-all cursor-pointer flex-1 shadow-md font-sans disabled:opacity-50 flex items-center justify-center gap-1.5"
+                className="min-h-[44px] px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs tracking-wider uppercase rounded-xl transition-all cursor-pointer flex-1 shadow-md font-sans disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
                 {isDeletingDraft ? "Deleting..." : "Delete"}
               </button>

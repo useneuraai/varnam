@@ -809,33 +809,45 @@ export async function saveRsvp(record: RsvpRecord): Promise<RsvpRecord> {
 }
 
 export async function getRsvpsByInvitationSlug(
-  invitationSlug: string,
+  invitationIdentifier: string,
   requesterUserId?: string
 ): Promise<RsvpRecord[]> {
+  const inv = await getInvitationBySlug(invitationIdentifier);
   if (requesterUserId) {
-    const inv = await getInvitationBySlug(invitationSlug);
     if (!inv || (inv.user_id && inv.user_id !== requesterUserId)) {
       throw new Error("Unauthorized: You do not own this invitation's RSVPs");
     }
   }
 
+  const invSlug = inv?.slug || invitationIdentifier;
+  const invId = inv?.id;
+
   if (isSupabaseConfigured) {
-    const { data, error } = await supabaseAdmin
+    let query = supabaseAdmin
       .from("rsvps")
       .select("*")
-      .eq("invitation_slug", invitationSlug)
       .order("created_at", { ascending: false });
 
+    if (invId && invSlug) {
+      query = query.or(`invitation_id.eq.${invId},invitation_slug.eq.${invSlug}`);
+    } else if (invId) {
+      query = query.eq("invitation_id", invId);
+    } else {
+      query = query.eq("invitation_slug", invSlug);
+    }
+
+    const { data, error } = await query;
+
     if (error) {
-      console.error(`Supabase error fetching RSVPs for slug "${invitationSlug}":`, error);
+      console.error(`Supabase error fetching RSVPs for "${invitationIdentifier}":`, error);
       const localRsvps = readJsonFile<RsvpRecord[]>(MOCK_RSVPS_PATH, []);
-      return localRsvps.filter((r) => r.invitation_slug === invitationSlug);
+      return localRsvps.filter((r) => r.invitation_slug === invSlug || (invId && r.invitation_id === invId));
     }
     return data || [];
   } else {
     const rsvps = readJsonFile<RsvpRecord[]>(MOCK_RSVPS_PATH, []);
     return rsvps
-      .filter((r) => r.invitation_slug === invitationSlug)
+      .filter((r) => r.invitation_slug === invSlug || (invId && r.invitation_id === invId))
       .sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime());
   }
 }

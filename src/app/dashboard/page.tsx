@@ -289,6 +289,15 @@ export default function DashboardPage() {
       const { data: { session } } = await supabase.auth.getSession();
       const token = isMockSupabase ? "mock-user-token" : session?.access_token || "";
 
+      // Client guard: Paid invitations cannot be deleted
+      const targetInvite = invitations.find((i) => i.slug === draftToDelete);
+      if (targetInvite?.is_paid) {
+        alert("Paid invitations cannot be deleted. You can unpublish it to keep it private.");
+        setIsDeletingDraft(false);
+        setDraftToDelete(null);
+        return;
+      }
+
       const res = await fetch(`/api/invitations/${draftToDelete}`, {
         method: "DELETE",
         headers: {
@@ -301,12 +310,17 @@ export default function DashboardPage() {
           const updated = prev.filter((i) => i.slug !== draftToDelete);
           try {
             localStorage.setItem(STORAGE_KEY_INVITATIONS, JSON.stringify(updated));
+            localStorage.removeItem(`varnam_offline_draft_${draftToDelete}`);
           } catch {}
           return updated;
         });
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        alert(errorData.message || "Failed to delete draft invitation.");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error deleting invitation:", err);
+      alert(err.message || "Error deleting invitation.");
     } finally {
       setIsDeletingDraft(false);
       setDraftToDelete(null);
@@ -1325,7 +1339,7 @@ export default function DashboardPage() {
               DELETE DRAFT
             </h3>
             <p className="text-zinc-500 text-xs text-center mb-6 leading-relaxed font-sans">
-              Are you sure you want to delete this draft invitation? This action cannot be undone.
+              Are you sure you want to delete this draft invitation? Its data will be permanently deleted from Supabase. This action cannot be undone.
             </p>
             <div className="flex gap-3 justify-center">
               <button

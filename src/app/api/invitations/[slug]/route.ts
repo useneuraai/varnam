@@ -196,8 +196,16 @@ export async function DELETE(
       return NextResponse.json({ message: "Forbidden: You do not own this invitation" }, { status: 403 });
     }
 
+    // Strict guard: Paid invitations cannot be deleted! Only unpaid drafts can be deleted.
+    if (invitation.is_paid || invitation.status === "paid" || invitation.status === "published") {
+      return NextResponse.json(
+        { message: "Paid invitations cannot be deleted. You can unpublish it to keep it private." },
+        { status: 400 }
+      );
+    }
+
     await deleteInvitation(slug, userId);
-    return NextResponse.json({ success: true, message: "Invitation removed successfully." });
+    return NextResponse.json({ success: true, message: "Draft invitation and all its data were permanently deleted from Supabase." });
   } catch (error: any) {
     console.error("Error deleting invitation:", error);
     return NextResponse.json(

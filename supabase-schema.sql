@@ -353,11 +353,40 @@ create policy "Allow owner to update their own invitations"
     using (auth.uid() = user_id or auth.role() = 'service_role')
     with check (auth.uid() = user_id or auth.role() = 'service_role');
 
--- Authenticated owner can delete their invitations
+-- Trigger function to strictly prevent deletion of paid invitations
+create or replace function public.prevent_paid_invitation_deletion()
+returns trigger as $$
+begin
+    if (old.is_paid is true or old.status in ('paid', 'published')) then
+        raise exception 'SECURITY_VIOLATION: Paid invitations cannot be deleted. Status: %, is_paid: %', old.status, old.is_paid;
+    end if;
+
+    if exists (
+        select 1 from public.payments
+        where (invitation_id = old.id or invitation_slug = old.slug)
+          and status = 'captured'
+    ) then
+        raise exception 'SECURITY_VIOLATION: Paid invitations cannot be deleted because a captured payment record exists.';
+    end if;
+
+    return old;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists tr_prevent_paid_invitation_deletion on public.invitations;
+create trigger tr_prevent_paid_invitation_deletion
+    before delete on public.invitations
+    for each row execute function public.prevent_paid_invitation_deletion();
+
+-- Authenticated owner can delete their unpaid draft invitations
 drop policy if exists "Allow owner to delete their own invitations" on public.invitations;
-create policy "Allow owner to delete their own invitations"
+drop policy if exists "Allow owner to delete their own unpaid invitations" on public.invitations;
+create policy "Allow owner to delete their own unpaid invitations"
     on public.invitations for delete
-    using (auth.uid() = user_id or auth.role() = 'service_role');
+    using (
+        (auth.uid() = user_id and (is_paid is not true or is_paid is null) and status not in ('paid', 'published'))
+        or auth.role() = 'service_role'
+    );
 
 -- 3. Orders Policies
 drop policy if exists "Allow owner to view their orders" on public.orders;

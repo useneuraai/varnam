@@ -536,33 +536,102 @@ export async function deleteInvitation(slug: string, userId?: string): Promise<b
     throw new Error("Unauthorized to delete this invitation");
   }
 
-  if (isSupabaseConfigured) {
-    // Soft delete: mark as removed & set deleted_at
-    const { error } = await supabaseAdmin
-      .from("invitations")
-      .update({
-        status: "removed",
-        deleted_at: new Date().toISOString(),
-      })
-      .eq("slug", slug);
+  // Safety check: Paid invitations cannot be deleted! Only unpaid drafts can be deleted.
+  if (inv.is_paid || inv.status === "paid" || inv.status === "published") {
+    throw new Error("Paid invitations cannot be deleted. You can unpublish it to keep it private.");
+  }
 
-    if (error) {
-      console.error(`Supabase error soft-deleting invitation "${slug}":`, error);
-      throw error;
+  if (isSupabaseConfigured) {
+    // Double check that no captured payment exists in payments table
+    if (inv.id) {
+      const { data: paymentsById } = await supabaseAdmin
+        .from("payments")
+        .select("id")
+        .eq("invitation_id", inv.id)
+        .eq("status", "captured")
+        .limit(1);
+
+      if (paymentsById && paymentsById.length > 0) {
+        throw new Error("Paid invitations cannot be deleted. A verified payment record exists.");
+      }
     }
 
-    // Clean up RSVPs associated with this invitation
+    const { data: paymentsBySlug } = await supabaseAdmin
+      .from("payments")
+      .select("id")
+      .eq("invitation_slug", slug)
+      .eq("status", "captured")
+      .limit(1);
+
+    if (paymentsBySlug && paymentsBySlug.length > 0) {
+      throw new Error("Paid invitations cannot be deleted. A verified payment record exists.");
+    }
+
+    // 1. Clean up RSVPs associated with this invitation
     if (inv.id) {
       await supabaseAdmin.from("rsvps").delete().eq("invitation_id", inv.id);
     }
     await supabaseAdmin.from("rsvps").delete().eq("invitation_slug", slug);
 
+    // 2. Clean up any unpaid draft orders
+    if (inv.id) {
+      await supabaseAdmin.from("orders").delete().eq("invitation_id", inv.id);
+    }
+
+    // 3. Clean up uploaded storage files in invitation-assets bucket (if any)
+    try {
+      const assetPathsToDelete: string[] = [];
+      const extractStoragePath = (url?: string | null): string | null => {
+        if (!url || typeof url !== "string") return null;
+        const match = url.match(/invitation-assets\/(.+)$/);
+        return match ? match[1] : null;
+      };
+
+      if (inv.bg_image_url) {
+        const p = extractStoragePath(inv.bg_image_url);
+        if (p) assetPathsToDelete.push(p);
+      }
+      if (inv.slideshow_images) {
+        const urls = inv.slideshow_images.split(",").map((u) => u.trim());
+        for (const u of urls) {
+          const p = extractStoragePath(u);
+          if (p) assetPathsToDelete.push(p);
+        }
+      }
+
+      if (assetPathsToDelete.length > 0) {
+        await supabaseAdmin.storage.from("invitation-assets").remove(assetPathsToDelete);
+      }
+    } catch (storageErr) {
+      console.warn("Notice: Storage file cleanup encountered an error:", storageErr);
+    }
+
+    // 4. Hard delete the invitation row from Supabase!
+    const { error } = await supabaseAdmin
+      .from("invitations")
+      .delete()
+      .eq("slug", slug);
+
+    if (error) {
+      console.error(`Supabase error deleting invitation "${slug}":`, error);
+      throw error;
+    }
+
+    // Also clean up local mock database if present
+    try {
+      const localDb = readJsonFile<Record<string, InvitationRecord>>(MOCK_INVITATIONS_PATH, {});
+      if (localDb[slug]) {
+        delete localDb[slug];
+        writeJsonFile(MOCK_INVITATIONS_PATH, localDb);
+      }
+    } catch {}
+
     return true;
   } else {
+    // Local / Mock Database Hard Delete
     const db = readJsonFile<Record<string, InvitationRecord>>(MOCK_INVITATIONS_PATH, {});
     if (db[slug]) {
-      db[slug].status = "removed";
-      db[slug].deleted_at = new Date().toISOString();
+      delete db[slug];
       writeJsonFile(MOCK_INVITATIONS_PATH, db);
     }
 

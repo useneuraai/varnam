@@ -3,7 +3,7 @@
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Script from "next/script";
-import { useEffect, useState, useRef, Suspense } from "react";
+import { useEffect, useState, useRef, useMemo, Suspense } from "react";
 import {
   ArrowLeft,
   CreditCard,
@@ -20,9 +20,12 @@ import {
   Monitor,
   Trash2,
   Plus,
-  Eye
+  Eye,
+  Clock,
+  Sparkle,
+  Check
 } from "lucide-react";
-import { getTemplateBySlug, getDefaultTemplateData, TemplateData } from "@/lib/templates";
+import { getTemplateBySlug, getDefaultTemplateData, getEmptyTemplateData, TemplateData, parseTimelineEvents, TimelineEvent } from "@/lib/templates";
 import { templatesMap } from "@/templates";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { loadRazorpayScript } from "@/lib/loadRazorpay";
@@ -37,33 +40,6 @@ const InteractiveMapPicker = dynamic(() => import("@/components/InteractiveMapPi
     </div>
   )
 });
-
-const BG_IMAGE_PRESETS = [
-  { label: "Default Template Backdrop", value: "" },
-  { label: "Palace Mandapam Stage Decor (Traditional Indian Decor) 🛕", value: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=1200" },
-  { label: "Glistening Lights & Sparkles Bokeh (Wedding Night) ✨", value: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1200" },
-  { label: "Royal Red Rose Wedding Archway (Floral Grand Ceremony) 🌹", value: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&q=80&w=1200" },
-  { label: "Gilded Marigold Garlands Decor (Haldi / Sangeet Vibe) 🌼", value: "https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?auto=format&fit=crop&q=80&w=1200" },
-  { label: "Luxurious White Roses Backdrop (Premium Minimal Arch) 🤍", value: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&q=80&w=1200" },
-  { label: "Traditional Hands with Henna/Garland (Indian Ceremony Detail) 🪷", value: "https://images.unsplash.com/photo-1603561596112-0a132b757442?auto=format&fit=crop&q=80&w=1200" },
-  { label: "Elegant Palace Courtyard (Heritage Backdrop) 🏰", value: "https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?auto=format&fit=crop&q=80&w=1200" },
-  { label: "Glimmering Gold Bokeh Wallpaper (Classic Luxury) 🪙", value: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&q=80&w=1200" }
-];
-
-const BG_COLOR_PRESETS = [
-  { label: "Deep Royal Burgundy", value: "#4a0e17" },
-  { label: "Imperial Emerald Green", value: "#0b2e16" },
-  { label: "Midnight Navy Blue", value: "#0a1128" },
-  { label: "Luxurious Metallic Gold", value: "#b89047" },
-  { label: "Champagne Pearl Velvet", value: "#fcfaf2" },
-  { label: "Blush Rose Gold", value: "#f5e1e2" },
-  { label: "Rich Plum Purple", value: "#2d0831" },
-  { label: "Editorial Matte Black", value: "#09090b" },
-  { label: "Sacred Golden Sands (Gradient)", value: "linear-gradient(135deg, #e5c060 0%, #b3811b 100%)" },
-  { label: "Emerald Canopy (Gradient)", value: "linear-gradient(135deg, #184e3d 0%, #0c2b21 100%)" },
-  { label: "Burgundy Satin (Gradient)", value: "linear-gradient(135deg, #5c0612 0%, #290207 100%)" },
-  { label: "Royal Amethyst (Gradient)", value: "linear-gradient(135deg, #440c4a 0%, #15021a 100%)" }
-];
 
 const MUSIC_PRESETS = [
   { label: "Default Template Melody", value: "" },
@@ -81,7 +57,7 @@ const SLIDESHOW_PRESETS = [
 
 function extractTemplateData(invitation: any, templateSlug: string): TemplateData {
   const defaults = getDefaultTemplateData(templateSlug);
-  if (!invitation) return defaults;
+  if (!invitation) return getEmptyTemplateData(templateSlug);
 
   const chain: Record<string, any>[] = [];
   let curr = invitation;
@@ -102,27 +78,27 @@ function extractTemplateData(invitation: any, templateSlug: string): TemplateDat
   return {
     ...defaults,
     ...merged,
-    bride_name: merged.bride_name || defaults.bride_name,
-    groom_name: merged.groom_name || defaults.groom_name,
-    wedding_date: merged.wedding_date || defaults.wedding_date,
-    wedding_venue: merged.wedding_venue || defaults.wedding_venue,
-    quote: merged.quote !== undefined ? merged.quote : defaults.quote,
-    family_names: merged.family_names !== undefined ? merged.family_names : defaults.family_names,
-    rsvp_phone: merged.rsvp_phone !== undefined ? merged.rsvp_phone : defaults.rsvp_phone,
-    custom_message: merged.custom_message !== undefined ? merged.custom_message : defaults.custom_message,
+    bride_name: merged.bride_name !== undefined ? String(merged.bride_name) : "",
+    groom_name: merged.groom_name !== undefined ? String(merged.groom_name) : "",
+    wedding_date: merged.wedding_date !== undefined ? String(merged.wedding_date) : "",
+    wedding_venue: merged.wedding_venue !== undefined ? String(merged.wedding_venue) : "",
+    quote: merged.quote !== undefined ? String(merged.quote) : "",
+    family_names: merged.family_names !== undefined ? String(merged.family_names) : "",
+    rsvp_phone: merged.rsvp_phone !== undefined ? String(merged.rsvp_phone) : "",
+    custom_message: merged.custom_message !== undefined ? String(merged.custom_message) : "",
     music_url: merged.music_url || defaults.music_url,
-    bg_image_url: merged.bg_image_url !== undefined ? merged.bg_image_url : defaults.bg_image_url,
+    bg_image_url: "",
     slideshow_images: merged.slideshow_images !== undefined ? merged.slideshow_images : defaults.slideshow_images,
-    dress_code: merged.dress_code !== undefined ? merged.dress_code : defaults.dress_code,
-    transport_info: merged.transport_info !== undefined ? merged.transport_info : defaults.transport_info,
+    dress_code: merged.dress_code !== undefined ? String(merged.dress_code) : "",
+    transport_info: merged.transport_info !== undefined ? String(merged.transport_info) : "",
     scratch_enabled: merged.scratch_enabled !== undefined ? merged.scratch_enabled : defaults.scratch_enabled,
-    sangeet_enabled: merged.sangeet_enabled !== undefined ? merged.sangeet_enabled : defaults.sangeet_enabled,
-    sangeet_date: merged.sangeet_date || defaults.sangeet_date,
-    sangeet_venue: merged.sangeet_venue !== undefined ? merged.sangeet_venue : defaults.sangeet_venue,
-    reception_date: merged.reception_date || defaults.reception_date,
-    reception_venue: merged.reception_venue !== undefined ? merged.reception_venue : defaults.reception_venue,
-    wedding_events: merged.wedding_events !== undefined ? merged.wedding_events : defaults.wedding_events,
-    gmap_coordinates: merged.gmap_coordinates !== undefined ? merged.gmap_coordinates : defaults.gmap_coordinates,
+    sangeet_enabled: merged.sangeet_enabled !== undefined ? merged.sangeet_enabled : false,
+    sangeet_date: merged.sangeet_date || "",
+    sangeet_venue: merged.sangeet_venue !== undefined ? String(merged.sangeet_venue) : "",
+    reception_date: merged.reception_date || "",
+    reception_venue: merged.reception_venue !== undefined ? String(merged.reception_venue) : "",
+    wedding_events: merged.wedding_events !== undefined ? String(merged.wedding_events) : "",
+    gmap_coordinates: merged.gmap_coordinates !== undefined ? String(merged.gmap_coordinates) : "",
   };
 }
 
@@ -147,6 +123,9 @@ function EditorPageContent() {
   const [conflictNotice, setConflictNotice] = useState<string | null>(null);
   const [currentRevision, setCurrentRevision] = useState<number>(1);
   const [activeMobileView, setActiveMobileView] = useState<"form" | "preview">("form");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeletingDraft, setIsDeletingDraft] = useState(false);
+  const isDraftDeletedRef = useRef<boolean>(false);
 
   const isAutosavingRef = useRef<boolean>(false);
   const pendingSaveRef = useRef<boolean>(false);
@@ -230,24 +209,44 @@ function EditorPageContent() {
   // Live preview device switcher state
   const [previewDevice, setPreviewDevice] = useState<"mobile" | "tablet" | "desktop">("mobile");
 
+  // Enforce mobile preview only on mobile screen widths (< 768px)
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== "undefined" && window.innerWidth < 768) {
+        setPreviewDevice("mobile");
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Template defaults and preview fallback data
+  const templateDefaults = useMemo(() => getDefaultTemplateData(templateSlug), [templateSlug]);
+
+  const previewData: TemplateData = useMemo(() => {
+    if (!formData) return templateDefaults;
+    return {
+      ...templateDefaults,
+      ...formData,
+      bride_name: formData.bride_name?.trim() ? formData.bride_name : templateDefaults.bride_name,
+      groom_name: formData.groom_name?.trim() ? formData.groom_name : templateDefaults.groom_name,
+      wedding_date: formData.wedding_date?.trim() ? formData.wedding_date : templateDefaults.wedding_date,
+      wedding_venue: formData.wedding_venue?.trim() ? formData.wedding_venue : templateDefaults.wedding_venue,
+      reception_date: formData.reception_date?.trim() ? formData.reception_date : templateDefaults.reception_date,
+      reception_venue: formData.reception_venue?.trim() ? formData.reception_venue : templateDefaults.reception_venue,
+      family_names: formData.family_names?.trim() ? formData.family_names : templateDefaults.family_names,
+      quote: formData.quote?.trim() ? formData.quote : templateDefaults.quote,
+      custom_message: formData.custom_message?.trim() ? formData.custom_message : templateDefaults.custom_message,
+      rsvp_phone: formData.rsvp_phone?.trim() ? formData.rsvp_phone : templateDefaults.rsvp_phone,
+      gmap_coordinates: formData.gmap_coordinates?.trim() ? formData.gmap_coordinates : templateDefaults.gmap_coordinates,
+      wedding_events: formData.wedding_events?.trim() ? formData.wedding_events : templateDefaults.wedding_events,
+    };
+  }, [formData, templateDefaults]);
+
   // Asset selection mode overrides: "preset" | "upload" | "url"
-  const [bgImageMode, setBgImageMode] = useState("preset");
   const [musicMode, setMusicMode] = useState("preset");
   const [slideshowMode, setSlideshowMode] = useState("preset");
-
-  // Dynamic Leaflet maps loading state
-  const [leafletLoaded, setLeafletLoaded] = useState(false);
-  const mapRef = useRef<any>(null);
-  const markerRef = useRef<any>(null);
-
-  // Map Search states
-  const [mapSearchQuery, setMapSearchQuery] = useState("");
-  const [mapSearchResults, setMapSearchResults] = useState<any[]>([]);
-  
-  const [isMapSearching, setIsMapSearching] = useState(false);
-  const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
-  const [isLocating, setIsLocating] = useState(false);
-  const [showFallbackDropdown, setShowFallbackDropdown] = useState(false);
 
   // Helper to adjust labels for religion categories (e.g., Nikah/Valima/Mehndi for Muslim template)
   const getAdjustedFieldLabel = (fieldId: string, defaultLabel: string): string => {
@@ -321,7 +320,8 @@ function EditorPageContent() {
             setDraftSlug(null);
             const newUrl = window.location.pathname;
             window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, "", newUrl);
-            setFormData(getDefaultTemplateData(templateSlug));
+            const emptyData = getEmptyTemplateData(templateSlug);
+            setFormData(emptyData);
             setIsDraftLoaded(true);
             return;
           }
@@ -357,14 +357,16 @@ function EditorPageContent() {
         } catch (err: any) {
           console.error("Error loading invitation draft:", err);
           setError(err.message || "Failed to load invitation.");
-          setFormData(getDefaultTemplateData(templateSlug));
+          const emptyData = getEmptyTemplateData(templateSlug);
+          setFormData(emptyData);
           setIsDraftLoaded(true);
         } finally {
           setIsSubmitting(false);
         }
       })();
     } else {
-      setFormData(getDefaultTemplateData(templateSlug));
+      const emptyData = getEmptyTemplateData(templateSlug);
+      setFormData(emptyData);
       setIsDraftLoaded(true);
     }
   }, [templateSlug, editSlug, loadingAuth]);
@@ -405,7 +407,7 @@ function EditorPageContent() {
   }, [editSlug, draftSlug]);
 
   const flushSave = async () => {
-    if (!user || isArchived || !isDraftLoaded || isAutosavingRef.current) return;
+    if (!user || isArchived || !isDraftLoaded || isAutosavingRef.current || isDraftDeletedRef.current) return;
     const currentData = formDataRef.current;
     if (!currentData || (!currentData.bride_name && !currentData.groom_name && !currentData.wedding_venue)) {
       return;
@@ -525,7 +527,7 @@ function EditorPageContent() {
 
   // Debounced autosave to database (500–1000ms debounce per spec)
   useEffect(() => {
-    if (!user || !formData || isArchived || !isDraftLoaded) return;
+    if (!user || !formData || isArchived || !isDraftLoaded || isDraftDeletedRef.current) return;
 
     if (!formData.bride_name && !formData.groom_name && !formData.wedding_venue) {
       return;
@@ -539,90 +541,6 @@ function EditorPageContent() {
   }, [formData, user, templateSlug, isArchived, isDraftLoaded, isEditMode, editSlug, draftSlug]);
 
   // Load Google Maps script dynamically (only if API key is present)
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-    if (!key) {
-      // Do not load the script to avoid console auth warning popup block
-      return;
-    }
-
-    if ((window as any).google?.maps?.places) {
-      setGoogleMapsLoaded(true);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places`;
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-      setGoogleMapsLoaded(true);
-    };
-    script.onerror = () => {
-      console.error("Google Maps Places script failed to load");
-    };
-    document.head.appendChild(script);
-  }, []);
-
-  // Attach Google Autocomplete listener to input
-  useEffect(() => {
-    if (!googleMapsLoaded || typeof window === "undefined" || !(window as any).google?.maps?.places) return;
-
-    const input = document.getElementById("gmap_coordinates") as HTMLInputElement;
-    if (!input) return;
-
-    const autocomplete = new (window as any).google.maps.places.Autocomplete(input, {
-      types: ["geocode", "establishment"],
-    });
-
-    autocomplete.addListener("place_changed", () => {
-      const place = autocomplete.getPlace();
-      if (place.geometry && place.geometry.location) {
-        const lat = place.geometry.location.lat();
-        const lng = place.geometry.location.lng();
-        const address = place.formatted_address || place.name || "";
-        handleInputChange("gmap_coordinates", `${lat.toFixed(6)},${lng.toFixed(6)} (${address})`);
-      } else if (place.name) {
-        handleInputChange("gmap_coordinates", place.name);
-      }
-    });
-  }, [googleMapsLoaded, currentStep]);
-
-  // Fallback search effect when Google Maps is not loaded
-  useEffect(() => {
-    const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-    if (key) return; // Google Autocomplete will handle it
-
-    const inputVal = formData?.gmap_coordinates || "";
-    // If it already looks like coordinates, e.g. "12.345,67.890" or has trailing address in parenthesis, don't query Nominatim
-    const query = inputVal.split("(")[0].trim();
-    if (!query || query.length < 3 || query.includes(",") || /^[0-9.-]+\s*,\s*[0-9.-]+$/.test(query)) {
-      setMapSearchResults([]);
-      setShowFallbackDropdown(false);
-      return;
-    }
-
-    const delayDebounce = setTimeout(async () => {
-      setIsMapSearching(true);
-      try {
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`
-        );
-        if (res.ok) {
-          const data = await res.json();
-          setMapSearchResults(data || []);
-          setShowFallbackDropdown(true);
-        }
-      } catch (err) {
-        console.error("Fallback map search error:", err);
-      } finally {
-        setIsMapSearching(false);
-      }
-    }, 450);
-
-    return () => clearTimeout(delayDebounce);
-  }, [formData?.gmap_coordinates]);
 
   if (!template) {
     return (
@@ -659,34 +577,43 @@ function EditorPageContent() {
     });
   };
 
-  // Wizard steps categorizer
+  // Wizard steps categorizer: 4 logical sections
   const getFieldStep = (fieldId: string): number => {
     switch (fieldId) {
-      // Step 1: Couple & Quote
+      // Step 1: Couple & Family Details
       case "bride_name":
       case "groom_name":
+      case "family_names":
       case "quote":
-      case "bg_image_url":
+      case "custom_message":
         return 1;
 
-      // Step 2: Date & Photos
+      // Step 2: Dates, Venues & Locations (Wedding, Reception & Maps in one place)
       case "wedding_date":
-      case "slideshow_images":
-        return 2;
-
-      // Step 3: Program Timeline
       case "wedding_venue":
       case "reception_date":
       case "reception_venue":
+      case "gmap_coordinates":
+        return 2;
+
+      // Step 3: Program Timeline
       case "wedding_events":
         return 3;
 
-      // Step 4: Venue Map & RSVP
-      case "gmap_coordinates":
+      // Step 4: Media, RSVP & Publish
+      case "slideshow_images":
+      case "music_url":
       case "rsvp_phone":
-      case "family_names":
-      case "custom_message":
+      case "dress_code":
+      case "transport_info":
+      case "scratch_enabled":
+      case "sangeet_enabled":
+      case "sangeet_date":
+      case "sangeet_venue":
         return 4;
+
+      case "bg_image_url":
+        return -1; // Custom background image removed
 
       default:
         return 1;
@@ -695,14 +622,28 @@ function EditorPageContent() {
 
   // Step Validation
   const validateStep = (step: number): boolean => {
-    const stepFields = template.fields.filter((f) => getFieldStep(f.id) === step);
-    for (const field of stepFields) {
-      if (field.required) {
-        const val = (formData as any)[field.id];
-        if (!val || !val.trim()) {
-          setStepError(`Please fill out the required field: "${getAdjustedFieldLabel(field.id, field.label)}"`);
-          return false;
-        }
+    if (step === 1) {
+      if (!formData?.bride_name || !formData.bride_name.trim()) {
+        setStepError("Please enter the Bride's Name.");
+        return false;
+      }
+      if (!formData?.groom_name || !formData.groom_name.trim()) {
+        setStepError("Please enter the Groom's Name.");
+        return false;
+      }
+    } else if (step === 2) {
+      if (!formData?.wedding_date || !formData.wedding_date.trim()) {
+        setStepError("Please select the Wedding Date & Time.");
+        return false;
+      }
+      if (!formData?.wedding_venue || !formData.wedding_venue.trim()) {
+        setStepError("Please enter the Wedding Venue Address.");
+        return false;
+      }
+    } else if (step === 4) {
+      if (!formData?.rsvp_phone || !formData.rsvp_phone.trim()) {
+        setStepError("Please enter an RSVP Contact Phone Number.");
+        return false;
       }
     }
     setStepError(null);
@@ -944,6 +885,55 @@ function EditorPageContent() {
     }
   };
 
+  const handleDeleteDraft = async () => {
+    const activeSlug = editSlug || draftSlug;
+    if (!activeSlug || isEditMode) return;
+
+    setIsDeletingDraft(true);
+    isDraftDeletedRef.current = true;
+
+    try {
+      const isMockSupabase = !isSupabaseConfigured;
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = isMockSupabase ? "mock-user-token" : session?.access_token || "";
+
+      const res = await fetch(`/api/invitations/${activeSlug}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        try {
+          localStorage.removeItem(`varnam_offline_draft_${activeSlug}`);
+          const cached = localStorage.getItem("varnam_cached_invitations");
+          if (cached) {
+            const list = JSON.parse(cached);
+            if (Array.isArray(list)) {
+              const updated = list.filter((i: any) => i.slug !== activeSlug);
+              localStorage.setItem("varnam_cached_invitations", JSON.stringify(updated));
+            }
+          }
+        } catch {}
+
+        router.push("/dashboard");
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        alert(errorData.message || "Failed to delete draft from database.");
+        isDraftDeletedRef.current = false;
+        setIsDeletingDraft(false);
+        setShowDeleteModal(false);
+      }
+    } catch (err: any) {
+      console.error("Error deleting draft from editor:", err);
+      alert(err.message || "Error deleting draft.");
+      isDraftDeletedRef.current = false;
+      setIsDeletingDraft(false);
+      setShowDeleteModal(false);
+    }
+  };
+
   if (loadingAuth) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f3efe9] flex flex-col items-center justify-center font-sans text-neutral-800">
@@ -1003,8 +993,23 @@ function EditorPageContent() {
           VARNAM
         </Link>
 
-        <div className="bg-[#fffcf9] border border-[#eed57c]/30 px-4 py-1.5 rounded-xl shadow-sm">
-          <span className="font-cinzel text-[#b3811b] font-bold tracking-wide text-xs">₹{template.price}</span>
+        <div className="flex items-center gap-2.5">
+          {/* Delete Draft Button (ONLY for unpaid draft) */}
+          {!isEditMode && (editSlug || draftSlug) && (
+            <button
+              type="button"
+              onClick={() => setShowDeleteModal(true)}
+              className="h-9 px-3 rounded-xl border border-red-200 hover:border-red-300 text-red-600 hover:bg-red-50 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Delete this draft from database"
+            >
+              <Trash2 className="w-3.5 h-3.5 text-red-500" />
+              <span className="hidden sm:inline">Delete Draft</span>
+            </button>
+          )}
+
+          <div className="bg-[#fffcf9] border border-[#eed57c]/30 px-4 py-1.5 rounded-xl shadow-sm">
+            <span className="font-cinzel text-[#b3811b] font-bold tracking-wide text-xs">₹{template.price}</span>
+          </div>
         </div>
       </header>
 
@@ -1054,7 +1059,7 @@ function EditorPageContent() {
                           : "text-neutral-400 group-hover:text-neutral-600"
                       }`}
                     >
-                      {step === 1 ? "Couple" : step === 2 ? "Photos" : step === 3 ? "Timeline" : "RSVP"}
+                      {step === 1 ? "Couple" : step === 2 ? "Venues" : step === 3 ? "Schedule" : "Publish"}
                     </span>
                   </button>
                 );
@@ -1076,536 +1081,550 @@ function EditorPageContent() {
             )}
 
             <div className="space-y-6">
-              {template.fields
-                .filter((field) => getFieldStep(field.id) === currentStep)
-                .map((field) => {
-                  const val = (formData as any)[field.id] || "";
-                  
-                  // 1. BACKGROUND IMAGE INPUT MODE OVERRIDE
-                  if (field.id === "bg_image_url") {
-                    return (
-                      <div key={field.id} className="flex flex-col gap-2.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
-                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
-                          <ImageIcon className="w-3.5 h-3.5" />
-                          {getAdjustedFieldLabel(field.id, field.label)}
+              {/* STEP 1: COUPLE & FAMILY DETAILS */}
+              {currentStep === 1 && (
+                <div className="space-y-5 animate-in fade-in duration-300">
+                  <div className="p-4 bg-[#fffdfa] border border-[#eed57c]/30 rounded-2xl shadow-xs space-y-4">
+                    <div className="flex items-center gap-2 border-b border-[#eed57c]/20 pb-2">
+                      <Heart className="w-4 h-4 text-[#b3811b]" />
+                      <h3 className="font-montserrat text-xs tracking-wider uppercase font-bold text-[#8a725d]">
+                        The Couple
+                      </h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold block mb-1">
+                          Bride Name <span className="text-red-500">*</span>
                         </label>
-
-                        {/* Mode Toggle Buttons */}
-                        <div className="flex gap-1.5 mb-1 bg-neutral-100/80 p-1 rounded-xl border border-neutral-200/30">
-                          {[
-                            { id: "preset", label: "Images" },
-                            { id: "color", label: "Colors" },
-                            { id: "upload", label: "Upload" },
-                            { id: "url", label: "Link" }
-                          ].map((mode) => (
-                            <button
-                              key={mode.id}
-                              type="button"
-                              onClick={() => setBgImageMode(mode.id)}
-                              className={`flex-1 py-1.5 font-montserrat text-[9px] tracking-wider uppercase transition-all duration-300 rounded-lg cursor-pointer ${
-                                bgImageMode === mode.id
-                                  ? "bg-white text-[#b3811b] font-bold shadow-sm"
-                                  : "text-neutral-500 hover:text-neutral-800"
-                              }`}
-                            >
-                              {mode.label}
-                            </button>
-                          ))}
-                        </div>
-
-                        {bgImageMode === "preset" && (
-                          <select
-                            value={val}
-                            onChange={(e) => handleInputChange(field.id, e.target.value)}
-                            className="w-full bg-white border border-neutral-200 text-neutral-800 text-xs px-3 py-2.5 rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all"
-                          >
-                            {BG_IMAGE_PRESETS.map((p) => (
-                              <option key={p.value} value={p.value} className="bg-white text-neutral-800">
-                                {p.label}
-                              </option>
-                            ))}
-                          </select>
-                        )}
-
-                        {bgImageMode === "color" && (
-                          <div className="space-y-3">
-                            <select
-                              value={val}
-                              onChange={(e) => handleInputChange(field.id, e.target.value)}
-                              className="w-full bg-white border border-neutral-200 text-neutral-800 text-xs px-3 py-2.5 rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all"
-                            >
-                              <option value="">Select a background color...</option>
-                              {BG_COLOR_PRESETS.map((p) => (
-                                <option key={p.value} value={p.value} className="bg-white text-neutral-800">
-                                  {p.label}
-                                </option>
-                              ))}
-                            </select>
-                            {/* Visual Color Grid Swatches */}
-                            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                              {BG_COLOR_PRESETS.map((p) => {
-                                const isSelected = val === p.value;
-                                return (
-                                  <button
-                                    key={p.value}
-                                    type="button"
-                                    onClick={() => handleInputChange(field.id, p.value)}
-                                    style={{ background: p.value }}
-                                    className={`w-8 h-8 rounded-full border shadow-sm transition-all cursor-pointer hover:scale-110 flex items-center justify-center ${
-                                      isSelected
-                                        ? "border-[#b3811b] ring-2 ring-[#b3811b]/30 scale-105"
-                                        : "border-neutral-200"
-                                    }`}
-                                    title={p.label}
-                                  >
-                                    {isSelected && (
-                                      <span className={`text-[9px] font-bold ${p.value === "#fcfaf2" || p.value === "#f5e1e2" ? "text-neutral-800" : "text-white"}`}>
-                                        ✓
-                                      </span>
-                                    )}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
-
-                        {bgImageMode === "upload" && (
-                          <div className="space-y-3">
-                            <div className="relative border border-dashed border-[#b3811b]/30 py-6 flex flex-col items-center justify-center bg-[#fffcf9] rounded-2xl transition-colors hover:bg-[#fff9f2]">
-                              <Upload className="w-6 h-6 text-[#b3811b]/60 mb-1" />
-                              <span className="font-montserrat text-[9px] text-[#b3811b]/70 uppercase font-bold">
-                                {val.startsWith("data:") ? "CHANGE UPLOADED IMAGE" : "UPLOAD BACKGROUND"}
-                              </span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleFileUpload(field.id, e)}
-                                className="absolute inset-0 opacity-0 cursor-pointer w-full"
-                              />
-                            </div>
-                            {val.startsWith("data:") && (
-                              <div className="flex items-center gap-3 bg-neutral-50 p-2 rounded-xl border border-neutral-100">
-                                <img src={val} alt="Custom uploaded backdrop" className="w-12 h-12 rounded-lg object-cover border border-[#eed57c]/30 shadow-sm" />
-                                <div className="flex-grow min-w-0">
-                                  <p className="text-[10px] font-bold text-neutral-800 truncate uppercase">Custom Upload Active</p>
-                                  <button
-                                    type="button"
-                                    onClick={() => handleInputChange(field.id, "")}
-                                    className="text-[9px] text-red-500 hover:text-red-600 font-bold uppercase"
-                                  >
-                                    Remove custom image
-                                  </button>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {bgImageMode === "url" && (
-                          <input
-                            type="text"
-                            value={val}
-                            onChange={(e) => handleInputChange(field.id, e.target.value)}
-                            placeholder="Paste image url link here..."
-                            className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
-                          />
-                        )}
-                      </div>
-                    );
-                  }
-
-                  // 2. BACKGROUND MUSIC INPUT MODE OVERRIDE
-                  if (field.id === "music_url") {
-                    return (
-                      <div key={field.id} className="flex flex-col gap-2.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
-                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
-                          <Music className="w-3.5 h-3.5" />
-                          {getAdjustedFieldLabel(field.id, field.label)}
-                        </label>
-
-                        {/* Mode Toggle */}
-                        <div className="flex gap-1.5 mb-1 bg-neutral-100/80 p-1 rounded-xl border border-neutral-200/30">
-                          {["preset", "upload", "url"].map((mode) => (
-                            <button
-                              key={mode}
-                              type="button"
-                              onClick={() => setMusicMode(mode)}
-                              className={`flex-1 py-1.5 font-montserrat text-[9px] tracking-wider uppercase transition-all duration-300 rounded-lg cursor-pointer ${
-                                musicMode === mode
-                                  ? "bg-white text-[#b3811b] font-bold shadow-sm"
-                                  : "text-neutral-500 hover:text-neutral-800"
-                              }`}
-                            >
-                              {mode}
-                            </button>
-                          ))}
-                        </div>
-
-                        {musicMode === "preset" && (
-                          <select
-                            value={val}
-                            onChange={(e) => handleInputChange(field.id, e.target.value)}
-                            className="w-full bg-white border border-neutral-200 text-neutral-800 text-xs px-3 py-2.5 rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all"
-                          >
-                            {MUSIC_PRESETS.map((p) => (
-                              <option key={p.value} value={p.value} className="bg-white text-neutral-800">
-                                {p.label}
-                              </option>
-                            ))}
-                          </select>
-                        )}
-
-                        {musicMode === "upload" && (
-                          <div className="relative border border-dashed border-[#b3811b]/30 py-6 flex flex-col items-center justify-center bg-[#fffcf9] rounded-2xl transition-colors hover:bg-[#fff9f2]">
-                            <Upload className="w-6 h-6 text-[#b3811b]/60 mb-1" />
-                            <span className="font-montserrat text-[9px] text-[#b3811b]/70 uppercase font-bold">UPLOAD BACKGROUND AUDIO</span>
-                            <input
-                              type="file"
-                              accept="audio/*"
-                              onChange={(e) => handleFileUpload(field.id, e)}
-                              className="absolute inset-0 opacity-0 cursor-pointer w-full"
-                            />
-                          </div>
-                        )}
-
-                        {musicMode === "url" && (
-                          <input
-                            type="text"
-                            value={val}
-                            onChange={(e) => handleInputChange(field.id, e.target.value)}
-                            placeholder="Paste audio .mp3 URL..."
-                            className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
-                          />
-                        )}
-                      </div>
-                    );
-                  }
-
-                  // 3. PHOTO SLIDESHOW GALLERY MODE OVERRIDE
-                  if (field.id === "slideshow_images") {
-                    return (
-                      <div key={field.id} className="flex flex-col gap-2.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
-                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
-                          <ImageIcon className="w-3.5 h-3.5" />
-                          {getAdjustedFieldLabel(field.id, field.label)}
-                        </label>
-
-                        {/* Mode Toggle */}
-                        <div className="flex gap-1.5 mb-1 bg-neutral-100/80 p-1 rounded-xl border border-neutral-200/30">
-                          {["preset", "upload", "url"].map((mode) => (
-                            <button
-                              key={mode}
-                              type="button"
-                              onClick={() => setSlideshowMode(mode)}
-                              className={`flex-1 py-1.5 font-montserrat text-[9px] tracking-wider uppercase transition-all duration-300 rounded-lg cursor-pointer ${
-                                slideshowMode === mode
-                                  ? "bg-white text-[#b3811b] font-bold shadow-sm"
-                                  : "text-neutral-500 hover:text-neutral-800"
-                              }`}
-                            >
-                              {mode}
-                            </button>
-                          ))}
-                        </div>
-
-                        {slideshowMode === "preset" && (
-                          <select
-                            value={val}
-                            onChange={(e) => handleInputChange(field.id, e.target.value)}
-                            className="w-full bg-white border border-neutral-200 text-neutral-800 text-xs px-3 py-2.5 rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all"
-                          >
-                            {SLIDESHOW_PRESETS.map((p) => (
-                              <option key={p.value} value={p.value} className="bg-white text-neutral-800">
-                                {p.label}
-                              </option>
-                            ))}
-                          </select>
-                        )}
-
-                        {slideshowMode === "upload" && (
-                          <div className="flex flex-col gap-2">
-                            <div className="relative border border-dashed border-[#b3811b]/30 py-6 flex flex-col items-center justify-center bg-[#fffcf9] rounded-2xl transition-colors hover:bg-[#fff9f2]">
-                              <Upload className="w-6 h-6 text-[#b3811b]/60 mb-1" />
-                              <span className="font-montserrat text-[9px] text-[#b3811b]/70 uppercase font-bold">UPLOAD SLIDESHOW IMAGE</span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) {
-                                    const reader = new FileReader();
-                                    reader.onload = (event) => {
-                                      const base64 = event.target?.result as string;
-                                      const newList = val ? `${val}, ${base64}` : base64;
-                                      handleInputChange(field.id, newList);
-                                    };
-                                    reader.readAsDataURL(file);
-                                  }
-                                }}
-                                className="absolute inset-0 opacity-0 cursor-pointer w-full"
-                              />
-                            </div>
-                            {val && (
-                              <div className="flex justify-between items-center text-[10px] text-[#8a725d]/70 font-semibold px-1">
-                                <span>{val.split(/,(?=\s*(?:https?:|data:))/i).filter(Boolean).length} Images Uploaded</span>
-                                <button
-                                  type="button"
-                                  onClick={() => handleInputChange(field.id, "")}
-                                  className="text-red-400 hover:text-red-300 font-bold"
-                                >
-                                  CLEAR ALL
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {slideshowMode === "url" && (
-                          <textarea
-                            value={val}
-                            onChange={(e) => handleInputChange(field.id, e.target.value)}
-                            placeholder="Paste image URLs separated by commas..."
-                            rows={3}
-                            className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2 focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400 text-xs rounded-xl"
-                          />
-                        )}
-                      </div>
-                    );
-                  }
-
-                  // 4. GOOGLE MAP COORDINATES MARKER INTEGRATION
-                  if (field.id === "gmap_coordinates") {
-                    const handleGetCurrentLocation = () => {
-                      if (navigator.geolocation) {
-                        setIsLocating(true);
-                        navigator.geolocation.getCurrentPosition(
-                          (position) => {
-                            const lat = position.coords.latitude;
-                            const lng = position.coords.longitude;
-                            handleInputChange(field.id, `${lat.toFixed(6)},${lng.toFixed(6)}`);
-                            setIsLocating(false);
-                          },
-                          (error) => {
-                            alert("Geolocation Error: " + error.message + " (Make sure you allow location permissions in your browser)");
-                            setIsLocating(false);
-                          },
-                          { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-                        );
-                      } else {
-                        alert("Geolocation is not supported by your browser.");
-                      }
-                    };
-
-                    const previewUrl = `https://maps.google.com/maps?q=${encodeURIComponent(val || "13.0827,80.2707")}&z=15&output=embed`;
-
-                    return (
-                      <div key={field.id} className="flex flex-col gap-2.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
-                        {/* Global Google places dropdown styling */}
-                        <style>{`
-                          .pac-container {
-                            z-index: 999999 !important;
-                            border-radius: 16px !important;
-                            border: 1px solid rgba(179, 129, 27, 0.2) !important;
-                            font-family: inherit !important;
-                            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1) !important;
-                            background-color: #fffdfa !important;
-                            padding: 6px 0 !important;
-                            margin-top: 4px !important;
-                          }
-                          .pac-item {
-                            padding: 8px 14px !important;
-                            font-size: 11px !important;
-                            color: #4a3e3d !important;
-                            cursor: pointer !important;
-                            border-top: 1px solid rgba(179, 129, 27, 0.08) !important;
-                            display: flex !important;
-                            align-items: center !important;
-                          }
-                          .pac-item:hover, .pac-item-selected {
-                            background-color: rgba(179, 129, 27, 0.08) !important;
-                          }
-                          .pac-icon {
-                            display: none !important;
-                          }
-                          .pac-item-query {
-                            font-size: 11px !important;
-                            color: #1a100f !important;
-                            font-weight: 600 !important;
-                            padding-right: 4px !important;
-                          }
-                          .pac-matched {
-                            color: #b3811b !important;
-                            font-weight: 700 !important;
-                          }
-                        `}</style>
-
-                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
-                          <MapPin className="w-3.5 h-3.5 text-[#b3811b]" />
-                          {field.label}
-                        </label>
-
-                        <div className="relative">
-                          <div className="flex gap-2">
-                            <input
-                              type="text"
-                              id={field.id}
-                              value={val}
-                              onChange={(e) => handleInputChange(field.id, e.target.value)}
-                              placeholder="Type address or search places..."
-                              className="flex-grow bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400 w-full"
-                            />
-                            <button
-                              type="button"
-                              onClick={handleGetCurrentLocation}
-                              disabled={isLocating}
-                              className="px-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs rounded-xl border border-neutral-200 shadow-sm transition-colors flex items-center justify-center gap-1.5 shrink-0 cursor-pointer font-montserrat font-semibold text-[10px] disabled:opacity-50"
-                              title="Use my current GPS location"
-                            >
-                              {isLocating ? "⏳ Locating..." : "📍 Use Current"}
-                            </button>
-                          </div>
-
-                          {/* Fallback Custom Suggestions Dropdown */}
-                          {showFallbackDropdown && mapSearchResults.length > 0 && (
-                            <div className="absolute left-0 right-0 mt-1.5 bg-[#fffdfa] border border-[#eed57c]/30 rounded-xl shadow-lg z-50 max-h-56 overflow-y-auto divide-y divide-neutral-100">
-                              {mapSearchResults.map((result: any, idx: number) => {
-                                const parts = result.display_name.split(",");
-                                const title = parts[0];
-                                const subtitle = parts.slice(1).join(",").trim();
-                                return (
-                                  <button
-                                    key={idx}
-                                    type="button"
-                                    onClick={() => {
-                                      const lat = parseFloat(result.lat);
-                                      const lng = parseFloat(result.lon);
-                                      const address = result.display_name;
-                                      handleInputChange("gmap_coordinates", `${lat.toFixed(6)},${lng.toFixed(6)} (${address})`);
-                                      setShowFallbackDropdown(false);
-                                    }}
-                                    className="w-full text-left px-4 py-2.5 hover:bg-[#b3811b]/5 flex flex-col gap-0.5 cursor-pointer text-xs transition-colors"
-                                  >
-                                    <span className="font-bold text-neutral-800">{title}</span>
-                                    <span className="text-[9px] text-neutral-400 truncate">{subtitle}</span>
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Interactive Google / Leaflet Venue Map */}
-                        <div className="flex flex-col gap-1.5 mt-1 text-left">
-                          <InteractiveMapPicker
-                            value={val}
-                            onChange={(newVal) => handleInputChange(field.id, newVal)}
-                          />
-                        </div>
-                      </div>
-                    );
-                  }
-
-
-
-                  if (field.type === "toggle") {
-                    const isChecked = val === "yes";
-                    return (
-                      <div key={field.id} className="flex items-center justify-between p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-sm">
-                        <div className="flex flex-col gap-0.5">
-                          <span className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold">
-                            {getAdjustedFieldLabel(field.id, field.label)}
-                          </span>
-                          {field.placeholder && (
-                            <span className="font-serif text-[9px] text-neutral-400 italic">
-                              {getAdjustedFieldPlaceholder(field.id, field.placeholder)}
-                            </span>
-                          )}
-                        </div>
-                        <button
-                          type="button"
-                          id={field.id}
-                          onClick={() => handleInputChange(field.id, isChecked ? "no" : "yes")}
-                          className={`w-11 h-6 rounded-full p-1 transition-colors duration-300 focus:outline-none relative cursor-pointer ${
-                            isChecked ? "bg-[#b3811b]" : "bg-neutral-200"
-                          }`}
-                        >
-                          <div
-                            className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-300 absolute top-1 ${
-                              isChecked ? "translate-x-5" : "translate-x-0"
-                            }`}
-                          />
-                        </button>
-                      </div>
-                    );
-                  }
-
-                  // Standard default rendering for other fields
-                  return (
-                    <div key={field.id} className="flex flex-col gap-1.5">
-                      <label htmlFor={field.id} className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold">
-                        {getAdjustedFieldLabel(field.id, field.label)} {field.required && <span className="text-red-500">*</span>}
-                      </label>
-
-                      {field.type === "textarea" ? (
-                        <textarea
-                          id={field.id}
-                          required={field.required}
-                          rows={3}
-                          value={val}
-                          onChange={(e) => handleInputChange(field.id, e.target.value)}
-                          placeholder={getAdjustedFieldPlaceholder(field.id, field.placeholder || "")}
-                          className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-3 text-sm rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
+                        <input
+                          type="text"
+                          required
+                          value={formData?.bride_name || ""}
+                          onChange={(e) => handleInputChange("bride_name", e.target.value)}
+                          placeholder={templateDefaults.bride_name || "e.g. Ananya"}
+                          className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs placeholder-neutral-400"
                         />
-                      ) : field.type === "datetime" ? (
-                        /* CALENDAR SELECT TRIGGERS ON CLICK */
+                      </div>
+                      <div>
+                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold block mb-1">
+                          Groom Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={formData?.groom_name || ""}
+                          onChange={(e) => handleInputChange("groom_name", e.target.value)}
+                          placeholder={templateDefaults.groom_name || "e.g. Siddharth"}
+                          className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs placeholder-neutral-400"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-[#fffdfa] border border-[#eed57c]/30 rounded-2xl shadow-xs space-y-4">
+                    <div className="flex items-center gap-2 border-b border-[#eed57c]/20 pb-2">
+                      <Sparkles className="w-4 h-4 text-[#b3811b]" />
+                      <h3 className="font-montserrat text-xs tracking-wider uppercase font-bold text-[#8a725d]">
+                        Family & Blessings
+                      </h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold block mb-1">
+                          With Blessings Of / Parents & Family Names
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={formData?.family_names || ""}
+                          onChange={(e) => handleInputChange("family_names", e.target.value)}
+                          placeholder={templateDefaults.family_names || "e.g. With the divine blessings of our beloved elders: Mr. & Mrs. R. Sundaram & Family"}
+                          className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs placeholder-neutral-400"
+                        />
+                      </div>
+                      <div>
+                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold block mb-1">
+                          {getAdjustedFieldLabel("quote", "Wedding Verse / Quote")}
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={formData?.quote || ""}
+                          onChange={(e) => handleInputChange("quote", e.target.value)}
+                          placeholder={templateDefaults.quote || "e.g. Two souls united amidst sacred blessings, embarking on an eternal auspicious journey together."}
+                          className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs placeholder-neutral-400"
+                        />
+                      </div>
+                      <div>
+                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold block mb-1">
+                          Welcome Note / Custom Message For Guests
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={formData?.custom_message || ""}
+                          onChange={(e) => handleInputChange("custom_message", e.target.value)}
+                          placeholder={templateDefaults.custom_message || "e.g. We cordially request the honour of your gracious presence to celebrate our wedding."}
+                          className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs placeholder-neutral-400"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 2: WEDDING & RECEPTION DATES, VENUES & MAPS IN ONE PLACE */}
+              {currentStep === 2 && (
+                <div className="space-y-5 animate-in fade-in duration-300">
+                  {/* Wedding Ceremony */}
+                  <div className="p-4 bg-[#fffdfa] border border-[#eed57c]/30 rounded-2xl shadow-xs space-y-4">
+                    <div className="flex items-center gap-2 border-b border-[#eed57c]/20 pb-2">
+                      <Calendar className="w-4 h-4 text-[#b3811b]" />
+                      <h3 className="font-montserrat text-xs tracking-wider uppercase font-bold text-[#8a725d]">
+                        {getAdjustedFieldLabel("wedding_date", "Wedding Ceremony")}
+                      </h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold block mb-1">
+                          {getAdjustedFieldLabel("wedding_date", "Wedding Date & Time")} <span className="text-red-500">*</span>
+                        </label>
                         <div
                           onClick={(e) => {
                             const input = e.currentTarget.querySelector("input");
                             if (input) {
-                              try {
-                                input.showPicker();
-                              } catch (err) {
-                                console.warn("showPicker is not supported", err);
-                                input.focus();
-                              }
+                              try { input.showPicker(); } catch {}
                             }
                           }}
                           className="w-full relative group cursor-pointer"
                         >
                           <input
                             type="datetime-local"
-                            id={field.id}
-                            required={field.required}
-                            value={val ? new Date(val).toISOString().slice(0, 16) : ""}
+                            value={formData?.wedding_date ? new Date(formData.wedding_date).toISOString().slice(0, 16) : ""}
                             onChange={(e) => {
-                              const isoStr = e.target.value ? new Date(e.target.value).toISOString() : "";
-                              handleInputChange(field.id, isoStr);
+                              const iso = e.target.value ? new Date(e.target.value).toISOString() : "";
+                              handleInputChange("wedding_date", iso);
                             }}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                            }}
-                            className="w-full bg-white border border-neutral-200 group-hover:border-neutral-300 text-neutral-800 px-4 py-3 pr-10 text-sm rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all cursor-pointer"
+                            className="w-full bg-white border border-neutral-200 group-hover:border-neutral-300 text-neutral-800 px-4 py-2.5 pr-10 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs cursor-pointer"
                           />
-                          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#b3811b] group-hover:text-[#8a725d] transition-colors pointer-events-none">
+                          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#b3811b] pointer-events-none">
                             <Calendar className="w-4 h-4" />
                           </div>
                         </div>
-                      ) : (
-                        <input
-                          type="text"
-                          id={field.id}
-                          required={field.required}
-                          value={val}
-                          onChange={(e) => handleInputChange(field.id, e.target.value)}
-                          placeholder={getAdjustedFieldPlaceholder(field.id, field.placeholder || "")}
-                          className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-3 text-sm rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-sm transition-all placeholder-neutral-400"
+                      </div>
+                      <div>
+                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold block mb-1">
+                          {getAdjustedFieldLabel("wedding_venue", "Wedding Venue Address")} <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          rows={3}
+                          required
+                          value={formData?.wedding_venue || ""}
+                          onChange={(e) => handleInputChange("wedding_venue", e.target.value)}
+                          placeholder={templateDefaults.wedding_venue || "e.g. The Leela Palace Courtyard, Adyar Seaface, MRC Nagar, Chennai - 600028"}
+                          className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs placeholder-neutral-400"
                         />
-                      )}
+                      </div>
                     </div>
-                  );
-                })}
-            </div>
+                  </div>
+
+                  {/* Reception Feast */}
+                  <div className="p-4 bg-[#fffdfa] border border-[#eed57c]/30 rounded-2xl shadow-xs space-y-4">
+                    <div className="flex items-center gap-2 border-b border-[#eed57c]/20 pb-2">
+                      <Sparkles className="w-4 h-4 text-[#b3811b]" />
+                      <h3 className="font-montserrat text-xs tracking-wider uppercase font-bold text-[#8a725d]">
+                        {getAdjustedFieldLabel("reception_date", "Reception Feast & Celebration")}
+                      </h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold block mb-1">
+                          {getAdjustedFieldLabel("reception_date", "Reception Date & Time")}
+                        </label>
+                        <div
+                          onClick={(e) => {
+                            const input = e.currentTarget.querySelector("input");
+                            if (input) {
+                              try { input.showPicker(); } catch {}
+                            }
+                          }}
+                          className="w-full relative group cursor-pointer"
+                        >
+                          <input
+                            type="datetime-local"
+                            value={formData?.reception_date ? new Date(formData.reception_date).toISOString().slice(0, 16) : ""}
+                            onChange={(e) => {
+                              const iso = e.target.value ? new Date(e.target.value).toISOString() : "";
+                              handleInputChange("reception_date", iso);
+                            }}
+                            className="w-full bg-white border border-neutral-200 group-hover:border-neutral-300 text-neutral-800 px-4 py-2.5 pr-10 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs cursor-pointer"
+                          />
+                          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#b3811b] pointer-events-none">
+                            <Calendar className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold block mb-1">
+                          {getAdjustedFieldLabel("reception_venue", "Reception Venue Address")}
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={formData?.reception_venue || ""}
+                          onChange={(e) => handleInputChange("reception_venue", e.target.value)}
+                          placeholder={templateDefaults.reception_venue || "e.g. Grand Ballroom, The Leela Palace, Chennai"}
+                          className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs placeholder-neutral-400"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Venue Map & Location */}
+                  <div className="p-4 border border-[#eed57c]/30 bg-[#fffdfa] rounded-2xl shadow-xs space-y-3">
+                    <div className="flex items-center gap-2 border-b border-[#eed57c]/20 pb-2">
+                      <MapPin className="w-4 h-4 text-[#b3811b]" />
+                      <h3 className="font-montserrat text-xs tracking-wider uppercase font-bold text-[#8a725d]">
+                        Venue Location Map & GPS Search
+                      </h3>
+                    </div>
+                    <p className="text-[11px] text-neutral-500">
+                      Pins location for guests to open turn-by-turn Google Maps directions on their mobile devices.
+                    </p>
+                    <div className="mt-1">
+                      <InteractiveMapPicker
+                        value={formData?.gmap_coordinates || ""}
+                        suggestedVenueName={formData?.wedding_venue || ""}
+                        onChange={(newVal) => handleInputChange("gmap_coordinates", newVal)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 3: PROGRAM SCHEDULE (WEDDING & RECEPTION FEATURED) */}
+              {currentStep === 3 && (
+                <div className="space-y-5 animate-in fade-in duration-300">
+                  <div className="flex items-center gap-2 border-b border-[#eed57c]/25 pb-3">
+                    <Calendar className="w-4 h-4 text-[#b3811b]" />
+                    <div>
+                      <h3 className="font-montserrat text-xs tracking-wider uppercase font-bold text-[#8a725d]">
+                        Invitation Program Schedule
+                      </h3>
+                      <p className="text-[10px] text-neutral-400 mt-0.5">
+                        Your sacred wedding ceremony and reception feast appear automatically on the invitation scroll
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Wedding Ceremony Program Card */}
+                  <div className="p-4 bg-[#fffdfa] border border-[#eed57c]/35 rounded-2xl shadow-xs space-y-2.5">
+                    <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-6 h-6 rounded-full bg-[#831843] text-white text-[10px] font-bold flex items-center justify-center font-montserrat shadow-xs">
+                          1
+                        </span>
+                        <div>
+                          <span className="font-montserrat text-xs font-bold text-neutral-800">
+                            {getAdjustedFieldLabel("wedding_date", "Sacred Wedding Ceremony")}
+                          </span>
+                          <span className="ml-2 text-[9px] uppercase tracking-wider text-[#b3811b] font-semibold bg-[#eed57c]/20 px-2 py-0.5 rounded-full">
+                            Featured On Invitation
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                      <div className="bg-white p-2.5 rounded-xl border border-neutral-200/80">
+                        <span className="text-[9.5px] uppercase tracking-wider text-neutral-400 font-bold block mb-0.5">
+                          Date & Time
+                        </span>
+                        <span className="font-medium text-neutral-800">
+                          {formData?.wedding_date
+                            ? new Date(formData.wedding_date).toLocaleString("en-IN", { dateStyle: "full", timeStyle: "short" })
+                            : templateDefaults.wedding_date
+                            ? new Date(templateDefaults.wedding_date).toLocaleString("en-IN", { dateStyle: "full", timeStyle: "short" })
+                            : "Auspicious Morning (Configured in Step 2)"}
+                        </span>
+                      </div>
+                      <div className="bg-white p-2.5 rounded-xl border border-neutral-200/80">
+                        <span className="text-[9.5px] uppercase tracking-wider text-neutral-400 font-bold block mb-0.5">
+                          Venue
+                        </span>
+                        <span className="font-medium text-neutral-800 line-clamp-1">
+                          {formData?.wedding_venue || templateDefaults.wedding_venue || "Configured in Step 2"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Reception Program Card */}
+                  <div className="p-4 bg-[#fffdfa] border border-[#eed57c]/35 rounded-2xl shadow-xs space-y-2.5">
+                    <div className="flex items-center justify-between border-b border-neutral-100 pb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-6 h-6 rounded-full bg-[#faedd3] border border-[#b8860b] text-[10px] text-[#4a2406] font-bold flex items-center justify-center font-montserrat shadow-xs">
+                          2
+                        </span>
+                        <div>
+                          <span className="font-montserrat text-xs font-bold text-neutral-800">
+                            {getAdjustedFieldLabel("reception_date", "Grand Reception & Feast")}
+                          </span>
+                          <span className="ml-2 text-[9px] uppercase tracking-wider text-[#b3811b] font-semibold bg-[#eed57c]/20 px-2 py-0.5 rounded-full">
+                            Featured On Invitation
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                      <div className="bg-white p-2.5 rounded-xl border border-neutral-200/80">
+                        <span className="text-[9.5px] uppercase tracking-wider text-neutral-400 font-bold block mb-0.5">
+                          Date & Time
+                        </span>
+                        <span className="font-medium text-neutral-800">
+                          {formData?.reception_date
+                            ? new Date(formData.reception_date).toLocaleString("en-IN", { dateStyle: "full", timeStyle: "short" })
+                            : "Evening Celebrations • 06:30 PM Onwards"}
+                        </span>
+                      </div>
+                      <div className="bg-white p-2.5 rounded-xl border border-neutral-200/80">
+                        <span className="text-[9.5px] uppercase tracking-wider text-neutral-400 font-bold block mb-0.5">
+                          Venue
+                        </span>
+                        <span className="font-medium text-neutral-800 line-clamp-1">
+                          {formData?.reception_venue || formData?.wedding_venue || templateDefaults.reception_venue || "Grand Ballroom / Banquet Lawn"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Automatic Ready Notification */}
+                  <div className="p-4 bg-gradient-to-r from-[#fffbf2] to-[#fff8eb] border border-[#eed57c]/40 rounded-2xl text-neutral-700 flex items-start gap-3 shadow-xs">
+                    <div className="w-7 h-7 rounded-full bg-[#b3811b]/15 text-[#b3811b] flex items-center justify-center shrink-0 mt-0.5">
+                      <Check className="w-4 h-4 text-[#b3811b]" />
+                    </div>
+                    <div>
+                      <div className="font-montserrat font-bold text-xs text-neutral-900">
+                        Schedule Ready For Your Invitation
+                      </div>
+                      <div className="text-[11px] text-neutral-600 mt-0.5 leading-relaxed">
+                        Both celebrations are automatically styled and presented with auspicious timestamps on your guest invitation scroll. To change dates or venues, simply update them anytime in the <strong>Dates & Venues</strong> section.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 4: MEDIA, RSVP & REVIEW SUMMARY */}
+              {currentStep === 4 && (
+                <div className="space-y-5 animate-in fade-in duration-300">
+                  {/* Photo Gallery Slideshow */}
+                  <div className="flex flex-col gap-2.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-xs">
+                    <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
+                      <ImageIcon className="w-3.5 h-3.5 text-[#b3811b]" />
+                      Photo Gallery Slideshow Images
+                    </label>
+
+                    <div className="flex gap-1.5 mb-1 bg-neutral-100/80 p-1 rounded-xl border border-neutral-200/30">
+                      {["preset", "upload", "url"].map((mode) => (
+                        <button
+                          key={mode}
+                          type="button"
+                          onClick={() => setSlideshowMode(mode)}
+                          className={`flex-1 py-1.5 font-montserrat text-[9px] tracking-wider uppercase transition-all duration-300 rounded-lg cursor-pointer ${
+                            slideshowMode === mode
+                              ? "bg-white text-[#b3811b] font-bold shadow-xs"
+                              : "text-neutral-500 hover:text-neutral-800"
+                          }`}
+                        >
+                          {mode}
+                        </button>
+                      ))}
+                    </div>
+
+                    {slideshowMode === "preset" && (
+                      <select
+                        value={formData?.slideshow_images || ""}
+                        onChange={(e) => handleInputChange("slideshow_images", e.target.value)}
+                        className="w-full bg-white border border-neutral-200 text-neutral-800 text-xs px-3 py-2.5 rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs"
+                      >
+                        {SLIDESHOW_PRESETS.map((p) => (
+                          <option key={p.value} value={p.value} className="bg-white text-neutral-800">
+                            {p.label}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+
+                    {slideshowMode === "upload" && (
+                      <div className="flex flex-col gap-2">
+                        <div className="relative border border-dashed border-[#b3811b]/30 py-6 flex flex-col items-center justify-center bg-[#fffcf9] rounded-2xl transition-colors hover:bg-[#fff9f2]">
+                          <Upload className="w-6 h-6 text-[#b3811b]/60 mb-1" />
+                          <span className="font-montserrat text-[9px] text-[#b3811b]/70 uppercase font-bold">UPLOAD COUPLE IMAGE</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const reader = new FileReader();
+                                reader.onload = (event) => {
+                                  const base64 = event.target?.result as string;
+                                  const cur = formData?.slideshow_images || "";
+                                  const newList = cur ? `${cur}, ${base64}` : base64;
+                                  handleInputChange("slideshow_images", newList);
+                                };
+                                reader.readAsDataURL(file);
+                              }
+                            }}
+                            className="absolute inset-0 opacity-0 cursor-pointer w-full"
+                          />
+                        </div>
+                        {formData?.slideshow_images && (
+                          <div className="flex justify-between items-center text-[10px] text-[#8a725d]/70 font-semibold px-1">
+                            <span>{formData.slideshow_images.split(/,(?=\s*(?:https?:|data:))/i).filter(Boolean).length} Images Loaded</span>
+                            <button
+                              type="button"
+                              onClick={() => handleInputChange("slideshow_images", "")}
+                              className="text-red-400 hover:text-red-500 font-bold"
+                            >
+                              CLEAR
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {slideshowMode === "url" && (
+                      <textarea
+                        value={formData?.slideshow_images || ""}
+                        onChange={(e) => handleInputChange("slideshow_images", e.target.value)}
+                        placeholder="Paste image URLs separated by commas..."
+                        rows={2}
+                        className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs placeholder-neutral-400"
+                      />
+                    )}
+                  </div>
+
+                  {/* Background Music */}
+                  <div className="flex flex-col gap-2.5 p-4 border border-[#eed57c]/20 bg-[#fffdfa] rounded-2xl shadow-xs">
+                    <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] flex items-center gap-1.5 font-bold">
+                      <Music className="w-3.5 h-3.5 text-[#b3811b]" />
+                      Background Music & Melodies
+                    </label>
+
+                    <div className="flex gap-1.5 mb-1 bg-neutral-100/80 p-1 rounded-xl border border-neutral-200/30">
+                      {["preset", "upload", "url"].map((mode) => (
+                        <button
+                          key={mode}
+                          type="button"
+                          onClick={() => setMusicMode(mode)}
+                          className={`flex-1 py-1.5 font-montserrat text-[9px] tracking-wider uppercase transition-all duration-300 rounded-lg cursor-pointer ${
+                            musicMode === mode
+                              ? "bg-white text-[#b3811b] font-bold shadow-xs"
+                              : "text-neutral-500 hover:text-neutral-800"
+                          }`}
+                        >
+                          {mode}
+                        </button>
+                      ))}
+                    </div>
+
+                    {musicMode === "preset" && (
+                      <select
+                        value={formData?.music_url || ""}
+                        onChange={(e) => handleInputChange("music_url", e.target.value)}
+                        className="w-full bg-white border border-neutral-200 text-neutral-800 text-xs px-3 py-2.5 rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs"
+                      >
+                        {MUSIC_PRESETS.map((p) => (
+                          <option key={p.value} value={p.value} className="bg-white text-neutral-800">
+                            {p.label}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+
+                    {musicMode === "upload" && (
+                      <div className="relative border border-dashed border-[#b3811b]/30 py-6 flex flex-col items-center justify-center bg-[#fffcf9] rounded-2xl transition-colors hover:bg-[#fff9f2]">
+                        <Upload className="w-6 h-6 text-[#b3811b]/60 mb-1" />
+                        <span className="font-montserrat text-[9px] text-[#b3811b]/70 uppercase font-bold">UPLOAD BACKGROUND AUDIO (.MP3)</span>
+                        <input
+                          type="file"
+                          accept="audio/*"
+                          onChange={(e) => handleFileUpload("music_url", e)}
+                          className="absolute inset-0 opacity-0 cursor-pointer w-full"
+                        />
+                      </div>
+                    )}
+
+                    {musicMode === "url" && (
+                      <input
+                        type="text"
+                        value={formData?.music_url || ""}
+                        onChange={(e) => handleInputChange("music_url", e.target.value)}
+                        placeholder="Paste audio .mp3 URL link..."
+                        className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs placeholder-neutral-400"
+                      />
+                    )}
+                  </div>
+
+                  {/* RSVP Contact */}
+                  <div className="p-4 bg-[#fffdfa] border border-[#eed57c]/30 rounded-2xl shadow-xs space-y-3">
+                    <label className="font-montserrat text-[10px] tracking-widest uppercase text-[#8a725d] font-bold block">
+                      RSVP Contact Phone Number <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      value={formData?.rsvp_phone || ""}
+                      onChange={(e) => handleInputChange("rsvp_phone", e.target.value)}
+                      placeholder={templateDefaults.rsvp_phone || "+91 98401 23456"}
+                      className="w-full bg-white border border-neutral-200 text-neutral-800 px-4 py-2.5 text-xs rounded-xl focus:border-[#b3811b] focus:outline-none focus:ring-1 focus:ring-[#b3811b]/30 shadow-xs placeholder-neutral-400"
+                    />
+                  </div>
+
+                  {/* Review Summary Card */}
+                  <div className="p-4 bg-gradient-to-br from-[#fffdfa] to-[#faf5eb] border border-[#eed57c]/40 rounded-2xl shadow-sm space-y-3">
+                    <div className="flex items-center justify-between border-b border-[#eed57c]/20 pb-2">
+                      <span className="font-montserrat text-[10px] tracking-wider uppercase font-bold text-[#b3811b] flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Invitation Summary
+                      </span>
+                      <span className="font-montserrat text-[9px] uppercase tracking-wider text-neutral-500 font-semibold">
+                        Ready to Launch
+                      </span>
+                    </div>
+
+                    <div className="space-y-1.5 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-neutral-500 font-medium">Couple:</span>
+                        <span className="font-bold text-neutral-800">
+                          {formData?.bride_name || templateDefaults.bride_name} & {formData?.groom_name || templateDefaults.groom_name}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-neutral-500 font-medium">Wedding Date:</span>
+                        <span className="font-semibold text-neutral-800">
+                          {formData?.wedding_date
+                            ? new Date(formData.wedding_date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
+                            : templateDefaults.wedding_date
+                            ? new Date(templateDefaults.wedding_date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
+                            : "—"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-neutral-500 font-medium">Reception Date:</span>
+                        <span className="font-semibold text-neutral-800">
+                          {formData?.reception_date
+                            ? new Date(formData.reception_date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
+                            : "Same Day Evening"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-neutral-500 font-medium">Programs Configured:</span>
+                        <span className="font-bold text-[#b3811b]">Wedding & Reception Included</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}</div>
           </div>
 
           {/* Stepper Footer Controls */}
@@ -1657,12 +1676,12 @@ function EditorPageContent() {
         {/* Right Side: Simulated Live Viewport Preview with Device Switcher */}
         <div id="live-preview" className="flex-grow bg-[#f4f1ea] flex flex-col items-center justify-center p-4 md:p-6 lg:h-[calc(100vh-80px)] overflow-hidden relative border-t lg:border-t-0 border-[#eed57c]/20 scroll-mt-24">
           
-          {/* Device Mockup Switcher Controls */}
+          {/* Device Mockup Switcher Controls - Only Mobile shown on mobile devices, Tablet and Desktop hidden */}
           <div className="mb-4 flex items-center gap-1 bg-white border border-neutral-200 p-1.5 rounded-2xl shadow-md z-20">
             {[
-              { mode: "mobile", icon: Smartphone, label: "Mobile" },
-              { mode: "tablet", icon: Tablet, label: "Tablet" },
-              { mode: "desktop", icon: Monitor, label: "Desktop" },
+              { mode: "mobile", icon: Smartphone, label: "Mobile", hideOnMobile: false },
+              { mode: "tablet", icon: Tablet, label: "Tablet", hideOnMobile: true },
+              { mode: "desktop", icon: Monitor, label: "Desktop", hideOnMobile: true },
             ].map((item) => {
               const Icon = item.icon;
               const active = previewDevice === item.mode;
@@ -1671,7 +1690,7 @@ function EditorPageContent() {
                   key={item.mode}
                   type="button"
                   onClick={() => setPreviewDevice(item.mode as any)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 text-[9px] font-montserrat uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                  className={`${item.hideOnMobile ? "hidden md:flex" : "flex"} items-center gap-1.5 px-3 py-1.5 text-[9px] font-montserrat uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                     active
                       ? "bg-gradient-to-r from-[#d4b060] to-[#b3811b] text-white font-bold rounded-xl shadow-sm"
                       : "text-neutral-500 hover:text-[#b3811b] hover:bg-[#b3811b]/5 rounded-xl"
@@ -1698,7 +1717,7 @@ function EditorPageContent() {
                 </div>
                 <div data-lenis-prevent className="w-full h-full overflow-y-auto pt-6 scale-98 origin-top select-none relative scrollbar-none preview-mode-mobile">
                   {TemplateComponent ? (
-                    <TemplateComponent data={formData} />
+                    <TemplateComponent data={previewData} isPreview />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-center p-4">
                       <span className="font-serif text-sm text-[#b3811b]/50">Loading preview...</span>
@@ -1710,7 +1729,7 @@ function EditorPageContent() {
               <div className="w-full max-w-[640px] h-[680px] bg-black border-8 border-neutral-800 rounded-[32px] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.25)] ring-1 ring-neutral-900/10">
                 <div data-lenis-prevent className="w-full h-full overflow-y-auto pt-2 scale-98 origin-top select-none relative scrollbar-none preview-mode-tablet">
                   {TemplateComponent ? (
-                    <TemplateComponent data={formData} />
+                    <TemplateComponent data={previewData} isPreview />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-center p-4">
                       <span className="font-serif text-sm text-[#b3811b]/50">Loading preview...</span>
@@ -1723,7 +1742,7 @@ function EditorPageContent() {
               <div className="w-full max-w-[960px] h-[720px] bg-black border-4 border-neutral-800 rounded-[16px] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.25)] ring-1 ring-neutral-900/10 scale-90 origin-center">
                 <div data-lenis-prevent className="w-full h-full overflow-y-auto select-none relative scrollbar-none template-container">
                   {TemplateComponent ? (
-                    <TemplateComponent data={formData} />
+                    <TemplateComponent data={previewData} isPreview />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-center p-4">
                       <span className="font-serif text-sm text-[#b3811b]/50">Loading preview...</span>
@@ -1762,6 +1781,47 @@ function EditorPageContent() {
           )}
         </button>
       </div>
+      {/* Delete Draft Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 bg-black/45 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-zinc-150 p-6 rounded-[28px] w-full max-w-sm flex flex-col shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-3">
+              <Trash2 className="w-5 h-5 text-red-600" />
+            </div>
+            <h3 className="font-sans text-lg font-bold text-zinc-900 text-center mb-1">
+              DELETE DRAFT
+            </h3>
+            <p className="text-zinc-500 text-xs text-center mb-6 leading-relaxed font-sans">
+              Are you sure you want to delete this draft? Its data will be permanently deleted from Supabase. This action cannot be undone.
+            </p>
+            <div className="flex gap-3 justify-center">
+              <button
+                type="button"
+                onClick={() => setShowDeleteModal(false)}
+                disabled={isDeletingDraft}
+                className="min-h-[44px] px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-xs tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex-1 font-sans disabled:opacity-50 flex items-center justify-center"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteDraft}
+                disabled={isDeletingDraft}
+                className="min-h-[44px] px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs tracking-wider uppercase rounded-xl transition-all cursor-pointer flex-1 shadow-md font-sans disabled:opacity-50 flex items-center justify-center gap-1.5"
+              >
+                {isDeletingDraft ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  "Delete"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

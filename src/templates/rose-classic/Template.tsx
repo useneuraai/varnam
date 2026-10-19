@@ -20,6 +20,7 @@ import {
   VolumeX,
 } from "lucide-react";
 import CreatedByVarnam from "@/components/CreatedByVarnam";
+import { parseTimelineEvents } from "@/lib/templates";
 
 // ============================================================================
 // 1. FLOATING ROSE BLUSH, JASMINE & GOLD SPARKLES OVERLAY
@@ -911,87 +912,101 @@ export default function RoseClassicTemplate({
             </motion.div>
           </div>
 
-          {/* 3 Programs inscribed cleanly inside the curled scroll */}
-          <div className="relative w-[88%] max-w-[325px] my-auto py-2 flex flex-col items-center justify-center z-15">
-            <div className="absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-[1.5px] bg-gradient-to-b from-[#a8781a]/40 via-[#b8860b] to-[#a8781a]/40" />
+          {/* Dynamic Programs inscribed cleanly inside the curled scroll */}
+          {(() => {
+            const customEvents = parseTimelineEvents(data.wedding_events);
 
-            <div className="relative w-full flex flex-col items-center space-y-3 sm:space-y-3.5 z-10">
-              {/* Program 1 */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center py-2.5 px-3 rounded-xl bg-[#fffaf2]/90 border border-[#b8860b]/40 shadow-xs backdrop-blur-xs"
-              >
-                <div className="w-5.5 h-5.5 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[9px] text-[#4a2406] font-cinzel font-bold mb-0.5 ring-2 ring-[#b8860b]/30">
-                  1
-                </div>
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#783e0a] uppercase font-bold block leading-tight">
-                  MANGALA SNANAM
-                </span>
-                <h4 className="font-marcellus text-xs sm:text-sm font-bold text-[#1a0a01] leading-snug mt-0.5">
-                  Auspicious Sacred Dawn Prayers
-                </h4>
-                <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
-                  07:00 AM
-                </div>
-                <div className="font-marcellus text-[11px] sm:text-xs text-[#522a07] font-semibold leading-tight mt-0.5">
-                  {venueName}
-                </div>
-              </motion.div>
+            const weddingDateStr = `${weddingDateInfo.weekday}, ${weddingDateInfo.day} ${weddingDateInfo.month} ${weddingDateInfo.year}`;
+            const receptionDateObj = data.reception_date ? parseDate(data.reception_date) : null;
+            const receptionDateStr = receptionDateObj
+              ? `${receptionDateObj.weekday}, ${receptionDateObj.day} ${receptionDateObj.month} ${receptionDateObj.year}`
+              : weddingDateStr;
+            const receptionTimeStr = receptionDateObj?.time || "06:30 PM Onwards";
+            const receptionVenueStr = data.reception_venue || venueName;
 
-              {/* Program 2 (Main Highlight) */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center py-3 px-3.5 rounded-xl bg-[#831843]/15 border-2 border-[#831843]/60 shadow-md backdrop-blur-xs"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#831843] border-2 border-[#eed57c] shadow-lg flex items-center justify-center text-[10px] text-[#fff2b2] font-bold mb-0.5">
-                  ❖
-                </div>
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#831843] uppercase font-bold block leading-tight">
-                  SACRED MUHURTHAM
-                </span>
-                <h4 className="font-cinzel text-sm sm:text-base font-bold text-[#3d0f19] leading-snug mt-0.5">
-                  Mangalya Dharanam &amp; Saptapadi
-                </h4>
-                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#24030d] font-bold leading-tight">
-                  {weddingDateInfo.time || "08:42 AM"}
-                </div>
-                <div className="font-marcellus text-xs text-[#831843] font-bold leading-tight mt-0.5">
-                  {venueName}
-                </div>
-              </motion.div>
+            const defaultPrograms = [
+              {
+                id: "p-wedding",
+                title: "SACRED WEDDING",
+                subtitle: "Mangalya Dharanam & Saptapadi",
+                time: weddingDateInfo.time || "08:42 AM",
+                date: weddingDateStr,
+                venue: venueName,
+              },
+              {
+                id: "p-reception",
+                title: "VIRUNDHU & RECEPTION",
+                subtitle: "Traditional Feast & Celebrations",
+                time: receptionTimeStr,
+                date: receptionDateStr,
+                venue: receptionVenueStr,
+              },
+            ];
 
-              {/* Program 3 */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center py-2.5 px-3 rounded-xl bg-[#fffaf2]/90 border border-[#b8860b]/40 shadow-xs backdrop-blur-xs"
-              >
-                <div className="w-5.5 h-5.5 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[9px] text-[#4a2406] font-cinzel font-bold mb-0.5 ring-2 ring-[#b8860b]/30">
-                  3
+            const programsToRender = customEvents.length > 0 ? customEvents : defaultPrograms;
+
+            return (
+              <div className="relative w-[88%] max-w-[325px] my-auto py-2 flex flex-col items-center justify-center z-15">
+                <div className="absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-[1.5px] bg-gradient-to-b from-[#a8781a]/40 via-[#b8860b] to-[#a8781a]/40" />
+
+                <div className="relative w-full flex flex-col items-center space-y-3 sm:space-y-3.5 z-10">
+                  {programsToRender.map((prog, index) => {
+                    const isHighlight =
+                      index === 1 ||
+                      prog.title?.toLowerCase().includes("muhurtham") ||
+                      prog.title?.toLowerCase().includes("nikah") ||
+                      prog.title?.toLowerCase().includes("kalyanam");
+
+                    return (
+                      <motion.div
+                        key={prog.id || index}
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false, amount: 0.25 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className={`relative z-10 w-full flex flex-col items-center text-center py-2.5 px-3 rounded-xl backdrop-blur-xs ${
+                          isHighlight
+                            ? "bg-[#831843]/15 border-2 border-[#831843]/60 shadow-md py-3 px-3.5"
+                            : "bg-[#fffaf2]/90 border border-[#b8860b]/40 shadow-xs"
+                        }`}
+                      >
+                        <div
+                          className={`rounded-full flex items-center justify-center font-bold mb-0.5 ${
+                            isHighlight
+                              ? "w-6 h-6 bg-[#831843] border-2 border-[#eed57c] text-[10px] text-[#fff2b2] shadow-lg"
+                              : "w-5.5 h-5.5 bg-[#faedd3] border-2 border-[#b8860b] text-[9px] text-[#4a2406] font-cinzel ring-2 ring-[#b8860b]/30 shadow-md"
+                          }`}
+                        >
+                          {isHighlight ? "❖" : index + 1}
+                        </div>
+                        <span
+                          className={`font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] uppercase font-bold block leading-tight ${
+                            isHighlight ? "text-[#831843]" : "text-[#783e0a]"
+                          }`}
+                        >
+                          {prog.title}
+                        </span>
+                        {prog.subtitle && (
+                          <h4 className="font-marcellus text-xs sm:text-sm font-bold text-[#1a0a01] leading-snug mt-0.5">
+                            {prog.subtitle}
+                          </h4>
+                        )}
+                        <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
+                          {prog.date ? `${prog.date} • ` : ""}
+                          {prog.time}
+                        </div>
+                        {prog.venue && (
+                          <div className="font-marcellus text-[11px] sm:text-xs text-[#522a07] font-semibold leading-tight mt-0.5">
+                            {prog.venue}
+                          </div>
+                        )}
+                      </motion.div>
+                    );
+                  })}
                 </div>
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#783e0a] uppercase font-bold block leading-tight">
-                  VIRUNDHU &amp; RECEPTION
-                </span>
-                <h4 className="font-marcellus text-xs sm:text-sm font-bold text-[#1a0a01] leading-snug mt-0.5">
-                  Traditional Feast &amp; Celebrations
-                </h4>
-                <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
-                  12:30 PM &amp; 06:30 PM
-                </div>
-                <div className="font-marcellus text-[11px] sm:text-xs text-[#522a07] font-bold leading-tight mt-0.5">
-                  {data.reception_venue || venueName}
-                </div>
-              </motion.div>
-            </div>
-          </div>
+              </div>
+            );
+          })()}
 
           {/* Bottom Ornament */}
           <div className="w-full flex items-center justify-center pb-8 pt-3 z-15 min-h-[175px] sm:min-h-[190px] text-[#a8781a]">

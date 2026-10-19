@@ -32,14 +32,43 @@ export interface TemplateConfigField {
   required: boolean;
 }
 
+export interface TimelineEvent {
+  id: string;
+  title: string;
+  subtitle?: string;
+  date: string;
+  time: string;
+  venue: string;
+}
+
+export function parseTimelineEvents(raw?: string | any[]): TimelineEvent[] {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw;
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+  } catch {}
+  
+  if (typeof raw === "string") {
+    const lines = raw.split("\n").map((l) => l.trim()).filter(Boolean);
+    if (lines.length > 0) {
+      return lines.map((l, i) => {
+        const parts = l.split("|").map((p) => p.trim());
+        return {
+          id: `evt-${i + 1}`,
+          title: parts[0] || `Program ${i + 1}`,
+          subtitle: "",
+          date: parts[1] || "",
+          time: "",
+          venue: parts[2] || "",
+        };
+      });
+    }
+  }
+  return [];
+}
+
 export const SHARED_LICENSE_FIELDS: TemplateConfigField[] = [
-  {
-    id: "bg_image_url",
-    label: "Custom Background / Atmosphere",
-    type: "text",
-    placeholder: "/images/kovil/kovil_temple_entrance.jpg",
-    required: false,
-  },
   {
     id: "slideshow_images",
     label: "Photo Gallery Images (Comma-separated URLs)",
@@ -58,10 +87,9 @@ export const SHARED_LICENSE_FIELDS: TemplateConfigField[] = [
   },
   {
     id: "wedding_events",
-    label: "Custom Timeline Events (Event | Date & Time | Venue per line)",
+    label: "Program Timeline Schedule",
     type: "textarea",
-    placeholder:
-      "Nichayathartham | 18 Dec 2026, 06:00 PM | Sri Krishna Mahal\nVratham & Haldi | 19 Dec 2026, 09:00 AM | Sri Krishna Mahal\nKalyana Muhurtham | 20 Dec 2026, 07:30 AM | Sri Krishna Mahal\nReception Feast | 20 Dec 2026, 06:30 PM | Sri Krishna Mahal",
+    placeholder: "Add program events with date, time, and venue.",
     required: false,
   },
   {
@@ -697,4 +725,23 @@ export const getDefaultTemplateData = (slug: string): TemplateData => {
     "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=900, https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=900, https://images.unsplash.com/photo-1604017011826-d3b4c23f8914?auto=format&fit=crop&q=80&w=900";
 
   return defaultData as unknown as TemplateData;
+};
+
+export const getEmptyTemplateData = (slug: string): TemplateData => {
+  const defaults = getDefaultTemplateData(slug);
+  return {
+    ...defaults,
+    bride_name: "",
+    groom_name: "",
+    wedding_date: "",
+    wedding_venue: "",
+    reception_date: "",
+    reception_venue: "",
+    family_names: "",
+    quote: "",
+    custom_message: "",
+    rsvp_phone: "",
+    gmap_coordinates: "",
+    wedding_events: "",
+  };
 };

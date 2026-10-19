@@ -486,38 +486,39 @@ export default function TheerthaMandapamTemplate({
             </span>
           </div>
 
-          {/* Center Couple Names: Sized proportionally, No Date in Hero */}
+          {/* Center Couple Names: Floating Directly on Background (NO BOX), Perfectly Blended */}
           <div
-            className="relative z-20 w-[86%] max-w-[315px] flex flex-col items-center my-auto py-4 px-3 sm:px-4 rounded-2xl bg-[#fffdf8]/90 backdrop-blur-xs border border-[#c89b38]/50 shadow-[0_10px_30px_rgba(5,30,25,0.3)] transition-all duration-300"
+            className="relative z-20 w-full max-w-[340px] flex flex-col items-center my-auto py-2 px-4 transition-all duration-300"
             style={{
               opacity: Math.max(0, 1 - scrollProgress * 1.6),
               transform: `translateY(-${scrollProgress * 45}px)`,
             }}
           >
-            <div className="absolute inset-1.5 border border-[#8f5e1a]/30 rounded-xl pointer-events-none" />
-
-            <p className="font-marcellus text-[10px] sm:text-[11px] tracking-[0.28em] text-[#6e370a] uppercase font-bold mb-1.5">
+            <p className="font-marcellus text-[10.5px] sm:text-[12px] tracking-[0.32em] text-[#0f5146] uppercase font-bold mb-2 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">
               WE ARE GETTING MARRIED
             </p>
 
-            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold tracking-[0.08em] text-[#041716] uppercase leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)] max-w-full break-words text-center px-1">
+            {/* Bride Name */}
+            <h1 className="font-cinzel text-3xl sm:text-4xl md:text-[42px] font-bold tracking-[0.1em] text-[#041716] uppercase leading-tight drop-shadow-[0_1px_3px_rgba(255,255,255,0.85)] max-w-full break-words text-center px-2">
               {bride}
             </h1>
 
-            <div className="flex items-center justify-center gap-3 my-1 w-full">
-              <div className="h-[1.5px] w-10 bg-gradient-to-r from-transparent via-[#0d9488] to-transparent" />
-              <span className="font-great-vibes text-2xl sm:text-3xl text-[#0d9488] italic">
+            {/* Weds Divider */}
+            <div className="flex items-center justify-center gap-3 my-1.5 w-full">
+              <div className="h-[1.5px] w-12 bg-gradient-to-r from-transparent via-[#0d9488] to-transparent" />
+              <span className="font-great-vibes text-3xl sm:text-4xl text-[#0d9488] italic drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">
                 weds
               </span>
-              <div className="h-[1.5px] w-10 bg-gradient-to-l from-transparent via-[#0d9488] to-transparent" />
+              <div className="h-[1.5px] w-12 bg-gradient-to-l from-transparent via-[#0d9488] to-transparent" />
             </div>
 
-            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold tracking-[0.08em] text-[#041716] uppercase leading-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)] max-w-full break-words text-center px-1">
+            {/* Groom Name */}
+            <h1 className="font-cinzel text-3xl sm:text-4xl md:text-[42px] font-bold tracking-[0.1em] text-[#041716] uppercase leading-tight drop-shadow-[0_1px_3px_rgba(255,255,255,0.85)] max-w-full break-words text-center px-2">
               {groom}
             </h1>
 
-            <div className="mt-2 text-[#783e0a] text-[9.5px] font-cinzel tracking-widest uppercase font-bold">
-              ❖ Royal Wedding Celebration ❖
+            <div className="mt-3 text-[#783e0a] text-[10px] sm:text-[11px] font-cinzel tracking-[0.24em] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.7)]">
+              ❖ ROYAL WEDDING CELEBRATION ❖
             </div>
           </div>
 

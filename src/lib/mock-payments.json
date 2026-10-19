@@ -1,1 +1,27 @@
-[]
+[
+  {
+    "invitation_id": "inv_dndrhbw9",
+    "invitation_slug": "uovfokt",
+    "user_id": "mock-user-123",
+    "provider": "mock",
+    "provider_order_id": "order_mock_1792059234463_dpiumk",
+    "provider_payment_id": "pay_mock_1792059234474",
+    "provider_signature": "mock_signature",
+    "razorpay_order_id": "order_mock_1792059234463_dpiumk",
+    "razorpay_payment_id": "pay_mock_1792059234474",
+    "razorpay_signature": "mock_signature",
+    "amount_inr": 999,
+    "currency": "INR",
+    "status": "captured",
+    "verified_at": "2026-10-15T10:13:55.135Z",
+    "metadata": {
+      "template_slug": "palace-garden",
+      "couple": "Ananya & Siddharth",
+      "wedding_date": "2027-01-18T09:45:49.187Z"
+    },
+    "id": "pay_au7xp2tx",
+    "amount": 999,
+    "created_at": "2026-10-15T10:13:55.136Z",
+    "updated_at": "2026-10-15T10:13:55.136Z"
+  }
+]

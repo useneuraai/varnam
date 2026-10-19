@@ -5,32 +5,32 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const FAQS = [
   {
-    q: "Can I preview my wedding invitation website before purchasing the license?",
-    a: "Yes! Varnam operates on a \"try before you pay\" model. You can completely customize your wedding template, set up your music, and check out the interactive RSVP tracking tools before making a one-time payment (Classic ₹999 / Premium ₹1,199) to share the live link with guests."
+    q: "Can I preview my wedding invitation before purchasing?",
+    a: "Yes. You can customize your entire template, add music, and test all interactive features for free before purchasing."
   },
   {
     q: "Can I edit after publishing?",
-    a: "Yes. You can update venue coordinates, schedule, photos, music, and details until 5 days after the event date."
+    a: "Yes. You can update venue coordinates, schedule, photos, music, and details until 5 days after your event."
   },
   {
     q: "Do guests need to install an app?",
-    a: "No. Every invitation opens in any modern mobile or desktop browser through a single shareable link."
+    a: "No. Every invitation opens directly in any mobile or desktop browser with a single link."
   },
   {
     q: "Can I share on WhatsApp?",
-    a: "Yes. Once payment is successful, you get a clean invitation link ready to copy and share on WhatsApp, email, or social media."
+    a: "Yes. You receive a clean link ready to share instantly on WhatsApp, email, or messages."
   },
   {
     q: "What does the one-time payment include?",
-    a: "A one-time license (Classic at ₹999, Premium at ₹1,199) unlocks full website hosting, unlimited photo slideshows, custom music uploads, Google Maps integration, RSVP guest tracking, and interactive animations."
+    a: "Full website hosting, unlimited photo uploads, background music, Google Maps navigation, and RSVP tracking."
   },
   {
-    q: "Why choose Varnam Invites for your wedding website?",
-    a: "Varnam Invites (varnaminvites.store) provides India's most luxurious, cinematic digital wedding invitation websites. With interactive 3D temple animations, instant WhatsApp RSVP, photo galleries, background music, and Google Maps venue navigation, Varnam Invites offers an unforgettable experience for you and your guests."
+    q: "Why choose Varnam for your wedding website?",
+    a: "Handcrafted Indian wedding aesthetics, interactive animations, instant WhatsApp sharing, and zero recurring fees."
   },
   {
-    q: "How long does my personalized wedding website link stay active?",
-    a: "Your custom invitation website link remains fully active and editable until 5 days after your wedding events are complete. All guest entries on your RSVP dashboard will be securely stored for you to view."
+    q: "How long does my link stay active?",
+    a: "Your custom invitation link stays active and editable until 5 days after your wedding celebrations."
   }
 ];
 
@@ -64,7 +64,7 @@ export default function FAQSection() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-10 sm:mb-16">
           <span className="text-[11px] sm:text-xs font-bold tracking-[0.18em] text-[#916710] uppercase">
-            Frequently Asked Questions
+            FAQ
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900 font-serif">
             Frequently Asked Questions

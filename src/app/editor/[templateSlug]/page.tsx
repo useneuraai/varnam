@@ -25,6 +25,17 @@ import {
 import { getTemplateBySlug, getDefaultTemplateData, TemplateData } from "@/lib/templates";
 import { templatesMap } from "@/templates";
 import { supabase } from "@/lib/supabase";
+import dynamic from "next/dynamic";
+
+const InteractiveMapPicker = dynamic(() => import("@/components/InteractiveMapPicker"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-72 sm:h-80 rounded-2xl bg-zinc-100 border border-zinc-200 animate-pulse flex flex-col items-center justify-center gap-2 text-xs text-zinc-400 font-medium">
+      <div className="w-6 h-6 border-2 border-zinc-300 border-t-[#b3811b] rounded-full animate-spin" />
+      <span>Loading Interactive Venue Map...</span>
+    </div>
+  )
+});
 
 const BG_IMAGE_PRESETS = [
   { label: "Default Template Backdrop", value: "" },
@@ -1248,9 +1259,6 @@ function EditorPageContent() {
                           <MapPin className="w-3.5 h-3.5 text-[#b3811b]" />
                           {field.label}
                         </label>
-                        <span className="font-serif text-[9px] text-neutral-400 italic">
-                          Type address or select from the recommendations that pop up as you type.
-                        </span>
 
                         <div className="relative">
                           <div className="flex gap-2">
@@ -1302,33 +1310,12 @@ function EditorPageContent() {
                           )}
                         </div>
 
-                        {/* Google Map Live Preview */}
-                        <div className="flex flex-col gap-1 mt-1 text-left">
-                          <span className="font-serif text-[9px] text-neutral-400 italic">
-                            Google Maps Live Preview:
-                          </span>
-                          <div className="w-full h-48 border border-neutral-200 relative rounded-xl overflow-hidden shadow-inner">
-                            <iframe
-                              title="Google Maps Location Finder Preview"
-                              src={previewUrl}
-                              className="w-full h-full border-0"
-                              allowFullScreen
-                              loading="lazy"
-                            />
-                          </div>
-                          <div className="flex justify-between items-center mt-1">
-                            <span className="text-[8px] text-neutral-400 font-serif leading-relaxed max-w-[70%]">
-                              Tip: Google Maps handles text addresses and GPS coordinates directly.
-                            </span>
-                            <a
-                              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(val || "13.0827,80.2707")}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-[8px] text-[#b3811b] hover:underline font-montserrat uppercase font-bold"
-                            >
-                              Search on Web ↗
-                            </a>
-                          </div>
+                        {/* Interactive Google / Leaflet Venue Map */}
+                        <div className="flex flex-col gap-1.5 mt-1 text-left">
+                          <InteractiveMapPicker
+                            value={val}
+                            onChange={(newVal) => handleInputChange(field.id, newVal)}
+                          />
                         </div>
                       </div>
                     );

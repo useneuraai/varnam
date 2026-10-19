@@ -93,6 +93,8 @@ export default function DashboardPage() {
   // Share tooltip state
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
+  const [draftToDelete, setDraftToDelete] = useState<string | null>(null);
+  const [isDeletingDraft, setIsDeletingDraft] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -203,14 +205,15 @@ export default function DashboardPage() {
     }
   };
 
-  const handleDeleteInvite = async (slug: string) => {
-    if (!window.confirm("Are you sure you want to delete this draft invitation?")) return;
+  const confirmDeleteDraft = async () => {
+    if (!draftToDelete) return;
+    setIsDeletingDraft(true);
     try {
       const isMockSupabase = !isSupabaseConfigured;
       const { data: { session } } = await supabase.auth.getSession();
       const token = isMockSupabase ? "mock-user-token" : session?.access_token || "";
 
-      const res = await fetch(`/api/invitations/${slug}`, {
+      const res = await fetch(`/api/invitations/${draftToDelete}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -218,10 +221,13 @@ export default function DashboardPage() {
       });
 
       if (res.ok) {
-        setInvitations((prev) => prev.filter((i) => i.slug !== slug));
+        setInvitations((prev) => prev.filter((i) => i.slug !== draftToDelete));
       }
     } catch (err) {
       console.error("Error deleting invitation:", err);
+    } finally {
+      setIsDeletingDraft(false);
+      setDraftToDelete(null);
     }
   };
 
@@ -636,7 +642,7 @@ export default function DashboardPage() {
               {user?.email === "demo.user@varnam.com" && (
                 <button
                   onClick={handleSeedDemoInvite}
-                  className="bg-[#fffcf9] border border-[#eed57c] text-[#b3811b] text-xs uppercase font-bold tracking-widest py-3.5 px-8 hover:bg-[#fff9f2] transition-colors rounded-xl cursor-pointer"
+                  className="bg-zinc-900 border border-zinc-900 text-white text-xs uppercase font-bold tracking-widest py-3.5 px-8 hover:bg-zinc-800 transition-colors rounded-xl cursor-pointer shadow-sm"
                 >
                   Seed Demo Invitation
                 </button>
@@ -761,7 +767,7 @@ export default function DashboardPage() {
                         ) : (
                           <button
                             onClick={() => handlePublish(invite.slug)}
-                            className="w-full flex items-center justify-center gap-1.5 bg-[#b3811b] hover:bg-[#9a6f14] text-white py-2 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer shadow-sm"
+                            className="w-full flex items-center justify-center gap-1.5 bg-zinc-950 hover:bg-zinc-850 text-white py-2 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer shadow-sm"
                           >
                             Publish & Make Live
                           </button>
@@ -780,14 +786,15 @@ export default function DashboardPage() {
 
                           <Link
                             href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
-                            className="flex items-center justify-center gap-2 bg-[#b3811b] hover:bg-[#9a6f14] text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm"
+                            className="flex items-center justify-center gap-2 bg-zinc-950 hover:bg-zinc-850 text-white py-2.5 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors shadow-sm"
                           >
                             <CreditCard className="w-3.5 h-3.5" />
                             Pay & Activate
                           </Link>
                         </div>
                         <button
-                          onClick={() => handleDeleteInvite(invite.slug)}
+                          type="button"
+                          onClick={() => setDraftToDelete(invite.slug)}
                           className="w-full flex items-center justify-center gap-1.5 bg-white hover:bg-red-50 border border-zinc-200 hover:border-red-200 text-zinc-500 hover:text-red-600 py-2 rounded-xl font-bold text-[10px] tracking-wider uppercase transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-3 h-3" />
@@ -1062,6 +1069,41 @@ export default function DashboardPage() {
                 className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] tracking-wider uppercase rounded-xl transition-all cursor-pointer flex-1 shadow-md font-sans"
               >
                 Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Draft Confirmation Modal */}
+      {draftToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/45 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-zinc-150 p-6 rounded-[28px] w-full max-w-sm flex flex-col shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-3">
+              <Trash2 className="w-5 h-5 text-red-600" />
+            </div>
+            <h3 className="font-sans text-lg font-bold text-zinc-900 text-center mb-1">
+              DELETE DRAFT
+            </h3>
+            <p className="text-zinc-500 text-xs text-center mb-6 leading-relaxed font-sans">
+              Are you sure you want to delete this draft invitation? This action cannot be undone.
+            </p>
+            <div className="flex gap-3 justify-center">
+              <button
+                type="button"
+                onClick={() => setDraftToDelete(null)}
+                disabled={isDeletingDraft}
+                className="px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-[10px] tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex-1 font-sans disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteDraft}
+                disabled={isDeletingDraft}
+                className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] tracking-wider uppercase rounded-xl transition-all cursor-pointer flex-1 shadow-md font-sans disabled:opacity-50 flex items-center justify-center gap-1.5"
+              >
+                {isDeletingDraft ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>

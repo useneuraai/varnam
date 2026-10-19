@@ -24,7 +24,10 @@ import {
   Layers,
   Send,
   Menu,
-  X
+  X,
+  Heart,
+  Sparkles,
+  Share2
 } from "lucide-react";
 import { TEMPLATES } from "@/lib/templates";
 import LiveTemplatePreview from "@/components/LiveTemplatePreview";
@@ -257,7 +260,7 @@ export default function LandingClient() {
             <nav className="hidden md:flex items-center gap-10 text-xs tracking-widest text-zinc-600 font-bold uppercase">
               <Link href="/templates" className="py-2.5 hover:text-zinc-950 transition-colors">TEMPLATES</Link>
               <a href="#how-it-works" className="py-2.5 hover:text-zinc-950 transition-colors">HOW IT WORKS</a>
-              <a href="#why-choose" className="py-2.5 hover:text-zinc-950 transition-colors">WHY US</a>
+              <a href="#why-choose" className="py-2.5 hover:text-zinc-950 transition-colors">WHY VARNAM</a>
               <a href="#faq" className="py-2.5 hover:text-zinc-950 transition-colors">FAQ</a>
             </nav>
 
@@ -316,7 +319,7 @@ export default function LandingClient() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-sm font-bold tracking-wider text-zinc-800 py-2 border-b border-zinc-50"
               >
-                WHY US
+                WHY VARNAM
               </a>
               <a
                 href="#faq"
@@ -368,13 +371,12 @@ export default function LandingClient() {
             </h1>
 
             {/* Subtitle: hidden on mobile and tablet, shown only on desktop */}
-            <p className="hidden lg:block max-w-3xl text-zinc-600 sm:text-base lg:text-lg leading-relaxed mb-8 sm:mb-10 font-normal">
-              Create beautiful digital wedding invitations and personal wedding websites with instant customization, background music, RSVP tracking, and Google Maps venue navigation — ready to share in minutes.
+            <p className="hidden lg:block max-w-2xl text-zinc-600 sm:text-base lg:text-lg leading-relaxed mb-8 sm:mb-10 font-normal">
+              Thoughtfully crafted digital wedding invitations and websites, ready to customize and share in minutes.
             </p>
 
             <div className="inline-flex items-center justify-center text-[11px] sm:text-xs font-bold text-[#916710] bg-[#fff9f2] px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full sm:rounded-xl border border-[#eed57c]/35 mb-6 sm:mb-8 shadow-xs max-w-full">
-              <span className="hidden sm:inline">Try before you pay — customize your invitation for free, with plans starting at ₹999!</span>
-              <span className="inline sm:hidden whitespace-nowrap">Customize for free • Plans from ₹999!</span>
+              <span>Customize for free • Plans from ₹999</span>
             </div>
 
             <div className="flex items-center justify-center w-full sm:w-auto px-4 sm:px-0">
@@ -509,85 +511,62 @@ export default function LandingClient() {
 
 
 
-        {/* Why Choose Varnam / Features */}
-        <section id="why-choose" className="py-14 sm:py-24 px-4 sm:px-6 relative bg-white border-t border-zinc-150 overflow-hidden scroll-mt-20">
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 lg:items-center">
-            <div>
-              <p className="font-bold text-[11px] sm:text-xs uppercase tracking-[0.18em] text-[#916710]">
-                Why choose varnam
+        {/* Why Choose Varnam */}
+        <section id="why-choose" className="py-14 sm:py-20 lg:py-24 px-4 sm:px-6 relative bg-white border-t border-zinc-150 scroll-mt-20">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
+              <p className="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#916710] uppercase">
+                WHY VARNAM
               </p>
-              <h2 className="mt-3 sm:mt-4 max-w-[560px] text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight font-serif">
-                Premium Indian Wedding Invitation Platform
+              <h2 className="mt-2.5 text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-zinc-900 font-serif leading-tight">
+                A beautiful beginning, made simple.
               </h2>
-              <p className="mt-4 sm:mt-5 max-w-[500px] text-sm sm:text-base leading-relaxed text-zinc-600 font-normal">
-                Varnam provides a premium, all-in-one digital wedding invitation maker. Easily personalize your wedding templates, custom music, photo galleries, Google Maps location, and guest messages from a secure live dashboard.
+              <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm md:text-base text-zinc-600 font-normal leading-relaxed max-w-lg mx-auto">
+                Everything you need to invite your favourite people to your special day.
               </p>
-              
-              <div className="mt-6 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-4">
-                <a
-                  href="https://razorpay.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-zinc-200/80 bg-zinc-50/70 px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold tracking-wide text-zinc-800 hover:text-zinc-950 hover:border-zinc-300 transition-colors shadow-2xs"
-                >
-                  <ShieldCheck className="w-4 h-4 text-[#916710]" />
-                  Razorpay Verified
-                </a>
-                <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200/80 bg-zinc-50/70 px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold tracking-wide text-zinc-800 shadow-2xs">
-                  <Lock className="w-4 h-4 text-[#916710]" />
-                  Secure Live Dashboard
-                </span>
-              </div>
-
-              <Link
-                href="/templates"
-                className="mt-8 sm:mt-10 inline-flex items-center gap-2 text-xs font-bold text-[#b3811b] hover:text-[#9a6f14] transition-colors uppercase tracking-widest"
-              >
-                Browse wedding templates
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+              <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-3.5 sm:mt-4 rounded-full" />
             </div>
 
-            <div className="relative border border-zinc-200/70 bg-gradient-to-br from-zinc-50/70 to-[#fffdf9] p-6 sm:p-8 md:p-10 shadow-xs rounded-[24px] sm:rounded-[32px]">
-              <div className="grid gap-6 sm:gap-8 divide-y divide-zinc-200/60">
-                {[
-                  {
-                    step: "01",
-                    title: "One-Time Event License",
-                    desc: "1 template license for your event. No subscriptions or recurring fees."
-                  },
-                  {
-                    step: "02",
-                    title: "Secure Razorpay Checkout",
-                    desc: "Activate your premium digital wedding card immediately after a safe, secure payment."
-                  },
-                  {
-                    step: "03",
-                    title: "Interactive Guest Experience",
-                    desc: "Engage guests with real-time online RSVP, scratch-to-reveal event cards, dynamic maps, photo galleries, and guest wish boards."
-                  }
-                ].map((item, idx) => (
-                  <div key={idx} className={`grid grid-cols-[40px_1fr] sm:grid-cols-[48px_1fr] gap-4 sm:gap-5 ${idx > 0 ? "pt-6 sm:pt-8" : ""}`}>
-                    <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center border border-zinc-200 bg-white text-[#916710] font-serif rounded-full text-xs sm:text-sm font-bold shadow-2xs">
-                      {item.step}
-                    </div>
-                    <div>
-                      <h3 className="text-base sm:text-lg font-bold text-zinc-900 tracking-tight">
-                        {item.title}
-                      </h3>
-                      <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-zinc-600">
-                        {item.desc}
-                      </p>
-                    </div>
+            {/* Benefits: 2 columns on mobile, 4 columns on large screens */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+              {[
+                {
+                  icon: <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-[#916710]" strokeWidth={1.75} />,
+                  title: "Made Personal",
+                  desc: "Your wedding, your way."
+                },
+                {
+                  icon: <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#916710]" strokeWidth={1.75} />,
+                  title: "Beautiful by Design",
+                  desc: "Thoughtfully crafted Indian wedding templates."
+                },
+                {
+                  icon: <Share2 className="w-4 h-4 sm:w-5 sm:h-5 text-[#916710]" strokeWidth={1.75} />,
+                  title: "Easy to Share",
+                  desc: "One link, ready for WhatsApp."
+                },
+                {
+                  icon: <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-[#916710]" strokeWidth={1.75} />,
+                  title: "One-Time Payment",
+                  desc: "Pay once. No recurring subscriptions."
+                }
+              ].map((benefit, idx) => (
+                <div
+                  key={idx}
+                  className="bg-[#fdfcf9] border border-[#eed57c]/35 rounded-2xl p-4 sm:p-6 flex flex-col items-center text-center transition-all duration-300 hover:border-[#eed57c]/70 hover:bg-[#fffdf7] hover:shadow-[0_8px_24px_rgba(212,163,37,0.06)]"
+                >
+                  <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#fbf5ea] border border-[#eed57c]/40 flex items-center justify-center mb-3 sm:mb-3.5 shrink-0">
+                    {benefit.icon}
                   </div>
-                ))}
-              </div>
-
-              <div className="mt-6 sm:mt-8 border-t border-zinc-200/60 pt-6 sm:pt-8">
-                <p className="text-base sm:text-lg italic text-zinc-800 leading-relaxed font-serif">
-                  &ldquo;The design feels high-end, but every guest action is just one tap away.&rdquo;
-                </p>
-              </div>
+                  <h3 className="text-[13px] sm:text-base font-bold font-serif text-zinc-900 tracking-tight">
+                    {benefit.title}
+                  </h3>
+                  <p className="mt-1 sm:mt-1.5 text-[11px] sm:text-xs md:text-[13px] text-zinc-600 font-normal leading-snug">
+                    {benefit.desc}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -597,10 +576,10 @@ export default function LandingClient() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-10 sm:mb-16">
               <span className="text-[11px] sm:text-xs font-bold tracking-[0.18em] text-[#916710] uppercase">
-                Our Handcrafted Collection
+                COLLECTION
               </span>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900 font-serif">
-                Signature Wedding Invitation Templates
+                Handcrafted Wedding Templates
               </h2>
               <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-3 sm:mt-4 rounded-full" />
             </div>
@@ -675,48 +654,58 @@ export default function LandingClient() {
         </section>
 
         {/* How it works Section */}
-        <section id="how-it-works" className="py-14 sm:py-24 px-4 sm:px-6 z-10 border-t border-zinc-150 bg-white relative scroll-mt-20">
-          <div className="max-w-7xl mx-auto">
+        <section id="how-it-works" className="py-16 sm:py-24 px-4 sm:px-6 z-10 border-y border-zinc-800 bg-[#0c0a09] text-white relative scroll-mt-20 overflow-hidden">
+          {/* Subtle warm ambient luxury glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[320px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent blur-3xl pointer-events-none" />
+
+          <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-10 sm:mb-16">
-              <span className="text-[11px] sm:text-xs font-bold tracking-[0.18em] text-[#916710] uppercase">
-                Simple Creation Process
+              <span className="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-[#eed57c] uppercase">
+                HOW IT WORKS
               </span>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900 font-serif">
-                How to Create Your WhatsApp Invite
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mt-2 text-white font-serif">
+                Four simple steps
               </h2>
-              <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-3 sm:mt-4 rounded-full" />
+              <div className="h-[2px] w-12 bg-[#eed57c] mx-auto mt-3.5 sm:mt-4 rounded-full" />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {/* Four boxes */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
               {[
                 {
-                  icon: <Layers className="w-5 h-5 text-[#916710]" />,
-                  title: "1. Select Wedding Template",
-                  desc: "Choose a design from our curated collection of classic and premium cinematic wedding templates."
+                  icon: <Layers className="w-5 h-5 text-[#eed57c]" />,
+                  title: "1. Choose Design",
+                  desc: "Pick a template that matches your wedding aesthetic."
                 },
                 {
-                  icon: <Sliders className="w-5 h-5 text-[#916710]" />,
-                  title: "2. Customize Your Details",
-                  desc: "Fill in the couple details, event schedules, dress codes, music tracks, map coordinates, and photos."
+                  icon: <Sliders className="w-5 h-5 text-[#eed57c]" />,
+                  title: "2. Personalize",
+                  desc: "Add your event details, music, photos, and venue location."
                 },
                 {
-                  icon: <CreditCard className="w-5 h-5 text-[#916710]" />,
-                  title: "3. Secure One-Time Payment",
-                  desc: "Complete your one-time event licensing fee securely via Razorpay (Classic ₹999 / Premium ₹1,199)."
+                  icon: <CreditCard className="w-5 h-5 text-[#eed57c]" />,
+                  title: "3. Pay Once",
+                  desc: "Simple one-time payment. No subscriptions."
                 },
                 {
-                  icon: <Send className="w-5 h-5 text-[#916710]" />,
-                  title: "4. Share on WhatsApp & Email",
-                  desc: "Instantly copy your custom digital wedding invitation link and share it with guests on WhatsApp."
+                  icon: <Send className="w-5 h-5 text-[#eed57c]" />,
+                  title: "4. Share Instantly",
+                  desc: "Send your custom link directly on WhatsApp."
                 }
               ].map((step, idx) => (
                 <div
                   key={idx}
-                  className="bg-zinc-50/70 border border-zinc-200/70 p-6 sm:p-8 flex flex-col items-center text-center rounded-[22px] sm:rounded-[28px] shadow-2xs transition hover:shadow-xs hover:border-[#eed57c]/60 duration-300"
+                  className="bg-zinc-900/90 border border-zinc-800 hover:border-[#eed57c]/60 p-4 sm:p-7 flex flex-col items-center text-center rounded-[20px] sm:rounded-[24px] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.6)] group"
                 >
-                  <div className="mb-4 sm:mb-5 p-3.5 sm:p-4 bg-white rounded-2xl border border-zinc-150 shadow-2xs">{step.icon}</div>
-                  <h3 className="text-base text-zinc-900 font-bold mb-2 tracking-tight">{step.title}</h3>
-                  <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">{step.desc}</p>
+                  <div className="mb-3.5 sm:mb-4 p-3 sm:p-3.5 bg-zinc-950 rounded-2xl border border-zinc-800 group-hover:border-[#eed57c]/40 shadow-xs transition-colors">
+                    {step.icon}
+                  </div>
+                  <h3 className="text-[13px] sm:text-base text-zinc-100 font-bold mb-1.5 tracking-tight group-hover:text-[#eed57c] transition-colors">
+                    {step.title}
+                  </h3>
+                  <p className="text-[11px] sm:text-xs md:text-sm text-zinc-400 leading-relaxed font-normal">
+                    {step.desc}
+                  </p>
                 </div>
               ))}
             </div>
@@ -728,13 +717,13 @@ export default function LandingClient() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-10 sm:mb-16">
               <span className="text-[11px] sm:text-xs font-bold tracking-[0.18em] text-[#916710] uppercase">
-                Transparent Event Licensing
+                PRICING
               </span>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mt-2 text-zinc-900 font-serif">
-                Digital Wedding Invitation Pricing
+                Simple, one-time pricing
               </h2>
-              <p className="mt-3 text-sm text-zinc-600 max-w-lg mx-auto">
-                One-time payment per event. Customize everything for free, pay only when you are ready to publish and share with your guests.
+              <p className="mt-2.5 text-sm text-zinc-600 max-w-md mx-auto">
+                Customize for free. Pay once only when you're ready to share.
               </p>
               <div className="h-[2px] w-12 bg-gold-500 mx-auto mt-4 rounded-full" />
             </div>
@@ -807,7 +796,7 @@ export default function LandingClient() {
 
                 <h3 className="text-xl sm:text-2xl font-bold font-serif text-zinc-900 mb-2">Premium License</h3>
                 <p className="text-xs text-zinc-600 leading-relaxed mb-6">
-                  Ultra-luxurious 3D scroll experiences with animated temple archways, scratch reveal, and falling petals.
+                  Cinematic 3D temple animations, scratch-reveal date, and falling petal effects.
                 </p>
 
                 <div className="flex items-baseline gap-2 mb-6">
@@ -879,7 +868,7 @@ export default function LandingClient() {
                 </span>
               </div>
               <p className="text-xs text-zinc-600 max-w-sm mt-2 leading-relaxed text-center md:text-left">
-                Create beautiful digital wedding invitations and personal wedding websites with instant customization, background music, RSVP tracking, and Google Maps venue navigation.
+                Thoughtfully crafted digital wedding invitations and personal wedding websites.
               </p>
               <p className="text-xs text-zinc-500 mt-2 text-center md:text-left">
                 ✉ <a href="mailto:hello@varnaminvites.store" className="hover:text-zinc-900 transition-colors">hello@varnaminvites.store</a>

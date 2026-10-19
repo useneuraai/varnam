@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { getTemplateBySlug } from "@/lib/templates";
+import { loadRazorpayScript } from "@/lib/loadRazorpay";
 import { 
   LogOut, 
   Plus, 
@@ -74,10 +75,15 @@ interface Payment {
   created_at: string;
 }
 
+const STORAGE_KEY_INVITATIONS = "varnam_cached_invitations";
+const STORAGE_KEY_USER = "varnam_cached_user";
+
 export default function DashboardPage() {
   const router = useRouter();
+
+  const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<any>(null);
-  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [loadingAuth, setLoadingAuth] = useState(false);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [loadingInvites, setLoadingInvites] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -86,6 +92,8 @@ export default function DashboardPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loadingPayments, setLoadingPayments] = useState(false);
   const [showPaymentsModal, setShowPaymentsModal] = useState(false);
+  const [payingSlug, setPayingSlug] = useState<string | null>(null);
+  const [gatewayError, setGatewayError] = useState<{ message: string; slug: string; templateSlug: string } | null>(null);
 
   // RSVP Modal State
   const [selectedInviteForRsvps, setSelectedInviteForRsvps] = useState<Invitation | null>(null);
@@ -101,6 +109,7 @@ export default function DashboardPage() {
   const profileDropdownRef = useRef<HTMLDivElement>(null);
   const [openMenuSlug, setOpenMenuSlug] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const isFetchingRef = useRef(false);
 
   // Close profile dropdown and actions overflow menu on outside click or touch
   useEffect(() => {
@@ -124,46 +133,100 @@ export default function DashboardPage() {
   }, [showProfileDropdown, openMenuSlug]);
 
   useEffect(() => {
+    setMounted(true);
+
+    // Fast synchronous cache read right after mounting
+    try {
+      const cachedInv = localStorage.getItem(STORAGE_KEY_INVITATIONS);
+      if (cachedInv) {
+        const parsed = JSON.parse(cachedInv);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setInvitations(parsed);
+          setLoadingInvites(false);
+        }
+      }
+      const cachedUser = localStorage.getItem(STORAGE_KEY_USER);
+      if (cachedUser) {
+        setUser(JSON.parse(cachedUser));
+      }
+    } catch {}
+
     const isMockSupabase = !isSupabaseConfigured;
     if (isMockSupabase) {
-      setUser({ id: "mock-user-123", email: "demo.user@varnam.com" });
+      const mockUser = { id: "mock-user-123", email: "demo.user@varnam.com" };
+      setUser(mockUser);
       setLoadingAuth(false);
       fetchInvitations("mock-user-123", true);
       fetchPayments("mock-user-123", true);
       return;
     }
 
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        setUser(session.user);
-        fetchInvitations(session.access_token, false);
-        fetchPayments(session.access_token, false);
-      } else {
-        router.replace("/login?redirectTo=/dashboard");
-      }
-      setLoadingAuth(false);
-    };
-    checkUser();
+    let isMounted = true;
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        setUser(session.user);
-        fetchInvitations(session.access_token, false);
-        fetchPayments(session.access_token, false);
-      } else {
+    const checkSessionAndFetch = async () => {
+      if (isFetchingRef.current) return;
+      isFetchingRef.current = true;
+
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!isMounted) return;
+
+        if (session) {
+          setUser(session.user);
+          try {
+            localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(session.user));
+          } catch {}
+
+          // Fetch fresh real data in the background
+          await Promise.allSettled([
+            fetchInvitations(session.access_token, false),
+            fetchPayments(session.access_token, false),
+          ]);
+        } else {
+          try {
+            localStorage.removeItem(STORAGE_KEY_USER);
+            localStorage.removeItem(STORAGE_KEY_INVITATIONS);
+          } catch {}
+          router.replace("/login?redirectTo=/dashboard");
+        }
+      } catch (err) {
+        console.error("Session check error:", err);
+      } finally {
+        if (isMounted) {
+          setLoadingAuth(false);
+          setLoadingInvites(false);
+          isFetchingRef.current = false;
+        }
+      }
+    };
+
+    checkSessionAndFetch();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!isMounted) return;
+      if (event === "SIGNED_OUT" || !session) {
         setUser(null);
+        try {
+          localStorage.removeItem(STORAGE_KEY_USER);
+          localStorage.removeItem(STORAGE_KEY_INVITATIONS);
+        } catch {}
         router.replace("/login?redirectTo=/dashboard");
+      } else if (event === "SIGNED_IN") {
+        setUser(session.user);
+        try {
+          localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(session.user));
+        } catch {}
+        checkSessionAndFetch();
       }
     });
 
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
   }, [router]);
 
   const fetchInvitations = async (tokenOrId: string, isMock: boolean) => {
-    setLoadingInvites(true);
     setError(null);
     try {
       let res;
@@ -186,8 +249,13 @@ export default function DashboardPage() {
       }
 
       const data = await res.json();
-      setInvitations(data.invitations || []);
+      const realInvites = data.invitations || [];
+      setInvitations(realInvites);
+      try {
+        localStorage.setItem(STORAGE_KEY_INVITATIONS, JSON.stringify(realInvites));
+      } catch {}
     } catch (err: any) {
+      console.error("Error loading user invitations:", err);
       setError(err.message || "An unexpected error occurred.");
     } finally {
       setLoadingInvites(false);
@@ -229,7 +297,13 @@ export default function DashboardPage() {
       });
 
       if (res.ok) {
-        setInvitations((prev) => prev.filter((i) => i.slug !== draftToDelete));
+        setInvitations((prev) => {
+          const updated = prev.filter((i) => i.slug !== draftToDelete);
+          try {
+            localStorage.setItem(STORAGE_KEY_INVITATIONS, JSON.stringify(updated));
+          } catch {}
+          return updated;
+        });
       }
     } catch (err) {
       console.error("Error deleting invitation:", err);
@@ -240,6 +314,10 @@ export default function DashboardPage() {
   };
 
   const handleSignOut = async () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY_USER);
+      localStorage.removeItem(STORAGE_KEY_INVITATIONS);
+    } catch {}
     const isMockSupabase = !isSupabaseConfigured;
     if (isMockSupabase) {
       router.replace("/templates");
@@ -389,52 +467,122 @@ export default function DashboardPage() {
     }
   };
 
-  const handleSeedDemoInvite = async () => {
-    setLoadingInvites(true);
+  const handlePayAndActivate = async (invite: Invitation) => {
+    setPayingSlug(invite.slug);
     try {
-      const res = await fetch("/api/payments/verify", {
+      const isMock = !isSupabaseConfigured;
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = isMock ? "mock-user-token" : session?.access_token || "";
+
+      // 1. Create order on server
+      const orderRes = await fetch("/api/payments/order", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({
-          razorpay_order_id: "order_mock_demo123",
-          razorpay_payment_id: "pay_mock_demo123",
-          razorpay_signature: "sig_mock",
-          templateSlug: "luxury-floral",
-          userId: user?.id,
-          formData: {
-            bride_name: "Priya",
-            groom_name: "Rahul",
-            wedding_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-            wedding_venue: "The Grand Ballroom, ITC Grand Chola, Chennai",
-            rsvp_phone: "+91 98765 43210",
-            custom_message: "We invite you to share our joy as we exchange our wedding vows.",
-            family_names: "Sharma & Kapoor Families"
-          }
+          templateSlug: invite.template_slug,
+          invitationSlug: invite.slug,
         })
       });
-      if (res.ok) {
-        fetchInvitations("mock-user-123", true);
-        fetchPayments("mock-user-123", true);
+
+      if (!orderRes.ok) {
+        const errData = await orderRes.json().catch(() => ({}));
+        const msg = errData.message || "Failed to initialize payment gateway order.";
+        if (msg.includes("Razorpay") || msg.includes("gateway") || msg.includes("configured") || msg.includes(".env")) {
+          setGatewayError({
+            message: msg,
+            slug: invite.slug,
+            templateSlug: invite.template_slug,
+          });
+          return;
+        }
+        throw new Error(msg);
       }
-    } catch (err) {
-      console.error(err);
+
+      const orderData = await orderRes.json();
+
+      // 2. Ensure Razorpay client SDK is loaded
+      const isLoaded = await loadRazorpayScript();
+      if (!isLoaded || !(window as any).Razorpay) {
+        throw new Error("Unable to load Razorpay payment gateway. Please check your network and try again.");
+      }
+
+      // 3. Launch Razorpay Checkout
+      const options = {
+        key: orderData.key,
+        amount: orderData.amount,
+        currency: orderData.currency || "INR",
+        name: "Varnam Invites",
+        description: `${invite.bride_name} & ${invite.groom_name} Wedding Invitation`,
+        order_id: orderData.id,
+        prefill: {
+          name: user?.user_metadata?.full_name || "",
+          email: user?.email || "",
+        },
+        theme: {
+          color: "#000000",
+        },
+        handler: async function (response: any) {
+          try {
+            const verifyRes = await fetch("/api/payments/verify", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                templateSlug: invite.template_slug,
+                existingSlug: invite.slug,
+                userId: user?.id,
+                formData: {
+                  bride_name: invite.bride_name,
+                  groom_name: invite.groom_name,
+                  wedding_date: invite.wedding_date,
+                  wedding_venue: invite.wedding_venue,
+                  rsvp_phone: invite.rsvp_phone,
+                },
+              })
+            });
+
+            if (!verifyRes.ok) {
+              const err = await verifyRes.json().catch(() => ({}));
+              throw new Error(err.message || "Payment verification failed.");
+            }
+
+            const result = await verifyRes.json();
+            router.push(`/success/${result.slug}`);
+          } catch (err: any) {
+            console.error("Verification failed:", err);
+            alert(err.message || "Payment verification failed.");
+          } finally {
+            setPayingSlug(null);
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            setPayingSlug(null);
+          }
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on("payment.failed", function (response: any) {
+        alert(response.error?.description || "Payment was not completed. Please try again.");
+        setPayingSlug(null);
+      });
+      rzp.open();
+    } catch (err: any) {
+      console.error("Pay and activate error:", err);
+      alert(err.message || "Failed to launch Razorpay payment.");
     } finally {
-      setLoadingInvites(false);
+      setPayingSlug(null);
     }
   };
-
-  if (loadingAuth) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f3efe9] flex flex-col items-center justify-center font-sans">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-4 border-[#b3811b] border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs uppercase tracking-widest text-[#8a725d] font-bold animate-pulse">
-            Loading Dashboard...
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#faf8f5] to-[#f3efe9] font-sans text-neutral-800 flex flex-col selection:bg-gold-200 selection:text-black">
@@ -637,12 +785,14 @@ export default function DashboardPage() {
 
         {/* Loading invitations list */}
         <section id="invitations-section" className="scroll-mt-24">
-        {loadingInvites ? (
-          <div className="flex flex-col items-center justify-center py-24 gap-4">
-            <div className="w-8 h-8 border-3 border-[#b3811b] border-t-transparent rounded-full animate-spin" />
-            <p className="text-xs uppercase tracking-widest text-[#8a725d] font-bold">
-              Fetching invitations...
-            </p>
+        {(!mounted || (loadingInvites && invitations.length === 0)) ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="bg-white border border-zinc-200/90 rounded-[24px] overflow-hidden p-6 animate-pulse">
+              <div className="aspect-[4/3] bg-zinc-100 rounded-2xl w-full mb-5" />
+              <div className="h-6 bg-zinc-100 rounded-lg w-2/3 mx-auto mb-3" />
+              <div className="h-4 bg-zinc-100 rounded-lg w-1/2 mx-auto mb-6" />
+              <div className="h-11 bg-zinc-100 rounded-xl w-full" />
+            </div>
           </div>
         ) : invitations.length === 0 ? (
           <div className="text-center py-20 bg-white border border-zinc-150 rounded-2xl shadow-sm max-w-2xl mx-auto">
@@ -660,14 +810,6 @@ export default function DashboardPage() {
               >
                 Browse Templates
               </Link>
-              {user?.email === "demo.user@varnam.com" && (
-                <button
-                  onClick={handleSeedDemoInvite}
-                  className="bg-zinc-900 border border-zinc-900 text-white text-xs uppercase font-bold tracking-widest py-3.5 px-8 hover:bg-zinc-800 transition-colors rounded-xl cursor-pointer shadow-sm"
-                >
-                  Seed Demo Invitation
-                </button>
-              )}
             </div>
           </div>
         ) : (
@@ -828,13 +970,24 @@ export default function DashboardPage() {
                     ) : (
                       <div className="flex flex-col gap-2.5">
                         {/* 1. Primary Black Pay & Activate */}
-                        <Link
-                          href={`/editor/${invite.template_slug}?edit=${invite.slug}`}
-                          className="w-full min-h-[44px] flex items-center justify-center gap-2 bg-zinc-950 hover:bg-zinc-850 active:scale-[0.99] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-xs"
+                        <button
+                          type="button"
+                          onClick={() => handlePayAndActivate(invite)}
+                          disabled={payingSlug === invite.slug}
+                          className="w-full min-h-[44px] flex items-center justify-center gap-2 bg-zinc-950 hover:bg-zinc-850 active:scale-[0.99] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-xs cursor-pointer disabled:opacity-75"
                         >
-                          <CreditCard className="w-4 h-4" />
-                          <span>Pay & Activate</span>
-                        </Link>
+                          {payingSlug === invite.slug ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              <span>Launching Razorpay...</span>
+                            </>
+                          ) : (
+                            <>
+                              <CreditCard className="w-4 h-4" />
+                              <span>Pay &amp; Activate</span>
+                            </>
+                          )}
+                        </button>
 
                         {/* 2 & 3. Outlined Continue Editing + Three-dot Overflow Menu for Delete Draft */}
                         <div className="flex items-center gap-2">
@@ -941,13 +1094,13 @@ export default function DashboardPage() {
                     <div>
                       <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold block">Attending</span>
                       <strong className="text-lg text-emerald-700 block mt-1">
-                        {rsvps.filter(r => r.attendance === "yes").reduce((acc, curr) => acc + curr.guest_count, 0)} guests
+                        {rsvps.filter(r => r.attendance_status === "attending" || r.attendance === "yes").reduce((acc, curr) => acc + (Number(curr.guest_count) || 1), 0)} guests
                       </strong>
                     </div>
                     <div>
                       <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold block">Declined</span>
                       <strong className="text-lg text-red-650 block mt-1">
-                        {rsvps.filter(r => r.attendance === "no").length} responses
+                        {rsvps.filter(r => r.attendance_status === "not_attending" || r.attendance === "no").length} responses
                       </strong>
                     </div>
                   </div>
@@ -955,7 +1108,10 @@ export default function DashboardPage() {
                   {/* List of responses */}
                   <div className="space-y-3">
                     {rsvps.map((rsvp) => {
-                      const attending = rsvp.attendance === "yes";
+                      const attending = rsvp.attendance_status === "attending" || rsvp.attendance === "yes";
+                      const guestName = rsvp.guest_name || rsvp.name || "Guest";
+                      const guestCount = Number(rsvp.guest_count) || 1;
+                      const guestWishes = rsvp.wishes || rsvp.message;
                       return (
                         <div 
                           key={rsvp.id}
@@ -964,20 +1120,20 @@ export default function DashboardPage() {
                           <div className="flex-grow min-w-0">
                             <div className="flex items-center gap-2">
                               <h4 className="font-bold text-xs text-zinc-900 truncate uppercase">
-                                {rsvp.name}
+                                {guestName}
                               </h4>
                               <span className={`text-[8px] tracking-wider uppercase px-2 py-0.5 font-bold rounded-lg ${
                                 attending 
                                   ? "bg-[#EDF3EC] text-[#346538] border border-emerald-100" 
                                   : "bg-[#FDEBEC] text-[#9F2F2D] border border-red-100"
                               }`}>
-                                {attending ? `Attending (${rsvp.guest_count} guests)` : "Declined"}
+                                {attending ? `Attending (${guestCount} guests)` : "Declined"}
                               </span>
                             </div>
                             
-                            {rsvp.wishes && (
+                            {guestWishes && (
                               <p className="text-xs text-zinc-500 italic mt-2 bg-zinc-50 p-2.5 rounded-lg border border-zinc-100">
-                                "{rsvp.wishes}"
+                                "{guestWishes}"
                               </p>
                             )}
                           </div>
@@ -1193,11 +1349,57 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* Razorpay Gateway Notice Modal */}
+      {gatewayError && (
+        <div className="fixed inset-0 z-50 bg-black/45 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-zinc-200 p-6 sm:p-8 rounded-[28px] w-full max-w-md flex flex-col shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center mx-auto mb-4 border border-amber-200">
+              <CreditCard className="w-6 h-6 text-[#b3811b]" />
+            </div>
+            <h3 className="font-sans text-lg font-bold text-zinc-900 text-center mb-2">
+              Razorpay Setup Notice
+            </h3>
+            <p className="text-zinc-600 text-xs text-center mb-6 leading-relaxed font-sans">
+              To complete live checkout and activate your invitation, please set your Razorpay credentials (<code className="bg-zinc-100 text-zinc-800 px-1.5 py-0.5 rounded font-mono text-[11px]">RAZORPAY_KEY_ID</code> and <code className="bg-zinc-100 text-zinc-800 px-1.5 py-0.5 rounded font-mono text-[11px]">RAZORPAY_KEY_SECRET</code>) in your <code className="bg-zinc-100 text-zinc-800 px-1.5 py-0.5 rounded font-mono text-[11px]">.env.local</code> file.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => setGatewayError(null)}
+                className="min-h-[44px] px-5 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-xs tracking-wider uppercase rounded-xl transition-colors cursor-pointer flex-1 font-sans flex items-center justify-center"
+              >
+                Close
+              </button>
+              <Link
+                href={`/editor/${gatewayError.templateSlug}?edit=${gatewayError.slug}&step=4`}
+                onClick={() => setGatewayError(null)}
+                className="min-h-[44px] px-5 py-2.5 bg-zinc-950 hover:bg-zinc-850 text-white font-bold text-xs tracking-wider uppercase rounded-xl transition-all cursor-pointer flex-1 shadow-md font-sans flex items-center justify-center text-center"
+              >
+                Review in Editor
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
-      <footer className="w-full py-10 px-6 border-t border-zinc-150 bg-white text-center mt-auto">
-        <p className="text-xs text-zinc-500">
-          © {new Date().getFullYear()} Varnam Wedding Invites. All rights reserved.
-        </p>
+      <footer className="w-full py-8 sm:py-10 px-4 sm:px-6 border-t border-zinc-150 bg-white mt-auto">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <p className="text-xs text-zinc-500">
+            © {new Date().getFullYear()} Varnam Wedding Invites. All rights reserved.
+          </p>
+          <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-8 gap-y-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+            <Link href="/terms-of-service" className="hover:text-zinc-950 transition-colors">
+              Terms &amp; Conditions
+            </Link>
+            <Link href="/privacy-policy" className="hover:text-zinc-950 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/refund-policy" className="hover:text-zinc-950 transition-colors">
+              Refund Policy
+            </Link>
+          </div>
+        </div>
       </footer>
 
     </div>

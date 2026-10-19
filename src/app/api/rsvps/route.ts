@@ -51,6 +51,26 @@ export async function GET(req: NextRequest) {
   }
 }
 
+interface RateLimitEntry {
+  count: number;
+  resetAt: number;
+}
+const ipRateLimits = new Map<string, RateLimitEntry>();
+
+function checkRateLimit(key: string, maxRequests = 10, windowMs = 5 * 60 * 1000): boolean {
+  const now = Date.now();
+  const entry = ipRateLimits.get(key);
+  if (!entry || now > entry.resetAt) {
+    ipRateLimits.set(key, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+  if (entry.count >= maxRequests) {
+    return false;
+  }
+  entry.count += 1;
+  return true;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -68,7 +88,28 @@ export async function POST(req: NextRequest) {
       dietary_preferences,
       wishes,
       message,
+      rsvp_token,
+      rsvpToken,
+      website,
+      address_confirm,
+      honeypot,
     } = body;
+
+    // 1. Honeypot Spam Trap: If filled, silently drop bot submission without writing to DB
+    if (website || address_confirm || honeypot) {
+      console.warn("[SPAM_PREVENTION] Bot detected via honeypot trap.");
+      return NextResponse.json({
+        success: true,
+        message: "RSVP registered successfully. Thank you for your blessings!",
+        rsvp: {
+          id: "rsvp_bot_ack",
+          guest_name: "Guest",
+          attendance_status: "attending",
+          guest_count: 1,
+          created_at: new Date().toISOString(),
+        },
+      });
+    }
 
     const finalSlug = invitationSlug;
     const finalName = (guest_name || name || "").trim();
@@ -82,11 +123,34 @@ export async function POST(req: NextRequest) {
 
     const parsedCount = Math.max(1, Math.min(10, Number(guest_count || guestCount) || 1));
     const finalContact = (guest_contact || phone || email || "").trim().slice(0, 50);
-    const finalMessage = (message || wishes || "").trim().slice(0, 500);
+    const rawMessage = (message || wishes || "").trim().slice(0, 500);
+    const finalMessage = rawMessage.replace(/<[^>]*>?/gm, "").trim();
     const finalDiet = (dietary_preferences || "").trim().slice(0, 100);
+    const finalToken = (rsvp_token || rsvpToken || "").trim().slice(0, 100);
 
     if (!finalSlug || !finalName) {
       return NextResponse.json({ message: "Guest name and invitation slug are required" }, { status: 400 });
+    }
+
+    // Input length and character safety check
+    if (finalName.length < 2 || finalName.length > 100) {
+      return NextResponse.json({ message: "Guest name must be between 2 and 100 characters" }, { status: 400 });
+    }
+    if (/(http:\/\/|https:\/\/|<script|<iframe)/i.test(finalName)) {
+      return NextResponse.json({ message: "Invalid characters detected in guest name" }, { status: 400 });
+    }
+
+    // Client IP for abuse prevention / audit & Rate limiting
+    const ipAddress =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
+
+    if (!checkRateLimit(`rsvp_${ipAddress}_${finalSlug}`, 10, 5 * 60 * 1000)) {
+      return NextResponse.json(
+        { message: "Too many RSVP submissions from this network. Please wait a few moments before trying again." },
+        { status: 429 }
+      );
     }
 
     // Verify parent invitation exists and is published + paid
@@ -102,12 +166,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Client IP for abuse prevention / audit
-    const ipAddress =
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      req.headers.get("x-real-ip") ||
-      "unknown";
-
     const saved = await saveRsvp({
       invitation_id: invitation.id,
       invitation_slug: finalSlug,
@@ -121,6 +179,7 @@ export async function POST(req: NextRequest) {
       message: finalMessage || undefined,
       wishes: finalMessage || undefined,
       dietary_preferences: finalDiet || undefined,
+      rsvp_token: finalToken || undefined,
       ip_address: ipAddress,
     });
 

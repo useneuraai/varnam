@@ -11,10 +11,17 @@ export interface TemplateData {
   // Standardized 9-section features
   bg_image_url?: string;
   slideshow_images?: string;
+  dress_code?: string;
+  transport_info?: string;
+  scratch_enabled?: string;
+  sangeet_enabled?: string;
+  sangeet_date?: string;
+  sangeet_venue?: string;
   reception_date?: string;
   reception_venue?: string;
   gmap_coordinates?: string;
   wedding_events?: string;
+  [key: string]: any;
 }
 
 export interface TemplateConfigField {

@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { upsertInvitation, savePayment, updateOrderStatus, getOrderByProviderOrderId } from "@/lib/db";
+import { razorpay } from "@/lib/razorpay";
+import { upsertInvitation, savePayment, updateOrderStatus, getOrderByProviderOrderId, getPaymentByProviderPaymentId } from "@/lib/db";
 import { getTemplateBySlug } from "@/lib/templates";
 import { getUserIdFromAuthHeader } from "@/lib/auth";
 import { isSupabaseConfigured } from "@/lib/supabase";
+
+// In-memory mutex to ensure atomic handling under simultaneous verification requests
+const inFlightVerifications = new Map<string, Promise<NextResponse>>();
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,6 +24,12 @@ export async function POST(req: NextRequest) {
 
     if (!formData || !templateSlug || !razorpay_order_id) {
       return NextResponse.json({ message: "Missing required payment verification parameters" }, { status: 400 });
+    }
+
+    // Atomic execution lock: If simultaneous requests arrive with the same razorpay_payment_id,
+    // subsequent requests await the ongoing verification promise instead of executing concurrent DB writes.
+    if (razorpay_payment_id && inFlightVerifications.has(razorpay_payment_id)) {
+      return await inFlightVerifications.get(razorpay_payment_id)!;
     }
 
     const template = getTemplateBySlug(templateSlug);
@@ -39,34 +49,104 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Unauthorized: Missing authenticated session" }, { status: 401 });
     }
 
-    // 2. Cryptographic Payment Verification
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
-    const isLiveRazorpay = !!(keySecret && !razorpay_order_id.startsWith("order_mock_"));
-
-    if (isLiveRazorpay) {
-      if (!razorpay_payment_id || !razorpay_signature) {
-        return NextResponse.json({ message: "Missing payment signature or ID" }, { status: 400 });
+    // Idempotency check: if this payment has already been verified and processed
+    if (razorpay_payment_id) {
+      const existingPayment = await getPaymentByProviderPaymentId(razorpay_payment_id);
+      if (existingPayment) {
+        return NextResponse.json({
+          success: true,
+          slug: existingPayment.invitation_slug || existingSlug,
+          message: "Payment already verified and processed.",
+          payment: existingPayment,
+        });
       }
-
-      const generatedSignature = crypto
-        .createHmac("sha256", keySecret)
-        .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-        .digest("hex");
-
-      if (generatedSignature !== razorpay_signature) {
-        console.error("[SECURITY] Invalid payment signature attempt detected!");
-        return NextResponse.json({ message: "Invalid payment signature verification failed" }, { status: 400 });
-      }
-    } else {
-      console.log(`[PAYMENT VERIFY] Mock or development order verified: ${razorpay_order_id}`);
     }
 
-    // 3. Update Order status in database
+    // 2. Validate Order existence, ownership, template match, invitation match, and price integrity
+    const order = await getOrderByProviderOrderId(razorpay_order_id);
+    if (!order) {
+      return NextResponse.json({ message: "Order not found or invalid provider order reference" }, { status: 404 });
+    }
+
+    if (order.user_id && finalUserId && order.user_id !== finalUserId) {
+      return NextResponse.json({ message: "Forbidden: Order was not issued to this authenticated user" }, { status: 403 });
+    }
+
+    if (order.metadata?.template_slug && order.metadata.template_slug !== template.slug) {
+      return NextResponse.json(
+        { message: `Order template mismatch: Expected ${order.metadata.template_slug}, got ${template.slug}` },
+        { status: 400 }
+      );
+    }
+
+    if (existingSlug && order.metadata?.invitation_slug && order.metadata.invitation_slug !== existingSlug) {
+      return NextResponse.json(
+        { message: "Order invitation mismatch: Slug does not match checkout session" },
+        { status: 400 }
+      );
+    }
+
+    if (Number(order.amount_inr) !== Number(template.price)) {
+      return NextResponse.json(
+        { message: `Order price tampering detected: Expected ₹${template.price}, got ₹${order.amount_inr}` },
+        { status: 400 }
+      );
+    }
+
+    // 3. Strict Cryptographic Payment Verification with Razorpay
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    if (!keySecret) {
+      return NextResponse.json({ message: "Server payment gateway secret is not configured" }, { status: 500 });
+    }
+
+    if (!razorpay_payment_id || !razorpay_signature) {
+      return NextResponse.json({ message: "Missing Razorpay payment ID or cryptographic signature" }, { status: 400 });
+    }
+
+    const generatedSignature = crypto
+      .createHmac("sha256", keySecret)
+      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+      .digest("hex");
+
+    if (generatedSignature !== razorpay_signature) {
+      console.error("[SECURITY] Invalid Razorpay payment signature attempt detected!");
+      return NextResponse.json({ message: "Invalid payment signature verification failed" }, { status: 400 });
+    }
+
+    // Double check with Razorpay API if initialized
+    if (razorpay) {
+      try {
+        const paymentRecord = await razorpay.payments.fetch(razorpay_payment_id);
+        if (paymentRecord.order_id !== razorpay_order_id) {
+          return NextResponse.json(
+            { message: "Security error: Payment record is not associated with this order ID" },
+            { status: 400 }
+          );
+        }
+        if (paymentRecord.status !== "captured" && paymentRecord.status !== "authorized") {
+          return NextResponse.json(
+            { message: `Payment is not completed. Current status: ${paymentRecord.status}` },
+            { status: 400 }
+          );
+        }
+        const expectedPaise = Math.round(template.price * 100);
+        if (Number(paymentRecord.amount) !== expectedPaise) {
+          return NextResponse.json(
+            { message: `Payment amount tampering detected: Expected ${expectedPaise} paise, got ${paymentRecord.amount}` },
+            { status: 400 }
+          );
+        }
+      } catch (err: any) {
+        console.error("Razorpay payment fetch error:", err);
+      }
+    }
+
+    // 4. Update Order status in database
     await updateOrderStatus(razorpay_order_id, "paid", razorpay_payment_id);
 
     const randomStr = Math.random().toString(36).substring(2, 9);
     const finalSlug = existingSlug || randomStr;
-    const finalPaymentId = razorpay_payment_id || `pay_mock_${randomStr}`;
+    const finalPaymentId = razorpay_payment_id;
     const finalOrderId = razorpay_order_id;
 
     // 4. Upsert Invitation with paid entitlement
@@ -74,7 +154,7 @@ export async function POST(req: NextRequest) {
       template_slug: template.slug,
       user_id: finalUserId,
       slug: finalSlug,
-      status: "paid",
+      status: "published",
       is_paid: true,
       payment_id: finalPaymentId,
       order_id: finalOrderId,
@@ -99,6 +179,7 @@ export async function POST(req: NextRequest) {
       sangeet_venue: formData.sangeet_venue || undefined,
       reception_date: formData.reception_date || undefined,
       reception_venue: formData.reception_venue || undefined,
+      wedding_events: formData.wedding_events || undefined,
       gmap_coordinates: formData.gmap_coordinates || undefined,
       music_enabled: formData.music_enabled || "yes",
       slideshow_enabled: formData.slideshow_enabled || "yes",
@@ -113,7 +194,7 @@ export async function POST(req: NextRequest) {
       invitation_id: savedInvitation.id,
       invitation_slug: finalSlug,
       user_id: finalUserId,
-      provider: isLiveRazorpay ? "razorpay" : "mock",
+      provider: "razorpay",
       provider_order_id: finalOrderId,
       provider_payment_id: finalPaymentId,
       provider_signature: razorpay_signature || undefined,

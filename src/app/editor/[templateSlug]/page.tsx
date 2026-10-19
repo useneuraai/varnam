@@ -24,7 +24,8 @@ import {
 } from "lucide-react";
 import { getTemplateBySlug, getDefaultTemplateData, TemplateData } from "@/lib/templates";
 import { templatesMap } from "@/templates";
-import { supabase } from "@/lib/supabase";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { loadRazorpayScript } from "@/lib/loadRazorpay";
 import dynamic from "next/dynamic";
 
 const InteractiveMapPicker = dynamic(() => import("@/components/InteractiveMapPicker"), {
@@ -78,6 +79,53 @@ const SLIDESHOW_PRESETS = [
   { label: "Minimalist Wedding Set", value: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600, https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=600" }
 ];
 
+function extractTemplateData(invitation: any, templateSlug: string): TemplateData {
+  const defaults = getDefaultTemplateData(templateSlug);
+  if (!invitation) return defaults;
+
+  const chain: Record<string, any>[] = [];
+  let curr = invitation;
+  while (curr && typeof curr === "object") {
+    chain.unshift(curr);
+    curr = curr.content_json;
+  }
+
+  const merged: Record<string, any> = {};
+  for (const obj of chain) {
+    for (const [k, v] of Object.entries(obj)) {
+      if (k !== "content_json" && k !== "id" && k !== "slug" && k !== "user_id" && v !== undefined && v !== null && v !== "") {
+        merged[k] = v;
+      }
+    }
+  }
+
+  return {
+    ...defaults,
+    ...merged,
+    bride_name: merged.bride_name || defaults.bride_name,
+    groom_name: merged.groom_name || defaults.groom_name,
+    wedding_date: merged.wedding_date || defaults.wedding_date,
+    wedding_venue: merged.wedding_venue || defaults.wedding_venue,
+    quote: merged.quote !== undefined ? merged.quote : defaults.quote,
+    family_names: merged.family_names !== undefined ? merged.family_names : defaults.family_names,
+    rsvp_phone: merged.rsvp_phone !== undefined ? merged.rsvp_phone : defaults.rsvp_phone,
+    custom_message: merged.custom_message !== undefined ? merged.custom_message : defaults.custom_message,
+    music_url: merged.music_url || defaults.music_url,
+    bg_image_url: merged.bg_image_url !== undefined ? merged.bg_image_url : defaults.bg_image_url,
+    slideshow_images: merged.slideshow_images !== undefined ? merged.slideshow_images : defaults.slideshow_images,
+    dress_code: merged.dress_code !== undefined ? merged.dress_code : defaults.dress_code,
+    transport_info: merged.transport_info !== undefined ? merged.transport_info : defaults.transport_info,
+    scratch_enabled: merged.scratch_enabled !== undefined ? merged.scratch_enabled : defaults.scratch_enabled,
+    sangeet_enabled: merged.sangeet_enabled !== undefined ? merged.sangeet_enabled : defaults.sangeet_enabled,
+    sangeet_date: merged.sangeet_date || defaults.sangeet_date,
+    sangeet_venue: merged.sangeet_venue !== undefined ? merged.sangeet_venue : defaults.sangeet_venue,
+    reception_date: merged.reception_date || defaults.reception_date,
+    reception_venue: merged.reception_venue !== undefined ? merged.reception_venue : defaults.reception_venue,
+    wedding_events: merged.wedding_events !== undefined ? merged.wedding_events : defaults.wedding_events,
+    gmap_coordinates: merged.gmap_coordinates !== undefined ? merged.gmap_coordinates : defaults.gmap_coordinates,
+  };
+}
+
 function EditorPageContent() {
   const params = useParams();
   const router = useRouter();
@@ -90,13 +138,22 @@ function EditorPageContent() {
   const template = getTemplateBySlug(templateSlug);
 
   const [formData, setFormData] = useState<TemplateData | null>(null);
+  const [isDraftLoaded, setIsDraftLoaded] = useState<boolean>(!editSlug);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [draftSlug, setDraftSlug] = useState<string | null>(null);
+  const [draftSlug, setDraftSlug] = useState<string | null>(editSlug || null);
   const [isAutosaving, setIsAutosaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<"saving" | "saved" | "error">("saved");
+  const [saveStatus, setSaveStatus] = useState<"saving" | "saved" | "error" | "offline">("saved");
+  const [conflictNotice, setConflictNotice] = useState<string | null>(null);
   const [currentRevision, setCurrentRevision] = useState<number>(1);
   const [activeMobileView, setActiveMobileView] = useState<"form" | "preview">("form");
+
+  const isAutosavingRef = useRef<boolean>(false);
+  const pendingSaveRef = useRef<boolean>(false);
+  const currentRevisionRef = useRef<number>(1);
+  currentRevisionRef.current = currentRevision;
+  const formDataRef = useRef<TemplateData | null>(formData);
+  formDataRef.current = formData;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -165,7 +222,9 @@ function EditorPageContent() {
   }, [templateSlug, editSlug, router]);
   
   // Wizard steps state
-  const [currentStep, setCurrentStep] = useState(1);
+  const initialStepParam = searchParams?.get("step");
+  const initialStep = initialStepParam ? Math.min(Math.max(parseInt(initialStepParam, 10) || 1, 1), 4) : 1;
+  const [currentStep, setCurrentStep] = useState(initialStep);
   const [stepError, setStepError] = useState<string | null>(null);
 
   // Live preview device switcher state
@@ -241,27 +300,50 @@ function EditorPageContent() {
 
   // Initialize form with defaults or fetch existing for editing
   useEffect(() => {
-    if (!templateSlug) return;
+    if (loadingAuth || !templateSlug) return;
 
-     if (editSlug) {
-      setIsEditMode(true);
+    if (editSlug) {
       setIsSubmitting(true);
-      fetch(`/api/invitations/${editSlug}`)
-        .then((res) => {
+      (async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          const headers: Record<string, string> = {};
+          if (session?.access_token) {
+            headers["Authorization"] = `Bearer ${session.access_token}`;
+          } else if (!isSupabaseConfigured) {
+            headers["Authorization"] = "Bearer mock-user-token";
+          }
+
+          const res = await fetch(`/api/invitations/${editSlug}`, { headers });
           if (res.status === 404) {
-            console.log("Invitation slug not found (404), initializing as new draft.");
+            console.warn("Invitation slug not found (404), initializing as new draft.");
             setIsEditMode(false);
-            // Remove edit query param from URL dynamically
+            setDraftSlug(null);
             const newUrl = window.location.pathname;
             window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, "", newUrl);
-            return getDefaultTemplateData(templateSlug);
+            setFormData(getDefaultTemplateData(templateSlug));
+            setIsDraftLoaded(true);
+            return;
           }
           if (!res.ok) throw new Error("Could not find invitation to edit.");
-          return res.json();
-        })
-        .then((data) => {
-          setFormData(data);
-          
+          const data = await res.json();
+
+          // Ensure user resumes draft with the correct template
+          if (data.template_slug && data.template_slug !== templateSlug) {
+            router.replace(`/editor/${data.template_slug}?edit=${editSlug}`);
+            return;
+          }
+
+          const resolvedData = extractTemplateData(data, templateSlug);
+          setFormData(resolvedData);
+          setDraftSlug(editSlug);
+          const isPaidAndPublished = Boolean(data && data.is_paid && data.status === "published");
+          setIsEditMode(isPaidAndPublished);
+          if (typeof data.revision === "number") {
+            setCurrentRevision(data.revision);
+          }
+          setIsDraftLoaded(true);
+
           if (data && data.wedding_date) {
             // Check if archived (more than 5 days after event completes)
             const now = new Date();
@@ -272,99 +354,189 @@ function EditorPageContent() {
               setError("This invitation is archived (license exhausted) and cannot be edited.");
             }
           }
-        })
-        .catch((err) => {
-          console.error(err);
+        } catch (err: any) {
+          console.error("Error loading invitation draft:", err);
           setError(err.message || "Failed to load invitation.");
           setFormData(getDefaultTemplateData(templateSlug));
-        })
-        .finally(() => {
+          setIsDraftLoaded(true);
+        } finally {
           setIsSubmitting(false);
-        });
+        }
+      })();
     } else {
       setFormData(getDefaultTemplateData(templateSlug));
+      setIsDraftLoaded(true);
     }
-  }, [templateSlug, editSlug]);
+  }, [templateSlug, editSlug, loadingAuth]);
+
+  // Offline detection and reconnection sync
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleOnline = () => {
+      setSaveStatus("saving");
+      // Trigger immediate sync on reconnection
+      if (formDataRef.current) {
+        pendingSaveRef.current = true;
+        flushSave();
+      }
+    };
+
+    const handleOffline = () => {
+      setSaveStatus("offline");
+      const activeSlug = editSlug || draftSlug;
+      if (activeSlug && formDataRef.current) {
+        try {
+          localStorage.setItem(`varnam_offline_draft_${activeSlug}`, JSON.stringify({
+            formData: formDataRef.current,
+            revision: currentRevisionRef.current,
+            savedAt: new Date().toISOString(),
+          }));
+        } catch {}
+      }
+    };
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [editSlug, draftSlug]);
+
+  const flushSave = async () => {
+    if (!user || isArchived || !isDraftLoaded || isAutosavingRef.current) return;
+    const currentData = formDataRef.current;
+    if (!currentData || (!currentData.bride_name && !currentData.groom_name && !currentData.wedding_venue)) {
+      return;
+    }
+
+    try {
+      isAutosavingRef.current = true;
+      setIsAutosaving(true);
+      setSaveStatus("saving");
+
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        setSaveStatus("offline");
+        return;
+      }
+
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (session?.access_token) {
+        headers["Authorization"] = `Bearer ${session.access_token}`;
+      } else if (!isSupabaseConfigured) {
+        headers["Authorization"] = "Bearer mock-user-token";
+      }
+
+      let activeSlug = editSlug || draftSlug;
+      if (!activeSlug) {
+        const randomStr = Math.random().toString(36).substring(2, 9);
+        activeSlug = randomStr;
+        setDraftSlug(activeSlug);
+        
+        const newUrl = `${window.location.pathname}?edit=${activeSlug}`;
+        window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, "", newUrl);
+      } else if (!draftSlug || draftSlug !== activeSlug) {
+        setDraftSlug(activeSlug);
+      }
+
+      const payloadRevision = currentRevisionRef.current;
+
+      if (isEditMode && activeSlug) {
+        const res = await fetch(`/api/invitations/${activeSlug}`, {
+          method: "PUT",
+          headers,
+          body: JSON.stringify({ formData: currentData, revision: payloadRevision }),
+        });
+
+        if (!res.ok) {
+          if (res.status === 409) {
+            const conflict = await res.json().catch(() => ({}));
+            const serverRev = conflict.serverRevision || (payloadRevision + 1);
+            currentRevisionRef.current = serverRev;
+            setCurrentRevision(serverRev);
+
+            // Do not discard user's latest in-memory work; sync revision & queue immediate save
+            setConflictNotice("Newer changes detected from another session. Your latest edits were preserved and synced.");
+            setTimeout(() => setConflictNotice(null), 5000);
+            pendingSaveRef.current = true;
+          } else {
+            setSaveStatus("error");
+          }
+        } else {
+          const data = await res.json();
+          if (data.revision) {
+            currentRevisionRef.current = data.revision;
+            setCurrentRevision(data.revision);
+          }
+          setSaveStatus("saved");
+        }
+      } else {
+        const res = await fetch("/api/invitations/draft", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            slug: activeSlug,
+            templateSlug: templateSlug,
+            formData: currentData,
+            revision: payloadRevision,
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.revision) {
+            currentRevisionRef.current = data.revision;
+            setCurrentRevision(data.revision);
+          }
+          setSaveStatus("saved");
+        } else {
+          if (res.status === 409) {
+            const conflict = await res.json().catch(() => ({}));
+            const serverRev = conflict.serverRevision || (payloadRevision + 1);
+            currentRevisionRef.current = serverRev;
+            setCurrentRevision(serverRev);
+
+            setConflictNotice("Newer changes detected from another session. Your latest edits were preserved and synced.");
+            setTimeout(() => setConflictNotice(null), 5000);
+            pendingSaveRef.current = true;
+          } else {
+            setSaveStatus("error");
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Autosave error:", err);
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        setSaveStatus("offline");
+      } else {
+        setSaveStatus("error");
+      }
+    } finally {
+      isAutosavingRef.current = false;
+      setIsAutosaving(false);
+      // Serialized retry if user continued typing while save was in flight
+      if (pendingSaveRef.current) {
+        pendingSaveRef.current = false;
+        flushSave();
+      }
+    }
+  };
 
   // Debounced autosave to database (500–1000ms debounce per spec)
   useEffect(() => {
-    if (!user || !formData || isArchived) return;
+    if (!user || !formData || isArchived || !isDraftLoaded) return;
 
-    // Check if the form is empty / uninitialized
     if (!formData.bride_name && !formData.groom_name && !formData.wedding_venue) {
       return;
     }
 
-    const saveDraft = async () => {
-      try {
-        setIsAutosaving(true);
-        setSaveStatus("saving");
-        const { data: { session } } = await supabase.auth.getSession();
-        const headers: Record<string, string> = { "Content-Type": "application/json" };
-        if (session) {
-          headers["Authorization"] = `Bearer ${session.access_token}`;
-        }
-
-        if (isEditMode && (editSlug || draftSlug)) {
-          // Update existing draft with revision check
-          const slugToUse = editSlug || draftSlug;
-          const res = await fetch(`/api/invitations/${slugToUse}`, {
-            method: "PUT",
-            headers,
-            body: JSON.stringify({ formData, revision: currentRevision }),
-          });
-
-          if (!res.ok) {
-            setSaveStatus("error");
-          } else {
-            const data = await res.json();
-            if (data.revision) setCurrentRevision(data.revision);
-            setSaveStatus("saved");
-          }
-        } else {
-          let activeSlug = draftSlug;
-          if (!activeSlug) {
-            const randomStr = Math.random().toString(36).substring(2, 9);
-            activeSlug = randomStr;
-            setDraftSlug(activeSlug);
-            
-            const newUrl = `${window.location.pathname}?edit=${activeSlug}`;
-            window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, "", newUrl);
-          }
-
-          const res = await fetch("/api/invitations/draft", {
-            method: "POST",
-            headers,
-            body: JSON.stringify({
-              slug: activeSlug,
-              templateSlug: templateSlug,
-              formData,
-              revision: currentRevision,
-            }),
-          });
-          if (res.ok) {
-            const data = await res.json();
-            if (data.revision) setCurrentRevision(data.revision);
-            setIsEditMode(true);
-            setSaveStatus("saved");
-          } else {
-            setSaveStatus("error");
-          }
-        }
-      } catch (err) {
-        console.error("Autosave error:", err);
-        setSaveStatus("error");
-      } finally {
-        setIsAutosaving(false);
-      }
-    };
-
     const timer = setTimeout(() => {
-      saveDraft();
-    }, 800); // 800ms debounce
+      flushSave();
+    }, 800);
 
     return () => clearTimeout(timer);
-  }, [formData, user, templateSlug, isArchived, currentRevision]);
+  }, [formData, user, templateSlug, isArchived, isDraftLoaded, isEditMode, editSlug, draftSlug]);
 
   // Load Google Maps script dynamically (only if API key is present)
   useEffect(() => {
@@ -452,14 +624,25 @@ function EditorPageContent() {
     return () => clearTimeout(delayDebounce);
   }, [formData?.gmap_coordinates]);
 
-  if (!template || !formData) {
+  if (!template) {
     return (
-      <div className="min-h-screen bg-[#080708] text-[#fbf6df] flex flex-col items-center justify-center p-6 text-center">
-        <h1 className="font-cinzel text-3xl font-bold tracking-widest text-gold-400 mb-4">Template Not Found</h1>
-        <p className="font-serif text-sm text-gold-200/60 mb-6">The template you are trying to customize does not exist.</p>
-        <Link href="/templates" className="px-6 py-2.5 bg-gold-500 text-black font-montserrat text-xs tracking-widest font-bold">
+      <div className="min-h-screen bg-[#faf8f5] text-zinc-900 flex flex-col items-center justify-center p-6 text-center">
+        <h1 className="font-cinzel text-3xl font-bold tracking-widest text-zinc-900 mb-4">Template Not Found</h1>
+        <p className="text-sm text-zinc-500 mb-6">The template you are trying to customize does not exist.</p>
+        <Link href="/templates" className="px-6 py-2.5 bg-zinc-950 text-white font-montserrat text-xs tracking-widest font-bold rounded-xl">
           RETURN TO GALLERY
         </Link>
+      </div>
+    );
+  }
+
+  if (!formData || !isDraftLoaded) {
+    return (
+      <div className="min-h-screen bg-[#faf8f5] flex flex-col items-center justify-center p-6 text-center gap-3">
+        <div className="w-8 h-8 border-2 border-zinc-300 border-t-[#b3811b] rounded-full animate-spin" />
+        <p className="text-xs font-montserrat tracking-widest uppercase text-zinc-600 font-bold">
+          Loading Saved Invitation...
+        </p>
       </div>
     );
   }
@@ -613,6 +796,9 @@ function EditorPageContent() {
     for (let s = 1; s <= 4; s++) {
       if (!validateStep(s)) {
         setCurrentStep(s);
+        setIsSubmitting(false);
+        const formEl = document.getElementById("editor-form");
+        if (formEl) formEl.scrollTo({ top: 0, behavior: "smooth" });
         return;
       }
     }
@@ -630,8 +816,10 @@ function EditorPageContent() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         const headers: Record<string, string> = { "Content-Type": "application/json" };
-        if (session) {
+        if (session?.access_token) {
           headers["Authorization"] = `Bearer ${session.access_token}`;
+        } else if (!isSupabaseConfigured) {
+          headers["Authorization"] = "Bearer mock-user-token";
         }
 
         const response = await fetch(`/api/invitations/${editSlug}`, {
@@ -658,8 +846,10 @@ function EditorPageContent() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const headers: Record<string, string> = { "Content-Type": "application/json" };
-      if (session) {
+      if (session?.access_token) {
         headers["Authorization"] = `Bearer ${session.access_token}`;
+      } else if (!isSupabaseConfigured) {
+        headers["Authorization"] = "Bearer mock-user-token";
       }
 
       // 1. Create order on server with trusted template price
@@ -679,92 +869,74 @@ function EditorPageContent() {
 
       const orderData = await orderRes.json();
 
-      // 2. If live Razorpay checkout is available on client
-      if (
-        typeof window !== "undefined" &&
-        (window as any).Razorpay &&
-        orderData.key &&
-        !orderData.mock &&
-        !orderData.id.startsWith("order_mock_")
-      ) {
-        const options = {
-          key: orderData.key,
-          amount: orderData.amount,
-          currency: orderData.currency || "INR",
-          name: "Varnam Invites",
-          description: `${template.name} Digital Wedding Invitation`,
-          order_id: orderData.id,
-          prefill: {
-            name: user?.user_metadata?.full_name || "",
-            email: user?.email || "",
-          },
-          theme: {
-            color: "#b3811b",
-          },
-          handler: async function (response: any) {
-            try {
-              const verifyResponse = await fetch("/api/payments/verify", {
-                method: "POST",
-                headers,
-                body: JSON.stringify({
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature,
-                  formData,
-                  templateSlug: template.slug,
-                  userId: user?.id,
-                  existingSlug: editSlug || draftSlug,
-                }),
-              });
+      // 2. Ensure Razorpay client SDK is loaded
+      const isLoaded = await loadRazorpayScript();
+      if (!isLoaded || !(window as any).Razorpay) {
+        throw new Error("Unable to load Razorpay payment gateway. Please disable ad-blockers and try again.");
+      }
 
-              if (!verifyResponse.ok) {
-                const err = await verifyResponse.json();
-                throw new Error(err.message || "Payment verification failed.");
-              }
+      if (!orderData.key || !orderData.id) {
+        throw new Error(orderData.message || "Failed to initialize payment gateway order.");
+      }
 
-              const verifyResult = await verifyResponse.json();
-              router.push(`/success/${verifyResult.slug}`);
-            } catch (err: any) {
-              console.error(err);
-              setError(err.message || "Verification failed after payment.");
-              setIsSubmitting(false);
+      // 3. Launch real Razorpay Checkout modal
+      const options = {
+        key: orderData.key,
+        amount: orderData.amount,
+        currency: orderData.currency || "INR",
+        name: "Varnam Invites",
+        description: `${template.name} Digital Wedding Invitation`,
+        order_id: orderData.id,
+        prefill: {
+          name: user?.user_metadata?.full_name || "",
+          email: user?.email || "",
+        },
+        theme: {
+          color: "#000000",
+        },
+        handler: async function (response: any) {
+          try {
+            const verifyResponse = await fetch("/api/payments/verify", {
+              method: "POST",
+              headers,
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                formData,
+                templateSlug: template.slug,
+                userId: user?.id,
+                existingSlug: editSlug || draftSlug,
+              }),
+            });
+
+            if (!verifyResponse.ok) {
+              const err = await verifyResponse.json();
+              throw new Error(err.message || "Payment verification failed.");
             }
-          },
-          modal: {
-            ondismiss: function () {
-              setIsSubmitting(false);
-            },
-          },
-        };
 
-        const rzp = new (window as any).Razorpay(options);
-        rzp.open();
-        return;
-      }
+            const verifyResult = await verifyResponse.json();
+            router.push(`/success/${verifyResult.slug}`);
+          } catch (err: any) {
+            console.error("Verification failed:", err);
+            setError(err.message || "Verification failed after payment.");
+            setIsSubmitting(false);
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            setIsSubmitting(false);
+          },
+        },
+      };
 
-      // Mock Mode Fallback (when credentials are not yet configured)
-      console.log("[CHECKOUT] Using mock payment flow for order:", orderData.id);
-      const verifyResponse = await fetch("/api/payments/verify", {
-        method: "POST",
-        headers,
-        body: JSON.stringify({
-          razorpay_order_id: orderData.id,
-          razorpay_payment_id: `pay_mock_${Date.now()}`,
-          razorpay_signature: "mock_signature",
-          formData,
-          templateSlug: template.slug,
-          userId: user?.id,
-          existingSlug: editSlug || draftSlug,
-        }),
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on("payment.failed", function (response: any) {
+        console.error("Razorpay payment failed:", response.error);
+        setError(response.error?.description || "Payment was not completed. Please try again.");
+        setIsSubmitting(false);
       });
-
-      if (!verifyResponse.ok) {
-        const err = await verifyResponse.json();
-        throw new Error(err.message || "Payment verification failed.");
-      }
-
-      const verifyResult = await verifyResponse.json();
-      router.push(`/success/${verifyResult.slug}`);
+      rzp.open();
     } catch (err: any) {
       console.error(err);
       setError(err.message || "An unexpected error occurred during checkout.");
@@ -807,6 +979,11 @@ function EditorPageContent() {
                   <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 animate-ping" />
                   Saving...
                 </span>
+              ) : saveStatus === "offline" ? (
+                <span className="text-[9px] text-amber-600 font-bold uppercase tracking-wider flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                  Offline (Saved Locally)
+                </span>
               ) : saveStatus === "error" ? (
                 <span className="text-[9px] text-rose-500 font-bold uppercase tracking-wider flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
@@ -830,6 +1007,14 @@ function EditorPageContent() {
           <span className="font-cinzel text-[#b3811b] font-bold tracking-wide text-xs">₹{template.price}</span>
         </div>
       </header>
+
+      {/* Non-destructive Conflict Notification Banner */}
+      {conflictNotice && (
+        <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-xs font-semibold text-amber-900 flex items-center justify-center gap-2 animate-in fade-in duration-200 z-30">
+          <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+          <span>{conflictNotice}</span>
+        </div>
+      )}
 
       {/* Main Split Layout */}
       <div className="flex-grow flex flex-col lg:flex-row min-h-0">
@@ -1461,7 +1646,7 @@ function EditorPageContent() {
                 ) : (
                   <>
                     <CreditCard className="w-4 h-4" />
-                    {isArchived ? "ARCHIVED (LOCKED)" : isEditMode ? "SAVE CHANGES" : `GENERATE (₹${template.price})`}
+                    {isArchived ? "ARCHIVED (LOCKED)" : isEditMode ? "SAVE CHANGES" : `PROCEED TO PAYMENT (₹${template.price})`}
                   </>
                 )}
               </button>

@@ -89,6 +89,7 @@ export async function POST(req: NextRequest) {
       sangeet_venue: formData.sangeet_venue || undefined,
       reception_date: formData.reception_date || undefined,
       reception_venue: formData.reception_venue || undefined,
+      wedding_events: formData.wedding_events || undefined,
       gmap_coordinates: formData.gmap_coordinates || undefined,
       music_enabled: formData.music_enabled || "yes",
       slideshow_enabled: formData.slideshow_enabled || "yes",

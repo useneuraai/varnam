@@ -267,6 +267,38 @@ create trigger tr_rsvps_updated_at
 create index if not exists idx_rsvps_invitation_slug on public.rsvps(invitation_slug);
 create index if not exists idx_rsvps_invitation_id on public.rsvps(invitation_id);
 create index if not exists idx_rsvps_created_at on public.rsvps(created_at desc);
+alter table public.rsvps add column if not exists rsvp_token varchar;
+create index if not exists idx_rsvps_token on public.rsvps(rsvp_token);
+create index if not exists idx_rsvps_contact on public.rsvps(invitation_slug, guest_contact);
+
+-- Trigger function to prevent non-service-role clients from setting is_paid = true or status = 'published'
+create or replace function public.protect_invitation_entitlement_changes()
+returns trigger as $$
+begin
+    if auth.role() = 'service_role' or current_user in ('postgres', 'service_role') then
+        return new;
+    end if;
+
+    if (new.is_paid is true and (old.is_paid is not true or old.is_paid is null)) then
+        raise exception 'SECURITY_VIOLATION: is_paid entitlement can only be granted by the backend payment gateway verification.';
+    end if;
+
+    if (new.status in ('paid', 'published') and (old.is_paid is not true or old.is_paid is null) and (new.is_paid is not true)) then
+        raise exception 'SECURITY_VIOLATION: Status cannot be set to paid or published without verified payment.';
+    end if;
+
+    if (old.user_id is not null and new.user_id is distinct from old.user_id) then
+        raise exception 'SECURITY_VIOLATION: Reassigning invitation ownership is prohibited.';
+    end if;
+
+    return new;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists tr_protect_invitation_entitlement on public.invitations;
+create trigger tr_protect_invitation_entitlement
+    before update or insert on public.invitations
+    for each row execute function public.protect_invitation_entitlement_changes();
 
 -- =====================================================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES FOR THE 5 TABLES
@@ -305,11 +337,14 @@ create policy "Allow public to view published invitations"
         or auth.role() = 'service_role'
     );
 
--- Authenticated owner can create invitations
+-- Authenticated owner can create invitations (strictly drafts)
 drop policy if exists "Allow authenticated users to create invitations" on public.invitations;
 create policy "Allow authenticated users to create invitations"
     on public.invitations for insert
-    with check (auth.uid() = user_id or auth.role() = 'service_role');
+    with check (
+        (auth.uid() = user_id and (is_paid is not true) and (status in ('draft', 'pending_payment')))
+        or auth.role() = 'service_role'
+    );
 
 -- Authenticated owner can update their invitations
 drop policy if exists "Allow owner to update their own invitations" on public.invitations;

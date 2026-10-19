@@ -51,14 +51,23 @@ export async function POST(req: NextRequest) {
       }
 
       if (providerOrderId) {
-        await updateOrderStatus(providerOrderId, "paid", providerPaymentId);
-
         const order = await getOrderByProviderOrderId(providerOrderId);
-        const invitationSlug = order?.metadata?.invitation_slug;
+        if (!order) {
+          console.warn(`[WEBHOOK] Order ${providerOrderId} not found in database.`);
+          return NextResponse.json({ message: "Order not found" }, { status: 404 });
+        }
+
+        // Validate amount against recorded order
+        if (order.amount_inr && Number(order.amount_inr) !== amountInr) {
+          console.error(`[SECURITY] Webhook amount mismatch for order ${providerOrderId}: expected ${order.amount_inr}, received ${amountInr}`);
+          return NextResponse.json({ message: "Payment amount mismatch" }, { status: 400 });
+        }
+
+        const invitationSlug = order.metadata?.invitation_slug;
 
         if (invitationSlug) {
           await updateInvitation(invitationSlug, {
-            status: "paid",
+            status: "published",
             is_paid: true,
             order_id: providerOrderId,
             payment_id: providerPaymentId,
@@ -82,6 +91,13 @@ export async function POST(req: NextRequest) {
             },
           });
         }
+      }
+    } else if (eventType === "payment.failed") {
+      const paymentEntity = event.payload?.payment?.entity;
+      const providerOrderId = paymentEntity?.order_id;
+      const providerPaymentId = paymentEntity?.id;
+      if (providerOrderId) {
+        await updateOrderStatus(providerOrderId, "failed", providerPaymentId);
       }
     }
 

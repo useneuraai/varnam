@@ -5,7 +5,7 @@ const keySecret = process.env.RAZORPAY_KEY_SECRET || "";
 
 if (!keyId || !keySecret) {
   console.warn(
-    "Razorpay credentials are not set. Payments will operate in mock mode. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in your environment."
+    "Razorpay credentials are not set. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env.local for live payment processing."
   );
 }
 

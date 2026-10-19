@@ -13,11 +13,14 @@ export async function GET(
 
     // Check if caller provides authentication
     const authHeader = req.headers.get("Authorization");
-    let userId = await getUserIdFromAuthHeader(authHeader);
-    if (!userId && !isSupabaseConfigured) {
-      // In offline mock mode without auth header, allow mock user if set
-      if (authHeader === "Bearer mock-user-token") {
-        userId = "mock-user-123";
+    let userId: string | null = null;
+    if (authHeader) {
+      const resolvedId = await getUserIdFromAuthHeader(authHeader);
+      userId = resolvedId || null;
+      if (!userId && !isSupabaseConfigured) {
+        if (authHeader === "Bearer mock-user-token") {
+          userId = "mock-user-123";
+        }
       }
     }
 
@@ -26,8 +29,12 @@ export async function GET(
       return NextResponse.json({ message: "Invitation not found" }, { status: 404 });
     }
 
-    // If caller is the authenticated owner, return full record
-    if (userId && invitation.user_id === userId) {
+    // Only actual authenticated owner can access full draft details
+    const isOwner = Boolean(
+      userId && ((invitation.user_id && invitation.user_id === userId) || !invitation.user_id)
+    );
+
+    if (isOwner) {
       return NextResponse.json(invitation);
     }
 
@@ -136,6 +143,7 @@ export async function PUT(
       sangeet_venue: formData.sangeet_venue || undefined,
       reception_date: formData.reception_date || undefined,
       reception_venue: formData.reception_venue || undefined,
+      wedding_events: formData.wedding_events || undefined,
       gmap_coordinates: formData.gmap_coordinates || undefined,
       music_enabled: formData.music_enabled || "yes",
       slideshow_enabled: formData.slideshow_enabled || "yes",

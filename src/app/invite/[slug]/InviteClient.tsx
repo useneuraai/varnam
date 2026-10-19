@@ -13,9 +13,11 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
   const [isDoorOpened, setIsDoorOpened] = useState(false);
   const [showRsvpModal, setShowRsvpModal] = useState(false);
   const [guestName, setGuestName] = useState("");
+  const [guestContact, setGuestContact] = useState("");
   const [guestCount, setGuestCount] = useState("1");
   const [attendance, setAttendance] = useState("yes");
   const [wishes, setWishes] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [isSubmittingRsvp, setIsSubmittingRsvp] = useState(false);
   const [rsvpCompleted, setRsvpCompleted] = useState(false);
 
@@ -27,6 +29,17 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
 
   // Archived checking (5 days after event completes)
   const isArchived = new Date() > new Date(new Date(invitation.wedding_date).getTime() + 5 * 24 * 60 * 60 * 1000);
+
+  const getRsvpToken = () => {
+    if (typeof window === "undefined") return "";
+    const key = `varnam_rsvp_token_${invitation.slug}`;
+    let token = localStorage.getItem(key);
+    if (!token) {
+      token = `tok_${Math.random().toString(36).substring(2, 10)}_${Date.now()}`;
+      localStorage.setItem(key, token);
+    }
+    return token;
+  };
 
   const fetchWishes = async () => {
     try {
@@ -58,9 +71,12 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
         body: JSON.stringify({
           invitationSlug: invitation.slug,
           name: guestName,
+          guest_contact: guestContact || undefined,
           attendance,
           guestCount: Number(guestCount) || 1,
           wishes: wishes || "",
+          rsvp_token: getRsvpToken(),
+          address_confirm: honeypot, // Honeypot field for bot detection
         }),
       });
 
@@ -276,6 +292,20 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
                 </div>
               ) : (
                 <form onSubmit={handleRsvpSubmit} className="space-y-4">
+                  {/* Honeypot Spam Trap for Automated Bots */}
+                  <div className="hidden" aria-hidden="true" style={{ display: "none" }}>
+                    <label htmlFor="address_confirm">Address Confirmation</label>
+                    <input
+                      id="address_confirm"
+                      type="text"
+                      name="address_confirm"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                    />
+                  </div>
+
                   {/* Guest Name */}
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="rsvp-name" className="font-montserrat text-[9px] tracking-widest uppercase text-gold-300/80">
@@ -288,6 +318,21 @@ export default function InviteClient({ invitation }: { invitation: InvitationRec
                       value={guestName}
                       onChange={(e) => setGuestName(e.target.value)}
                       placeholder="Jane Doe"
+                      className="w-full bg-black/60 border border-gold-500/20 text-[#fbf6df] px-4 py-3 text-xs tracking-wider focus:border-gold-500/60 focus:outline-none placeholder-gold-300/10 rounded-none"
+                    />
+                  </div>
+
+                  {/* Guest Contact (Phone or Email) */}
+                  <div className="flex flex-col gap-1.5">
+                    <label htmlFor="rsvp-contact" className="font-montserrat text-[9px] tracking-widest uppercase text-gold-300/80">
+                      Phone Number (Optional)
+                    </label>
+                    <input
+                      id="rsvp-contact"
+                      type="tel"
+                      value={guestContact}
+                      onChange={(e) => setGuestContact(e.target.value)}
+                      placeholder="+91 98765 43210"
                       className="w-full bg-black/60 border border-gold-500/20 text-[#fbf6df] px-4 py-3 text-xs tracking-wider focus:border-gold-500/60 focus:outline-none placeholder-gold-300/10 rounded-none"
                     />
                   </div>

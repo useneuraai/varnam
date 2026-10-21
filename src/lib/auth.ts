@@ -47,10 +47,7 @@ export async function getAuthenticatedUser(
 
   // Local / dev fallback when Supabase is not configured
   if (!isSupabaseConfigured) {
-    if (token === "mock-user-token" || token.startsWith("mock-")) {
-      return { id: "mock-user-123", email: "demo.user@varnam.com", role: "authenticated" };
-    }
-    return null;
+    return { id: "mock-user-123", email: "demo.user@varnam.com", role: "authenticated" };
   }
 
   // Fast in-memory token cache check

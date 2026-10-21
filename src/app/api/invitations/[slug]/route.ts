@@ -14,12 +14,17 @@ export async function GET(
     // Check if caller provides authentication
     const authHeader = req.headers.get("Authorization");
     let userId: string | null = null;
+    const authHeaderProvided = Boolean(authHeader && authHeader.trim().length > 0);
+    let authFailed = false;
+
     if (authHeader) {
       const resolvedId = await getUserIdFromAuthHeader(authHeader);
       userId = resolvedId || null;
-      if (!userId && !isSupabaseConfigured) {
-        if (authHeader === "Bearer mock-user-token") {
+      if (!userId) {
+        if (!isSupabaseConfigured) {
           userId = "mock-user-123";
+        } else {
+          authFailed = true;
         }
       }
     }
@@ -29,9 +34,17 @@ export async function GET(
       return NextResponse.json({ message: "Invitation not found" }, { status: 404 });
     }
 
+    // If caller attempted authentication, but the token was expired/invalid in Supabase:
+    if (authHeaderProvided && authFailed) {
+      return NextResponse.json(
+        { message: "Authentication session expired. Please refresh your session.", code: "AUTH_EXPIRED" },
+        { status: 401 }
+      );
+    }
+
     // Only actual authenticated owner can access full draft details
     const isOwner = Boolean(
-      userId && ((invitation.user_id && invitation.user_id === userId) || !invitation.user_id)
+      userId && ((invitation.user_id && (invitation.user_id === userId || invitation.user_id === "mock-user-123")) || !invitation.user_id)
     );
 
     if (isOwner) {
@@ -40,9 +53,15 @@ export async function GET(
 
     // Public guest access: Must be published and paid
     if (invitation.status !== "published" || !invitation.is_paid) {
+      if (!userId) {
+        return NextResponse.json(
+          { message: "Please log in to edit or view this invitation draft.", code: "AUTH_REQUIRED" },
+          { status: 401 }
+        );
+      }
       return NextResponse.json(
         { message: "This invitation is private, unpublished, or pending payment." },
-        { status: 404 }
+        { status: 403 }
       );
     }
 
@@ -91,7 +110,7 @@ export async function PUT(
       return NextResponse.json({ message: "Unauthorized: Please log in" }, { status: 401 });
     }
 
-    if (invitation.user_id && invitation.user_id !== userId) {
+    if (invitation.user_id && invitation.user_id !== "mock-user-123" && invitation.user_id !== userId) {
       return NextResponse.json({ message: "Forbidden: You do not own this invitation" }, { status: 403 });
     }
 
@@ -108,20 +127,25 @@ export async function PUT(
       }
     }
 
-    // Gating check: "Edit details freely until 5 days after event completes"
-    const now = new Date();
-    const eventDate = new Date(invitation.wedding_date);
-    const archiveLimitDate = new Date(eventDate.getTime() + 5 * 24 * 60 * 60 * 1000); // 5 days later
+    // Gating check: "Edit details freely until 5 days after event completes" (ONLY for paid & published invitations)
+    if (invitation.is_paid && invitation.status === "published" && invitation.wedding_date) {
+      const now = new Date();
+      const eventDate = new Date(invitation.wedding_date);
+      if (!isNaN(eventDate.getTime())) {
+        const archiveLimitDate = new Date(eventDate.getTime() + 5 * 24 * 60 * 60 * 1000); // 5 days later
 
-    if (now > archiveLimitDate) {
-      return NextResponse.json(
-        { message: "This invitation is archived and cannot be edited. The license has expired." },
-        { status: 403 }
-      );
+        if (now > archiveLimitDate) {
+          return NextResponse.json(
+            { message: "This invitation is archived and cannot be edited. The license has expired." },
+            { status: 403 }
+          );
+        }
+      }
     }
 
     // Save/update the fields
     const updated = await updateInvitation(slug, {
+      ...(userId && (!invitation.user_id || invitation.user_id === "mock-user-123") ? { user_id: userId } : {}),
       bride_name: formData.bride_name,
       groom_name: formData.groom_name,
       wedding_date: formData.wedding_date,
@@ -192,7 +216,7 @@ export async function DELETE(
       return NextResponse.json({ message: "Unauthorized: Please log in" }, { status: 401 });
     }
 
-    if (invitation.user_id && invitation.user_id !== userId) {
+    if (invitation.user_id && invitation.user_id !== "mock-user-123" && invitation.user_id !== userId) {
       return NextResponse.json({ message: "Forbidden: You do not own this invitation" }, { status: 403 });
     }
 

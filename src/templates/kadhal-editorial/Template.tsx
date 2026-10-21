@@ -19,6 +19,8 @@ import {
   VolumeX,
 } from "lucide-react";
 import CreatedByVarnam from "@/components/CreatedByVarnam";
+import ScratchHeartCard from "@/components/ScratchHeartCard";
+import RoyalWeddingTimeline from "@/components/RoyalWeddingTimeline";
 
 // ============================================================================
 // 1. FLOATING GOLD & JASMINE PETALS PARTICLES
@@ -103,12 +105,10 @@ const MinimalGoldDivider = ({ className = "" }: { className?: string }) => (
 
 const SectionVignette = ({ hasSeam = true }: { hasSeam?: boolean }) => (
   <>
-    <div className="absolute inset-x-0 top-0 h-28 sm:h-36 bg-gradient-to-b from-black/75 via-black/35 to-transparent pointer-events-none z-10" />
-    <div className="absolute inset-x-0 bottom-0 h-28 sm:h-36 bg-gradient-to-t from-black/75 via-black/35 to-transparent pointer-events-none z-10" />
     {hasSeam && (
       <div className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-center pointer-events-none">
-        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#eed57c]/45 to-transparent" />
-        <span className="absolute px-2.5 py-0.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-[8px] text-[#eed57c] font-serif shadow-sm">
+        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4af37]/45 to-transparent" />
+        <span className="absolute px-2.5 py-0.5 rounded-full bg-[#fbf7ee] border border-[#d4af37]/60 text-[8px] text-[#783e0a] font-serif shadow-sm">
           ❖
         </span>
       </div>
@@ -473,15 +473,15 @@ export default function KadhalEditorialTemplate({
               transform: `translateY(-${scrollProgress * 30}px)`,
             }}
           >
-            <div className="flex items-center justify-center gap-2 mb-1 text-[#eed57c]">
-              <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-[#eed57c] to-[#eed57c]" />
-              <span className="text-xs text-[#eed57c]">❖</span>
-              <div className="w-8 h-[1px] bg-gradient-to-l from-transparent via-[#eed57c] to-[#eed57c]" />
+            <div className="flex items-center justify-center gap-2 mb-1 text-[#8a4b08]">
+              <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-[#a87422] to-[#a87422]" />
+              <span className="text-xs text-[#8a4b08]">❖</span>
+              <div className="w-8 h-[1px] bg-gradient-to-l from-transparent via-[#a87422] to-[#a87422]" />
             </div>
-            <h2 className="font-cinzel text-xs sm:text-sm tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            <h2 className="font-cinzel text-xs sm:text-sm tracking-[0.3em] text-[#241005] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               AN AUSPICIOUS CELEBRATION
             </h2>
-            <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.25em] text-[#eed57c] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+            <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.25em] text-[#8a4b08] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.7)]">
               SHUBHA VIVAHA MUHURTHAM
             </span>
           </div>
@@ -550,7 +550,7 @@ export default function KadhalEditorialTemplate({
         <section
           className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-5 bg-cover bg-center overflow-hidden"
           style={{
-            backgroundImage: "url('/images/kadhal-editorial/veena_quote_v6.jpg')",
+            backgroundImage: "url('/images/kadhal-editorial/quote-gold.jpg')",
           }}
         >
           <SectionVignette />
@@ -559,11 +559,52 @@ export default function KadhalEditorialTemplate({
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-15 w-[85%] max-w-[315px] flex flex-col items-center px-5 py-7 my-auto rounded-2xl bg-[#fffdf8]/92 backdrop-blur-[2px] border border-[#c89b38]/45 shadow-[0_12px_36px_rgba(40,20,5,0.18)]"
+            className="relative z-15 w-[85%] max-w-[320px] flex flex-col items-center px-6 py-8 my-auto rounded-2xl bg-[#fffdf8]/94 backdrop-blur-[2px] border border-[#c89b38]/45 shadow-[0_12px_36px_rgba(40,20,5,0.18)] overflow-hidden"
           >
-            <div className="absolute inset-1.5 border border-[#8f5e1a]/25 rounded-xl pointer-events-none" />
+            {/* Real Royal Gold Corner Flourishes */}
+            <img
+              src="/images/elements/gold_corner_tl.webp"
+              alt="Corner Flourish"
+              className="absolute top-1 left-1 w-9 h-auto object-contain opacity-80 pointer-events-none select-none"
+            />
+            <img
+              src="/images/elements/gold_corner_tr.webp"
+              alt="Corner Flourish"
+              className="absolute top-1 right-1 w-9 h-auto object-contain opacity-80 pointer-events-none select-none"
+            />
+            <img
+              src="/images/elements/gold_corner_bl.webp"
+              alt="Corner Flourish"
+              className="absolute bottom-1 left-1 w-9 h-auto object-contain opacity-80 pointer-events-none select-none"
+            />
+            <img
+              src="/images/elements/gold_corner_br.webp"
+              alt="Corner Flourish"
+              className="absolute bottom-1 right-1 w-9 h-auto object-contain opacity-80 pointer-events-none select-none"
+            />
 
-            <span className="font-cinzel text-[10.5px] sm:text-[11px] tracking-[0.26em] text-[#783e0a] uppercase font-bold mb-1">
+            {/* Left & Right Vertical Gold Filigree Rails */}
+            <img
+              src="/images/elements/gold_border_left.webp"
+              alt="Side Border"
+              className="absolute left-1.5 top-14 bottom-14 w-3.5 h-auto object-contain opacity-65 pointer-events-none select-none"
+            />
+            <img
+              src="/images/elements/gold_border_right.webp"
+              alt="Side Border"
+              className="absolute right-1.5 top-14 bottom-14 w-3.5 h-auto object-contain opacity-65 pointer-events-none select-none"
+            />
+
+            <div className="absolute inset-2 border border-[#8f5e1a]/25 rounded-xl pointer-events-none" />
+
+            {/* Radiant Blooming Gold Flower Emblem */}
+            <img
+              src="/images/elements/gold_flower_bloom.webp"
+              alt="Gold Flower"
+              className="w-10 h-10 object-contain mb-1 drop-shadow-[0_2px_8px_rgba(180,130,20,0.35)] select-none pointer-events-none"
+            />
+
+            <span className="font-cinzel text-[10px] sm:text-[10.5px] tracking-[0.28em] text-[#783e0a] uppercase font-bold mb-1">
               ✦ DIVINE INVOCATION ✦
             </span>
 
@@ -610,115 +651,21 @@ export default function KadhalEditorialTemplate({
         <section
           className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center bg-cover bg-center overflow-hidden select-none"
           style={{
-            backgroundImage: "url('/images/kadhal-editorial/veena_scratch_v6.jpg')",
+            backgroundImage: "url('/images/kadhal-editorial/scratchtoreveal-gold.jpg')",
           }}
         >
           <SectionVignette />
-          <div className="absolute inset-0 bg-black/45 pointer-events-none" />
+          <div className="absolute inset-0 bg-black/15 pointer-events-none" />
 
-          <div className="relative z-20 mb-4 flex flex-col items-center">
-            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-              ✦ AUSPICIOUS INVITATION ✦
-            </span>
-            <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-[#fff2b2] tracking-[0.18em] uppercase mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
-              Save The Date
-            </h3>
-            <MinimalGoldDivider className="mt-1.5 opacity-80" />
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.94 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: false, amount: 0.25 }}
-            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative rounded-[26px] sm:rounded-[30px] overflow-hidden flex flex-col items-center justify-center text-center z-15 shadow-[0_20px_50px_rgba(0,0,0,0.9)] border-2 border-[#d4af37]"
-            style={{
-              width: "60%",
-              height: "44%",
-            }}
-          >
-            <div
-              className="absolute inset-0 bg-cover bg-center flex flex-col items-center justify-between py-4 px-3 text-center pointer-events-none select-none z-0 bg-[#fffbf2]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(135deg, #fffcf5 0%, #faedd3 50%, #f4dec0 100%)",
-              }}
-            >
-              <div className="absolute inset-2 border border-[#b8860b]/40 rounded-2xl pointer-events-none" />
-
-              <div className="flex flex-col items-center pt-1 z-10">
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#7a3407] font-bold uppercase">
-                  ✦ AUSPICIOUS MUHURTHAM ✦
-                </span>
-                <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#9e6b22] to-transparent mt-0.5" />
-              </div>
-
-              <div className="flex flex-col items-center justify-center my-auto px-1 z-10">
-                <div className="font-cormorant text-5xl sm:text-6xl font-bold text-[#200d02] leading-none tracking-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                  {weddingDateInfo.day}
-                </div>
-                <div className="font-cinzel text-xs sm:text-sm tracking-[0.28em] text-[#381603] font-bold uppercase mt-1">
-                  {weddingDateInfo.month} {weddingDateInfo.year}
-                </div>
-                <div className="flex items-center gap-1.5 my-1 text-[#9e6b22]">
-                  <div className="w-4 h-[1px] bg-current" />
-                  <span className="text-[7px]">❖</span>
-                  <div className="w-4 h-[1px] bg-current" />
-                </div>
-                <div className="font-marcellus text-[10.5px] sm:text-[11.5px] text-[#422005] font-bold tracking-wider">
-                  {weddingDateInfo.weekday} · {weddingDateInfo.time}
-                </div>
-                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#633208] font-bold mt-0.5 line-clamp-1 max-w-[170px]">
-                  {data.wedding_venue || "The Leela Palace Courtyard"}
-                </div>
-              </div>
-
-              <div className="pb-1 text-[8.5px] tracking-[0.22em] font-cinzel text-[#783e0a] uppercase font-bold z-10">
-                ❖ An Auspicious Union ❖
-              </div>
-            </div>
-
-            <canvas
-              ref={canvasRef}
-              style={{ touchAction: "none" }}
-              onMouseDown={() => (isDrawing.current = true)}
-              onMouseUp={() => (isDrawing.current = false)}
-              onMouseLeave={() => (isDrawing.current = false)}
-              onMouseMove={(e) => {
-                if (isDrawing.current) handleScratchMove(e.clientX, e.clientY);
-              }}
-              onTouchStart={() => (isDrawing.current = true)}
-              onTouchEnd={() => (isDrawing.current = false)}
-              onTouchMove={(e) => {
-                if (e.touches[0]) handleScratchMove(e.touches[0].clientX, e.touches[0].clientY);
-              }}
-              className={`absolute inset-0 w-full h-full cursor-pointer z-10 transition-opacity duration-700 ${
-                isScratched ? "opacity-0 pointer-events-none" : "opacity-100"
-              }`}
-            />
-
-            {!isScratched && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0.75, 1, 0.75], y: [0, -2, 0] }}
-                transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-                className="absolute bottom-2.5 pointer-events-none z-20 px-2.5 py-0.5 rounded-full bg-black/75 border border-[#eed57c]/70 text-[8px] font-marcellus text-[#fff2b2] tracking-widest uppercase flex items-center gap-1 shadow-md"
-              >
-                <span>✨ Swipe To Reveal</span>
-              </motion.div>
-            )}
-          </motion.div>
-
-          {!isScratched && (
-            <button
-              type="button"
-              onClick={() => setIsScratched(true)}
-              className="relative mt-5 z-20 px-5 py-2 rounded-full bg-gradient-to-r from-[#3d1d06] via-[#633209] to-[#3d1d06] border border-[#eed57c] text-[#fff2b2] text-[10px] sm:text-[10.5px] tracking-[0.22em] uppercase font-cinzel font-bold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.8)] cursor-pointer flex items-center gap-1.5"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#eed57c]" />
-              <span>Click To Reveal Date</span>
-            </button>
-          )}
+          {/* Golden Wax Seal on Warm Ivory Parchment Card */}
+          <ScratchHeartCard
+            weddingDateInfo={weddingDateInfo}
+            venueName={data.wedding_venue || "The Leela Palace Courtyard"}
+            templateType="kadhal"
+            isScratched={isScratched}
+            setIsScratched={setIsScratched}
+            title="Save the Date"
+          />
         </section>
 
         {/* ===================================================================== */}
@@ -727,11 +674,10 @@ export default function KadhalEditorialTemplate({
         <section
           className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-6 bg-cover bg-center overflow-hidden"
           style={{
-            backgroundImage: "url('/images/kadhal-editorial/veena_countdown_v6.jpg')",
+            backgroundImage: "url('/images/kadhal-editorial/counting-down-gold.jpg')",
           }}
         >
           <SectionVignette />
-          <div className="absolute inset-0 bg-black/50 pointer-events-none" />
 
           <motion.div
             initial={{ opacity: 0, y: 35, scale: 0.94 }}
@@ -740,13 +686,18 @@ export default function KadhalEditorialTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-15 w-full max-w-[320px] flex flex-col items-center py-6 px-3"
           >
-            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+            <img
+              src="/images/elements/gold_flower_bloom.webp"
+              alt="Gold Flower"
+              className="w-10 h-10 object-contain mb-1 drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)] select-none pointer-events-none"
+            />
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#783e0a] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               ✦ AUSPICIOUS MUHURTHAM ✦
             </span>
-            <h3 className="font-cinzel text-xl sm:text-2xl text-[#fff2b2] tracking-[0.2em] uppercase font-bold mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+            <h3 className="font-cinzel text-xl sm:text-2xl text-[#220d03] tracking-[0.2em] uppercase font-bold mt-1 drop-shadow-[0_1px_3px_rgba(255,255,255,0.85)]">
               Counting Down
             </h3>
-            <span className="font-marcellus text-xs tracking-[0.24em] text-[#eed57c] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+            <span className="font-marcellus text-xs tracking-[0.24em] text-[#874d12] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">
               To Eternal Togetherness
             </span>
             <MinimalGoldDivider className="my-2.5 opacity-90" />
@@ -764,21 +715,21 @@ export default function KadhalEditorialTemplate({
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.25 }}
                   transition={{ duration: 0.5, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
-                  className="py-3.5 px-2 rounded-xl bg-black/75 border border-[#eed57c]/60 shadow-[0_8px_24px_rgba(0,0,0,0.7)] backdrop-blur-md flex flex-col items-center justify-center relative overflow-hidden"
+                  className="py-4 px-2 rounded-2xl bg-white border border-[#d4af37]/45 shadow-[0_10px_25px_rgba(34,13,3,0.14)] flex flex-col items-center justify-center relative overflow-hidden"
                 >
-                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#fff2b2] tabular-nums leading-none drop-shadow-[0_2px_8px_rgba(238,213,124,0.5)]">
+                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#220d03] tabular-nums leading-none">
                     {String(unit.value).padStart(2, "0")}
                   </span>
-                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#eed57c] uppercase font-bold mt-1.5 text-center">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#783e0a] uppercase font-bold mt-1.5 text-center">
                     {unit.label}
                   </span>
                 </motion.div>
               ))}
             </div>
 
-            <div className="mt-4 px-4 py-1.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-center shadow-md">
-              <span className="font-marcellus text-xs text-[#faedd0] font-semibold tracking-wider">
+            <div className="mt-4 px-4 py-1.5 rounded-full bg-white/92 backdrop-blur-sm border border-[#d4af37]/50 text-center shadow-md">
+              <span className="font-marcellus text-xs text-[#220d03] font-semibold tracking-wider">
                 {weddingDateInfo.weekday}, {weddingDateInfo.day} {weddingDateInfo.month} · {weddingDateInfo.time}
               </span>
             </div>
@@ -786,138 +737,63 @@ export default function KadhalEditorialTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 5. PROGRAM TIMELINE: EXACTLY 3 PROGRAMS LYING DIRECTLY ON IMAGE        */}
+        {/* 5. PROGRAM TIMELINE: CONNECTED ROYAL WEDDING TIMELINE                  */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[760px] sm:min-h-[800px] text-center flex flex-col items-center justify-between px-4 pt-9 pb-7 bg-center overflow-hidden"
+          className="relative w-full min-h-[760px] sm:min-h-[800px] text-center flex flex-col items-center justify-center py-12 px-4 bg-center overflow-hidden"
           style={{
-            backgroundImage: "url('/images/kadhal-editorial/veena_program_v6.jpg')",
+            backgroundImage: "url('/images/kadhal-editorial/timeline-gold.jpg')",
             backgroundSize: "100% 100%",
             backgroundRepeat: "no-repeat",
           }}
         >
           <SectionVignette />
-          <div className="absolute inset-0 bg-black/55 pointer-events-none" />
-
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col items-center z-15 mt-1"
-          >
-            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#fff2b2] uppercase font-bold mb-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-              ✦ SACRED RITUALS ✦
-            </span>
-            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.16em] uppercase font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
-              Wedding Program
-            </h2>
-            <div className="flex items-center gap-2 mt-1 text-[#eed57c] drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-              <div className="w-8 h-[1px] bg-current" />
-              <span className="text-[9px]">❖</span>
-              <div className="w-8 h-[1px] bg-current" />
-            </div>
-          </motion.div>
-
-          <div className="relative w-[88%] max-w-[330px] my-auto py-2 flex flex-col items-center z-15">
-            <div className="absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-[1.5px] bg-gradient-to-b from-[#eed57c]/40 via-[#b3811b] to-[#eed57c]/40" />
-
-            <div className="relative w-full flex flex-col items-center space-y-4 sm:space-y-4.5 z-10">
-              {/* Program 1 */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#4a2406] font-cinzel font-bold mb-1 ring-2 ring-[#b8860b]/30">
-                  1
-                </div>
-                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-[#eed57c] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  MANGALA SNANAM
-                </span>
-                <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#fffaf0] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  Auspicious Sacred Dawn Prayers
-                </h4>
-                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#faedd0] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  07:00 AM
-                </div>
-                <div className="font-marcellus text-xs text-[#eed57c]/95 font-semibold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  {venueName}
-                </div>
-              </motion.div>
-
-              {/* Program 2: Sacred Muhurtham (Highlight) */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center py-2 px-3 rounded-xl bg-[#633209]/60 border border-[#eed57c]/70 shadow-lg backdrop-blur-xs"
-              >
-                <div className="w-7 h-7 rounded-full bg-[#96631b] border-2 border-[#eed57c] shadow-lg flex items-center justify-center text-xs text-[#fff2b2] font-bold mb-1">
-                  ❖
-                </div>
-                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.24em] text-[#eed57c] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  SACRED MUHURTHAM
-                </span>
-                <h4 className="font-cinzel text-base sm:text-lg font-bold text-[#fff2b2] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  Mangalya Dharanam &amp; Saptapadi
-                </h4>
-                <div className="mt-0.5 font-cormorant text-base sm:text-lg text-[#fff9e6] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  {weddingDateInfo.time || "08:42 AM"}
-                </div>
-                <div className="font-marcellus text-xs sm:text-[13px] text-[#eed57c] font-bold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  {venueName}
-                </div>
-              </motion.div>
-
-              {/* Program 3 */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#4a2406] font-cinzel font-bold mb-1 ring-2 ring-[#b8860b]/30">
-                  3
-                </div>
-                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-[#eed57c] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-                  VIRUNDHU &amp; RECEPTION
-                </span>
-                <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#fffaf0] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-                  Traditional Feast &amp; Celebrations
-                </h4>
-                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#faedd0] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-                  12:30 PM &amp; 06:30 PM
-                </div>
-                <div className="font-marcellus text-xs text-[#eed57c] font-bold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-                  The Leela Palace Banquet Hall
-                </div>
-              </motion.div>
-            </div>
-          </div>
-
-          <div className="relative z-15 flex items-center justify-center gap-2 mb-2 text-[#eed57c] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-            <div className="w-8 h-[1px] bg-current" />
-            <span className="text-[10px]">❖</span>
-            <div className="w-8 h-[1px] bg-current" />
-          </div>
+          <RoyalWeddingTimeline
+            eyebrow="AUSPICIOUS TIMINGS"
+            title="Wedding Program"
+            events={[
+              {
+                id: 1,
+                sequence: 1,
+                time: "07:00 AM",
+                name: "Mangala Snanam",
+                venue: venueName,
+                description: "Auspicious sacred dawn prayers & ceremonial bath",
+              },
+              {
+                id: 2,
+                sequence: 2,
+                time: weddingDateInfo.time || "08:42 AM",
+                name: "Sacred Muhurtham",
+                venue: venueName,
+                description: "Mangalya Dharanam & Saptapadi",
+                isMuhurtham: true,
+              },
+              {
+                id: 3,
+                sequence: 3,
+                time: "12:30 PM & 06:30 PM",
+                name: "Virundhu & Reception",
+                venue: (data as any).reception_venue || venueName,
+                description: "Traditional feast & grand celebrations",
+              },
+            ]}
+          />
         </section>
 
         {/* ===================================================================== */}
         {/* 6. SWEET MOMENTS: 3D PHOTO FAN CAROUSEL                                */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-4 bg-cover bg-center overflow-hidden"
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center px-4 overflow-hidden"
           style={{
-            backgroundImage: "url('/images/kadhal-editorial/veena_moments_v6.jpg')",
+            backgroundImage: "url('/images/kadhal-editorial/moments-gold-v2.jpg?v=2')",
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
           }}
         >
           <SectionVignette />
-          <div className="absolute inset-0 bg-black/45 pointer-events-none" />
 
           <motion.div
             initial={{ opacity: 0, y: 35, scale: 0.94 }}
@@ -926,13 +802,18 @@ export default function KadhalEditorialTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="w-full flex flex-col items-center z-15"
           >
-            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <img
+              src="/images/elements/gold_flower_bloom.webp"
+              alt="Gold Flower"
+              className="w-8 h-8 object-contain mb-1 drop-shadow-sm select-none pointer-events-none"
+            />
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#783e0a] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]">
               ✦ CHERISHED GLIMPSES ✦
             </span>
-            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mt-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#220d03] tracking-[0.18em] uppercase font-bold mt-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]">
               Sweet Moments
             </h2>
-            <p className="font-cormorant italic text-sm sm:text-base text-[#faedd0] font-semibold mb-5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+            <p className="font-cormorant italic text-sm sm:text-base text-[#6b4018] font-semibold mb-5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               Treasured memories of our journey together
             </p>
 
@@ -1029,13 +910,15 @@ export default function KadhalEditorialTemplate({
         {/* 7. VENUE & GOOGLE MAPS: UNIFIED SINGLE CARD                            */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[660px] text-center flex flex-col items-center justify-center px-4 py-12 bg-cover bg-center overflow-hidden"
+          className="relative w-full min-h-[660px] text-center flex flex-col items-center justify-center px-4 py-12 overflow-hidden"
           style={{
-            backgroundImage: "url('/images/kadhal-editorial/veena_venue_v6.jpg')",
+            backgroundImage: "url('/images/kadhal-editorial/venue-palace-gold-v2.jpg?v=2')",
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
           }}
         >
           <SectionVignette />
-          <div className="absolute inset-0 bg-black/55 pointer-events-none" />
 
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -1044,27 +927,54 @@ export default function KadhalEditorialTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-15 w-full max-w-[330px] sm:max-w-[350px] flex flex-col items-center"
           >
-            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <img
+              src="/images/elements/gold_flower_bloom.webp"
+              alt="Gold Flower"
+              className="w-8 h-8 object-contain mb-1 drop-shadow-sm select-none pointer-events-none"
+            />
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#783e0a] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]">
               ✦ CEREMONY LOCATION ✦
             </span>
-            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mb-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#220d03] tracking-[0.18em] uppercase font-bold mb-1 drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]">
               Wedding Venue
             </h2>
             <MinimalGoldDivider className="mb-4 opacity-80" />
 
-            <div className="w-full rounded-2xl bg-[#1c0f06]/95 border-2 border-[#eed57c]/70 shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-4 flex flex-col items-center text-center relative overflow-hidden backdrop-blur-md">
-              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
+            <div className="w-full rounded-2xl bg-[#fffdf8]/95 sm:bg-[#faf6ee]/94 border-2 border-[#d4af37]/65 shadow-[0_20px_50px_rgba(40,20,5,0.18)] p-5 flex flex-col items-center text-center relative overflow-hidden backdrop-blur-md">
+              {/* Corner Gold Flourishes */}
+              <img
+                src="/images/elements/gold_corner_tl.webp"
+                alt="Filigree"
+                className="absolute top-1 left-1 w-8 h-auto object-contain opacity-75 pointer-events-none select-none"
+              />
+              <img
+                src="/images/elements/gold_corner_tr.webp"
+                alt="Filigree"
+                className="absolute top-1 right-1 w-8 h-auto object-contain opacity-75 pointer-events-none select-none"
+              />
+              <img
+                src="/images/elements/gold_corner_bl.webp"
+                alt="Filigree"
+                className="absolute bottom-1 left-1 w-8 h-auto object-contain opacity-75 pointer-events-none select-none"
+              />
+              <img
+                src="/images/elements/gold_corner_br.webp"
+                alt="Filigree"
+                className="absolute bottom-1 right-1 w-8 h-auto object-contain opacity-75 pointer-events-none select-none"
+              />
 
-              <h3 className="font-cinzel text-base sm:text-lg font-bold text-[#fff2b2] tracking-wide drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+
+              <h3 className="font-cinzel text-base sm:text-lg font-bold text-[#220d03] tracking-wide">
                 {venueName}
               </h3>
 
-              <p className="font-marcellus text-xs sm:text-[13px] text-[#faedd0]/90 mt-1 mb-3.5 leading-relaxed max-w-[280px]">
+              <p className="font-marcellus text-xs sm:text-[13px] text-[#5c3a16] mt-1 mb-3.5 leading-relaxed max-w-[280px]">
                 {venueAddress}
               </p>
 
-              <div className="relative w-full h-48 sm:h-52 rounded-xl overflow-hidden border border-[#eed57c]/50 shadow-md bg-[#110803] mb-3.5">
-                <div className="absolute top-0 inset-x-0 z-10 px-3 py-1 flex items-center justify-between text-[10px] bg-black/85 backdrop-blur-md border-b border-[#eed57c]/30">
+              <div className="relative w-full h-48 sm:h-52 rounded-xl overflow-hidden border border-[#d4af37]/60 shadow-md bg-[#110803] mb-3.5">
+                <div className="absolute top-0 inset-x-0 z-10 px-3 py-1 flex items-center justify-between text-[10px] bg-[#220d03]/90 backdrop-blur-md border-b border-[#d4af37]/40">
                   <span className="font-cinzel tracking-wider uppercase font-semibold text-[#fff2b2] flex items-center gap-1">
                     <MapPin className="w-3 h-3 text-[#eed57c]" />
                     Interactive Map
@@ -1122,47 +1032,78 @@ export default function KadhalEditorialTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 8. BLESSINGS & RSVP: UNIFIED HIGH-CONTRAST CARD                        */}
+        {/* 8. BLESSINGS & RSVP: LUXURY GOLD EMBOSSED CARD                         */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[680px] text-center flex flex-col items-center justify-center px-4 py-12 bg-cover bg-center overflow-hidden"
+          className="relative w-full min-h-[680px] text-center flex flex-col items-center justify-center px-4 py-12 overflow-hidden"
           style={{
-            backgroundImage: "url('/images/kadhal-editorial/veena_rsvp_v6.jpg')",
+            backgroundImage: "url('/images/kadhal-editorial/rsvp-blessings-gold-v2.jpg?v=2')",
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
           }}
         >
           <SectionVignette />
-          <div className="absolute inset-0 bg-black/60 pointer-events-none" />
 
           <motion.div
             initial={{ opacity: 0, y: 35, scale: 0.94 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-15 w-full max-w-[315px] sm:max-w-[335px] flex flex-col items-center"
+            className="relative z-15 w-full max-w-[325px] sm:max-w-[350px] flex flex-col items-center"
           >
-            <div className="w-full rounded-2xl bg-[#1c0f06]/95 backdrop-blur-md border-2 border-[#d4af37]/75 shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-5 flex flex-col items-center text-center relative overflow-hidden">
-              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
+            {/* Header flower ornament */}
+            <img
+              src="/images/elements/gold_flower_bloom.webp"
+              alt="Ornament"
+              className="w-8 h-auto object-contain opacity-85 mb-1.5 drop-shadow-[0_2px_4px_rgba(255,255,255,0.9)] pointer-events-none select-none"
+            />
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.26em] text-[#783e0a] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]">
+              ✦ WARM WISHES ✦
+            </span>
+            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#220d03] tracking-[0.18em] uppercase font-bold mt-0.5 mb-1 drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]">
+              Blessings &amp; RSVP
+            </h2>
+            <MinimalGoldDivider className="mb-4 opacity-80" />
 
-              <span className="font-cinzel text-[10px] tracking-[0.24em] text-[#eed57c] uppercase font-bold">
-                ✦ WARM WISHES ✦
-              </span>
-              <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.18em] uppercase font-bold mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
-                Blessings &amp; RSVP
-              </h2>
-              <MinimalGoldDivider className="my-2 opacity-90" />
-              <p className="font-cormorant text-base sm:text-lg text-[#faedd0] mb-4 drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)] font-medium italic">
+            <div className="w-full rounded-2xl bg-[#fffdf8]/95 sm:bg-[#faf6ee]/94 border-2 border-[#d4af37]/65 shadow-[0_20px_50px_rgba(40,20,5,0.18)] p-5 flex flex-col items-center text-center relative overflow-hidden backdrop-blur-md">
+              {/* Corner Gold Flourishes */}
+              <img
+                src="/images/elements/gold_corner_tl.webp"
+                alt="Filigree"
+                className="absolute top-1 left-1 w-8 h-auto object-contain opacity-75 pointer-events-none select-none"
+              />
+              <img
+                src="/images/elements/gold_corner_tr.webp"
+                alt="Filigree"
+                className="absolute top-1 right-1 w-8 h-auto object-contain opacity-75 pointer-events-none select-none"
+              />
+              <img
+                src="/images/elements/gold_corner_bl.webp"
+                alt="Filigree"
+                className="absolute bottom-1 left-1 w-8 h-auto object-contain opacity-75 pointer-events-none select-none"
+              />
+              <img
+                src="/images/elements/gold_corner_br.webp"
+                alt="Filigree"
+                className="absolute bottom-1 right-1 w-8 h-auto object-contain opacity-75 pointer-events-none select-none"
+              />
+
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+
+              <p className="font-cormorant text-base sm:text-lg text-[#5c3a16] mb-4 font-semibold italic">
                 Please grace our celebration with your presence &amp; blessings
               </p>
 
               {rsvpSaved ? (
-                <div className="p-4 rounded-xl bg-black/75 border border-[#eed57c]/60 text-center w-full shadow-lg">
-                  <div className="w-10 h-10 rounded-full bg-[#eed57c]/20 border-2 border-[#eed57c] flex items-center justify-center mx-auto mb-2 text-[#eed57c] shadow-md">
+                <div className="p-4 rounded-xl bg-white/90 border border-[#d4af37]/60 text-center w-full shadow-md">
+                  <div className="w-10 h-10 rounded-full bg-[#fbf5e6] border-2 border-[#d4af37] flex items-center justify-center mx-auto mb-2 text-[#783e0a] shadow-sm">
                     <Check className="w-5 h-5 stroke-[3]" />
                   </div>
-                  <h4 className="font-cinzel text-base text-[#fff2b2] uppercase tracking-wider font-bold">
+                  <h4 className="font-cinzel text-base text-[#220d03] uppercase tracking-wider font-bold">
                     {rsvpStatus === "attending" ? "Thank You!" : "Response Received"}
                   </h4>
-                  <p className="font-cormorant text-sm sm:text-base text-[#faedd0] mt-1.5 leading-relaxed font-medium">
+                  <p className="font-cormorant text-sm sm:text-base text-[#5c3a16] mt-1.5 leading-relaxed font-medium">
                     {rsvpStatus === "attending"
                       ? "We eagerly look forward to celebrating with you and receiving your heartfelt blessings."
                       : "Thank you for sending your warm wishes and blessings."}
@@ -1174,10 +1115,10 @@ export default function KadhalEditorialTemplate({
                     <button
                       type="button"
                       onClick={() => setRsvpStatus("attending")}
-                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
+                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-sm ${
                         rsvpStatus === "attending"
-                          ? "bg-gradient-to-r from-[#eed57c] to-[#c59a3f] text-[#1c0f05] border-2 border-white ring-2 ring-[#eed57c]/50 scale-[1.02]"
-                          : "bg-[#2d180a] text-[#faedd0] hover:bg-[#3d200e] border border-[#eed57c]/50"
+                          ? "bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#c59b27] text-[#1c0f05] border-2 border-[#b8860b] shadow-md scale-[1.02]"
+                          : "bg-white/90 text-[#5c3a16] hover:bg-[#fff7ea] border border-[#d4af37]/40"
                       }`}
                     >
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
@@ -1187,10 +1128,10 @@ export default function KadhalEditorialTemplate({
                     <button
                       type="button"
                       onClick={() => setRsvpStatus("declined")}
-                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-md ${
+                      className={`py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 font-cinzel text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-sm ${
                         rsvpStatus === "declined"
-                          ? "bg-[#541217] text-[#ffe4e6] border-2 border-[#f87171] ring-2 ring-[#f87171]/40 scale-[1.02]"
-                          : "bg-[#2d180a] text-[#faedd0]/80 hover:bg-[#3d200e] border border-[#eed57c]/50"
+                          ? "bg-[#783e0a] text-white border-2 border-[#542805] shadow-md scale-[1.02]"
+                          : "bg-white/90 text-[#5c3a16]/80 hover:bg-[#fff7ea] border border-[#d4af37]/40"
                       }`}
                     >
                       <X className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -1205,7 +1146,7 @@ export default function KadhalEditorialTemplate({
                       className="w-full space-y-3 text-left mt-1"
                     >
                       <div>
-                        <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#eed57c] uppercase font-bold mb-1">
+                        <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#783e0a] uppercase font-bold mb-1">
                           Guest / Family Name
                         </label>
                         <input
@@ -1213,19 +1154,19 @@ export default function KadhalEditorialTemplate({
                           value={guestName}
                           onChange={(e) => setGuestName(e.target.value)}
                           placeholder="e.g. Sundaram & Family"
-                          className="w-full px-3 py-2 rounded-xl bg-black/80 border-2 border-[#eed57c]/50 text-sm text-[#fff9e6] placeholder-[#faedd0]/50 font-cormorant focus:outline-none focus:border-[#eed57c] focus:ring-1 focus:ring-[#eed57c]"
+                          className="w-full px-3 py-2 rounded-xl bg-white/95 border-2 border-[#d4af37]/50 text-sm text-[#220d03] placeholder-[#8a6840]/60 font-cormorant focus:outline-none focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] shadow-sm"
                         />
                       </div>
 
                       {rsvpStatus === "attending" && (
                         <div>
-                          <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#eed57c] uppercase font-bold mb-1">
+                          <label className="block text-[11px] tracking-[0.2em] font-cinzel text-[#783e0a] uppercase font-bold mb-1">
                             Number of Guests
                           </label>
                           <select
                             value={guestCount}
                             onChange={(e) => setGuestCount(e.target.value)}
-                            className="w-full px-3 py-2 rounded-xl bg-[#1c0f06] border-2 border-[#eed57c]/50 text-sm text-[#fff9e6] font-cormorant focus:outline-none focus:border-[#eed57c]"
+                            className="w-full px-3 py-2 rounded-xl bg-white/95 border-2 border-[#d4af37]/50 text-sm text-[#220d03] font-cormorant focus:outline-none focus:border-[#d4af37] shadow-sm"
                           >
                             <option value="1">1 Guest</option>
                             <option value="2">2 Guests</option>
@@ -1238,7 +1179,7 @@ export default function KadhalEditorialTemplate({
                       <button
                         type="button"
                         onClick={() => setRsvpSaved(true)}
-                        className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#eed57c] via-[#f5e6a8] to-[#c59a3f] text-[#1c0f05] font-cinzel text-xs uppercase font-bold tracking-[0.2em] hover:brightness-110 active:scale-98 transition shadow-[0_4px_16px_rgba(238,213,124,0.4)] cursor-pointer mt-1"
+                        className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#c59b27] text-[#1c0f05] font-cinzel text-xs uppercase font-bold tracking-[0.2em] hover:brightness-110 active:scale-98 transition shadow-[0_4px_16px_rgba(212,175,55,0.4)] cursor-pointer mt-1"
                       >
                         Confirm RSVP
                       </button>
@@ -1246,10 +1187,10 @@ export default function KadhalEditorialTemplate({
                   )}
 
                   {rsvpPhone && (
-                    <div className="pt-2 border-t border-[#eed57c]/30 w-full flex items-center justify-center">
+                    <div className="pt-2 border-t border-[#d4af37]/30 w-full flex items-center justify-center">
                       <a
                         href={`tel:${rsvpPhone.replace(/[^0-9+]/g, "")}`}
-                        className="inline-flex items-center gap-1.5 text-xs text-[#eed57c] hover:text-[#fff2b2] font-semibold transition"
+                        className="inline-flex items-center gap-1.5 text-xs text-[#783e0a] hover:text-[#220d03] font-semibold transition"
                       >
                         <Phone className="w-3.5 h-3.5" />
                         <span className="font-marcellus tracking-wider">RSVP Helpline: {rsvpPhone}</span>

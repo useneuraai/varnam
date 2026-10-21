@@ -18,6 +18,8 @@ import {
   Heart,
 } from "lucide-react";
 import CreatedByVarnam from "@/components/CreatedByVarnam";
+import ScratchHeartCard from "@/components/ScratchHeartCard";
+import RoyalWeddingTimeline from "@/components/RoyalWeddingTimeline";
 
 // ============================================================================
 // 1. FLOATING ROSE PETALS PARTICLES
@@ -466,21 +468,21 @@ export default function KovilThirumanamTemplate({
             </p>
 
             {/* Bride Name */}
-            <h1 className="font-cinzel text-4xl sm:text-5xl font-bold tracking-[0.18em] text-[#fff9e6] uppercase leading-none drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]">
+            <h1 className="font-cinzel text-4xl sm:text-5xl font-bold tracking-[0.18em] text-[#fff9e6] uppercase leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] drop-shadow-[0_6px_20px_rgba(0,0,0,0.95)]">
               {bride}
             </h1>
 
             {/* Weds Divider */}
             <div className="flex items-center justify-center gap-3 my-2 w-full">
               <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-              <span className="font-serif text-xs tracking-[0.25em] text-[#eed57c] uppercase">
+              <span className="font-serif text-xs tracking-[0.25em] text-[#eed57c] uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                 WEDS
               </span>
               <div className="h-[1px] w-12 bg-gradient-to-l from-transparent via-[#eed57c] to-transparent" />
             </div>
 
             {/* Groom Name */}
-            <h1 className="font-cinzel text-4xl sm:text-5xl font-bold tracking-[0.18em] text-[#fff9e6] uppercase leading-none drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]">
+            <h1 className="font-cinzel text-4xl sm:text-5xl font-bold tracking-[0.18em] text-[#fff9e6] uppercase leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] drop-shadow-[0_6px_20px_rgba(0,0,0,0.95)]">
               {groom}
             </h1>
 
@@ -568,99 +570,16 @@ export default function KovilThirumanamTemplate({
           }}
         >
           <SectionVignette />
-          {/* Exact Gold Cartouche Box (27.5% left, 45% width, 27.5% top, 40.5% height) */}
-          <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.93 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: false, amount: 0.25 }}
-            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute rounded-[28px] sm:rounded-[36px] overflow-hidden flex flex-col items-center justify-between py-4 px-3 text-center z-15"
-            style={{
-              left: "27.5%",
-              width: "45%",
-              top: "27.5%",
-              height: "40.5%",
-            }}
-          >
-            {/* Header Text - Hidden once scratched */}
-            {!isScratched ? (
-              <div className="flex flex-col items-center pointer-events-none pt-2 transition-opacity duration-500">
-                <span className="font-serif text-[8.5px] sm:text-[9.5px] tracking-[0.2em] text-[#3e270c] font-extrabold uppercase">
-                  Scratch to Reveal
-                </span>
-                <span className="font-serif text-[8.5px] sm:text-[9.5px] tracking-[0.2em] text-[#3e270c] font-bold uppercase">
-                  Our Wedding Date
-                </span>
-                <div className="w-8 h-[1px] bg-[#3e270c]/40 mt-1" />
-              </div>
-            ) : (
-              <div className="flex items-center gap-1.5 pt-2 text-[#4a2b0b] pointer-events-none animate-fadeIn">
-                <div className="w-4 h-[1px] bg-current opacity-60" />
-                <span className="text-[8px]">❖</span>
-                <span className="font-serif text-[8.5px] sm:text-[9.5px] tracking-[0.22em] text-[#3e2206] uppercase font-bold">
-                  Save The Date
-                </span>
-                <span className="text-[8px]">❖</span>
-                <div className="w-4 h-[1px] bg-current opacity-60" />
-              </div>
-            )}
 
-            {/* Revealed Date Layer with Rich High-Contrast Typography */}
-            <div className="flex flex-col items-center justify-center pointer-events-none my-auto">
-              <span className="font-serif text-4xl sm:text-5xl font-black text-[#1e0d02] leading-none drop-shadow-[0_1px_2px_rgba(255,255,255,0.7)] tracking-tight">
-                {weddingDateInfo.day}
-              </span>
-              <span className="font-serif text-xs sm:text-sm font-black tracking-[0.24em] text-[#381a04] uppercase drop-shadow-[0_1px_1px_rgba(255,255,255,0.7)] mt-1">
-                {weddingDateInfo.month}
-              </span>
-              <span className="font-serif text-[11px] sm:text-xs font-black tracking-[0.3em] text-[#522907] mt-0.5">
-                {weddingDateInfo.year}
-              </span>
-              <div className="text-[8px] sm:text-[9px] tracking-wider text-[#3d1c03] font-bold uppercase mt-1.5 px-2.5 py-0.5 rounded-full bg-[#3e270c]/10 border border-[#3e270c]/25">
-                {weddingDateInfo.weekday} · {weddingDateInfo.time}
-              </div>
-            </div>
-
-            {/* Bottom Accent */}
-            <div className="flex items-center gap-1.5 pointer-events-none pb-2 text-[#5c3e16]/60">
-              <div className="w-4 h-[1px] bg-current" />
-              <span className="text-[8px]">❖</span>
-              <div className="w-4 h-[1px] bg-current" />
-            </div>
-
-            {/* Precision Scratch Canvas Overlay */}
-            <canvas
-              ref={canvasRef}
-              style={{ touchAction: "none" }}
-              onMouseDown={() => (isDrawing.current = true)}
-              onMouseUp={() => (isDrawing.current = false)}
-              onMouseLeave={() => (isDrawing.current = false)}
-              onMouseMove={(e) => {
-                if (isDrawing.current) handleScratchMove(e.clientX, e.clientY);
-              }}
-              onTouchStart={() => (isDrawing.current = true)}
-              onTouchEnd={() => (isDrawing.current = false)}
-              onTouchMove={(e) => {
-                if (e.touches[0]) {
-                  handleScratchMove(e.touches[0].clientX, e.touches[0].clientY);
-                }
-              }}
-              className={`absolute inset-0 w-full h-full rounded-[28px] sm:rounded-[36px] cursor-pointer transition-opacity duration-700 ${
-                isScratched ? "opacity-0 pointer-events-none" : "opacity-100"
-              }`}
-            />
-          </motion.div>
-
-          {/* Click to Reveal fallback button */}
-          {!isScratched && (
-            <button
-              type="button"
-              onClick={() => setIsScratched(true)}
-              className="absolute bottom-10 z-20 px-4 py-1.5 rounded-full bg-black/75 border border-[#eed57c]/60 text-[#eed57c] text-[9px] tracking-[0.2em] uppercase font-bold hover:bg-[#eed57c] hover:text-black transition cursor-pointer shadow-md"
-            >
-              Click To Reveal Date
-            </button>
-          )}
+          {/* Golden Wax Seal on Warm Ivory Parchment Card */}
+          <ScratchHeartCard
+            weddingDateInfo={weddingDateInfo}
+            venueName={data.wedding_venue || "Sri Krishna Mahal Chennai"}
+            templateType="kovil"
+            isScratched={isScratched}
+            setIsScratched={setIsScratched}
+            title="Save the Date"
+          />
         </section>
 
         {/* ===================================================================== */}
@@ -806,7 +725,7 @@ export default function KovilThirumanamTemplate({
             </h3>
             <GoldDivider className="my-2.5 opacity-90" />
 
-            {/* 4 Countdown Boxes with Staggered Modern Animation */}
+            {/* 4 White Countdown Boxes */}
             <div className="grid grid-cols-2 gap-2.5 w-full mt-3">
               {[
                 { label: "DAYS", value: timeLeft.days },
@@ -820,13 +739,13 @@ export default function KovilThirumanamTemplate({
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.25 }}
                   transition={{ duration: 0.6, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
-                  className="py-3 px-2 rounded-xl bg-[#261005]/88 border border-[#d4af37]/60 shadow-[0_4px_16px_rgba(0,0,0,0.5)] backdrop-blur-xs flex flex-col items-center justify-center relative overflow-hidden"
+                  className="py-4 px-2 rounded-2xl bg-white border border-[#d4af37]/45 shadow-[0_10px_25px_rgba(46,26,13,0.14)] flex flex-col items-center justify-center relative overflow-hidden"
                 >
-                  <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-                  <span className="font-cinzel text-3xl font-extrabold text-[#fff2b2] tabular-nums leading-none drop-shadow-[0_2px_4px_rgba(238,213,124,0.4)]">
+                  <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+                  <span className="font-cinzel text-3xl font-extrabold text-[#2e1a0d] tabular-nums leading-none">
                     {String(unit.value).padStart(2, "0")}
                   </span>
-                  <span className="font-serif text-[9px] tracking-[0.18em] text-[#eed57c] uppercase font-bold mt-1 text-center">
+                  <span className="font-serif text-[9px] tracking-[0.18em] text-[#936625] uppercase font-bold mt-1 text-center">
                     {unit.label}
                   </span>
                 </motion.div>
@@ -845,137 +764,47 @@ export default function KovilThirumanamTemplate({
           }}
         >
           <SectionVignette />
-          {/* Framed within center sandstone column (w-[56%] max-w-[260px]) */}
-          {/* Leaving both the left elephant (0-22%) and right elephant (78-100%) 100% visible! */}
-          <div className="relative z-15 w-[56%] max-w-[260px] sm:max-w-[280px] flex flex-col items-center mx-auto py-8">
-            <motion.div
-              initial={{ opacity: 0, y: -15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="flex flex-col items-center mb-6"
-            >
-              <h2 className="font-serif text-base sm:text-lg text-[#1a0b01] tracking-wider uppercase font-black mb-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
-                Wedding Program
-              </h2>
-              <p className="font-serif italic text-xs sm:text-[13px] text-[#4a2608] font-bold mb-1.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
-                Auspicious Timings
-              </p>
-              <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-[#b38827] to-transparent" />
-            </motion.div>
-
-            {/* Central Connected Timeline with Gold Markers & One-by-One Staggered Scroll Reveal */}
-            <div className="relative w-full flex flex-col items-center space-y-8 sm:space-y-9">
-              {/* Vertical connecting gold rod */}
-              <div className="absolute left-1/2 -translate-x-1/2 top-3 bottom-3 w-[2px] bg-gradient-to-b from-[#b8860b]/40 via-[#d4af37] to-[#b8860b]/40" />
-
-              {/* Event 1: Nichayathartham */}
-              <motion.div
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[11px] text-[#542d07] font-black mb-1 ring-2 ring-[#784f18]/20">
-                  1
-                </div>
-                <span className="font-sans text-[10px] sm:text-[11px] tracking-[0.2em] text-[#783e0a] uppercase font-black block leading-tight">
-                  ENGAGEMENT
-                </span>
-                <h4 className="font-serif text-base sm:text-lg font-black text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
-                  Nichayathartham
-                </h4>
-                <div className="mt-1 font-sans text-xs sm:text-sm text-[#240e02] font-black leading-tight">
-                  19 Dec 2026 · 06:00 PM
-                </div>
-                <div className="font-serif text-xs sm:text-[13px] text-[#422005] font-bold leading-tight mt-0.5">
-                  Sri Krishna Mahal
-                </div>
-              </motion.div>
-
-              {/* Event 2: Vratham */}
-              <motion.div
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[11px] text-[#542d07] font-black mb-1 ring-2 ring-[#784f18]/20">
-                  2
-                </div>
-                <span className="font-sans text-[10px] sm:text-[11px] tracking-[0.2em] text-[#783e0a] uppercase font-black block leading-tight">
-                  SACRED RITUAL
-                </span>
-                <h4 className="font-serif text-base sm:text-lg font-black text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
-                  Vratham
-                </h4>
-                <div className="mt-1 font-sans text-xs sm:text-sm text-[#240e02] font-black leading-tight">
-                  20 Dec 2026 · 09:00 AM
-                </div>
-                <div className="font-serif text-xs sm:text-[13px] text-[#422005] font-bold leading-tight mt-0.5">
-                  Sri Krishna Mahal
-                </div>
-              </motion.div>
-
-              {/* Event 3: Kalyana Muhurtham (Apex Highlight) */}
-              <motion.div
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center"
-              >
-                <div className="w-7 h-7 rounded-full bg-[#7a0d18] border-2 border-[#eed57c] shadow-lg flex items-center justify-center text-xs text-[#fff2b2] font-black mb-1 ring-2 ring-[#7a0d18]/40">
-                  ❖
-                </div>
-                <span className="font-sans text-[11px] sm:text-xs tracking-[0.24em] text-[#7a0914] uppercase font-black block leading-tight">
-                  SACRED MUHURTHAM
-                </span>
-                <h4 className="font-serif text-lg sm:text-xl font-black text-[#45040b] leading-snug mt-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
-                  Kalyana Muhurtham
-                </h4>
-                <div className="mt-1 font-sans text-sm sm:text-base text-[#240307] font-black leading-tight">
-                  {weddingDateInfo.day} {weddingDateInfo.month} · {weddingDateInfo.time}
-                </div>
-                <div className="font-serif text-xs sm:text-sm text-[#5e0710] font-black leading-tight mt-0.5">
-                  {data.wedding_venue || "Sri Krishna Mahal"}
-                </div>
-              </motion.div>
-
-              {/* Event 4: Reception Feast */}
-              <motion.div
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[11px] text-[#542d07] font-black mb-1 ring-2 ring-[#784f18]/20">
-                  4
-                </div>
-                <span className="font-sans text-[10px] sm:text-[11px] tracking-[0.2em] text-[#783e0a] uppercase font-black block leading-tight">
-                  GALA RECEPTION
-                </span>
-                <h4 className="font-serif text-base sm:text-lg font-black text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
-                  Reception Feast
-                </h4>
-                <div className="mt-1 font-sans text-xs sm:text-sm text-[#240e02] font-black leading-tight">
-                  {data.reception_date
-                    ? parseDate(data.reception_date).day +
-                      " " +
-                      parseDate(data.reception_date).month +
-                      " · " +
-                      parseDate(data.reception_date).time
-                    : "20 Dec · 06:30 PM"}
-                </div>
-                <div className="font-serif text-xs sm:text-[13px] text-[#422005] font-bold leading-tight mt-0.5">
-                  {data.reception_venue || "Sri Krishna Mahal"}
-                </div>
-              </motion.div>
-            </div>
-          </div>
+          <RoyalWeddingTimeline
+            eyebrow="AUSPICIOUS TIMINGS"
+            title="Wedding Program"
+            events={[
+              {
+                id: 1,
+                sequence: 1,
+                time: "19 DEC · 06:00 PM",
+                name: "Nichayathartham",
+                venue: data.wedding_venue || "Sri Krishna Mahal",
+                description: "Formal engagement & ring exchange ceremony",
+              },
+              {
+                id: 2,
+                sequence: 2,
+                time: "20 DEC · 09:00 AM",
+                name: "Vratham & Sumangali Prarthanai",
+                venue: data.wedding_venue || "Sri Krishna Mahal",
+                description: "Sacred familial prayers & auspicious blessings",
+              },
+              {
+                id: 3,
+                sequence: 3,
+                time: `${weddingDateInfo.day} ${weddingDateInfo.month} · ${weddingDateInfo.time}`,
+                name: "Kalyana Muhurtham",
+                venue: data.wedding_venue || "Sri Krishna Mahal",
+                description: "Mangalya Dharanam & Saptapadi vows",
+                isMuhurtham: true,
+              },
+              {
+                id: 4,
+                sequence: 4,
+                time: data.reception_date
+                  ? `${parseDate(data.reception_date).day} ${parseDate(data.reception_date).month} · ${parseDate(data.reception_date).time}`
+                  : "20 DEC · 06:30 PM",
+                name: "Reception Feast",
+                venue: data.reception_venue || data.wedding_venue || "Sri Krishna Mahal",
+                description: "Traditional feast & grand musical celebrations",
+              },
+            ]}
+          />
         </section>
 
         {/* ===================================================================== */}

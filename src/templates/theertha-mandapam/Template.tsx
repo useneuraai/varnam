@@ -19,6 +19,8 @@ import {
   VolumeX,
 } from "lucide-react";
 import CreatedByVarnam from "@/components/CreatedByVarnam";
+import ScratchHeartCard from "@/components/ScratchHeartCard";
+import RoyalWeddingTimeline from "@/components/RoyalWeddingTimeline";
 
 // ============================================================================
 // 1. FLOATING LOTUS & JASMINE PETALS PARTICLES
@@ -473,15 +475,15 @@ export default function TheerthaMandapamTemplate({
               transform: `translateY(-${scrollProgress * 30}px)`,
             }}
           >
-            <div className="flex items-center justify-center gap-2 mb-1 text-[#eed57c]">
-              <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-[#eed57c] to-[#eed57c]" />
-              <span className="text-xs text-[#eed57c]">❖</span>
-              <div className="w-8 h-[1px] bg-gradient-to-l from-transparent via-[#eed57c] to-[#eed57c]" />
+            <div className="flex items-center justify-center gap-2 mb-1 text-[#0d9488]">
+              <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-[#0d9488] to-[#0d9488]" />
+              <span className="text-xs text-[#0d9488]">❖</span>
+              <div className="w-8 h-[1px] bg-gradient-to-l from-transparent via-[#0d9488] to-[#0d9488]" />
             </div>
-            <h2 className="font-cinzel text-xs sm:text-sm tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            <h2 className="font-cinzel text-xs sm:text-sm tracking-[0.3em] text-[#041716] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               AN AUSPICIOUS CELEBRATION
             </h2>
-            <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.25em] text-[#eed57c] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+            <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.25em] text-[#0f5146] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               SHUBHA VIVAHA MUHURTHAM
             </span>
           </div>
@@ -517,7 +519,7 @@ export default function TheerthaMandapamTemplate({
               {groom}
             </h1>
 
-            <div className="mt-3 text-[#783e0a] text-[10px] sm:text-[11px] font-cinzel tracking-[0.24em] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.7)]">
+            <div className="mt-3 text-[#0f5146] text-[10px] sm:text-[11px] font-cinzel tracking-[0.24em] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.7)]">
               ❖ ROYAL WEDDING CELEBRATION ❖
             </div>
           </div>
@@ -527,11 +529,11 @@ export default function TheerthaMandapamTemplate({
             className="relative z-20 flex flex-col items-center gap-1 transition-opacity duration-300 pb-1"
             style={{ opacity: Math.max(0, 1 - scrollProgress * 2) }}
           >
-            <span className="text-[9px] tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+            <span className="text-[9px] tracking-[0.3em] text-[#041716] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               SCROLL TO CELEBRATE
             </span>
-            <div className="w-4 h-6 rounded-full border border-[#eed57c] bg-black/40 flex items-start justify-center p-1 shadow-md">
-              <div className="w-1 h-2 rounded-full bg-[#eed57c] animate-bounce" />
+            <div className="w-4 h-6 rounded-full border border-[#0d9488] bg-white/40 flex items-start justify-center p-1 shadow-md">
+              <div className="w-1 h-2 rounded-full bg-[#0f5146] animate-bounce" />
             </div>
           </div>
 
@@ -614,111 +616,17 @@ export default function TheerthaMandapamTemplate({
           }}
         >
           <SectionVignette />
-          <div className="absolute inset-0 bg-black/45 pointer-events-none" />
+          <div className="absolute inset-0 bg-black/15 pointer-events-none" />
 
-          <div className="relative z-20 mb-4 flex flex-col items-center">
-            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-              ✦ AUSPICIOUS INVITATION ✦
-            </span>
-            <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-[#fff2b2] tracking-[0.18em] uppercase mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
-              Save The Date
-            </h3>
-            <MinimalGoldDivider className="mt-1.5 opacity-80" />
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.94 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: false, amount: 0.25 }}
-            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative rounded-[26px] sm:rounded-[30px] overflow-hidden flex flex-col items-center justify-center text-center z-15 shadow-[0_20px_50px_rgba(0,0,0,0.9)] border-2 border-[#d4af37]"
-            style={{
-              width: "60%",
-              height: "44%",
-            }}
-          >
-            <div
-              className="absolute inset-0 bg-cover bg-center flex flex-col items-center justify-between py-4 px-3 text-center pointer-events-none select-none z-0 bg-[#fffbf2]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(135deg, #fffcf5 0%, #faedd3 50%, #f4dec0 100%)",
-              }}
-            >
-              <div className="absolute inset-2 border border-[#b8860b]/40 rounded-2xl pointer-events-none" />
-
-              <div className="flex flex-col items-center pt-1 z-10">
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#7a3407] font-bold uppercase">
-                  ✦ AUSPICIOUS MUHURTHAM ✦
-                </span>
-                <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#9e6b22] to-transparent mt-0.5" />
-              </div>
-
-              <div className="flex flex-col items-center justify-center my-auto px-1 z-10">
-                <div className="font-cormorant text-5xl sm:text-6xl font-bold text-[#200d02] leading-none tracking-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                  {weddingDateInfo.day}
-                </div>
-                <div className="font-cinzel text-xs sm:text-sm tracking-[0.28em] text-[#381603] font-bold uppercase mt-1">
-                  {weddingDateInfo.month} {weddingDateInfo.year}
-                </div>
-                <div className="flex items-center gap-1.5 my-1 text-[#9e6b22]">
-                  <div className="w-4 h-[1px] bg-current" />
-                  <span className="text-[7px]">❖</span>
-                  <div className="w-4 h-[1px] bg-current" />
-                </div>
-                <div className="font-marcellus text-[10.5px] sm:text-[11.5px] text-[#422005] font-bold tracking-wider">
-                  {weddingDateInfo.weekday} · {weddingDateInfo.time}
-                </div>
-                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#633208] font-bold mt-0.5 line-clamp-1 max-w-[170px]">
-                  {data.wedding_venue || "The Leela Palace Courtyard"}
-                </div>
-              </div>
-
-              <div className="pb-1 text-[8.5px] tracking-[0.22em] font-cinzel text-[#783e0a] uppercase font-bold z-10">
-                ❖ An Auspicious Union ❖
-              </div>
-            </div>
-
-            <canvas
-              ref={canvasRef}
-              style={{ touchAction: "none" }}
-              onMouseDown={() => (isDrawing.current = true)}
-              onMouseUp={() => (isDrawing.current = false)}
-              onMouseLeave={() => (isDrawing.current = false)}
-              onMouseMove={(e) => {
-                if (isDrawing.current) handleScratchMove(e.clientX, e.clientY);
-              }}
-              onTouchStart={() => (isDrawing.current = true)}
-              onTouchEnd={() => (isDrawing.current = false)}
-              onTouchMove={(e) => {
-                if (e.touches[0]) handleScratchMove(e.touches[0].clientX, e.touches[0].clientY);
-              }}
-              className={`absolute inset-0 w-full h-full cursor-pointer z-10 transition-opacity duration-700 ${
-                isScratched ? "opacity-0 pointer-events-none" : "opacity-100"
-              }`}
-            />
-
-            {!isScratched && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0.75, 1, 0.75], y: [0, -2, 0] }}
-                transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-                className="absolute bottom-2.5 pointer-events-none z-20 px-2.5 py-0.5 rounded-full bg-black/75 border border-[#eed57c]/70 text-[8px] font-marcellus text-[#fff2b2] tracking-widest uppercase flex items-center gap-1 shadow-md"
-              >
-                <span>✨ Swipe To Reveal</span>
-              </motion.div>
-            )}
-          </motion.div>
-
-          {!isScratched && (
-            <button
-              type="button"
-              onClick={() => setIsScratched(true)}
-              className="relative mt-5 z-20 px-5 py-2 rounded-full bg-gradient-to-r from-[#042f2e] via-[#115e59] to-[#042f2e] border border-[#eed57c] text-[#fff2b2] text-[10px] sm:text-[10.5px] tracking-[0.22em] uppercase font-cinzel font-bold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.8)] cursor-pointer flex items-center gap-1.5"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#eed57c]" />
-              <span>Click To Reveal Date</span>
-            </button>
-          )}
+          {/* Golden Wax Seal on Warm Ivory Parchment Card */}
+          <ScratchHeartCard
+            weddingDateInfo={weddingDateInfo}
+            venueName={data.wedding_venue || "The Leela Palace Courtyard"}
+            templateType="theertha"
+            isScratched={isScratched}
+            setIsScratched={setIsScratched}
+            title="Save the Date"
+          />
         </section>
 
         {/* ===================================================================== */}
@@ -731,7 +639,6 @@ export default function TheerthaMandapamTemplate({
           }}
         >
           <SectionVignette />
-          <div className="absolute inset-0 bg-black/50 pointer-events-none" />
 
           <motion.div
             initial={{ opacity: 0, y: 35, scale: 0.94 }}
@@ -740,13 +647,13 @@ export default function TheerthaMandapamTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-15 w-full max-w-[320px] flex flex-col items-center py-6 px-3"
           >
-            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#0f5146] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               ✦ AUSPICIOUS MUHURTHAM ✦
             </span>
-            <h3 className="font-cinzel text-xl sm:text-2xl text-[#fff2b2] tracking-[0.2em] uppercase font-bold mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+            <h3 className="font-cinzel text-xl sm:text-2xl text-[#041716] tracking-[0.2em] uppercase font-bold mt-1 drop-shadow-[0_1px_3px_rgba(255,255,255,0.85)]">
               Counting Down
             </h3>
-            <span className="font-marcellus text-xs tracking-[0.24em] text-[#5eead4] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+            <span className="font-marcellus text-xs tracking-[0.24em] text-[#0d9488] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">
               To Eternal Togetherness
             </span>
             <MinimalGoldDivider className="my-2.5 opacity-90" />
@@ -764,21 +671,21 @@ export default function TheerthaMandapamTemplate({
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.25 }}
                   transition={{ duration: 0.5, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
-                  className="py-3.5 px-2 rounded-xl bg-black/75 border border-[#eed57c]/60 shadow-[0_8px_24px_rgba(0,0,0,0.7)] backdrop-blur-md flex flex-col items-center justify-center relative overflow-hidden"
+                  className="py-4 px-2 rounded-2xl bg-white border border-[#d4af37]/45 shadow-[0_10px_25px_rgba(4,23,22,0.14)] flex flex-col items-center justify-center relative overflow-hidden"
                 >
-                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#fff2b2] tabular-nums leading-none drop-shadow-[0_2px_8px_rgba(238,213,124,0.5)]">
+                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#041716] tabular-nums leading-none">
                     {String(unit.value).padStart(2, "0")}
                   </span>
-                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#eed57c] uppercase font-bold mt-1.5 text-center">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#0f5146] uppercase font-bold mt-1.5 text-center">
                     {unit.label}
                   </span>
                 </motion.div>
               ))}
             </div>
 
-            <div className="mt-4 px-4 py-1.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-center shadow-md">
-              <span className="font-marcellus text-xs text-[#faedd0] font-semibold tracking-wider">
+            <div className="mt-4 px-4 py-1.5 rounded-full bg-white/92 backdrop-blur-sm border border-[#d4af37]/50 text-center shadow-md">
+              <span className="font-marcellus text-xs text-[#041716] font-semibold tracking-wider">
                 {weddingDateInfo.weekday}, {weddingDateInfo.day} {weddingDateInfo.month} · {weddingDateInfo.time}
               </span>
             </div>
@@ -789,122 +696,43 @@ export default function TheerthaMandapamTemplate({
         {/* 5. PROGRAM TIMELINE: EXACTLY 3 PROGRAMS LYING DIRECTLY ON IMAGE        */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[760px] sm:min-h-[800px] text-center flex flex-col items-center justify-between px-4 pt-9 pb-7 bg-center overflow-hidden"
+          className="relative w-full min-h-[760px] sm:min-h-[800px] text-center flex flex-col items-center justify-center py-12 px-4 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/theertha-mandapam/theertha_program_v6.jpg')",
-            backgroundSize: "100% 100%",
-            backgroundRepeat: "no-repeat",
           }}
         >
           <SectionVignette />
-          <div className="absolute inset-0 bg-black/55 pointer-events-none" />
-
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col items-center z-15 mt-1"
-          >
-            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#fff2b2] uppercase font-bold mb-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-              ✦ SACRED RITUALS ✦
-            </span>
-            <h2 className="font-cinzel text-2xl sm:text-3xl text-[#fff2b2] tracking-[0.16em] uppercase font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
-              Wedding Program
-            </h2>
-            <div className="flex items-center gap-2 mt-1 text-[#eed57c] drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-              <div className="w-8 h-[1px] bg-current" />
-              <span className="text-[9px]">❖</span>
-              <div className="w-8 h-[1px] bg-current" />
-            </div>
-          </motion.div>
-
-          <div className="relative w-[88%] max-w-[330px] my-auto py-2 flex flex-col items-center z-15">
-            <div className="absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-[1.5px] bg-gradient-to-b from-[#eed57c]/40 via-[#b3811b] to-[#eed57c]/40" />
-
-            <div className="relative w-full flex flex-col items-center space-y-4 sm:space-y-4.5 z-10">
-              {/* Program 1 */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#4a2406] font-cinzel font-bold mb-1 ring-2 ring-[#b8860b]/30">
-                  1
-                </div>
-                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-[#eed57c] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  MANGALA SNANAM
-                </span>
-                <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#fffaf0] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  Auspicious Sacred Dawn Prayers
-                </h4>
-                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#faedd0] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  07:00 AM
-                </div>
-                <div className="font-marcellus text-xs text-[#eed57c]/95 font-semibold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  {venueName}
-                </div>
-              </motion.div>
-
-              {/* Program 2: Sacred Muhurtham (Highlight) */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center py-2 px-3 rounded-xl bg-[#042f2e]/60 border border-[#eed57c]/70 shadow-lg backdrop-blur-xs"
-              >
-                <div className="w-7 h-7 rounded-full bg-[#0d9488] border-2 border-[#eed57c] shadow-lg flex items-center justify-center text-xs text-[#fff2b2] font-bold mb-1">
-                  ❖
-                </div>
-                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.24em] text-[#5eead4] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  SACRED MUHURTHAM
-                </span>
-                <h4 className="font-cinzel text-base sm:text-lg font-bold text-[#fff2b2] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  Mangalya Dharanam &amp; Saptapadi
-                </h4>
-                <div className="mt-0.5 font-cormorant text-base sm:text-lg text-[#fff9e6] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  {weddingDateInfo.time || "08:42 AM"}
-                </div>
-                <div className="font-marcellus text-xs sm:text-[13px] text-[#eed57c] font-bold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  {venueName}
-                </div>
-              </motion.div>
-
-              {/* Program 3 */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#4a2406] font-cinzel font-bold mb-1 ring-2 ring-[#b8860b]/30">
-                  3
-                </div>
-                <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-[#eed57c] uppercase font-bold block leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-                  VIRUNDHU &amp; RECEPTION
-                </span>
-                <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#fffaf0] leading-snug mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-                  Traditional Feast &amp; Celebrations
-                </h4>
-                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#faedd0] font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-                  12:30 PM &amp; 06:30 PM
-                </div>
-                <div className="font-marcellus text-xs text-[#eed57c] font-bold leading-tight mt-0.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-                  The Leela Palace Banquet Hall
-                </div>
-              </motion.div>
-            </div>
-          </div>
-
-          <div className="relative z-15 flex items-center justify-center gap-2 mb-2 text-[#eed57c] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-            <div className="w-8 h-[1px] bg-current" />
-            <span className="text-[10px]">❖</span>
-            <div className="w-8 h-[1px] bg-current" />
-          </div>
+          <RoyalWeddingTimeline
+            eyebrow="AUSPICIOUS TIMINGS"
+            title="Wedding Program"
+            events={[
+              {
+                id: 1,
+                sequence: 1,
+                time: "07:00 AM",
+                name: "Mangala Snanam",
+                venue: venueName,
+                description: "Auspicious sacred dawn prayers & ceremonial bath",
+              },
+              {
+                id: 2,
+                sequence: 2,
+                time: weddingDateInfo.time || "08:42 AM",
+                name: "Sacred Muhurtham",
+                venue: venueName,
+                description: "Mangalya Dharanam & Saptapadi",
+                isMuhurtham: true,
+              },
+              {
+                id: 3,
+                sequence: 3,
+                time: "12:30 PM & 06:30 PM",
+                name: "Virundhu & Reception",
+                venue: data.reception_venue || venueName,
+                description: "Traditional feast & grand celebrations",
+              },
+            ]}
+          />
         </section>
 
         {/* ===================================================================== */}

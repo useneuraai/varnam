@@ -280,14 +280,79 @@ function buildContentJson(record: Partial<InvitationRecord>): Record<string, any
   };
 }
 
+export function sanitizePayloadForDatabase(payload: Record<string, any>): Record<string, any> {
+  const sanitized = { ...payload };
+
+  // 1. Sanitize timestamps for PostgreSQL: never pass empty strings ""
+  if (sanitized.wedding_date) {
+    const d = new Date(sanitized.wedding_date);
+    sanitized.wedding_date = isNaN(d.getTime())
+      ? new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString()
+      : d.toISOString();
+  } else if ("wedding_date" in sanitized) {
+    sanitized.wedding_date = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString();
+  }
+
+  if ("reception_date" in sanitized) {
+    if (!sanitized.reception_date || typeof sanitized.reception_date !== "string" || !sanitized.reception_date.trim()) {
+      sanitized.reception_date = null;
+    } else {
+      const d = new Date(sanitized.reception_date);
+      sanitized.reception_date = isNaN(d.getTime()) ? null : d.toISOString();
+    }
+  }
+
+  if ("sangeet_date" in sanitized) {
+    if (!sanitized.sangeet_date || typeof sanitized.sangeet_date !== "string" || !sanitized.sangeet_date.trim()) {
+      sanitized.sangeet_date = null;
+    } else {
+      const d = new Date(sanitized.sangeet_date);
+      sanitized.sangeet_date = isNaN(d.getTime()) ? null : d.toISOString();
+    }
+  }
+
+  if ("published_at" in sanitized) {
+    if (!sanitized.published_at) {
+      sanitized.published_at = null;
+    } else {
+      const d = new Date(sanitized.published_at);
+      sanitized.published_at = isNaN(d.getTime()) ? null : d.toISOString();
+    }
+  }
+
+  if ("deleted_at" in sanitized) {
+    if (!sanitized.deleted_at) {
+      sanitized.deleted_at = null;
+    } else {
+      const d = new Date(sanitized.deleted_at);
+      sanitized.deleted_at = isNaN(d.getTime()) ? null : d.toISOString();
+    }
+  }
+
+  // 2. Validate UUID fields for PostgreSQL Supabase
+  if (isSupabaseConfigured) {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+    if (sanitized.id !== undefined && (typeof sanitized.id !== "string" || !uuidRegex.test(sanitized.id))) {
+      delete sanitized.id;
+    }
+
+    if (sanitized.user_id !== undefined && (typeof sanitized.user_id !== "string" || !uuidRegex.test(sanitized.user_id))) {
+      delete sanitized.user_id;
+    }
+  }
+
+  return sanitized;
+}
+
 export async function saveInvitation(record: InvitationRecord): Promise<InvitationRecord> {
   const content_json = buildContentJson(record);
-  const payload = {
+  const payload = sanitizePayloadForDatabase({
     ...record,
     status: record.status || "draft",
     content_json,
     revision: record.revision || 1,
-  };
+  });
 
   if (isSupabaseConfigured) {
     const { data, error } = await supabaseAdmin
@@ -304,7 +369,7 @@ export async function saveInvitation(record: InvitationRecord): Promise<Invitati
   } else {
     const db = readJsonFile<Record<string, InvitationRecord>>(MOCK_INVITATIONS_PATH, {});
     const newRecord: InvitationRecord = {
-      ...payload,
+      ...(payload as InvitationRecord),
       id: record.id || `inv_${Math.random().toString(36).substring(2, 10)}`,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -315,17 +380,26 @@ export async function saveInvitation(record: InvitationRecord): Promise<Invitati
   }
 }
 
+function mergeRecordContent(record: any): InvitationRecord | null {
+  if (!record) return null;
+  const content = typeof record.content_json === "object" && record.content_json !== null ? record.content_json : {};
+  return { ...content, ...record };
+}
+
 export async function getInvitationBySlug(slug: string): Promise<InvitationRecord | null> {
   if (isSupabaseConfigured) {
-    // 1. Query by ID
-    const { data: byId } = await supabaseAdmin
-      .from("invitations")
-      .select("*")
-      .eq("id", slug)
-      .is("deleted_at", null)
-      .maybeSingle();
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    // 1. Query by ID only if slug is a valid UUID to prevent Postgres syntax errors
+    if (uuidRegex.test(slug)) {
+      const { data: byId } = await supabaseAdmin
+        .from("invitations")
+        .select("*")
+        .eq("id", slug)
+        .is("deleted_at", null)
+        .maybeSingle();
 
-    if (byId) return byId;
+      if (byId) return mergeRecordContent(byId);
+    }
 
     // 2. Query by slug
     const { data: bySlug } = await supabaseAdmin
@@ -335,17 +409,17 @@ export async function getInvitationBySlug(slug: string): Promise<InvitationRecor
       .is("deleted_at", null)
       .maybeSingle();
 
-    if (bySlug) return bySlug;
+    if (bySlug) return mergeRecordContent(bySlug);
 
     // Fallback to local cache
     const localDb = readJsonFile<Record<string, InvitationRecord>>(MOCK_INVITATIONS_PATH, {});
     const match = localDb[slug] || Object.values(localDb).find((r) => r.id === slug);
-    if (match && !match.deleted_at) return match;
+    if (match && !match.deleted_at) return mergeRecordContent(match);
     return null;
   } else {
     const db = readJsonFile<Record<string, InvitationRecord>>(MOCK_INVITATIONS_PATH, {});
     const match = db[slug] || Object.values(db).find((r) => r.id === slug);
-    if (match && !match.deleted_at) return match;
+    if (match && !match.deleted_at) return mergeRecordContent(match);
     return null;
   }
 }
@@ -384,14 +458,14 @@ export async function getInvitationsByUserId(userId: string): Promise<Invitation
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error(`Supabase error fetching invitations for user "${userId}":`, error);
+      console.error("Supabase error fetching user invitations:", error);
       const localDb = readJsonFile<Record<string, InvitationRecord>>(MOCK_INVITATIONS_PATH, {});
-      return Object.values(localDb).filter((r) => r.user_id === userId && !r.deleted_at);
+      return Object.values(localDb).filter((r) => r.user_id === userId && !r.deleted_at).map(mergeRecordContent) as InvitationRecord[];
     }
-    return data || [];
+    return (data || []).map(mergeRecordContent) as InvitationRecord[];
   } else {
     const db = readJsonFile<Record<string, InvitationRecord>>(MOCK_INVITATIONS_PATH, {});
-    return Object.values(db).filter((r) => r.user_id === userId && !r.deleted_at);
+    return Object.values(db).filter((r) => r.user_id === userId && !r.deleted_at).map(mergeRecordContent) as InvitationRecord[];
   }
 }
 
@@ -406,12 +480,12 @@ export async function getAllInvitations(): Promise<InvitationRecord[]> {
     if (error) {
       console.error("Supabase error fetching all invitations:", error);
       const localDb = readJsonFile<Record<string, InvitationRecord>>(MOCK_INVITATIONS_PATH, {});
-      return Object.values(localDb).filter((r) => !r.deleted_at);
+      return Object.values(localDb).filter((r) => !r.deleted_at).map(mergeRecordContent) as InvitationRecord[];
     }
-    return data || [];
+    return (data || []).map(mergeRecordContent) as InvitationRecord[];
   } else {
     const db = readJsonFile<Record<string, InvitationRecord>>(MOCK_INVITATIONS_PATH, {});
-    return Object.values(db).filter((r) => !r.deleted_at);
+    return Object.values(db).filter((r) => !r.deleted_at).map(mergeRecordContent) as InvitationRecord[];
   }
 }
 
@@ -420,11 +494,11 @@ export async function updateInvitation(
   record: Partial<InvitationRecord>
 ): Promise<InvitationRecord> {
   const content_json = buildContentJson(record);
-  const updatePayload = {
+  const updatePayload = sanitizePayloadForDatabase({
     ...record,
     content_json,
     updated_at: new Date().toISOString(),
-  };
+  });
 
   if (isSupabaseConfigured) {
     const { data, error } = await supabaseAdmin
@@ -445,10 +519,11 @@ export async function updateInvitation(
       throw new Error(`Invitation with slug "${slug}" not found.`);
     }
     const currentRevision = db[slug].revision || 1;
+    const nextRevision = typeof updatePayload.revision === "number" ? updatePayload.revision : currentRevision + 1;
     const updatedRecord: InvitationRecord = {
       ...db[slug],
       ...updatePayload,
-      revision: currentRevision + 1,
+      revision: nextRevision,
       updated_at: new Date().toISOString(),
     };
     db[slug] = updatedRecord;
@@ -459,12 +534,12 @@ export async function updateInvitation(
 
 export async function upsertInvitation(record: InvitationRecord): Promise<InvitationRecord> {
   const content_json = buildContentJson(record);
-  const payload = {
+  const payload = sanitizePayloadForDatabase({
     ...record,
     status: record.status || "draft",
     content_json,
     updated_at: new Date().toISOString(),
-  };
+  });
 
   if (isSupabaseConfigured) {
     const { data, error } = await supabaseAdmin
@@ -481,15 +556,15 @@ export async function upsertInvitation(record: InvitationRecord): Promise<Invita
   } else {
     const db = readJsonFile<Record<string, InvitationRecord>>(MOCK_INVITATIONS_PATH, {});
     const existing = db[record.slug] || {};
-    const currentRevision = (existing.revision || 0) + 1;
+    const nextRevision = typeof payload.revision === "number" ? payload.revision : (existing.revision || 0) + 1;
     const newRecord: InvitationRecord = {
       ...existing,
       ...payload,
       id: record.id || existing.id || `inv_${Math.random().toString(36).substring(2, 10)}`,
-      revision: currentRevision,
+      revision: nextRevision,
       created_at: existing.created_at || new Date().toISOString(),
       updated_at: new Date().toISOString(),
-    };
+    } as InvitationRecord;
     db[record.slug] = newRecord;
     writeJsonFile(MOCK_INVITATIONS_PATH, db);
     return newRecord;

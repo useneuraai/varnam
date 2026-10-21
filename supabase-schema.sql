@@ -149,6 +149,7 @@ alter table public.invitations add column if not exists payment_id varchar;
 alter table public.invitations add column if not exists order_id varchar;
 alter table public.invitations add column if not exists published_at timestamp with time zone;
 alter table public.invitations add column if not exists deleted_at timestamp with time zone;
+alter table public.invitations add column if not exists wedding_events text;
 alter table public.invitations add column if not exists updated_at timestamp with time zone default timezone('utc'::text, now());
 
 drop trigger if exists tr_invitations_updated_at on public.invitations;

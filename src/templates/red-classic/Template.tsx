@@ -20,6 +20,8 @@ import {
   VolumeX,
 } from "lucide-react";
 import CreatedByVarnam from "@/components/CreatedByVarnam";
+import ScratchHeartCard from "@/components/ScratchHeartCard";
+import RoyalWeddingTimeline from "@/components/RoyalWeddingTimeline";
 
 // ============================================================================
 // 1. FLOATING GOLD SPARKLES, JASMINE & CRIMSON ROSE PETALS OVERLAY
@@ -680,50 +682,25 @@ export default function RedClassicTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 3. DATE SECTION: ROYAL GOLD MANDALA CARD (DOWNLOAD 41)                */}
-        {/* ONLY KEEPS DATE & DAY, DIRECTLY ON BACKGROUND IMAGE (NO BOX)          */}
+        {/* 3. DATE REVEAL: HEART-SHAPED SCRATCH TO UNVEIL SACRED DATE            */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center bg-cover bg-center overflow-hidden select-none"
+          className="relative w-full aspect-[9/16] min-h-[660px] text-center flex flex-col items-center justify-center bg-cover bg-center overflow-hidden select-none px-4"
           style={{
             backgroundImage: "url('/images/red-classic/date_mandala_reveal.jpg')",
           }}
         >
           <SectionVignette />
 
-          {/* Date & Day Inscribed DIRECTLY on Center Vertical Red Panel (NO BOX) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92, y: 15 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-20 flex flex-col items-center justify-center text-center select-none py-4 px-2"
-            style={{
-              marginTop: "-36px",
-            }}
-          >
-            {/* Day Number */}
-            <div className="font-cormorant text-8xl sm:text-9xl md:text-[108px] font-bold text-[#fff5d6] leading-none tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
-              {weddingDateInfo.day}
-            </div>
-
-            {/* Month & Year */}
-            <div className="font-cinzel text-lg sm:text-xl md:text-2xl tracking-[0.34em] text-[#eed57c] font-bold uppercase mt-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
-              {weddingDateInfo.month} {weddingDateInfo.year}
-            </div>
-
-            {/* Ornamental Gold Divider */}
-            <div className="flex items-center gap-3 my-3.5 text-[#eed57c] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-              <div className="w-12 h-[1.5px] bg-gradient-to-r from-transparent via-[#eed57c] to-[#eed57c]" />
-              <span className="text-sm">❖</span>
-              <div className="w-12 h-[1.5px] bg-gradient-to-l from-transparent via-[#eed57c] to-[#eed57c]" />
-            </div>
-
-            {/* Weekday */}
-            <div className="font-marcellus text-base sm:text-lg md:text-xl text-[#fff9e6] font-bold tracking-[0.25em] drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)] uppercase">
-              {weddingDateInfo.weekday}
-            </div>
-          </motion.div>
+          {/* Golden Wax Seal on Warm Ivory Parchment Card */}
+          <ScratchHeartCard
+            weddingDateInfo={weddingDateInfo}
+            venueName={data.wedding_venue}
+            templateType="red"
+            isScratched={isScratched}
+            setIsScratched={setIsScratched}
+            title="Save the Date"
+          />
         </section>
 
         {/* ===================================================================== */}
@@ -767,21 +744,21 @@ export default function RedClassicTemplate({
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.25 }}
                   transition={{ duration: 0.5, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
-                  className="py-3.5 px-2 rounded-xl bg-black/75 border border-[#eed57c]/60 shadow-[0_8px_24px_rgba(0,0,0,0.7)] backdrop-blur-md flex flex-col items-center justify-center relative overflow-hidden"
+                  className="py-4 px-2 rounded-2xl bg-white border border-[#d4af37]/45 shadow-[0_10px_25px_rgba(122,13,24,0.14)] flex flex-col items-center justify-center relative overflow-hidden"
                 >
-                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#fff2b2] tabular-nums leading-none drop-shadow-[0_2px_8px_rgba(238,213,124,0.5)]">
+                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#7a0d18] tabular-nums leading-none">
                     {String(unit.value).padStart(2, "0")}
                   </span>
-                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#eed57c] uppercase font-bold mt-1.5 text-center">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#9a6a24] uppercase font-bold mt-1.5 text-center">
                     {unit.label}
                   </span>
                 </motion.div>
               ))}
             </div>
 
-            <div className="mt-4 px-4 py-1.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-center shadow-md">
-              <span className="font-marcellus text-xs text-[#faedd0] font-semibold tracking-wider">
+            <div className="mt-4 px-4 py-1.5 rounded-full bg-white/92 backdrop-blur-sm border border-[#d4af37]/50 text-center shadow-md">
+              <span className="font-marcellus text-xs text-[#7a0d18] font-semibold tracking-wider">
                 {weddingDateInfo.weekday}, {weddingDateInfo.day} {weddingDateInfo.month} · {weddingDateInfo.time}
               </span>
             </div>
@@ -793,123 +770,42 @@ export default function RedClassicTemplate({
         {/* 3 PROGRAMS INSCRIBED DIRECTLY ON SCROLL                              */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[820px] sm:min-h-[860px] text-center flex flex-col items-center justify-between px-4 bg-center overflow-hidden"
+          className="relative w-full min-h-[820px] sm:min-h-[860px] text-center flex flex-col items-center justify-center py-12 px-4 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/red-classic/timeline_royal_scroll.jpg')",
-            backgroundSize: "100% 100%",
-            backgroundRepeat: "no-repeat",
           }}
         >
-          <SectionVignette />
-
-          <div className="w-full flex flex-col items-center justify-center pt-8 pb-3 z-15 min-h-[175px] sm:min-h-[190px]">
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="flex flex-col items-center"
-            >
-              <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.28em] text-[#fff2b2] uppercase font-bold mb-1 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-                ✦ SACRED RITUALS ✦
-              </span>
-              <h2 className="font-cinzel text-xl sm:text-2xl text-[#fff2b2] tracking-[0.16em] uppercase font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
-                Wedding Program
-              </h2>
-              <div className="flex items-center gap-2 mt-1 text-[#eed57c] drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-                <div className="w-8 h-[1px] bg-current" />
-                <span className="text-[9px]">❖</span>
-                <div className="w-8 h-[1px] bg-current" />
-              </div>
-            </motion.div>
-          </div>
-
-          <div className="relative w-[92%] max-w-[340px] my-auto py-2 flex flex-col items-center justify-center z-15">
-            <div className="absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-[1.5px] bg-gradient-to-b from-[#a8781a]/40 via-[#b8860b] to-[#a8781a]/40" />
-
-            <div className="relative w-full flex flex-col items-center space-y-3 sm:space-y-3.5 z-10">
-              {/* Program 1 */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center py-2 px-3 rounded-xl bg-[#faedd3]/80 border border-[#b8860b]/40 shadow-xs backdrop-blur-xs"
-              >
-                <div className="w-5.5 h-5.5 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[9px] text-[#4a2406] font-cinzel font-bold mb-0.5 ring-2 ring-[#b8860b]/30">
-                  1
-                </div>
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#783e0a] uppercase font-bold block leading-tight">
-                  MANGALA SNANAM
-                </span>
-                <h4 className="font-marcellus text-xs sm:text-sm font-bold text-[#1a0a01] leading-snug mt-0.5">
-                  Auspicious Sacred Dawn Prayers
-                </h4>
-                <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
-                  07:00 AM
-                </div>
-                <div className="font-marcellus text-[11px] sm:text-xs text-[#522a07] font-semibold leading-tight mt-0.5">
-                  {venueName}
-                </div>
-              </motion.div>
-
-              {/* Program 2 */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center py-2.5 px-3.5 rounded-xl bg-[#8b1e1e]/20 border-2 border-[#8b1e1e]/50 shadow-md backdrop-blur-xs"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#8b1e1e] border-2 border-[#eed57c] shadow-lg flex items-center justify-center text-[10px] text-[#fff2b2] font-bold mb-0.5">
-                  ❖
-                </div>
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#8b1e1e] uppercase font-bold block leading-tight">
-                  SACRED MUHURTHAM
-                </span>
-                <h4 className="font-cinzel text-sm sm:text-base font-bold text-[#3d0f04] leading-snug mt-0.5">
-                  Mangalya Dharanam &amp; Saptapadi
-                </h4>
-                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#240307] font-bold leading-tight">
-                  {weddingDateInfo.time || "08:42 AM"}
-                </div>
-                <div className="font-marcellus text-xs text-[#8b1e1e] font-bold leading-tight mt-0.5">
-                  {venueName}
-                </div>
-              </motion.div>
-
-              {/* Program 3 */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center py-2 px-3 rounded-xl bg-[#faedd3]/90 border border-[#b8860b]/50 shadow-xs backdrop-blur-xs"
-              >
-                <div className="w-5.5 h-5.5 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[9px] text-[#4a2406] font-cinzel font-bold mb-0.5 ring-2 ring-[#b8860b]/30">
-                  3
-                </div>
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#783e0a] uppercase font-bold block leading-tight">
-                  VIRUNDHU &amp; RECEPTION
-                </span>
-                <h4 className="font-marcellus text-xs sm:text-sm font-bold text-[#1a0a01] leading-snug mt-0.5">
-                  Traditional Feast &amp; Celebrations
-                </h4>
-                <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
-                  12:30 PM &amp; 06:30 PM
-                </div>
-                <div className="font-marcellus text-[11px] sm:text-xs text-[#522a07] font-bold leading-tight mt-0.5">
-                  The Leela Palace Banquet Hall
-                </div>
-              </motion.div>
-            </div>
-          </div>
-
-          <div className="w-full flex items-center justify-center pb-8 pt-3 z-15 min-h-[175px] sm:min-h-[190px] text-[#eed57c] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-            <div className="w-8 h-[1px] bg-current" />
-            <span className="text-[10px]">❖</span>
-            <div className="w-8 h-[1px] bg-current" />
-          </div>
+          <RoyalWeddingTimeline
+            eyebrow="AUSPICIOUS TIMINGS"
+            title="Wedding Program"
+            events={[
+              {
+                id: 1,
+                sequence: 1,
+                time: "07:00 AM",
+                name: "Mangala Snanam",
+                venue: venueName,
+                description: "Auspicious sacred dawn prayers & ceremonial bath",
+              },
+              {
+                id: 2,
+                sequence: 2,
+                time: weddingDateInfo.time || "08:42 AM",
+                name: "Sacred Muhurtham",
+                venue: venueName,
+                description: "Mangalya Dharanam & Saptapadi",
+                isMuhurtham: true,
+              },
+              {
+                id: 3,
+                sequence: 3,
+                time: "12:30 PM & 06:30 PM",
+                name: "Virundhu & Reception",
+                venue: data.reception_venue || venueName,
+                description: "Traditional feast & grand celebrations",
+              },
+            ]}
+          />
         </section>
 
         {/* ===================================================================== */}

@@ -20,6 +20,8 @@ import {
   VolumeX,
 } from "lucide-react";
 import CreatedByVarnam from "@/components/CreatedByVarnam";
+import ScratchHeartCard from "@/components/ScratchHeartCard";
+import RoyalWeddingTimeline from "@/components/RoyalWeddingTimeline";
 
 // ============================================================================
 // 1. FLOATING PEACOCK SPARKLES, JASMINE & BLUSH GOLD PETALS OVERLAY
@@ -557,15 +559,15 @@ export default function MayuraClassicTemplate({
               transform: `translateY(${20 - scrollProgress * 30}px)`,
             }}
           >
-            <div className="flex items-center justify-center gap-2 mb-1 text-[#fff2b2]">
-              <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-[#eed57c] to-[#eed57c]" />
-              <span className="text-xs text-[#eed57c]">❖</span>
-              <div className="w-8 h-[1px] bg-gradient-to-l from-transparent via-[#eed57c] to-[#eed57c]" />
+            <div className="flex items-center justify-center gap-2 mb-1 text-[#9c6a1e]">
+              <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-[#9c6a1e] to-[#9c6a1e]" />
+              <span className="text-xs text-[#9c6a1e]">❖</span>
+              <div className="w-8 h-[1px] bg-gradient-to-l from-transparent via-[#9c6a1e] to-[#9c6a1e]" />
             </div>
-            <h2 className="font-cinzel text-xs sm:text-sm tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            <h2 className="font-cinzel text-xs sm:text-sm tracking-[0.3em] text-[#3d1a08] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               AN AUSPICIOUS CELEBRATION
             </h2>
-            <span className="font-marcellus text-[9.5px] sm:text-[10.5px] tracking-[0.25em] text-[#783e0a] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+            <span className="font-marcellus text-[9.5px] sm:text-[10.5px] tracking-[0.25em] text-[#783e0a] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               SHUBHA VIVAHA MUHURTHAM
             </span>
           </div>
@@ -583,7 +585,7 @@ export default function MayuraClassicTemplate({
             </p>
 
             {/* Bride Name - Bigger, Free of Box */}
-            <h1 className="font-cinzel text-3xl sm:text-4xl md:text-[42px] font-bold tracking-[0.1em] text-[#250d03] uppercase leading-tight drop-shadow-[0_1px_3px_rgba(255,255,255,0.8)] text-center px-2">
+            <h1 className="font-cinzel text-3xl sm:text-4xl md:text-[42px] font-bold tracking-[0.1em] text-[#200a02] uppercase leading-tight drop-shadow-[0_1px_3px_rgba(255,255,255,0.85)] text-center px-2">
               {bride}
             </h1>
 
@@ -597,7 +599,7 @@ export default function MayuraClassicTemplate({
             </div>
 
             {/* Groom Name - Bigger, Free of Box */}
-            <h1 className="font-cinzel text-3xl sm:text-4xl md:text-[42px] font-bold tracking-[0.1em] text-[#250d03] uppercase leading-tight drop-shadow-[0_1px_3px_rgba(255,255,255,0.8)] text-center px-2">
+            <h1 className="font-cinzel text-3xl sm:text-4xl md:text-[42px] font-bold tracking-[0.1em] text-[#200a02] uppercase leading-tight drop-shadow-[0_1px_3px_rgba(255,255,255,0.85)] text-center px-2">
               {groom}
             </h1>
 
@@ -611,11 +613,11 @@ export default function MayuraClassicTemplate({
             className="relative z-20 flex flex-col items-center gap-1 transition-opacity duration-300 pb-1"
             style={{ opacity: Math.max(0, 1 - scrollProgress * 2) }}
           >
-            <span className="text-[9px] tracking-[0.3em] text-[#fff2b2] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
+            <span className="text-[9px] tracking-[0.3em] text-[#422005] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               SCROLL TO CELEBRATE
             </span>
-            <div className="w-4 h-6 rounded-full border border-[#eed57c] bg-black/40 flex items-start justify-center p-1 shadow-md">
-              <div className="w-1 h-2 rounded-full bg-[#eed57c] animate-bounce" />
+            <div className="w-4 h-6 rounded-full border border-[#9c6a1e] bg-white/40 flex items-start justify-center p-1 shadow-md">
+              <div className="w-1 h-2 rounded-full bg-[#783e0a] animate-bounce" />
             </div>
           </div>
 
@@ -709,121 +711,15 @@ export default function MayuraClassicTemplate({
         >
           <SectionVignette />
 
-          {/* Heading Above Scratch Card */}
-          <div className="relative z-20 mb-4 flex flex-col items-center">
-            <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.28em] text-[#eed57c] uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-              ✦ AUSPICIOUS INVITATION ✦
-            </span>
-            <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-[#fff2b2] tracking-[0.18em] uppercase mt-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
-              Save The Date
-            </h3>
-            <GoldDivider className="mt-1.5 opacity-80" />
-          </div>
-
-          {/* Centered Antique Gold Cartouche Scratch Box */}
-          <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.94 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: false, amount: 0.25 }}
-            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative rounded-[26px] sm:rounded-[30px] overflow-hidden flex flex-col items-center justify-center text-center z-15 shadow-[0_20px_50px_rgba(0,0,0,0.9)] border-2 border-[#d4af37]"
-            style={{
-              width: "60%",
-              height: "44%",
-            }}
-          >
-            {/* 1. Underlying Revealed Luxury Card Backing */}
-            <div
-              className="absolute inset-0 bg-cover bg-center flex flex-col items-center justify-between py-4 px-3 text-center pointer-events-none select-none z-0 bg-[#fffbf2]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(135deg, #fffcf5 0%, #faedd3 50%, #f4dec0 100%)",
-              }}
-            >
-              {/* Inner Gold Hairline Frame */}
-              <div className="absolute inset-2 border border-[#b8860b]/40 rounded-2xl pointer-events-none" />
-
-              {/* Header inside Card */}
-              <div className="flex flex-col items-center pt-1 z-10">
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#7a3407] font-bold uppercase">
-                  ✦ AUSPICIOUS MUHURTHAM ✦
-                </span>
-                <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#9e6b22] to-transparent mt-0.5" />
-              </div>
-
-              {/* Center Date Details - Ultra high-contrast & crisp */}
-              <div className="flex flex-col items-center justify-center my-auto px-1 z-10">
-                <div className="font-cormorant text-5xl sm:text-6xl font-bold text-[#200d02] leading-none tracking-tight drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                  {weddingDateInfo.day}
-                </div>
-                <div className="font-cinzel text-xs sm:text-sm tracking-[0.28em] text-[#381603] font-bold uppercase mt-1">
-                  {weddingDateInfo.month} {weddingDateInfo.year}
-                </div>
-                <div className="flex items-center gap-1.5 my-1 text-[#9e6b22]">
-                  <div className="w-4 h-[1px] bg-current" />
-                  <span className="text-[7px]">❖</span>
-                  <div className="w-4 h-[1px] bg-current" />
-                </div>
-                <div className="font-marcellus text-[10.5px] sm:text-[11.5px] text-[#422005] font-bold tracking-wider">
-                  {weddingDateInfo.weekday} · {weddingDateInfo.time}
-                </div>
-                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#633208] font-bold mt-0.5 line-clamp-1 max-w-[170px]">
-                  {data.wedding_venue || "The Leela Palace Courtyard"}
-                </div>
-              </div>
-
-              {/* Bottom Tag */}
-              <div className="pb-1 text-[8.5px] tracking-[0.22em] font-cinzel text-[#783e0a] uppercase font-bold z-10">
-                ❖ An Auspicious Union ❖
-              </div>
-            </div>
-
-            {/* 2. Top Scratch Canvas Layer */}
-            <canvas
-              ref={canvasRef}
-              style={{ touchAction: "none" }}
-              onMouseDown={() => (isDrawing.current = true)}
-              onMouseUp={() => (isDrawing.current = false)}
-              onMouseLeave={() => (isDrawing.current = false)}
-              onMouseMove={(e) => {
-                if (isDrawing.current) handleScratchMove(e.clientX, e.clientY);
-              }}
-              onTouchStart={() => (isDrawing.current = true)}
-              onTouchEnd={() => (isDrawing.current = false)}
-              onTouchMove={(e) => {
-                if (e.touches[0]) {
-                  handleScratchMove(e.touches[0].clientX, e.touches[0].clientY);
-                }
-              }}
-              className={`absolute inset-0 w-full h-full cursor-pointer z-10 transition-opacity duration-700 ${
-                isScratched ? "opacity-0 pointer-events-none" : "opacity-100"
-              }`}
-            />
-
-            {/* 3. Subtle Animated Scratch Hint Badge */}
-            {!isScratched && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0.75, 1, 0.75], y: [0, -2, 0] }}
-                transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-                className="absolute bottom-2.5 pointer-events-none z-20 px-2.5 py-0.5 rounded-full bg-black/75 border border-[#eed57c]/70 text-[8px] font-marcellus text-[#fff2b2] tracking-widest uppercase flex items-center gap-1 shadow-md"
-              >
-                <span>✨ Swipe To Reveal</span>
-              </motion.div>
-            )}
-          </motion.div>
-
-          {/* Click to Reveal fallback button */}
-          {!isScratched && (
-            <button
-              type="button"
-              onClick={() => setIsScratched(true)}
-              className="relative mt-5 z-20 px-5 py-2 rounded-full bg-gradient-to-r from-[#1e343d] via-[#2d4d59] to-[#1e343d] border border-[#eed57c] text-[#fff2b2] text-[10px] sm:text-[10.5px] tracking-[0.22em] uppercase font-cinzel font-bold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.8)] cursor-pointer flex items-center gap-1.5"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#eed57c]" />
-              <span>Click To Reveal Date</span>
-            </button>
-          )}
+          {/* Golden Wax Seal on Warm Ivory Parchment Card */}
+          <ScratchHeartCard
+            weddingDateInfo={weddingDateInfo}
+            venueName={data.wedding_venue || "The Leela Palace Courtyard"}
+            templateType="mayura-classic"
+            isScratched={isScratched}
+            setIsScratched={setIsScratched}
+            title="Save the Date"
+          />
         </section>
 
         {/* ===================================================================== */}
@@ -855,7 +751,7 @@ export default function MayuraClassicTemplate({
             </span>
             <GoldDivider className="my-2.5 opacity-90" />
 
-            {/* 4 Glowing Countdown Boxes against Deep Peacock Blue */}
+            {/* 4 Crisp White Countdown Boxes with Royal Gold Accent */}
             <div className="grid grid-cols-2 gap-2.5 w-full mt-3">
               {[
                 { label: "DAYS", value: timeLeft.days },
@@ -869,13 +765,13 @@ export default function MayuraClassicTemplate({
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.25 }}
                   transition={{ duration: 0.5, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
-                  className="py-3.5 px-2 rounded-xl bg-black/75 border border-[#eed57c]/60 shadow-[0_8px_24px_rgba(0,0,0,0.7)] backdrop-blur-md flex flex-col items-center justify-center relative overflow-hidden"
+                  className="py-4 px-2 rounded-2xl bg-white border border-[#d4af37]/45 shadow-[0_10px_25px_rgba(32,10,2,0.14)] flex flex-col items-center justify-center relative overflow-hidden"
                 >
-                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#fff2b2] tabular-nums leading-none drop-shadow-[0_2px_8px_rgba(238,213,124,0.5)]">
+                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#200a02] tabular-nums leading-none">
                     {String(unit.value).padStart(2, "0")}
                   </span>
-                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#eed57c] uppercase font-bold mt-1.5 text-center">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#8a6314] uppercase font-bold mt-1.5 text-center">
                     {unit.label}
                   </span>
                 </motion.div>
@@ -883,8 +779,8 @@ export default function MayuraClassicTemplate({
             </div>
 
             {/* Auspicious Time Pill */}
-            <div className="mt-4 px-4 py-1.5 rounded-full bg-black/80 border border-[#eed57c]/50 text-center shadow-md">
-              <span className="font-marcellus text-xs text-[#faedd0] font-semibold tracking-wider">
+            <div className="mt-4 px-4 py-1.5 rounded-full bg-white/92 backdrop-blur-sm border border-[#d4af37]/50 text-center shadow-md">
+              <span className="font-marcellus text-xs text-[#200a02] font-semibold tracking-wider">
                 {weddingDateInfo.weekday}, {weddingDateInfo.day} {weddingDateInfo.month} · {weddingDateInfo.time}
               </span>
             </div>
@@ -892,131 +788,46 @@ export default function MayuraClassicTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 5. PROGRAM TIMELINE: GOLD MANDALA SUNBURST & PARCHMENT (DOWNLOAD 30) */}
-        {/* LIES DIRECTLY ON THE IMAGE (NO SEPARATE BOX) - EXACTLY 3 PROGRAMS    */}
+        {/* 5. PROGRAM TIMELINE: GOLD MANDALA SUNBURST & PARCHMENT                */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[820px] sm:min-h-[860px] text-center flex flex-col items-center justify-between px-4 bg-center overflow-hidden"
+          className="relative w-full min-h-[820px] sm:min-h-[860px] text-center flex flex-col items-center justify-center py-12 px-4 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/mayura-classic/timeline_mandala_bg.jpg')",
-            backgroundSize: "100% 100%",
-            backgroundRepeat: "no-repeat",
           }}
         >
           <SectionVignette />
-
-          {/* Header centered over top mandala arch (0% to ~23.5%) */}
-          <div className="w-full flex flex-col items-center justify-center pt-8 pb-3 z-15 min-h-[175px] sm:min-h-[190px]">
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="flex flex-col items-center"
-            >
-              <span className="font-cinzel text-[10.5px] sm:text-[11.5px] tracking-[0.28em] text-[#fff2b2] uppercase font-bold mb-1 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
-                ✦ SACRED RITUALS ✦
-              </span>
-              <h2 className="font-cinzel text-xl sm:text-2xl text-[#fff2b2] tracking-[0.16em] uppercase font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
-                Wedding Program
-              </h2>
-              <div className="flex items-center gap-2 mt-1 text-[#eed57c] drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-                <div className="w-8 h-[1px] bg-current" />
-                <span className="text-[9px]">❖</span>
-                <div className="w-8 h-[1px] bg-current" />
-              </div>
-            </motion.div>
-          </div>
-
-          {/* 3 Programs Centered Directly on Natural Parchment Field (23.5% to 75.3%) */}
-          <div className="relative w-[92%] max-w-[340px] my-auto py-2 flex flex-col items-center justify-center z-15">
-            {/* Vertical connecting gold rod */}
-            <div className="absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-[1.5px] bg-gradient-to-b from-[#a8781a]/40 via-[#b8860b] to-[#a8781a]/40" />
-
-            <div className="relative w-full flex flex-col items-center space-y-3 sm:space-y-3.5 z-10">
-              {/* Program 1: Mangala Snanam */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center py-2 px-3 rounded-xl bg-[#faedd3]/80 border border-[#b8860b]/40 shadow-xs backdrop-blur-xs"
-              >
-                <div className="w-5.5 h-5.5 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[9px] text-[#4a2406] font-cinzel font-bold mb-0.5 ring-2 ring-[#b8860b]/30">
-                  1
-                </div>
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#783e0a] uppercase font-bold block leading-tight">
-                  MANGALA SNANAM
-                </span>
-                <h4 className="font-marcellus text-xs sm:text-sm font-bold text-[#1a0a01] leading-snug mt-0.5">
-                  Auspicious Sacred Dawn Prayers
-                </h4>
-                <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
-                  07:00 AM
-                </div>
-                <div className="font-marcellus text-[11px] sm:text-xs text-[#522a07] font-semibold leading-tight mt-0.5">
-                  {venueName}
-                </div>
-              </motion.div>
-
-              {/* Program 2: Kalyana Muhurtham (Apex Highlight) */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center py-2.5 px-3.5 rounded-xl bg-[#8b1e1e]/20 border-2 border-[#8b1e1e]/50 shadow-md backdrop-blur-xs"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#8b1e1e] border-2 border-[#eed57c] shadow-lg flex items-center justify-center text-[10px] text-[#fff2b2] font-bold mb-0.5">
-                  ❖
-                </div>
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#8b1e1e] uppercase font-bold block leading-tight">
-                  SACRED MUHURTHAM
-                </span>
-                <h4 className="font-cinzel text-sm sm:text-base font-bold text-[#3d0f04] leading-snug mt-0.5">
-                  Mangalya Dharanam &amp; Saptapadi
-                </h4>
-                <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#240307] font-bold leading-tight">
-                  {weddingDateInfo.time || "08:42 AM"}
-                </div>
-                <div className="font-marcellus text-xs text-[#8b1e1e] font-bold leading-tight mt-0.5">
-                  {venueName}
-                </div>
-              </motion.div>
-
-              {/* Program 3: Kalyana Virundhu & Reception */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative z-10 w-full flex flex-col items-center text-center py-2 px-3 rounded-xl bg-[#faedd3]/90 border border-[#b8860b]/50 shadow-xs backdrop-blur-xs"
-              >
-                <div className="w-5.5 h-5.5 rounded-full bg-[#faedd3] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[9px] text-[#4a2406] font-cinzel font-bold mb-0.5 ring-2 ring-[#b8860b]/30">
-                  3
-                </div>
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.22em] text-[#783e0a] uppercase font-bold block leading-tight">
-                  VIRUNDHU &amp; RECEPTION
-                </span>
-                <h4 className="font-marcellus text-xs sm:text-sm font-bold text-[#1a0a01] leading-snug mt-0.5">
-                  Traditional Feast &amp; Celebrations
-                </h4>
-                <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
-                  12:30 PM &amp; 06:30 PM
-                </div>
-                <div className="font-marcellus text-[11px] sm:text-xs text-[#522a07] font-bold leading-tight mt-0.5">
-                  The Leela Palace Banquet Hall
-                </div>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Bottom Decorative Indicator centered in bottom mandala (75.3% to 100%) */}
-          <div className="w-full flex items-center justify-center pb-8 pt-3 z-15 min-h-[175px] sm:min-h-[190px] text-[#eed57c] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
-            <div className="w-8 h-[1px] bg-current" />
-            <span className="text-[10px]">❖</span>
-            <div className="w-8 h-[1px] bg-current" />
-          </div>
+          <RoyalWeddingTimeline
+            eyebrow="AUSPICIOUS TIMINGS"
+            title="Wedding Program"
+            events={[
+              {
+                id: 1,
+                sequence: 1,
+                time: "07:00 AM",
+                name: "Mangala Snanam",
+                venue: venueName,
+                description: "Auspicious sacred dawn prayers & ceremonial bath",
+              },
+              {
+                id: 2,
+                sequence: 2,
+                time: weddingDateInfo.time || "08:42 AM",
+                name: "Sacred Muhurtham",
+                venue: venueName,
+                description: "Mangalya Dharanam & Saptapadi",
+                isMuhurtham: true,
+              },
+              {
+                id: 3,
+                sequence: 3,
+                time: "12:30 PM & 06:30 PM",
+                name: "Virundhu & Reception",
+                venue: data.reception_venue || venueName,
+                description: "Traditional feast & grand celebrations",
+              },
+            ]}
+          />
         </section>
 
         {/* ===================================================================== */}

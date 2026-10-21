@@ -18,6 +18,8 @@ import {
   Heart,
 } from "lucide-react";
 import CreatedByVarnam from "@/components/CreatedByVarnam";
+import ScratchHeartCard from "@/components/ScratchHeartCard";
+import RoyalWeddingTimeline from "@/components/RoyalWeddingTimeline";
 
 // ============================================================================
 // 1. FLOATING JASMINE & BLUSH MARIGOLD PETALS PARTICLES
@@ -235,121 +237,9 @@ export default function KalyanaMandapamTemplate({
   }, [data.wedding_date]);
 
   // --------------------------------------------------------------------------
-  // SCRATCH TO REVEAL CANVAS LOGIC (Antique Sandstone & Gold Filigree Cartouche)
+  // SCRATCH TO REVEAL (HEART CARD & FLORAL BURST)
   // --------------------------------------------------------------------------
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isScratched, setIsScratched] = useState(false);
-  const isDrawing = useRef(false);
-
-  const initCanvas = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const width = (canvas.width = canvas.offsetWidth || 240);
-    const height = (canvas.height = canvas.offsetHeight || 320);
-
-    // Warm brushed sandstone and antique gold foil texture
-    const goldGrad = ctx.createLinearGradient(0, 0, width, height);
-    goldGrad.addColorStop(0, "#bf9035");
-    goldGrad.addColorStop(0.18, "#fdeda7");
-    goldGrad.addColorStop(0.42, "#b88728");
-    goldGrad.addColorStop(0.68, "#fbeeaf");
-    goldGrad.addColorStop(0.88, "#9d6f16");
-    goldGrad.addColorStop(1, "#d6ad4b");
-
-    ctx.fillStyle = goldGrad;
-    ctx.fillRect(0, 0, width, height);
-
-    // Brushed filigree texture overlay
-    ctx.fillStyle = "rgba(255, 255, 255, 0.32)";
-    for (let i = 0; i < 400; i++) {
-      const rx = Math.random() * width;
-      const ry = Math.random() * height;
-      const rw = Math.random() * 2.2 + 0.8;
-      ctx.fillRect(rx, ry, rw, rw);
-    }
-
-    ctx.fillStyle = "rgba(70, 40, 10, 0.22)";
-    for (let i = 0; i < 200; i++) {
-      const rx = Math.random() * width;
-      const ry = Math.random() * height;
-      const rw = Math.random() * 1.8 + 0.5;
-      ctx.fillRect(rx, ry, rw, rw);
-    }
-
-    // Double ornate gold filigree border
-    ctx.strokeStyle = "rgba(70, 36, 6, 0.45)";
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(8, 8, width - 16, height - 16);
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(11, 11, width - 22, height - 22);
-
-    // Center Sacred Star / Sparkle Icon
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.font = "bold 20px 'Marcellus', Georgia, serif";
-    ctx.fillStyle = "#2c1305";
-    ctx.fillText("✦", width / 2, height * 0.36);
-
-    // Prominent "✦ SCRATCH TO REVEAL ✦" Text (White highlight bevel + Deep Bronze)
-    ctx.font = "bold 11px 'Marcellus', Georgia, serif";
-    ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
-    ctx.fillText("✦ SCRATCH TO REVEAL ✦", width / 2, height * 0.49 + 1);
-    ctx.fillStyle = "#2c1305";
-    ctx.fillText("✦ SCRATCH TO REVEAL ✦", width / 2, height * 0.49);
-
-    // Subtitle Text
-    ctx.font = "bold 9px 'Marcellus', Georgia, serif";
-    ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-    ctx.fillText("OUR WEDDING DATE", width / 2, height * 0.59 + 1);
-    ctx.fillStyle = "#3e1c07";
-    ctx.fillText("OUR WEDDING DATE", width / 2, height * 0.59);
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      initCanvas();
-    }, 100);
-    const handleResize = () => initCanvas();
-    window.addEventListener("resize", handleResize);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const handleScratchMove = (clientX: number, clientY: number) => {
-    if (!canvasRef.current || isScratched) return;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
-
-    ctx.globalCompositeOperation = "destination-out";
-    ctx.beginPath();
-    ctx.arc(x, y, 26, 0, Math.PI * 2, false);
-    ctx.fill();
-
-    if (Math.random() > 0.5) {
-      try {
-        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        let clear = 0;
-        for (let i = 3; i < imgData.data.length; i += 16) {
-          if (imgData.data[i] === 0) clear++;
-        }
-        const percent = Math.round((clear / (imgData.data.length / 16)) * 100);
-        if (percent > 35) {
-          setIsScratched(true);
-        }
-      } catch {}
-    }
-  };
 
   // --------------------------------------------------------------------------
   // 3D PHOTO CAROUSEL / MOMENTS
@@ -446,15 +336,15 @@ export default function KalyanaMandapamTemplate({
               transform: `translateY(-${scrollProgress * 35}px)`,
             }}
           >
-            <div className="flex items-center justify-center gap-2 mb-1.5 text-[#eed57c]">
-              <div className="w-8 h-[1px] bg-current opacity-80" />
+            <div className="flex items-center justify-center gap-2 mb-1.5 text-[#8a4b08]">
+              <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-[#a87422] to-[#a87422]" />
               <span className="text-xs">❖</span>
-              <div className="w-8 h-[1px] bg-current opacity-80" />
+              <div className="w-8 h-[1px] bg-gradient-to-l from-transparent via-[#a87422] to-[#a87422]" />
             </div>
-            <h2 className="font-cinzel text-base sm:text-lg tracking-[0.25em] text-[#fff2b2] uppercase font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
+            <h2 className="font-cinzel text-base sm:text-lg tracking-[0.25em] text-[#260e05] uppercase font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.85)]">
               ROYAL PALACE MANDAPAM
             </h2>
-            <span className="font-marcellus text-[10px] sm:text-[11px] tracking-[0.3em] text-[#eed57c] uppercase font-medium mt-0.5">
+            <span className="font-marcellus text-[10px] sm:text-[11px] tracking-[0.3em] text-[#8a4b08] uppercase font-semibold mt-0.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.7)]">
               AN AUSPICIOUS UNION
             </span>
           </div>
@@ -467,26 +357,26 @@ export default function KalyanaMandapamTemplate({
               transform: `translateY(-${scrollProgress * 50}px)`,
             }}
           >
-            <p className="font-marcellus text-xs sm:text-[13px] tracking-[0.32em] text-[#eed57c] uppercase font-semibold mb-2.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+            <p className="font-marcellus text-xs sm:text-[13px] tracking-[0.32em] text-[#783e0a] uppercase font-bold mb-2.5 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">
               WE&apos;RE GETTING MARRIED
             </p>
 
             {/* Bride Name */}
-            <h1 className="font-cinzel text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.14em] text-[#fff9e6] uppercase leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]">
+            <h1 className="font-cinzel text-4xl sm:text-5xl md:text-6xl font-bold tracking-[0.14em] text-[#220d03] uppercase leading-tight drop-shadow-[0_1px_3px_rgba(255,255,255,0.85)]">
               {bride}
             </h1>
 
             {/* Weds Divider */}
             <div className="flex items-center justify-center gap-3 my-2.5 w-full">
-              <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-              <span className="font-great-vibes text-2xl sm:text-3xl text-[#eed57c] italic">
+              <div className="h-[1.5px] w-12 bg-gradient-to-r from-transparent via-[#b45309] to-transparent" />
+              <span className="font-great-vibes text-3xl sm:text-4xl text-[#8a4412] italic drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">
                 weds
               </span>
-              <div className="h-[1px] w-12 bg-gradient-to-l from-transparent via-[#eed57c] to-transparent" />
+              <div className="h-[1.5px] w-12 bg-gradient-to-l from-transparent via-[#b45309] to-transparent" />
             </div>
 
             {/* Groom Name */}
-            <h1 className="font-cinzel text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.14em] text-[#fff9e6] uppercase leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]">
+            <h1 className="font-cinzel text-4xl sm:text-5xl md:text-6xl font-bold tracking-[0.14em] text-[#220d03] uppercase leading-tight drop-shadow-[0_1px_3px_rgba(255,255,255,0.85)]">
               {groom}
             </h1>
           </div>
@@ -560,117 +450,26 @@ export default function KalyanaMandapamTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 3. SCRATCH TO REVEAL: LUXURY IVORY & GOLD FILIGREE CARTOUCHE           */}
+        {/* 3. SCRATCH TO REVEAL: LUXURY HEART-SHAPED CARTOUCHE                  */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full aspect-[9/16] min-h-[640px] text-center flex flex-col items-center justify-center bg-cover bg-center overflow-hidden select-none"
+          className="relative w-full aspect-[9/16] min-h-[640px] text-center flex flex-col items-center justify-center px-4 bg-cover bg-center overflow-hidden select-none"
           style={{
             backgroundImage: "url('/images/kalyana-mandapam/mandapam_couple_hall.jpg')",
           }}
         >
           <SectionVignette />
-          {/* Centered Antique Gold Filigree Cartouche Box */}
-          <motion.div
-            initial={{ opacity: 0, y: 35, scale: 0.94 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: false, amount: 0.25 }}
-            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute rounded-[26px] sm:rounded-[32px] overflow-hidden flex flex-col items-center justify-center text-center z-15 shadow-[0_16px_40px_rgba(0,0,0,0.85)] border-2 border-[#d4af37]/70"
-            style={{
-              left: "24%",
-              width: "52%",
-              top: "26%",
-              height: "44%",
-            }}
-          >
-            {/* 1. Underlying Revealed Luxury Ivory Card (mandapam_card_backing.jpg) */}
-            <div
-              className="absolute inset-0 bg-cover bg-center flex flex-col items-center justify-between py-3 px-2 text-center pointer-events-none select-none z-0"
-              style={{
-                backgroundImage: "url('/images/kalyana-mandapam/mandapam_card_backing.jpg')",
-              }}
-            >
-              {/* Header inside Card */}
-              <div className="flex flex-col items-center pt-2">
-                <span className="font-cinzel text-[9.5px] sm:text-[10.5px] tracking-[0.24em] text-[#7a3407] font-bold uppercase drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                  ✦ AUSPICIOUS MUHURTHAM ✦
-                </span>
-                <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#9e6b22] to-transparent mt-0.5" />
-              </div>
-
-              {/* Center Date Details - Ultra high-contrast & crisp */}
-              <div className="flex flex-col items-center justify-center my-auto px-1">
-                <div className="font-cormorant text-5xl sm:text-6xl font-bold text-[#230d02] leading-none tracking-tight drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
-                  {weddingDateInfo.day}
-                </div>
-                <div className="font-cinzel text-xs sm:text-sm tracking-[0.28em] text-[#3b1704] font-bold uppercase mt-1">
-                  {weddingDateInfo.month} {weddingDateInfo.year}
-                </div>
-                <div className="flex items-center gap-1.5 my-1 text-[#9e6b22]/70">
-                  <div className="w-4 h-[1px] bg-current" />
-                  <span className="text-[7px]">❖</span>
-                  <div className="w-4 h-[1px] bg-current" />
-                </div>
-                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#4a2406] font-semibold tracking-wider">
-                  {weddingDateInfo.weekday} · {weddingDateInfo.time}
-                </div>
-                <div className="font-marcellus text-[10px] sm:text-[11px] text-[#6b3509] font-semibold mt-0.5 line-clamp-1 max-w-[150px]">
-                  {data.wedding_venue || "Sri Krishna Mahal"}
-                </div>
-              </div>
-
-              {/* Bottom Tag */}
-              <div className="pb-1 text-[8.5px] tracking-[0.22em] font-cinzel text-[#8a5518] uppercase font-bold">
-                ❖ Save The Date ❖
-              </div>
-            </div>
-
-            {/* 2. Top Scratch Canvas Layer */}
-            <canvas
-              ref={canvasRef}
-              style={{ touchAction: "none" }}
-              onMouseDown={() => (isDrawing.current = true)}
-              onMouseUp={() => (isDrawing.current = false)}
-              onMouseLeave={() => (isDrawing.current = false)}
-              onMouseMove={(e) => {
-                if (isDrawing.current) handleScratchMove(e.clientX, e.clientY);
-              }}
-              onTouchStart={() => (isDrawing.current = true)}
-              onTouchEnd={() => (isDrawing.current = false)}
-              onTouchMove={(e) => {
-                if (e.touches[0]) {
-                  handleScratchMove(e.touches[0].clientX, e.touches[0].clientY);
-                }
-              }}
-              className={`absolute inset-0 w-full h-full cursor-pointer z-10 transition-opacity duration-700 ${
-                isScratched ? "opacity-0 pointer-events-none" : "opacity-100"
-              }`}
+          
+          <div className="relative z-10 w-full max-w-[340px] flex flex-col items-center">
+            <ScratchHeartCard
+              weddingDateInfo={weddingDateInfo}
+              venueName={data.wedding_venue || "Sri Krishna Mahal"}
+              templateType="kalyana"
+              isScratched={isScratched}
+              setIsScratched={setIsScratched}
+              title="✦ AUSPICIOUS MUHURTHAM ✦"
             />
-
-            {/* 3. Subtle Animated Scratch Hint Badge */}
-            {!isScratched && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0.75, 1, 0.75], y: [0, -2, 0] }}
-                transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-                className="absolute bottom-2 pointer-events-none z-20 px-2.5 py-0.5 rounded-full bg-black/70 border border-[#eed57c]/60 text-[8px] font-marcellus text-[#fff2b2] tracking-widest uppercase flex items-center gap-1 shadow-md"
-              >
-                <span>✨ Swipe To Reveal</span>
-              </motion.div>
-            )}
-          </motion.div>
-
-          {/* Click to Reveal fallback button */}
-          {!isScratched && (
-            <button
-              type="button"
-              onClick={() => setIsScratched(true)}
-              className="absolute bottom-8 z-20 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#241105] via-[#432009] to-[#241105] border border-[#eed57c] text-[#fff2b2] text-[10.5px] tracking-[0.22em] uppercase font-cinzel font-semibold hover:scale-105 hover:border-white active:scale-95 transition-all shadow-[0_4px_18px_rgba(0,0,0,0.85)] cursor-pointer flex items-center gap-1.5"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#eed57c]" />
-              <span>Click To Reveal Date</span>
-            </button>
-          )}
+          </div>
         </section>
 
         {/* ===================================================================== */}
@@ -690,15 +489,15 @@ export default function KalyanaMandapamTemplate({
             transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 w-full max-w-[290px] sm:max-w-[310px] flex flex-col items-center py-6 px-3"
           >
-            <h3 className="font-cinzel text-xl sm:text-2xl text-[#fff2b2] tracking-[0.2em] uppercase font-semibold drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+            <h3 className="font-cinzel text-xl sm:text-2xl text-[#220d03] tracking-[0.2em] uppercase font-bold drop-shadow-[0_1px_3px_rgba(255,255,255,0.85)]">
               AUSPICIOUS MUHURTHAM
             </h3>
-            <span className="font-marcellus text-[11px] sm:text-xs tracking-[0.24em] text-[#eed57c] uppercase font-medium mt-1">
+            <span className="font-marcellus text-[11px] sm:text-xs tracking-[0.24em] text-[#b45309] uppercase font-semibold mt-1 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">
               Counting Down to Forever
             </span>
             <GoldDivider className="my-2.5 opacity-90" />
 
-            {/* 4 Countdown Boxes with Staggered Modern Animation */}
+            {/* 4 White Countdown Boxes */}
             <div className="grid grid-cols-2 gap-2.5 w-full mt-3">
               {[
                 { label: "DAYS", value: timeLeft.days },
@@ -712,13 +511,13 @@ export default function KalyanaMandapamTemplate({
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.25 }}
                   transition={{ duration: 0.6, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
-                  className="py-3.5 px-2 rounded-xl bg-[#261306]/90 border border-[#d4af37]/60 shadow-[0_6px_18px_rgba(0,0,0,0.6)] backdrop-blur-xs flex flex-col items-center justify-center relative overflow-hidden"
+                  className="py-4 px-2 rounded-2xl bg-white border border-[#d4af37]/45 shadow-[0_10px_25px_rgba(34,13,3,0.14)] flex flex-col items-center justify-center relative overflow-hidden"
                 >
-                  <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#eed57c] to-transparent" />
-                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#fff2b2] tabular-nums leading-none drop-shadow-[0_2px_6px_rgba(238,213,124,0.4)]">
+                  <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+                  <span className="font-cormorant text-4xl sm:text-5xl font-bold text-[#220d03] tabular-nums leading-none">
                     {String(unit.value).padStart(2, "0")}
                   </span>
-                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.2em] text-[#eed57c] uppercase font-semibold mt-1.5 text-center">
+                  <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.2em] text-[#783e0a] uppercase font-semibold mt-1.5 text-center">
                     {unit.label}
                   </span>
                 </motion.div>
@@ -728,185 +527,56 @@ export default function KalyanaMandapamTemplate({
         </section>
 
         {/* ===================================================================== */}
-        {/* 5. WEDDING RITUALS / AUSPICIOUS TIMINGS CORRIDOR                      */}
+        {/* 5. WEDDING RITUALS / AUSPICIOUS TIMINGS                               */}
         {/* ===================================================================== */}
         <section
-          className="relative w-full min-h-[920px] text-center flex flex-col items-center justify-center px-2 py-12 bg-cover bg-center overflow-hidden"
+          className="relative w-full min-h-[760px] sm:min-h-[820px] text-center flex flex-col items-center justify-center py-12 px-4 bg-cover bg-center overflow-hidden"
           style={{
             backgroundImage: "url('/images/kalyana-mandapam/mandapam_rituals_corridor.jpg')",
           }}
         >
           <SectionVignette />
-
-          {/* Royal Unfurled Parchment Scroll with Top & Bottom Wooden Sticks */}
-          <div className="relative z-15 w-[92%] max-w-[340px] sm:max-w-[365px] mx-auto flex flex-col items-center drop-shadow-[0_18px_45px_rgba(0,0,0,0.85)]">
-            {/* Top Turned Wooden Rod with Brass Finials */}
-            <div className="w-full relative z-20 -mb-2">
-              <img
-                src="/images/kalyana-mandapam/mandapam_scroll_top.png"
-                alt="Scroll Top Rod"
-                className="w-full h-auto object-contain select-none pointer-events-none drop-shadow-[0_6px_14px_rgba(0,0,0,0.6)]"
-              />
-            </div>
-
-            {/* Scroll Parchment Body with Deckle Edges & Gold Filigree */}
-            <div
-              className="relative z-10 w-[86%] -my-1 px-4 sm:px-5 py-6 bg-repeat flex flex-col items-center shadow-[inset_0_0_24px_rgba(110,65,15,0.25)] border-x border-[#c99b38]/50"
-              style={{
-                backgroundImage: "url('/images/kalyana-mandapam/mandapam_parchment_bg.jpg')",
-                backgroundColor: "#f5e8cf",
-              }}
-            >
-              {/* Delicate Gold Inner Filigree Border Frame */}
-              <div className="absolute inset-1.5 border border-[#a8781a]/40 pointer-events-none" />
-              <div className="absolute inset-2.5 border border-[#a8781a]/25 pointer-events-none" />
-
-              {/* Scroll Header */}
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="flex flex-col items-center mb-5 relative z-10"
-              >
-                <span className="font-cinzel text-[10px] sm:text-[11px] tracking-[0.24em] text-[#7a3809] uppercase font-bold mb-0.5">
-                  ✦ SACRED CEREMONIES ✦
-                </span>
-                <h2 className="font-cinzel text-xl sm:text-2xl text-[#240e02] tracking-[0.18em] uppercase font-bold drop-shadow-[0_1px_1px_rgba(255,255,255,0.85)]">
-                  Wedding Program
-                </h2>
-                <p className="font-cormorant italic text-sm sm:text-base text-[#542807] font-semibold mt-0.5">
-                  Auspicious Rituals &amp; Celebrations
-                </p>
-                <div className="flex items-center gap-2 mt-2 text-[#996a1a]">
-                  <div className="w-8 h-[1px] bg-current" />
-                  <span className="text-[9px]">❖</span>
-                  <div className="w-8 h-[1px] bg-current" />
-                </div>
-              </motion.div>
-
-              {/* Central Connected Timeline with Gold Markers */}
-              <div className="relative w-full flex flex-col items-center space-y-5 sm:space-y-6 z-10">
-                {/* Vertical connecting gold rod */}
-                <div className="absolute left-1/2 -translate-x-1/2 top-3 bottom-3 w-[1.5px] bg-gradient-to-b from-[#a8781a]/30 via-[#c99b38] to-[#a8781a]/30" />
-
-                {/* Ritual 1: Nichayathartham */}
-                <motion.div
-                  initial={{ opacity: 0, y: 25, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: false, amount: 0.25 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="relative z-10 w-full flex flex-col items-center text-center"
-                >
-                  <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#542d07] font-marcellus font-bold mb-1 ring-2 ring-[#784f18]/20">
-                    1
-                  </div>
-                  <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.2em] text-[#783e0a] uppercase font-bold block leading-tight">
-                    ENGAGEMENT
-                  </span>
-                  <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                    Nichayathartham
-                  </h4>
-                  <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
-                    19 Dec 2026 · 06:00 PM
-                  </div>
-                  <div className="font-cormorant italic text-xs text-[#522a07] font-medium leading-tight mt-0.5">
-                    Sri Krishna Mahal
-                  </div>
-                </motion.div>
-
-                {/* Ritual 2: Janavasam / Mapillai Azhaippu */}
-                <motion.div
-                  initial={{ opacity: 0, y: 25, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: false, amount: 0.25 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="relative z-10 w-full flex flex-col items-center text-center"
-                >
-                  <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#542d07] font-marcellus font-bold mb-1 ring-2 ring-[#784f18]/20">
-                    2
-                  </div>
-                  <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.2em] text-[#783e0a] uppercase font-bold block leading-tight">
-                    GROOM PROCESSION
-                  </span>
-                  <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                    Janavasam &amp; Oonjal
-                  </h4>
-                  <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
-                    20 Dec 2026 · 06:00 AM
-                  </div>
-                  <div className="font-cormorant italic text-xs text-[#522a07] font-medium leading-tight mt-0.5">
-                    Sri Krishna Mahal
-                  </div>
-                </motion.div>
-
-                {/* Ritual 3: Kalyana Muhurtham (Apex Highlight) */}
-                <motion.div
-                  initial={{ opacity: 0, y: 25, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: false, amount: 0.25 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="relative z-10 w-full flex flex-col items-center text-center py-1.5 px-2 rounded-xl bg-[#591018]/10 border border-[#800020]/20"
-                >
-                  <div className="w-7 h-7 rounded-full bg-[#6b0813] border-2 border-[#eed57c] shadow-lg flex items-center justify-center text-xs text-[#fff2b2] font-bold mb-1 ring-2 ring-[#6b0813]/40">
-                    ❖
-                  </div>
-                  <span className="font-marcellus text-[9.5px] sm:text-[10.5px] tracking-[0.24em] text-[#6b0813] uppercase font-bold block leading-tight">
-                    SACRED MUHURTHAM
-                  </span>
-                  <h4 className="font-marcellus text-base sm:text-lg font-bold text-[#45040b] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                    Kalyana Muhurtham
-                  </h4>
-                  <div className="mt-0.5 font-cormorant text-sm sm:text-base text-[#240307] font-bold leading-tight">
-                    {weddingDateInfo.day} {weddingDateInfo.month} · {weddingDateInfo.time}
-                  </div>
-                  <div className="font-cormorant italic text-xs sm:text-[13px] text-[#5e0710] font-semibold leading-tight mt-0.5">
-                    {data.wedding_venue || "Sri Krishna Mahal"}
-                  </div>
-                </motion.div>
-
-                {/* Ritual 4: Nalangu & Reception */}
-                <motion.div
-                  initial={{ opacity: 0, y: 25, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: false, amount: 0.25 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="relative z-10 w-full flex flex-col items-center text-center"
-                >
-                  <div className="w-6 h-6 rounded-full bg-[#fcedc7] border-2 border-[#b8860b] shadow-md flex items-center justify-center text-[10px] text-[#542d07] font-marcellus font-bold mb-1 ring-2 ring-[#784f18]/20">
-                    4
-                  </div>
-                  <span className="font-marcellus text-[9px] sm:text-[10px] tracking-[0.2em] text-[#783e0a] uppercase font-bold block leading-tight">
-                    GALA RECEPTION
-                  </span>
-                  <h4 className="font-marcellus text-sm sm:text-base font-bold text-[#1a0b01] leading-snug mt-0.5 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
-                    Nalangu &amp; Reception
-                  </h4>
-                  <div className="mt-0.5 font-cormorant text-xs sm:text-sm text-[#240e02] font-bold leading-tight">
-                    {data.reception_date
-                      ? parseDate(data.reception_date).day +
-                        " " +
-                        parseDate(data.reception_date).month +
-                        " · " +
-                        parseDate(data.reception_date).time
-                      : "20 Dec · 06:30 PM"}
-                  </div>
-                  <div className="font-cormorant italic text-xs text-[#522a07] font-medium leading-tight mt-0.5">
-                    {data.reception_venue || "Sri Krishna Mahal"}
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-
-            {/* Bottom Turned Wooden Rod with Brass Finials */}
-            <div className="w-full relative z-20 -mt-2">
-              <img
-                src="/images/kalyana-mandapam/mandapam_scroll_bottom.png"
-                alt="Scroll Bottom Rod"
-                className="w-full h-auto object-contain select-none pointer-events-none drop-shadow-[0_6px_14px_rgba(0,0,0,0.6)]"
-              />
-            </div>
-          </div>
+          <RoyalWeddingTimeline
+            eyebrow="AUSPICIOUS TIMINGS"
+            title="Wedding Program"
+            events={[
+              {
+                id: 1,
+                sequence: 1,
+                time: "19 DEC · 06:00 PM",
+                name: "Nichayathartham",
+                venue: data.wedding_venue || "Sri Krishna Mahal",
+                description: "Formal engagement & ring exchange ceremony",
+              },
+              {
+                id: 2,
+                sequence: 2,
+                time: "20 DEC · 06:00 AM",
+                name: "Janavasam & Oonjal",
+                venue: data.wedding_venue || "Sri Krishna Mahal",
+                description: "Groom procession & traditional swing rituals",
+              },
+              {
+                id: 3,
+                sequence: 3,
+                time: `${weddingDateInfo.day} ${weddingDateInfo.month} · ${weddingDateInfo.time}`,
+                name: "Kalyana Muhurtham",
+                venue: data.wedding_venue || "Sri Krishna Mahal",
+                description: "Mangalya Dharanam & Saptapadi vows",
+                isMuhurtham: true,
+              },
+              {
+                id: 4,
+                sequence: 4,
+                time: data.reception_date
+                  ? `${parseDate(data.reception_date).day} ${parseDate(data.reception_date).month} · ${parseDate(data.reception_date).time}`
+                  : "20 DEC · 06:30 PM",
+                name: "Nalangu & Reception",
+                venue: (data as any).reception_venue || data.wedding_venue || "Sri Krishna Mahal",
+                description: "Gala reception & grand celebratory feast",
+              },
+            ]}
+          />
         </section>
 
         {/* ===================================================================== */}

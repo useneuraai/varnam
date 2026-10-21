@@ -23,7 +23,8 @@ import {
   Eye,
   Clock,
   Sparkle,
-  Check
+  Check,
+  Save
 } from "lucide-react";
 import { getTemplateBySlug, getDefaultTemplateData, getEmptyTemplateData, TemplateData, parseTimelineEvents, TimelineEvent } from "@/lib/templates";
 import { templatesMap } from "@/templates";
@@ -120,6 +121,7 @@ function EditorPageContent() {
   const [draftSlug, setDraftSlug] = useState<string | null>(editSlug || null);
   const [isAutosaving, setIsAutosaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"saving" | "saved" | "error" | "offline">("saved");
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [conflictNotice, setConflictNotice] = useState<string | null>(null);
   const [currentRevision, setCurrentRevision] = useState<number>(1);
   const [activeMobileView, setActiveMobileView] = useState<"form" | "preview">("form");
@@ -129,6 +131,7 @@ function EditorPageContent() {
 
   const isAutosavingRef = useRef<boolean>(false);
   const pendingSaveRef = useRef<boolean>(false);
+  const hasUnsavedChangesRef = useRef<boolean>(false);
   const currentRevisionRef = useRef<number>(1);
   currentRevisionRef.current = currentRevision;
   const formDataRef = useRef<TemplateData | null>(formData);
@@ -297,6 +300,59 @@ function EditorPageContent() {
     }
   };
 
+  // Proactive authentication header resolution with automatic token refresh
+  const getAuthHeaders = async (forceRefresh = false): Promise<Record<string, string>> => {
+    if (!isSupabaseConfigured) {
+      return {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer mock-user-token",
+      };
+    }
+
+    try {
+      let { data: { session } } = await supabase.auth.getSession();
+      const expiresAt = session?.expires_at ? session.expires_at * 1000 : 0;
+      const isExpiringSoon = expiresAt > 0 && expiresAt - Date.now() < 60000;
+
+      if (!session || forceRefresh || isExpiringSoon) {
+        const { data: refreshed, error } = await supabase.auth.refreshSession();
+        if (!error && refreshed?.session) {
+          session = refreshed.session;
+          if (refreshed.session.user) {
+            setUser(refreshed.session.user);
+          }
+        }
+      }
+
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (session?.access_token) {
+        headers["Authorization"] = `Bearer ${session.access_token}`;
+      }
+      return headers;
+    } catch (err) {
+      console.warn("Error resolving auth headers:", err);
+      return { "Content-Type": "application/json" };
+    }
+  };
+
+  // Authenticated fetch wrapper that retries once on 401 using a fresh session token
+  const authenticatedFetch = async (url: string, init?: RequestInit): Promise<Response> => {
+    const defaultHeaders = await getAuthHeaders();
+    const headers = { ...defaultHeaders, ...(init?.headers as Record<string, string> || {}) };
+    let res = await fetch(url, { ...init, headers });
+
+    if (res.status === 401 && isSupabaseConfigured) {
+      console.warn("Received 401 Unauthorized, refreshing Supabase session and retrying...");
+      const refreshedHeaders = await getAuthHeaders(true);
+      if (refreshedHeaders["Authorization"]) {
+        const retryHeaders = { ...headers, ...refreshedHeaders };
+        res = await fetch(url, { ...init, headers: retryHeaders });
+      }
+    }
+
+    return res;
+  };
+
   // Initialize form with defaults or fetch existing for editing
   useEffect(() => {
     if (loadingAuth || !templateSlug) return;
@@ -305,15 +361,16 @@ function EditorPageContent() {
       setIsSubmitting(true);
       (async () => {
         try {
-          const { data: { session } } = await supabase.auth.getSession();
-          const headers: Record<string, string> = {};
-          if (session?.access_token) {
-            headers["Authorization"] = `Bearer ${session.access_token}`;
-          } else if (!isSupabaseConfigured) {
-            headers["Authorization"] = "Bearer mock-user-token";
+          const res = await authenticatedFetch(`/api/invitations/${editSlug}`);
+
+          // Session expired or unauthenticated: redirect to login preserving edit parameter
+          if (res.status === 401) {
+            console.warn("Unauthorized to view draft (401). Preserving draft URL and redirecting.");
+            const currentPath = window.location.pathname + window.location.search;
+            router.push(`/login?redirectTo=${encodeURIComponent(currentPath)}`);
+            return;
           }
 
-          const res = await fetch(`/api/invitations/${editSlug}`, { headers });
           if (res.status === 404) {
             console.warn("Invitation slug not found (404), initializing as new draft.");
             setIsEditMode(false);
@@ -325,6 +382,26 @@ function EditorPageContent() {
             setIsDraftLoaded(true);
             return;
           }
+
+          if (res.status === 403) {
+            const errData = await res.json().catch(() => ({}));
+            if (errData.message?.includes("archived")) {
+              setIsArchived(true);
+              setError("This invitation is archived (license exhausted) and cannot be edited.");
+            } else {
+              console.warn("Draft ownership mismatch, initializing a personal copy.");
+              setError("This draft belongs to another user. Initializing a personal draft for you.");
+              setIsEditMode(false);
+              setDraftSlug(null);
+              const newUrl = window.location.pathname;
+              window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, "", newUrl);
+              const emptyData = getEmptyTemplateData(templateSlug);
+              setFormData(emptyData);
+              setIsDraftLoaded(true);
+              return;
+            }
+          }
+
           if (!res.ok) throw new Error("Could not find invitation to edit.");
           const data = await res.json();
 
@@ -335,23 +412,43 @@ function EditorPageContent() {
           }
 
           const resolvedData = extractTemplateData(data, templateSlug);
+
+          // Restore local backup if newer than server copy
+          try {
+            const localSaved = localStorage.getItem(`varnam_draft_${editSlug}`);
+            if (localSaved) {
+              const parsedLocal = JSON.parse(localSaved);
+              if (parsedLocal?.formData && parsedLocal?.savedAt) {
+                const localDate = new Date(parsedLocal.savedAt).getTime();
+                const serverDate = data.updated_at ? new Date(data.updated_at).getTime() : 0;
+                if (localDate > serverDate) {
+                  console.info("Restoring latest local changes for slug:", editSlug);
+                  Object.assign(resolvedData, parsedLocal.formData);
+                }
+              }
+            }
+          } catch {}
+
           setFormData(resolvedData);
           setDraftSlug(editSlug);
-          const isPaidAndPublished = Boolean(data && data.is_paid && data.status === "published");
-          setIsEditMode(isPaidAndPublished);
+          const isPaid = Boolean(data && data.is_paid);
+          setIsEditMode(isPaid);
           if (typeof data.revision === "number") {
             setCurrentRevision(data.revision);
+            currentRevisionRef.current = data.revision;
           }
           setIsDraftLoaded(true);
 
-          if (data && data.wedding_date) {
-            // Check if archived (more than 5 days after event completes)
+          // Check if archived only for paid & published invitations
+          if (data && data.is_paid && data.status === "published" && data.wedding_date) {
             const now = new Date();
             const eventDate = new Date(data.wedding_date);
-            const archiveLimit = new Date(eventDate.getTime() + 5 * 24 * 60 * 60 * 1000);
-            if (now > archiveLimit) {
-              setIsArchived(true);
-              setError("This invitation is archived (license exhausted) and cannot be edited.");
+            if (!isNaN(eventDate.getTime())) {
+              const archiveLimit = new Date(eventDate.getTime() + 5 * 24 * 60 * 60 * 1000);
+              if (now > archiveLimit) {
+                setIsArchived(true);
+                setError("This invitation is archived (license exhausted) and cannot be edited.");
+              }
             }
           }
         } catch (err: any) {
@@ -371,13 +468,66 @@ function EditorPageContent() {
     }
   }, [templateSlug, editSlug, loadingAuth]);
 
-  // Offline detection and reconnection sync
+  // Flush uncommitted changes on page exit / visibility change / pagehide using keepalive fetch
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    const flushOnExit = () => {
+      const activeSlug = editSlug || draftSlug;
+      const currentData = formDataRef.current;
+      if (!activeSlug || !currentData || !hasUnsavedChangesRef.current) return;
+
+      try {
+        localStorage.setItem(`varnam_draft_${activeSlug}`, JSON.stringify({
+          formData: currentData,
+          revision: currentRevisionRef.current,
+          savedAt: new Date().toISOString(),
+        }));
+
+        const isMockSupabase = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === "https://placeholder-project.supabase.co";
+        const authHeader = isMockSupabase ? "Bearer mock-user-token" : "";
+        const headers: Record<string, string> = { "Content-Type": "application/json" };
+        if (authHeader) headers["Authorization"] = authHeader;
+
+        const payload = isEditMode
+          ? JSON.stringify({ formData: currentData, revision: currentRevisionRef.current })
+          : JSON.stringify({
+              slug: activeSlug,
+              templateSlug: templateSlug,
+              formData: currentData,
+              revision: currentRevisionRef.current,
+            });
+
+        const targetUrl = isEditMode ? `/api/invitations/${activeSlug}` : "/api/invitations/draft";
+        fetch(targetUrl, {
+          method: isEditMode ? "PUT" : "POST",
+          headers,
+          body: payload,
+          keepalive: true,
+        }).catch(() => {});
+      } catch {}
+    };
+
+    const handleBeforeUnload = () => {
+      if (hasUnsavedChangesRef.current) {
+        flushOnExit();
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden" && hasUnsavedChangesRef.current) {
+        flushOnExit();
+      }
+    };
+
+    const handlePageHide = () => {
+      if (hasUnsavedChangesRef.current) {
+        flushOnExit();
+      }
+    };
+
     const handleOnline = () => {
       setSaveStatus("saving");
-      // Trigger immediate sync on reconnection
       if (formDataRef.current) {
         pendingSaveRef.current = true;
         flushSave();
@@ -389,7 +539,7 @@ function EditorPageContent() {
       const activeSlug = editSlug || draftSlug;
       if (activeSlug && formDataRef.current) {
         try {
-          localStorage.setItem(`varnam_offline_draft_${activeSlug}`, JSON.stringify({
+          localStorage.setItem(`varnam_draft_${activeSlug}`, JSON.stringify({
             formData: formDataRef.current,
             revision: currentRevisionRef.current,
             savedAt: new Date().toISOString(),
@@ -398,18 +548,30 @@ function EditorPageContent() {
       }
     };
 
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("pagehide", handlePageHide);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
+
     return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("pagehide", handlePageHide);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
-  }, [editSlug, draftSlug]);
+  }, [editSlug, draftSlug, templateSlug, isEditMode]);
 
-  const flushSave = async () => {
-    if (!user || isArchived || !isDraftLoaded || isAutosavingRef.current || isDraftDeletedRef.current) return;
+  const flushSave = async (force: boolean = false) => {
+    if (!user || isArchived || !isDraftLoaded || isDraftDeletedRef.current) return;
     const currentData = formDataRef.current;
     if (!currentData || (!currentData.bride_name && !currentData.groom_name && !currentData.wedding_venue)) {
+      return;
+    }
+
+    if (isAutosavingRef.current && !force) {
+      pendingSaveRef.current = true;
       return;
     }
 
@@ -417,19 +579,7 @@ function EditorPageContent() {
       isAutosavingRef.current = true;
       setIsAutosaving(true);
       setSaveStatus("saving");
-
-      if (typeof navigator !== "undefined" && !navigator.onLine) {
-        setSaveStatus("offline");
-        return;
-      }
-
-      const { data: { session } } = await supabase.auth.getSession();
-      const headers: Record<string, string> = { "Content-Type": "application/json" };
-      if (session?.access_token) {
-        headers["Authorization"] = `Bearer ${session.access_token}`;
-      } else if (!isSupabaseConfigured) {
-        headers["Authorization"] = "Bearer mock-user-token";
-      }
+      setSaveError(null);
 
       let activeSlug = editSlug || draftSlug;
       if (!activeSlug) {
@@ -443,41 +593,31 @@ function EditorPageContent() {
         setDraftSlug(activeSlug);
       }
 
+      // Save immediate local snapshot
+      try {
+        localStorage.setItem(`varnam_draft_${activeSlug}`, JSON.stringify({
+          formData: currentData,
+          revision: currentRevisionRef.current,
+          savedAt: new Date().toISOString(),
+        }));
+      } catch {}
+
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        setSaveStatus("offline");
+        return;
+      }
+
       const payloadRevision = currentRevisionRef.current;
 
+      let res: Response;
       if (isEditMode && activeSlug) {
-        const res = await fetch(`/api/invitations/${activeSlug}`, {
+        res = await authenticatedFetch(`/api/invitations/${activeSlug}`, {
           method: "PUT",
-          headers,
           body: JSON.stringify({ formData: currentData, revision: payloadRevision }),
         });
-
-        if (!res.ok) {
-          if (res.status === 409) {
-            const conflict = await res.json().catch(() => ({}));
-            const serverRev = conflict.serverRevision || (payloadRevision + 1);
-            currentRevisionRef.current = serverRev;
-            setCurrentRevision(serverRev);
-
-            // Do not discard user's latest in-memory work; sync revision & queue immediate save
-            setConflictNotice("Newer changes detected from another session. Your latest edits were preserved and synced.");
-            setTimeout(() => setConflictNotice(null), 5000);
-            pendingSaveRef.current = true;
-          } else {
-            setSaveStatus("error");
-          }
-        } else {
-          const data = await res.json();
-          if (data.revision) {
-            currentRevisionRef.current = data.revision;
-            setCurrentRevision(data.revision);
-          }
-          setSaveStatus("saved");
-        }
       } else {
-        const res = await fetch("/api/invitations/draft", {
+        res = await authenticatedFetch("/api/invitations/draft", {
           method: "POST",
-          headers,
           body: JSON.stringify({
             slug: activeSlug,
             templateSlug: templateSlug,
@@ -485,34 +625,57 @@ function EditorPageContent() {
             revision: payloadRevision,
           }),
         });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.revision) {
-            currentRevisionRef.current = data.revision;
-            setCurrentRevision(data.revision);
-          }
-          setSaveStatus("saved");
-        } else {
-          if (res.status === 409) {
-            const conflict = await res.json().catch(() => ({}));
-            const serverRev = conflict.serverRevision || (payloadRevision + 1);
-            currentRevisionRef.current = serverRev;
-            setCurrentRevision(serverRev);
-
-            setConflictNotice("Newer changes detected from another session. Your latest edits were preserved and synced.");
-            setTimeout(() => setConflictNotice(null), 5000);
-            pendingSaveRef.current = true;
-          } else {
-            setSaveStatus("error");
-          }
-        }
       }
-    } catch (err) {
+
+      if (res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (typeof data.revision === "number") {
+          currentRevisionRef.current = data.revision;
+          setCurrentRevision(data.revision);
+        }
+        setSaveStatus("saved");
+        setSaveError(null);
+        hasUnsavedChangesRef.current = false;
+      } else if (res.status === 409) {
+        const conflict = await res.json().catch(() => ({}));
+        const serverRev = conflict.serverRevision || (payloadRevision + 1);
+        currentRevisionRef.current = serverRev;
+        setCurrentRevision(serverRev);
+
+        setConflictNotice("Newer changes detected from another session. Your latest edits were preserved and synced.");
+        setTimeout(() => setConflictNotice(null), 5000);
+        pendingSaveRef.current = true;
+      } else if (res.status === 401) {
+        setSaveStatus("error");
+        setSaveError("Session expired. Please sign in to save.");
+      } else if (res.status === 403) {
+        const errData = await res.json().catch(() => ({}));
+        if (errData.message?.includes("archived")) {
+          setIsArchived(true);
+          setSaveStatus("error");
+          setSaveError("This invitation is archived and cannot be edited.");
+        } else {
+          // Ownership mismatch: fork to a new slug for the current user so work is not lost!
+          const randomStr = Math.random().toString(36).substring(2, 9);
+          setDraftSlug(randomStr);
+          const newUrl = `${window.location.pathname}?edit=${randomStr}`;
+          window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, "", newUrl);
+          pendingSaveRef.current = true;
+          setConflictNotice("Forked to a personal draft for your account.");
+          setTimeout(() => setConflictNotice(null), 5000);
+        }
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        setSaveStatus("error");
+        setSaveError(errData.message || "Failed to save draft.");
+      }
+    } catch (err: any) {
       console.error("Autosave error:", err);
       if (typeof navigator !== "undefined" && !navigator.onLine) {
         setSaveStatus("offline");
       } else {
         setSaveStatus("error");
+        setSaveError(err.message || "Network error while saving.");
       }
     } finally {
       isAutosavingRef.current = false;
@@ -568,6 +731,7 @@ function EditorPageContent() {
   const TemplateComponent = templatesMap[templateSlug];
 
   const handleInputChange = (fieldId: string, value: string) => {
+    hasUnsavedChangesRef.current = true;
     setFormData((prev) => {
       if (!prev) return null;
       return {
@@ -652,24 +816,28 @@ function EditorPageContent() {
 
   const handleNextStep = () => {
     if (validateStep(currentStep)) {
+      flushSave();
       setCurrentStep((prev) => Math.min(prev + 1, 4));
     }
   };
 
   const handlePrevStep = () => {
     setStepError(null);
+    flushSave();
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
   const handleStepClick = (step: number) => {
     if (step < currentStep) {
       setStepError(null);
+      flushSave();
       setCurrentStep(step);
     } else if (step > currentStep) {
       // Validate intermediate steps
       for (let s = currentStep; s < step; s++) {
         if (!validateStep(s)) return;
       }
+      flushSave();
       setCurrentStep(step);
     }
   };
@@ -687,20 +855,32 @@ function EditorPageContent() {
     try {
       setIsAutosaving(true);
       setSaveStatus("saving");
-      const { data: { session } } = await supabase.auth.getSession();
+      let authHeaders = await getAuthHeaders();
       const uploadFormData = new FormData();
       uploadFormData.append("file", file);
 
-      const headers: Record<string, string> = {};
-      if (session?.access_token) {
-        headers["Authorization"] = `Bearer ${session.access_token}`;
+      const uploadHeaders: Record<string, string> = {};
+      if (authHeaders["Authorization"]) {
+        uploadHeaders["Authorization"] = authHeaders["Authorization"];
       }
 
-      const res = await fetch("/api/media/upload", {
+      let res = await fetch("/api/media/upload", {
         method: "POST",
-        headers,
+        headers: uploadHeaders,
         body: uploadFormData,
       });
+
+      if (res.status === 401 && isSupabaseConfigured) {
+        authHeaders = await getAuthHeaders(true);
+        if (authHeaders["Authorization"]) {
+          uploadHeaders["Authorization"] = authHeaders["Authorization"];
+        }
+        res = await fetch("/api/media/upload", {
+          method: "POST",
+          headers: uploadHeaders,
+          body: uploadFormData,
+        });
+      }
 
       if (res.ok) {
         const data = await res.json();
@@ -755,18 +935,9 @@ function EditorPageContent() {
     // If already in edit mode for an existing paid invitation, save and redirect
     if (isEditMode && editSlug) {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        const headers: Record<string, string> = { "Content-Type": "application/json" };
-        if (session?.access_token) {
-          headers["Authorization"] = `Bearer ${session.access_token}`;
-        } else if (!isSupabaseConfigured) {
-          headers["Authorization"] = "Bearer mock-user-token";
-        }
-
-        const response = await fetch(`/api/invitations/${editSlug}`, {
+        const response = await authenticatedFetch(`/api/invitations/${editSlug}`, {
           method: "PUT",
-          headers,
-          body: JSON.stringify({ formData, revision: currentRevision }),
+          body: JSON.stringify({ formData, revision: currentRevisionRef.current }),
         });
 
         if (!response.ok) {
@@ -785,18 +956,9 @@ function EditorPageContent() {
     }
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const headers: Record<string, string> = { "Content-Type": "application/json" };
-      if (session?.access_token) {
-        headers["Authorization"] = `Bearer ${session.access_token}`;
-      } else if (!isSupabaseConfigured) {
-        headers["Authorization"] = "Bearer mock-user-token";
-      }
-
       // 1. Create order on server with trusted template price
-      const orderRes = await fetch("/api/payments/order", {
+      const orderRes = await authenticatedFetch("/api/payments/order", {
         method: "POST",
-        headers,
         body: JSON.stringify({
           templateSlug: template.slug,
           invitationSlug: editSlug || draftSlug,
@@ -837,9 +999,8 @@ function EditorPageContent() {
         },
         handler: async function (response: any) {
           try {
-            const verifyResponse = await fetch("/api/payments/verify", {
+            const verifyResponse = await authenticatedFetch("/api/payments/verify", {
               method: "POST",
-              headers,
               body: JSON.stringify({
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -970,15 +1131,26 @@ function EditorPageContent() {
                   Saving...
                 </span>
               ) : saveStatus === "offline" ? (
-                <span className="text-[9px] text-amber-600 font-bold uppercase tracking-wider flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => flushSave(true)}
+                  className="text-[9px] text-amber-600 hover:text-amber-700 font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer"
+                  title="Saved locally. Click to retry syncing"
+                >
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                  Offline (Saved Locally)
-                </span>
+                  Offline (Saved Locally) • Retry
+                </button>
               ) : saveStatus === "error" ? (
-                <span className="text-[9px] text-rose-500 font-bold uppercase tracking-wider flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-                  Save failed
-                </span>
+                <button
+                  type="button"
+                  id="save-failed-retry-btn"
+                  onClick={() => flushSave(true)}
+                  className="text-[9px] text-rose-600 hover:text-rose-700 font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer underline decoration-rose-300 underline-offset-2"
+                  title={saveError || "Save failed. Click to retry"}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
+                  Save failed • Retry
+                </button>
               ) : (
                 <span className="text-[9px] text-[#b3811b] font-bold uppercase tracking-wider flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#b3811b]" />
@@ -994,6 +1166,19 @@ function EditorPageContent() {
         </Link>
 
         <div className="flex items-center gap-2.5">
+          {/* Manual Save Draft Button */}
+          <button
+            type="button"
+            id="manual-save-draft-btn"
+            onClick={() => flushSave(true)}
+            disabled={isAutosaving}
+            className="h-9 px-3 rounded-xl border border-[#eed57c]/60 hover:border-[#b3811b] bg-white/80 hover:bg-[#fffbf0] text-[#8a725d] hover:text-[#b3811b] text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
+            title="Save changes now"
+          >
+            <Save className={`w-3.5 h-3.5 ${isAutosaving ? "animate-spin" : ""}`} />
+            <span className="hidden sm:inline">Save Draft</span>
+          </button>
+
           {/* Delete Draft Button (ONLY for unpaid draft) */}
           {!isEditMode && (editSlug || draftSlug) && (
             <button
@@ -1012,6 +1197,21 @@ function EditorPageContent() {
           </div>
         </div>
       </header>
+
+      {/* Save Error Notice Banner */}
+      {saveStatus === "error" && saveError && (
+        <div className="bg-rose-50 border-b border-rose-200 px-4 py-2 text-center text-xs font-semibold text-rose-900 flex items-center justify-center gap-3 animate-in fade-in duration-200 z-30">
+          <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+          <span>{saveError}</span>
+          <button
+            type="button"
+            onClick={() => flushSave(true)}
+            className="px-2.5 py-0.5 bg-rose-600 hover:bg-rose-700 text-white rounded-md text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
+          >
+            Retry Now
+          </button>
+        </div>
+      )}
 
       {/* Non-destructive Conflict Notification Banner */}
       {conflictNotice && (
